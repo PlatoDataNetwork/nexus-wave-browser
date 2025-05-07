@@ -40,8 +40,8 @@ const Index = () => {
           onGoBack={goBack}
           onGoForward={goForward}
           onRefresh={refreshPage}
-          canGoBack={canGoBack}
-          canGoForward={canGoForward}
+          canGoBack={canGoBack()}
+          canGoForward={canGoForward()}
         />
         
         <BrowserContent 
