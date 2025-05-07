@@ -19,6 +19,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    // Add mainFields to prioritize which field in package.json to use
+    mainFields: ['module', 'jsnext:main', 'jsnext'],
   },
   build: {
     // Production optimizations
