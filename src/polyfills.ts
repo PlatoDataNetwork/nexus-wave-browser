@@ -5,7 +5,8 @@ if (typeof window !== 'undefined') {
   window.global = window;
   
   // Ensure necessary properties exist on the global object
-  window.process = window.process || { env: {} };
+  // Use type assertion to tell TypeScript this is acceptable
+  window.process = window.process || { env: {} } as any;
   window.Buffer = window.Buffer || require('buffer').Buffer;
 }
 
