@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
-import { Wallet, ExternalLink, Copy, Check } from "lucide-react";
+import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -33,8 +33,14 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-  SheetTrigger
+  SheetTrigger,
+  SheetFooter
 } from "@/components/ui/sheet";
+import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -74,6 +80,8 @@ const WalletConnect: React.FC = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
 
   // Form setup
   const form = useForm({
@@ -93,6 +101,7 @@ const WalletConnect: React.FC = () => {
         }
       } catch (error) {
         console.error("Error checking session:", error);
+        setConnectionError("Failed to retrieve user session");
       } finally {
         setLoading(false);
       }
@@ -120,6 +129,7 @@ const WalletConnect: React.FC = () => {
 
   const fetchWalletConnection = async (userId: string) => {
     try {
+      setConnectionError(null);
       const { data, error } = await supabase
         .from('wallet_connections')
         .select('*')
@@ -136,6 +146,8 @@ const WalletConnect: React.FC = () => {
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
+      setConnectionError("Failed to retrieve wallet connection");
+      setIsConnected(false);
     }
   };
 
@@ -143,6 +155,7 @@ const WalletConnect: React.FC = () => {
     setIsConnected(false);
     setActiveWallet(null);
     setWalletAddress('');
+    setConnectionError(null);
   };
 
   // Handle connect action
@@ -154,6 +167,7 @@ const WalletConnect: React.FC = () => {
 
     try {
       setIsDialogOpen(false);
+      setConnectionError(null);
       toast.loading(`Connecting to ${getWalletName(provider)}...`, { duration: 1500 });
       
       // Simulate connection delay
@@ -196,7 +210,9 @@ const WalletConnect: React.FC = () => {
       
       toast.success(`Successfully connected to ${getWalletName(provider)}`);
     } catch (error) {
-      toast.error(`Failed to connect: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      setConnectionError(errorMsg);
+      toast.error(`Failed to connect: ${errorMsg}`);
     }
   };
 
@@ -241,6 +257,55 @@ const WalletConnect: React.FC = () => {
     handleConnect(data.walletProvider);
   };
 
+  const handleRepairConnection = async () => {
+    if (!user || !activeWallet) {
+      toast.error("No active wallet to repair");
+      return;
+    }
+
+    try {
+      setIsRepairModalOpen(false);
+      toast.loading("Attempting to repair connection...", { duration: 2000 });
+      
+      // Simulate repair process
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Refresh the connection by updating the timestamp
+      const { error } = await supabase
+        .from('wallet_connections')
+        .update({ 
+          last_connected: new Date().toISOString(),
+          is_connected: true 
+        })
+        .eq('user_id', user.id)
+        .eq('wallet_provider', activeWallet);
+
+      if (error) throw error;
+      
+      setConnectionError(null);
+      toast.success("Connection successfully repaired");
+      
+      // Refresh wallet connection data
+      fetchWalletConnection(user.id);
+    } catch (error) {
+      toast.error(`Repair failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const reportIssue = async () => {
+    try {
+      // In a real app, this would send diagnostics to a backend
+      toast.loading("Sending diagnostic report...", { duration: 1500 });
+      
+      // Simulate sending report
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast.success("Report sent successfully. Our team will investigate.");
+    } catch (error) {
+      toast.error("Failed to send report. Please try again later.");
+    }
+  };
+
   if (loading) {
     return (
       <Card className="nexus-glass animate-pulse-glow">
@@ -265,6 +330,34 @@ const WalletConnect: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {connectionError && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Connection Error</AlertTitle>
+            <AlertDescription>
+              {connectionError}
+              <div className="mt-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mr-2"
+                  onClick={() => setIsRepairModalOpen(true)}
+                >
+                  <RefreshCw className="mr-1 h-3 w-3" />
+                  Repair
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={reportIssue}
+                >
+                  Report Issue
+                </Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Status</span>
@@ -359,14 +452,29 @@ const WalletConnect: React.FC = () => {
                       
                       <Separator className="my-4" />
                       
-                      <div className="flex justify-end">
+                      <Alert>
+                        <AlertTitle>Troubleshooting</AlertTitle>
+                        <AlertDescription>
+                          If you're experiencing issues with your wallet connection, try repairing the connection or reconnecting.
+                        </AlertDescription>
+                      </Alert>
+                      
+                      <SheetFooter className="flex justify-between">
+                        <Button 
+                          variant="outline"
+                          onClick={handleRepairConnection}
+                          className="bg-secondary hover:bg-secondary/80"
+                        >
+                          <RefreshCw className="w-4 h-4 mr-2" />
+                          Repair
+                        </Button>
                         <Button 
                           onClick={handleDisconnect}
                           className="bg-destructive hover:bg-destructive/90 text-white"
                         >
                           Disconnect Wallet
                         </Button>
-                      </div>
+                      </SheetFooter>
                     </div>
                   </SheetContent>
                 </Sheet>
@@ -456,6 +564,43 @@ const WalletConnect: React.FC = () => {
             </p>
           </div>
         </div>
+        
+        {/* Repair Connection Modal */}
+        <Dialog open={isRepairModalOpen} onOpenChange={setIsRepairModalOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Repair Wallet Connection</DialogTitle>
+              <DialogDescription>
+                This will attempt to fix issues with your current wallet connection.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-4">
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Troubleshooting Steps</AlertTitle>
+                <AlertDescription className="text-xs space-y-2">
+                  <p>1. Check your wallet application is running</p>
+                  <p>2. Make sure you're logged into your wallet</p>
+                  <p>3. Try refreshing the page if issues persist</p>
+                </AlertDescription>
+              </Alert>
+            </div>
+            
+            <div className="flex justify-end gap-3 pt-2">
+              <DialogClose asChild>
+                <Button variant="outline" type="button">Cancel</Button>
+              </DialogClose>
+              <Button 
+                onClick={handleRepairConnection}
+                className="bg-nexus-purple hover:bg-nexus-light-purple"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Repair Connection
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
