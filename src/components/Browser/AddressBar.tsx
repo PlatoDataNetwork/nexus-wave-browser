@@ -1,0 +1,119 @@
+
+import React, { useState } from "react";
+import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+interface AddressBarProps {
+  currentUrl: string;
+  onNavigate: (url: string) => void;
+}
+
+const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
+  const [inputValue, setInputValue] = useState(currentUrl);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onNavigate(inputValue);
+  };
+
+  const handleRefresh = () => {
+    onNavigate(currentUrl);
+  };
+
+  React.useEffect(() => {
+    setInputValue(currentUrl);
+  }, [currentUrl]);
+
+  return (
+    <div className="flex items-center space-x-2 px-2 py-2">
+      <div className="flex items-center space-x-1">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Back</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Forward</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8" 
+                onClick={handleRefresh}
+              >
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Refresh</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+      
+      <div className="flex-1">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="address-bar">
+            <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              className="bg-transparent flex-1 outline-none text-sm"
+              placeholder="Search or enter address"
+            />
+            <Button 
+              type="submit" 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6 text-muted-foreground hover:text-foreground"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
+        </form>
+      </div>
+      
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
+            >
+              Connect Wallet
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Connect to Web3</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  );
+};
+
+export default AddressBar;
