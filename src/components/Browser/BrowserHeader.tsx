@@ -12,6 +12,11 @@ interface BrowserHeaderProps {
   onCloseTab: (id: string) => void;
   onActivateTab: (id: string) => void;
   onNavigate: (url: string) => void;
+  onGoBack: () => void;
+  onGoForward: () => void;
+  onRefresh: () => void;
+  canGoBack: boolean;
+  canGoForward: boolean;
 }
 
 const BrowserHeader: React.FC<BrowserHeaderProps> = ({
@@ -20,7 +25,12 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   onAddTab,
   onCloseTab,
   onActivateTab,
-  onNavigate
+  onNavigate,
+  onGoBack,
+  onGoForward,
+  onRefresh,
+  canGoBack,
+  canGoForward
 }) => {
   return (
     <div className="flex flex-col">
@@ -33,6 +43,11 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
       <AddressBar
         currentUrl={currentUrl}
         onNavigate={onNavigate}
+        onGoBack={onGoBack}
+        onGoForward={onGoForward}
+        onRefresh={onRefresh}
+        canGoBack={canGoBack}
+        canGoForward={canGoForward}
       />
       <Bookmarks onNavigate={onNavigate} />
     </div>

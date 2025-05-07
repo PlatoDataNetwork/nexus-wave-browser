@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -7,21 +7,44 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface AddressBarProps {
   currentUrl: string;
   onNavigate: (url: string) => void;
+  onGoBack: () => void;
+  onGoForward: () => void;
+  onRefresh: () => void;
+  canGoBack: boolean;
+  canGoForward: boolean;
 }
 
-const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
+const AddressBar: React.FC<AddressBarProps> = ({ 
+  currentUrl, 
+  onNavigate,
+  onGoBack,
+  onGoForward,
+  onRefresh,
+  canGoBack,
+  canGoForward
+}) => {
   const [inputValue, setInputValue] = useState(currentUrl);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onNavigate(inputValue);
+    simulateLoading();
   };
 
   const handleRefresh = () => {
-    onNavigate(currentUrl);
+    onRefresh();
+    simulateLoading();
+  };
+  
+  const simulateLoading = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setInputValue(currentUrl);
   }, [currentUrl]);
 
@@ -31,8 +54,15 @@ const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <ArrowLeft className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8" 
+                onClick={onGoBack}
+                disabled={!canGoBack}
+                aria-label="Go back"
+              >
+                <ArrowLeft className={`h-4 w-4 ${!canGoBack ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -44,8 +74,15 @@ const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <ArrowRight className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8" 
+                onClick={onGoForward}
+                disabled={!canGoForward}
+                aria-label="Go forward"
+              >
+                <ArrowRight className={`h-4 w-4 ${!canGoForward ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -62,8 +99,10 @@ const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
                 size="icon" 
                 className="h-8 w-8" 
                 onClick={handleRefresh}
+                aria-label="Refresh page"
+                disabled={isLoading}
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -75,7 +114,7 @@ const AddressBar: React.FC<AddressBarProps> = ({ currentUrl, onNavigate }) => {
       
       <div className="flex-1">
         <form onSubmit={handleSubmit} className="w-full">
-          <div className="address-bar">
+          <div className="address-bar flex items-center px-3 py-1.5 rounded-md bg-background border border-input hover:border-muted-foreground/50 focus-within:border-nexus-purple focus-within:ring-1 focus-within:ring-nexus-purple">
             <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
             <input
               type="text"

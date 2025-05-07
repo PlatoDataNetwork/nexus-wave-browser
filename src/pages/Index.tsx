@@ -7,7 +7,19 @@ import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 
 const Index = () => {
-  const { tabs, currentUrl, addTab, closeTab, activateTab, navigateToUrl } = useTabs();
+  const { 
+    tabs, 
+    currentUrl, 
+    addTab, 
+    closeTab, 
+    activateTab, 
+    navigateToUrl,
+    goBack,
+    goForward,
+    refreshPage,
+    canGoBack,
+    canGoForward
+  } = useTabs();
 
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
@@ -25,6 +37,11 @@ const Index = () => {
           onCloseTab={closeTab}
           onActivateTab={activateTab}
           onNavigate={navigateToUrl}
+          onGoBack={goBack}
+          onGoForward={goForward}
+          onRefresh={refreshPage}
+          canGoBack={canGoBack}
+          canGoForward={canGoForward}
         />
         
         <BrowserContent 
