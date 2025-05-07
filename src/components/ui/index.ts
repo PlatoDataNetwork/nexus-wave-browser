@@ -42,7 +42,19 @@ export * from "./table";
 export * from "./tabs";
 export * from "./textarea";
 export * from "./toast";
-export * from "./toaster";
+// Export toast components without the Toaster to avoid naming conflicts
+// with the one exported from sonner
+export { 
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+} from "./toast";
 export * from "./toggle";
 export * from "./toggle-group";
 export * from "./tooltip";

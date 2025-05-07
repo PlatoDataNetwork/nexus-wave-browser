@@ -22,12 +22,16 @@ export default defineConfig(({ mode }) => ({
     // Add mainFields to prioritize which field in package.json to use
     mainFields: ['module', 'jsnext:main', 'jsnext'],
   },
+  define: {
+    // Fix for "global is not defined" error
+    global: 'globalThis',
+  },
   build: {
     // Production optimizations
-    minify: 'terser',
+    minify: mode === 'production' ? 'terser' : false,
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console logs in production
+        drop_console: mode === 'production',
       },
     },
     // Chunk size optimization
