@@ -18,7 +18,6 @@ interface ExtensionSearchBarProps {
   setActiveCategory: (category: string) => void;
   viewMode: "grid" | "list";
   setViewMode: (mode: "grid" | "list") => void;
-  onAdminNavigation: () => void;
 }
 
 const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
@@ -28,12 +27,11 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
   activeCategory,
   setActiveCategory,
   viewMode,
-  setViewMode,
-  onAdminNavigation
+  setViewMode
 }) => {
   return (
     <div className="flex items-center gap-3">
-      <div className="relative flex-grow max-w-md">
+      <div className="relative flex-grow">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
           placeholder="Search extensions..." 

@@ -76,15 +76,15 @@ const ExtensionStore: React.FC = () => {
       {/* Stats Cards */}
       <ExtensionStats extensions={extensions} />
       
-      {/* Unified control bar */}
-      <div className="flex flex-col lg:flex-row justify-between items-center mb-8 gap-4 bg-muted/30 p-4 rounded-lg">
+      {/* Control bar - all in one line */}
+      <div className="flex items-center justify-between gap-4 mt-6 mb-8">
         <Tabs 
           defaultValue="all" 
           value={activeTab} 
           onValueChange={setActiveTab} 
-          className="w-full lg:w-auto"
+          className="flex-shrink-0"
         >
-          <TabsList className="w-full lg:w-auto p-1 h-12 bg-background/30">
+          <TabsList className="h-12 bg-background/30">
             <TabsTrigger 
               value="all" 
               className="text-base px-6 py-2.5 data-[state=active]:bg-background"
@@ -114,16 +114,17 @@ const ExtensionStore: React.FC = () => {
           </TabsList>
         </Tabs>
         
-        <ExtensionSearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          categories={categories}
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-          onAdminNavigation={handleAdminNavigation}
-        />
+        <div className="flex-grow flex justify-end">
+          <ExtensionSearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            categories={categories}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+          />
+        </div>
       </div>
 
       {/* Extensions grid/list */}
