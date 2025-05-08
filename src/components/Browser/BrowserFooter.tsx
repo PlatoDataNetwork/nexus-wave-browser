@@ -52,13 +52,13 @@ const BrowserFooter: React.FC = () => {
               variant="ghost" 
               size="sm" 
               className="h-7"
-              onClick={() => handleActionClick("History")}
+              onClick={() => handleActionClick("Downloads")}
             >
-              <History className="h-3 w-3 mr-1" />
-              <span>History</span>
+              <Download className="h-3 w-3 mr-1" />
+              <span>Downloads</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>View browsing history</TooltipContent>
+          <TooltipContent>View downloaded files</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -82,13 +82,28 @@ const BrowserFooter: React.FC = () => {
               variant="ghost" 
               size="sm" 
               className="h-7"
-              onClick={() => handleActionClick("Downloads")}
+              onClick={handleSettingsClick}
             >
-              <Download className="h-3 w-3 mr-1" />
-              <span>Downloads</span>
+              <Settings className="h-3 w-3 mr-1" />
+              <span>Settings</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>View downloaded files</TooltipContent>
+          <TooltipContent>Browser settings</TooltipContent>
+        </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-7"
+              onClick={() => handleActionClick("History")}
+            >
+              <History className="h-3 w-3 mr-1" />
+              <span>History</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>View browsing history</TooltipContent>
         </Tooltip>
 
         <Tooltip>
@@ -104,21 +119,6 @@ const BrowserFooter: React.FC = () => {
             </Button>
           </TooltipTrigger>
           <TooltipContent>Manage privacy shields</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-7"
-              onClick={handleSettingsClick}
-            >
-              <Settings className="h-3 w-3 mr-1" />
-              <span>Settings</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
       </div>
       
