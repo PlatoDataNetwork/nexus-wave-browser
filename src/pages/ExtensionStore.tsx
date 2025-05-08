@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Filter, Search, Package, Grid2x2, List, Settings, Tag } from "lucide-react";
+import { Filter, Search, Package, Grid2x2, List, Tag, Star } from "lucide-react";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 
@@ -151,15 +151,18 @@ const ExtensionStore: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 ml-4">
-                <Badge variant="outline">{extension.category}</Badge>
-                <Badge variant="secondary">{extension.users.toLocaleString()} users</Badge>
+              <div className="flex items-center gap-4 ml-4">
+                <Badge variant="outline" className="bg-secondary/50 text-foreground">{extension.category}</Badge>
+                <div className="flex items-center text-sm">
+                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                  <span>{extension.rating}</span>
+                </div>
                 <Button 
                   variant={extension.installed ? "outline" : "default"}
                   onClick={() => handleInstall(extension.id)}
-                  size="sm"
+                  className={extension.installed ? "" : "bg-nexus-purple hover:bg-nexus-purple/90"}
                 >
-                  {extension.installed ? "Uninstall" : "Install"}
+                  {extension.installed ? "Uninstall" : "Install Now"}
                 </Button>
               </div>
             </Card>
