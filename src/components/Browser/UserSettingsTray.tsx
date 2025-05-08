@@ -148,8 +148,8 @@ const UserSettingsTray: React.FC = () => {
     <div className="flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-            <Settings className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
+            <Settings className="h-6 w-6 text-nexus-purple" />
             <span className="sr-only">Settings</span>
           </Button>
         </DropdownMenuTrigger>
