@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronRight, BookText, Search, ArrowLeft } from "lucide-react";
+import { ChevronRight, BookText, Search, ArrowLeft, Apple, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -71,6 +70,13 @@ const Documentation: React.FC = () => {
                   className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
                 >
                   <span>Features</span>
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </TabsTrigger>
+                <TabsTrigger
+                  value="installation"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                >
+                  <span>Installation</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
@@ -346,6 +352,278 @@ const Documentation: React.FC = () => {
                 </Card>
               </TabsContent>
 
+              <TabsContent value="installation" className="p-6 space-y-6 mt-0">
+                <div>
+                  <h2 className="text-xl font-medium mb-2">Nexus Wave Installation</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Detailed installation guidelines for different operating systems and platforms
+                  </p>
+                </div>
+
+                <Card className="border-nexus-purple/20 mb-6">
+                  <CardContent className="p-6">
+                    <h3 className="text-md font-medium mb-3">Nexus Wave Versions</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Nexus Wave is available as both a native application for various operating systems 
+                      and as a web-based version. Choose the option that best suits your needs.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Accordion type="single" collapsible className="w-full mb-6">
+                  <AccordionItem value="macos">
+                    <AccordionTrigger className="text-md font-medium">macOS Installation</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
+                      <h4 className="font-medium text-sm">System Requirements</h4>
+                      <ul className="space-y-1 list-disc pl-5 mb-3">
+                        <li>macOS 11.0 (Big Sur) or later</li>
+                        <li>Apple Silicon (M1/M2) or Intel processor</li>
+                        <li>4GB RAM minimum (8GB recommended)</li>
+                        <li>500MB available storage</li>
+                      </ul>
+                      
+                      <h4 className="font-medium text-sm mt-4">Installation Options</h4>
+                      
+                      <div className="space-y-3 mt-2">
+                        <div>
+                          <h5 className="font-medium">Option 1: App Store Download</h5>
+                          <p className="mb-2">Download Nexus Wave directly from the Apple App Store for the simplest installation experience:</p>
+                          <ol className="list-decimal pl-5 space-y-1">
+                            <li>Open the App Store on your Mac</li>
+                            <li>Search for "Nexus Wave Browser"</li>
+                            <li>Click "Get" or the price button</li>
+                            <li>Authenticate with your Apple ID if prompted</li>
+                            <li>The app will download and install automatically</li>
+                            <li>Launch from your Applications folder or Launchpad</li>
+                          </ol>
+                          <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Apple className="h-4 w-4 mr-2" /> Download from App Store
+                          </Button>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <h5 className="font-medium">Option 2: Direct Download</h5>
+                          <p className="mb-2">Download the installer package directly from our official website:</p>
+                          <ol className="list-decimal pl-5 space-y-1">
+                            <li>Visit the official Nexus Wave website</li>
+                            <li>Go to the Downloads section</li>
+                            <li>Select the macOS version</li>
+                            <li>Download the .dmg file</li>
+                            <li>Open the downloaded file</li>
+                            <li>Drag the Nexus Wave icon to your Applications folder</li>
+                            <li>Right-click the app and select "Open" the first time to bypass Gatekeeper</li>
+                          </ol>
+                          <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> Download Installer
+                          </Button>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="windows">
+                    <AccordionTrigger className="text-md font-medium">Windows PC Installation</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
+                      <h4 className="font-medium text-sm">System Requirements</h4>
+                      <ul className="space-y-1 list-disc pl-5 mb-3">
+                        <li>Windows 10 (64-bit) or Windows 11</li>
+                        <li>Intel Core i3 / AMD Ryzen 3 processor or better</li>
+                        <li>4GB RAM minimum (8GB recommended)</li>
+                        <li>500MB available storage</li>
+                        <li>DirectX 11 compatible graphics</li>
+                      </ul>
+                      
+                      <h4 className="font-medium text-sm mt-4">Installation Options</h4>
+                      
+                      <div className="space-y-3 mt-2">
+                        <div>
+                          <h5 className="font-medium">Option 1: Microsoft Store</h5>
+                          <p className="mb-2">Download Nexus Wave from the Microsoft Store for automatic updates:</p>
+                          <ol className="list-decimal pl-5 space-y-1">
+                            <li>Open the Microsoft Store on your PC</li>
+                            <li>Search for "Nexus Wave Browser"</li>
+                            <li>Click "Get" or "Install"</li>
+                            <li>The app will download and install automatically</li>
+                            <li>Launch from your Start menu</li>
+                          </ol>
+                          <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> Get from Microsoft Store
+                          </Button>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <h5 className="font-medium">Option 2: Direct Installer</h5>
+                          <p className="mb-2">Download the installer package directly from our official website:</p>
+                          <ol className="list-decimal pl-5 space-y-1">
+                            <li>Visit the official Nexus Wave website</li>
+                            <li>Go to the Downloads section</li>
+                            <li>Select the Windows version</li>
+                            <li>Download the .exe installer</li>
+                            <li>Run the installer with administrator privileges</li>
+                            <li>Follow the installation wizard instructions</li>
+                            <li>Choose your preferred installation location</li>
+                            <li>Select additional components (optional)</li>
+                            <li>Create desktop and Start menu shortcuts if desired</li>
+                            <li>Complete the installation</li>
+                          </ol>
+                          <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> Download Installer
+                          </Button>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="linux">
+                    <AccordionTrigger className="text-md font-medium">Linux Installation</AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
+                      <h4 className="font-medium text-sm">System Requirements</h4>
+                      <ul className="space-y-1 list-disc pl-5 mb-3">
+                        <li>Ubuntu 20.04 or newer, Fedora 34 or newer, or other major distributions</li>
+                        <li>64-bit architecture</li>
+                        <li>4GB RAM minimum (8GB recommended)</li>
+                        <li>500MB available storage</li>
+                        <li>GTK+ 3.14 or higher</li>
+                      </ul>
+                      
+                      <h4 className="font-medium text-sm mt-4">Installation Options</h4>
+                      
+                      <div className="space-y-3 mt-2">
+                        <div>
+                          <h5 className="font-medium">Option 1: Snap/Flatpak</h5>
+                          <p className="mb-2">Install Nexus Wave using Snap (recommended) or Flatpak:</p>
+                          <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
+                            <p># Using Snap</p>
+                            <p>sudo snap install nexus-wave-browser</p>
+                            <p className="mt-2"># Using Flatpak</p>
+                            <p>flatpak install flathub dev.nexuswave.browser</p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <h5 className="font-medium">Option 2: APT Repository (Debian/Ubuntu)</h5>
+                          <p className="mb-2">Add our repository and install via APT:</p>
+                          <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
+                            <p>curl -s https://repo.nexuswave.dev/gpg | sudo apt-key add -</p>
+                            <p>echo "deb [arch=amd64] https://repo.nexuswave.dev/apt stable main" | sudo tee /etc/apt/sources.list.d/nexuswave.list</p>
+                            <p>sudo apt update</p>
+                            <p>sudo apt install nexus-wave-browser</p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <h5 className="font-medium">Option 3: Direct Download</h5>
+                          <p className="mb-2">Download the appropriate package for your distribution:</p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>.deb package for Debian/Ubuntu</li>
+                            <li>.rpm package for Fedora/RHEL/CentOS</li>
+                            <li>.AppImage for universal compatibility</li>
+                            <li>tarball for manual installation</li>
+                          </ul>
+                          <Button className="mt-3 mr-2 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> .deb Package
+                          </Button>
+                          <Button className="mt-3 mr-2 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> .rpm Package
+                          </Button>
+                          <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                            <Download className="h-4 w-4 mr-2" /> .AppImage
+                          </Button>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                <Card className="border-nexus-purple/20 mb-6">
+                  <CardContent className="p-6">
+                    <h3 className="text-md font-medium mb-3">Web-Based Version</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Access Nexus Wave directly from your web browser with no installation required.
+                      The web-based version offers most of the same functionality as the desktop app,
+                      with some limitations for certain Web3 integrations that require deeper system access.
+                    </p>
+                    
+                    <h4 className="font-medium text-sm mt-3">Accessing the Web Version:</h4>
+                    <ol className="list-decimal pl-5 space-y-1 text-sm text-muted-foreground mb-4">
+                      <li>Visit app.nexuswave.dev in any modern browser</li>
+                      <li>Create an account or sign in with your existing credentials</li>
+                      <li>Your browsing data will sync across devices when signed in</li>
+                      <li>Bookmark the page for quick access</li>
+                    </ol>
+
+                    <h4 className="font-medium text-sm mt-3">Browser Compatibility:</h4>
+                    <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground mb-4">
+                      <li>Chrome 90+</li>
+                      <li>Firefox 88+</li>
+                      <li>Safari 14+</li>
+                      <li>Edge 90+</li>
+                      <li>Opera 76+</li>
+                    </ul>
+                    
+                    <Button className="bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                      Launch Web Version
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-nexus-purple/20 mb-6">
+                  <CardContent className="p-6">
+                    <h3 className="text-md font-medium mb-3">Mobile Applications</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Take Nexus Wave with you on your mobile devices. Our mobile apps offer a
+                      tailored experience for smaller screens while maintaining the core functionality
+                      of the desktop version.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-medium text-sm mb-2">iOS App</h4>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Available for iPhone and iPad running iOS 14.0 or later.
+                          Features include Touch ID/Face ID support, widget integration, 
+                          and Shortcuts app compatibility.
+                        </p>
+                        <Button className="bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                          <Apple className="h-4 w-4 mr-2" /> Download on App Store
+                        </Button>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-medium text-sm mb-2">Android App</h4>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          Available for Android devices running Android 8.0 (Oreo) or later.
+                          Features include biometric authentication, homescreen widgets,
+                          and integration with Android's share functionality.
+                        </p>
+                        <Button className="bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
+                          <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.5236 9.75885H6.47638C6.13974 9.75885 5.875 10.0236 5.875 10.3602V19.6398C5.875 19.9764 6.13974 20.2411 6.47638 20.2411H17.5236C17.8603 20.2411 18.125 19.9764 18.125 19.6398V10.3602C18.125 10.0236 17.8603 9.75885 17.5236 9.75885Z" stroke="currentColor" strokeWidth="2" />
+                            <path d="M8 9.5V8C8 5.79086 9.79086 4 12 4C14.2091 4 16 5.79086 16 8V9.5" stroke="currentColor" strokeWidth="2" />
+                          </svg>
+                          Download on Google Play
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-nexus-purple/20">
+                  <CardContent className="p-6">
+                    <h3 className="text-md font-medium mb-3">Trademark Disclaimer</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Apple, the Apple logo, iPhone, and iPad are trademarks of Apple Inc., registered in the U.S. and other countries. App Store is a service mark of Apple Inc.
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Google Play and the Google Play logo are trademarks of Google LLC.
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Nexus Wave is not affiliated with, endorsed by, or sponsored by Apple Inc. or Google LLC. All respective trademarks, logos, and brand names are the property of their respective owners.
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="web3" className="p-6 space-y-6 mt-0">
                 <div>
                   <h2 className="text-xl font-medium mb-2">Web3 Integration</h2>
@@ -390,564 +668,3 @@ const Documentation: React.FC = () => {
                   </Card>
 
                   <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Supported Networks</h3>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Nexus Wave supports these blockchain networks:
-                      </p>
-                      <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                        <li>Ethereum and EVM-compatible chains</li>
-                        <li>Solana</li>
-                        <li>Polkadot ecosystem</li>
-                        <li>Cosmos ecosystem</li>
-                        <li>Bitcoin</li>
-                        <li>Layer 2 solutions (Optimism, Arbitrum)</li>
-                        <li>And more being added regularly</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="dapps">
-                    <AccordionTrigger className="text-md font-medium">DApp Interaction</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Nexus Wave provides enhanced experiences with decentralized applications:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Transaction Previews:</strong> See exactly what a transaction will do before signing</li>
-                        <li><strong>Risk Assessments:</strong> Automated security checks for DApp interactions</li>
-                        <li><strong>Gas Optimization:</strong> AI-powered suggestions for optimal gas fees</li>
-                        <li><strong>Connection Management:</strong> Control which DApps can access your wallet</li>
-                        <li><strong>Contract Verification:</strong> Automatic verification of smart contract code</li>
-                      </ul>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="protocol-ticker">
-                    <AccordionTrigger className="text-md font-medium">Protocol Ticker</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>The built-in protocol ticker provides:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li>Real-time price updates for major cryptocurrencies</li>
-                        <li>Customizable watchlist for tokens of interest</li>
-                        <li>Price alerts and notifications</li>
-                        <li>Historical price data visualization</li>
-                        <li>Market trends and indicators</li>
-                      </ul>
-                      <p className="mt-2">Data is sourced from multiple exchanges to ensure accuracy and reliability.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="web3-settings">
-                    <AccordionTrigger className="text-md font-medium">Web3 Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Customize your Web3 experience with these settings:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Default Network:</strong> Choose your primary blockchain network</li>
-                        <li><strong>RPC Configuration:</strong> Custom RPC endpoints for specific networks</li>
-                        <li><strong>Auto-Connect:</strong> Manage automatic wallet connections for trusted sites</li>
-                        <li><strong>Transaction Confirmations:</strong> Set confirmation requirements based on value</li>
-                        <li><strong>Gas Settings:</strong> Configure default gas price strategies</li>
-                      </ul>
-                      <p className="mt-2">These settings can be found in Settings {'>'} Web3.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </TabsContent>
-
-              <TabsContent value="privacy" className="p-6 space-y-6 mt-0">
-                <div>
-                  <h2 className="text-xl font-medium mb-2">Privacy & Security</h2>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Discover how Nexus Wave protects your privacy and keeps you secure online
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-5">
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Shields</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Nexus Shield is our comprehensive privacy protection system that includes:
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Tracker Blocking</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>Blocks third-party tracking scripts</li>
-                            <li>Prevents cross-site tracking cookies</li>
-                            <li>Disables tracking pixels</li>
-                            <li>Customizable blocking levels</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Fingerprint Protection</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>Canvas fingerprinting protection</li>
-                            <li>WebRTC IP masking</li>
-                            <li>User agent randomization</li>
-                            <li>Hardware information concealment</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Advanced Features</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>HTTPS Everywhere encryption</li>
-                            <li>Script blocking options</li>
-                            <li>Cookie management</li>
-                            <li>Referrer policy controls</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Site-Specific Controls</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>Per-site shield customization</li>
-                            <li>Temporary permission granting</li>
-                            <li>Shield statistics and reporting</li>
-                            <li>Easy toggle for trusted sites</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Security Features</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Nexus Wave implements multiple security layers to protect your browsing:
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Safe Browsing</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>Phishing site detection</li>
-                            <li>Malware download prevention</li>
-                            <li>Suspicious site warnings</li>
-                            <li>Real-time threat updates</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Connection Security</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>DNS over HTTPS (DoH) support</li>
-                            <li>Transport Layer Security (TLS) validation</li>
-                            <li>Certificate transparency checking</li>
-                            <li>Mixed content blocking</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Web3 Security</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>Smart contract security scanning</li>
-                            <li>Phishing-resistant wallet connections</li>
-                            <li>Transaction validation warnings</li>
-                            <li>Security ratings for DApps</li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">Data Protection</h4>
-                          <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                            <li>End-to-end encrypted sync</li>
-                            <li>Secure password storage</li>
-                            <li>Auto-clear browsing data options</li>
-                            <li>Private browsing mode</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="private-browsing">
-                    <AccordionTrigger className="text-md font-medium">Private Browsing Mode</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Nexus Wave's private browsing mode provides enhanced privacy by:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li>Not saving browsing history, cookies, or site data</li>
-                        <li>Preventing trackers from following you across sites</li>
-                        <li>Blocking third-party cookies by default</li>
-                        <li>Preventing sites from accessing local storage</li>
-                        <li>Clearing all session data when closed</li>
-                      </ul>
-                      <p className="mt-2">To activate, click the menu button and select "New Private Window" or use Ctrl+Shift+N (Cmd+Shift+N on Mac).</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="password-management">
-                    <AccordionTrigger className="text-md font-medium">Password Management</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Nexus Wave includes a secure password manager that offers:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li>Encrypted password storage</li>
-                        <li>Password generator for strong, unique passwords</li>
-                        <li>Auto-fill capability for forms and login pages</li>
-                        <li>Password health check to identify weak or compromised passwords</li>
-                        <li>Optional biometric authentication for accessing passwords</li>
-                        <li>Import/export functionality to migrate from other password managers</li>
-                      </ul>
-                      <p className="mt-2">Access your password manager in Settings {'>'} Autofill {'>'} Manage saved passwords.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </TabsContent>
-
-              <TabsContent value="settings" className="p-6 space-y-6 mt-0">
-                <div>
-                  <h2 className="text-xl font-medium mb-2">Settings Guide</h2>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Comprehensive guide to configuring Nexus Wave to your preferences
-                  </p>
-                </div>
-
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="appearance">
-                    <AccordionTrigger className="text-md font-medium">Appearance Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Customize how Nexus Wave looks with these options:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Theme:</strong> Choose between Light, Dark, or System-based themes</li>
-                        <li><strong>Page Zoom:</strong> Set your default zoom level for websites</li>
-                        <li><strong>Bookmarks Bar:</strong> Toggle visibility and customize appearance</li>
-                        <li><strong>Home Button:</strong> Show or hide the home button on the toolbar</li>
-                        <li><strong>Tab Appearance:</strong> Customize the look and behavior of tabs</li>
-                        <li><strong>Custom Fonts:</strong> Choose preferred fonts for website display</li>
-                      </ul>
-                      <p className="mt-2">Access these settings in Settings {'>'} Appearance.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="privacy-settings">
-                    <AccordionTrigger className="text-md font-medium">Privacy & Security Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Configure your privacy and security preferences:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Content Blocking:</strong> Control trackers, cookies, and scripts</li>
-                        <li><strong>HTTPS-Only Mode:</strong> Enforce secure connections</li>
-                        <li><strong>Permission Management:</strong> Control site access to camera, location, etc.</li>
-                        <li><strong>Cookie Settings:</strong> Manage how cookies are stored and used</li>
-                        <li><strong>Safe Browsing:</strong> Configure protection against dangerous sites</li>
-                        <li><strong>Privacy Reports:</strong> View and manage your privacy protection statistics</li>
-                      </ul>
-                      <p className="mt-2">Access these settings in Settings {'>'} Privacy and security.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="extensions-settings">
-                    <AccordionTrigger className="text-md font-medium">Extensions Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Manage your browser extensions:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Install Extensions:</strong> Browse and install from the extensions store</li>
-                        <li><strong>Extension Permissions:</strong> Review and adjust what extensions can access</li>
-                        <li><strong>Update Management:</strong> Control how extensions update</li>
-                        <li><strong>Extension Shortcuts:</strong> Configure keyboard shortcuts for extensions</li>
-                        <li><strong>Developer Mode:</strong> Enable developer options for extension testing</li>
-                      </ul>
-                      <p className="mt-2">Access these settings in Settings {'>'} Extensions.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="web3-settings-detail">
-                    <AccordionTrigger className="text-md font-medium">Web3 Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Configure your Web3 experience:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>Default Network:</strong> Set your primary blockchain network</li>
-                        <li><strong>Wallet Connections:</strong> Manage wallet integrations</li>
-                        <li><strong>Transaction Confirmations:</strong> Set confirmation requirements</li>
-                        <li><strong>Gas Settings:</strong> Configure default gas price strategies</li>
-                        <li><strong>Custom RPCs:</strong> Add and manage RPC endpoints</li>
-                        <li><strong>Token Lists:</strong> Manage token visibility and custom tokens</li>
-                      </ul>
-                      <p className="mt-2">Access these settings in Settings {'>'} Web3.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="advanced-settings">
-                    <AccordionTrigger className="text-md font-medium">Advanced Settings</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>Fine-tune advanced browser functionality:</p>
-                      <ul className="space-y-2 list-disc pl-5">
-                        <li><strong>System Integration:</strong> Configure how Nexus Wave interacts with your OS</li>
-                        <li><strong>Hardware Acceleration:</strong> Enable/disable GPU acceleration</li>
-                        <li><strong>Network Settings:</strong> Configure proxy and DNS settings</li>
-                        <li><strong>Memory Management:</strong> Control how memory is allocated and used</li>
-                        <li><strong>Developer Tools:</strong> Access and configure developer features</li>
-                        <li><strong>Experimental Features:</strong> Try out features still in development</li>
-                      </ul>
-                      <p className="mt-2">Access these settings in Settings {'>'} Advanced.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </TabsContent>
-
-              <TabsContent value="shortcuts" className="p-6 space-y-6 mt-0">
-                <div>
-                  <h2 className="text-xl font-medium mb-2">Keyboard Shortcuts</h2>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Master Nexus Wave with these time-saving keyboard shortcuts
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Navigation Shortcuts</h3>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Back</span>
-                          <span className="text-sm text-muted-foreground">Alt + ←</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Forward</span>
-                          <span className="text-sm text-muted-foreground">Alt + →</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Reload</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + R</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Home</span>
-                          <span className="text-sm text-muted-foreground">Alt + Home</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Focus Address Bar</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + L</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Find in Page</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + F</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Tab Management</h3>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-sm">New Tab</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + T</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Close Tab</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + W</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Reopen Closed Tab</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + T</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Next Tab</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Tab</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Previous Tab</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + Tab</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Go to Tab (1-8)</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + 1-8</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">Web3 Shortcuts</h3>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Open Wallet Connect</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + W</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">View Connected Sites</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + C</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Toggle Protocol Ticker</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + P</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">View Transaction History</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + H</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-nexus-purple/20">
-                    <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">General Shortcuts</h3>
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span className="text-sm">Settings</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + ,</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">History</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + H</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Bookmarks</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + B</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Private Browsing</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + N</span>
-                        </div>
-                        <Separator />
-                        <div className="flex justify-between">
-                          <span className="text-sm">Extensions</span>
-                          <span className="text-sm text-muted-foreground">Ctrl + Shift + E</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="troubleshooting" className="p-6 space-y-6 mt-0">
-                <div>
-                  <h2 className="text-xl font-medium mb-2">Troubleshooting</h2>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Solutions for common issues you may encounter with Nexus Wave
-                  </p>
-                </div>
-
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="performance">
-                    <AccordionTrigger className="text-md font-medium">Performance Issues</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>If Nexus Wave is running slowly, try these solutions:</p>
-                      <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Update the browser</strong> to the latest version</li>
-                        <li><strong>Clear browsing data</strong> in Settings {'>'} Advanced {'>'} Clear browsing data</li>
-                        <li><strong>Disable unused extensions</strong> that may be consuming resources</li>
-                        <li><strong>Enable hardware acceleration</strong> in Settings {'>'} Advanced {'>'} System</li>
-                        <li><strong>Check your computer's resources</strong> in Task Manager/Activity Monitor</li>
-                        <li><strong>Close unnecessary tabs</strong> to free up memory</li>
-                      </ol>
-                      <p className="mt-2">If problems persist, try resetting browser settings in Settings {'>'} Advanced {'>'} Reset settings.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="wallet-connection">
-                    <AccordionTrigger className="text-md font-medium">Wallet Connection Issues</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>If you're having trouble connecting your Web3 wallet:</p>
-                      <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Ensure your wallet is unlocked</strong> before attempting connection</li>
-                        <li><strong>Check network settings</strong> in both your wallet and Nexus Bridge</li>
-                        <li><strong>Verify permissions</strong> for the specific site you're using</li>
-                        <li><strong>Clear site data</strong> for the specific DApp experiencing issues</li>
-                        <li><strong>Try disconnecting and reconnecting</strong> the wallet</li>
-                        <li><strong>Update your wallet software</strong> to the latest version</li>
-                      </ol>
-                      <p className="mt-2">For persistent issues, check the connection logs in Settings {'>'} Web3 {'>'} Connection logs.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="website-compatibility">
-                    <AccordionTrigger className="text-md font-medium">Website Compatibility Issues</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>If a website isn't displaying or functioning correctly:</p>
-                      <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Temporarily disable shields</strong> by clicking the shield icon in the address bar</li>
-                        <li><strong>Check if it works in private browsing mode</strong> to rule out extension conflicts</li>
-                        <li><strong>Clear cookies and site data</strong> for the specific site</li>
-                        <li><strong>Try using compatibility mode</strong> from the site settings menu</li>
-                        <li><strong>Check if the site is up-to-date</strong> with modern web standards</li>
-                        <li><strong>Report the issue</strong> to help improve compatibility</li>
-                      </ol>
-                      <p className="mt-2">For specific DApps, check the Web3 compatibility list in Settings {'>'} Web3 {'>'} Compatible DApps.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="crashes">
-                    <AccordionTrigger className="text-md font-medium">Browser Crashes and Freezes</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>If Nexus Wave crashes or freezes frequently:</p>
-                      <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Update to the latest version</strong> to fix known bugs</li>
-                        <li><strong>Disable problematic extensions</strong> one by one to identify issues</li>
-                        <li><strong>Clear all browsing data</strong> including cache and cookies</li>
-                        <li><strong>Check for malware or viruses</strong> on your system</li>
-                        <li><strong>Reset browser settings</strong> to default in Settings {'>'} Advanced</li>
-                        <li><strong>Reinstall the browser</strong> if problems persist</li>
-                      </ol>
-                      <p className="mt-2">For technical users, check crash reports in Settings {'>'} Advanced {'>'} Crash reports.</p>
-                    </AccordionContent>
-                  </AccordionItem>
-
-                  <AccordionItem value="sync-issues">
-                    <AccordionTrigger className="text-md font-medium">Sync Issues</AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>If your bookmarks, passwords, or settings aren't syncing correctly:</p>
-                      <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Verify your account status</strong> in Settings {'>'} Sync</li>
-                        <li><strong>Check which sync categories are enabled</strong> in sync settings</li>
-                        <li><strong>Force a manual sync</strong> by clicking "Sync now"</li>
-                        <li><strong>Sign out and sign back in</strong> to refresh your connection</li>
-                        <li><strong>Check your internet connection</strong> as sync requires connectivity</li>
-                        <li><strong>Reset sync</strong> as a last resort (will require setting up sync again)</li>
-                      </ol>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-
-                <Card className="border-nexus-purple/20">
-                  <CardContent className="p-6">
-                    <h3 className="text-md font-medium mb-3">Getting Additional Help</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      If you're still experiencing issues, here are additional resources:
-                    </p>
-                    <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
-                      <li><strong>Community Forums:</strong> Connect with other users to discuss solutions</li>
-                      <li><strong>Knowledge Base:</strong> Search our extensive documentation for answers</li>
-                      <li><strong>Customer Support:</strong> Contact our dedicated support team</li>
-                      <li><strong>Discord Community:</strong> Join our active Discord server for real-time help</li>
-                      <li><strong>Bug Reports:</strong> Submit detailed bug reports to help us improve</li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </ScrollArea>
-        </div>
-      </div>
-
-      <div className="flex justify-between p-4 border-t border-border bg-card">
-        <Button asChild variant="outline">
-          <Link to="/settings">View Settings</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/">Return to Browser</Link>
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-export default Documentation;
-
