@@ -152,6 +152,12 @@ export const bookmarks: Bookmark[] = [
     url: "https://saberdao.so",
     icon: Globe,
   },
+  {
+    id: "20",
+    title: "Gamblex",
+    url: "https://Gamblex.casino",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
