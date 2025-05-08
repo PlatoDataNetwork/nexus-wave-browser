@@ -169,7 +169,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
               size="sm" 
               className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white h-9"
             >
-              Nexus Wave
+              Nexus Bridge
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
@@ -178,7 +178,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
                   NB
                 </div>
-                <span className="ml-2">Nexus Wave</span>
+                <span className="ml-2">Nexus Bridge</span>
               </DialogTitle>
               <DialogDescription>
                 Connect your wallet to interact with Web3 applications.
