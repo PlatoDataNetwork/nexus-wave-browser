@@ -48,7 +48,7 @@ const BrowserFooter: React.FC = () => {
         <Button 
           onClick={handleSettingsClick}
           size="sm" 
-          className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white font-medium px-3 py-1 rounded-md"
+          className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
         >
           Nexus Bridge
         </Button>

@@ -166,7 +166,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#5D4037] hover:bg-[#5D4037]/80 text-white border-none h-9 px-4"
+          className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/80 text-white border-none h-9 px-4"
         >
           Staking
         </Button>
