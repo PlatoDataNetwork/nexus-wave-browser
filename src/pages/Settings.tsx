@@ -10,9 +10,14 @@ import SettingsAppearance from "@/components/Settings/SettingsAppearance";
 import SettingsPrivacySecurity from "@/components/Settings/SettingsPrivacySecurity";
 import SettingsAutofill from "@/components/Settings/SettingsAutofill";
 import SettingsSearch from "@/components/Settings/SettingsSearch";
+import SettingsAdvanced from "@/components/Settings/SettingsAdvanced";
+import SettingsWeb3 from "@/components/Settings/SettingsWeb3";
+import SettingsExtensions from "@/components/Settings/SettingsExtensions";
+import SettingsShields from "@/components/Settings/SettingsShields";
 
 const Settings: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [activeTab, setActiveTab] = React.useState("appearance");
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -39,7 +44,13 @@ const Settings: React.FC = () => {
               />
             </div>
 
-            <Tabs defaultValue="appearance" orientation="vertical" className="w-full">
+            <Tabs 
+              defaultValue={activeTab} 
+              value={activeTab}
+              onValueChange={setActiveTab}
+              orientation="vertical" 
+              className="w-full"
+            >
               <TabsList className="flex flex-col items-start justify-start h-auto gap-1 bg-transparent p-0">
                 <TabsTrigger
                   value="appearance"
@@ -49,10 +60,24 @@ const Settings: React.FC = () => {
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
+                  value="shields"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                >
+                  <span>Shields & Privacy</span>
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </TabsTrigger>
+                <TabsTrigger
                   value="privacy"
                   className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
                 >
                   <span>Privacy and security</span>
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </TabsTrigger>
+                <TabsTrigger
+                  value="extensions"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                >
+                  <span>Extensions</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
@@ -69,6 +94,20 @@ const Settings: React.FC = () => {
                   <span>Search engine</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
+                <TabsTrigger
+                  value="web3"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                >
+                  <span>Web3</span>
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </TabsTrigger>
+                <TabsTrigger
+                  value="advanced"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                >
+                  <span>Advanced</span>
+                  <ChevronRight className="h-4 w-4 opacity-50" />
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -77,12 +116,18 @@ const Settings: React.FC = () => {
         {/* Main Content */}
         <div className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
-            <Tabs defaultValue="appearance" className="w-full">
+            <Tabs value={activeTab} className="w-full">
               <TabsContent value="appearance" className="p-6 space-y-6 mt-0">
                 <SettingsAppearance />
               </TabsContent>
+              <TabsContent value="shields" className="p-6 space-y-6 mt-0">
+                <SettingsShields />
+              </TabsContent>
               <TabsContent value="privacy" className="p-6 space-y-6 mt-0">
                 <SettingsPrivacySecurity />
+              </TabsContent>
+              <TabsContent value="extensions" className="p-6 space-y-6 mt-0">
+                <SettingsExtensions />
               </TabsContent>
               <TabsContent value="autofill" className="p-6 space-y-6 mt-0">
                 <SettingsAutofill />
@@ -90,12 +135,21 @@ const Settings: React.FC = () => {
               <TabsContent value="search" className="p-6 space-y-6 mt-0">
                 <SettingsSearch />
               </TabsContent>
+              <TabsContent value="web3" className="p-6 space-y-6 mt-0">
+                <SettingsWeb3 />
+              </TabsContent>
+              <TabsContent value="advanced" className="p-6 space-y-6 mt-0">
+                <SettingsAdvanced />
+              </TabsContent>
             </Tabs>
           </ScrollArea>
         </div>
       </div>
 
-      <div className="flex justify-end p-4 border-t border-border bg-card">
+      <div className="flex justify-between p-4 border-t border-border bg-card">
+        <Button asChild variant="outline">
+          <Link to="/settings-docs">View Documentation</Link>
+        </Button>
         <Button asChild variant="outline">
           <Link to="/">Return to Browser</Link>
         </Button>

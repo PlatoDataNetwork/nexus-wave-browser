@@ -19,7 +19,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/settings-docs" element={<Index defaultUrl="https://Platodata.io" />} />
+          <Route path="/settings-docs" element={<Index defaultUrl="https://docs.nexuswave.browser" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
