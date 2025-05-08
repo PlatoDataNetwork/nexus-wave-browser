@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -65,7 +65,7 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <PageLayout includeFooter={true}>
       <div className="flex flex-col min-h-screen bg-background">
         {/* Header */}
         <div className="flex items-center justify-center h-12 bg-card border-b border-border">
