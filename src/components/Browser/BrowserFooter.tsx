@@ -117,7 +117,7 @@ const BrowserFooter: React.FC = () => {
               className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
               onClick={() => setIsWalletDialogOpen(true)}
             >
-              Nexus Bridge
+              Nexus Bridge V2.1
             </Button>
           </DialogTrigger>
           <DialogContent className="p-0 border-none max-w-4xl">
