@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -57,6 +58,9 @@ interface WalletConnection {
 // Official WalletConnect logo URL
 const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24ea5.png";
 
+// Trezor logo URL from the uploaded image
+const trezorLogoUrl = "/lovable-uploads/e931de13-c6d4-4048-b5c5-b591236df7ae.png";
+
 // Wallet options - alphabetized
 const walletOptions = [
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw' },
@@ -66,7 +70,7 @@ const walletOptions = [
   { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
   { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' },
   { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: 'https://cryptorank.io/public/wallet-logos/solflare.svg' },
-  { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to your Trezor hardware wallet', logoUrl: 'https://trezor.io/static/images/trezor-logo.svg' },
+  { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to your Trezor hardware wallet', logoUrl: trezorLogoUrl },
   { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: 'https://trustwallet.com/assets/images/media/assets/trust_platform.png' },
   { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
   { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', description: 'Connect with WalletConnect protocol', logoUrl: walletConnectLogoUrl },
@@ -333,11 +337,11 @@ const WalletConnect: React.FC = () => {
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-medium flex items-center">
           <div className="flex items-center">
-            <div className="w-6 h-6 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden">
+            <div className="w-8 h-8 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden">
               <img 
                 src={walletConnectLogoUrl} 
                 alt="WalletConnect" 
-                className="w-5 h-5 object-contain"
+                className="w-7 h-7 object-contain"
               />
             </div>
             Web3 Wallet
@@ -390,8 +394,8 @@ const WalletConnect: React.FC = () => {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Wallet</span>
                 <span className="text-sm font-medium flex items-center">
-                  <Avatar className="h-5 w-5 mr-1">
-                    <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} />
+                  <Avatar className="h-7 w-7 mr-2">
+                    <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0.5" />
                     <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   {getWalletName(activeWallet)}
@@ -405,10 +409,10 @@ const WalletConnect: React.FC = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-5 w-5 ml-1"
+                    className="h-6 w-6 ml-1"
                     onClick={copyAddress}
                   >
-                    {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </span>
               </div>
@@ -430,8 +434,8 @@ const WalletConnect: React.FC = () => {
                     </SheetHeader>
                     <div className="py-4 space-y-4">
                       <div className="flex justify-center mb-4">
-                        <Avatar className="h-16 w-16">
-                          <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} />
+                        <Avatar className="h-20 w-20">
+                          <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-1" />
                           <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                       </div>
@@ -515,11 +519,11 @@ const WalletConnect: React.FC = () => {
                 <Button 
                   className="w-full bg-nexus-purple hover:bg-nexus-light-purple text-white flex items-center gap-2"
                 >
-                  <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                  <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden">
                     <img 
                       src={walletConnectLogoUrl} 
                       alt="WalletConnect" 
-                      className="w-4 h-4 object-contain"
+                      className="w-6 h-6 object-contain"
                     />
                   </div>
                   Connect Wallet
@@ -528,11 +532,11 @@ const WalletConnect: React.FC = () => {
               <DialogContent className="sm:max-w-[850px]">
                 <DialogHeader>
                   <DialogTitle className="flex items-center">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
+                    <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
                       <img 
                         src={walletConnectLogoUrl} 
                         alt="WalletConnect" 
-                        className="w-5 h-5 object-contain"
+                        className="w-7 h-7 object-contain"
                       />
                     </div>
                     Connect Wallet
@@ -560,8 +564,8 @@ const WalletConnect: React.FC = () => {
                                 <RadioGroupItem value={wallet.id} id={wallet.id} />
                                 <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
                                   <div className="flex items-center">
-                                    <Avatar className="h-10 w-10 mr-2">
-                                      <AvatarImage src={wallet.logoUrl} alt={wallet.name} />
+                                    <Avatar className="h-12 w-12 mr-3">
+                                      <AvatarImage src={wallet.logoUrl} alt={wallet.name} className="p-1" />
                                       <AvatarFallback>{wallet.icon}</AvatarFallback>
                                     </Avatar>
                                     <div>
@@ -582,11 +586,11 @@ const WalletConnect: React.FC = () => {
                         <Button variant="outline" type="button">Cancel</Button>
                       </DialogClose>
                       <Button type="submit" className="bg-nexus-purple hover:bg-nexus-light-purple flex items-center">
-                        <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
+                        <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
                           <img 
                             src={walletConnectLogoUrl} 
                             alt="WalletConnect" 
-                            className="w-4 h-4 object-contain"
+                            className="w-6 h-6 object-contain"
                           />
                         </div>
                         Connect
@@ -610,11 +614,11 @@ const WalletConnect: React.FC = () => {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle className="flex items-center">
-                <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
                   <img 
                     src={walletConnectLogoUrl} 
                     alt="WalletConnect" 
-                    className="w-5 h-5 object-contain"
+                    className="w-7 h-7 object-contain"
                   />
                 </div>
                 Repair Wallet Connection
@@ -644,11 +648,11 @@ const WalletConnect: React.FC = () => {
                 onClick={handleRepairConnection}
                 className="bg-nexus-purple hover:bg-nexus-light-purple flex items-center"
               >
-                <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
+                <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
                   <img 
                     src={walletConnectLogoUrl} 
                     alt="WalletConnect" 
-                    className="w-4 h-4 object-contain"
+                    className="w-6 h-6 object-contain"
                   />
                 </div>
                 Repair Connection
