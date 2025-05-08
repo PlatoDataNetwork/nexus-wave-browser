@@ -122,6 +122,12 @@ export const bookmarks: Bookmark[] = [
     url: "https://erratic.finance",
     icon: Globe,
   },
+  {
+    id: "15",
+    title: "Gate",
+    url: "https://gate.io",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
