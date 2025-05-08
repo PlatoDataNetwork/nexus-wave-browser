@@ -52,10 +52,9 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall }) =
       <CardFooter className="p-4 pt-0">
         <Button 
           onClick={onInstall} 
-          className={installed ? "bg-muted hover:bg-muted/80 text-foreground" : ""}
+          className={`w-full ${installed ? "bg-muted hover:bg-muted/80 text-foreground" : ""}`}
           variant={installed ? "outline" : "default"}
           size="sm"
-          className="w-full"
         >
           {installed ? "Uninstall" : "Install Now"}
         </Button>

@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Filter, Search, Package, Grid2x2, List, Category, Settings, Download, Star, Users, Info, Category as CategoryIcon } from "lucide-react";
+import { Filter, Search, Package, Grid2x2, List, Settings, Download, Star, Users, Info, Tag } from "lucide-react";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
@@ -130,11 +130,11 @@ const ExtensionStore: React.FC = () => {
             <Tabs defaultValue={activeCategory} value={activeCategory} onValueChange={setActiveCategory} className="w-full">
               <TabsList className="flex h-10 w-full">
                 <TabsTrigger value="all" className="flex-grow">
-                  <Category className="h-4 w-4 mr-2" /> All
+                  <Package className="h-4 w-4 mr-2" /> All
                 </TabsTrigger>
                 {categories.filter(c => c !== "all").sort().map((category) => (
                   <TabsTrigger key={category} value={category} className="flex-grow">
-                    <CategoryIcon className="h-4 w-4 mr-2" /> {category}
+                    <Tag className="h-4 w-4 mr-2" /> {category}
                   </TabsTrigger>
                 ))}
               </TabsList>
