@@ -68,6 +68,48 @@ export const bookmarks: Bookmark[] = [
     url: "https://aave.com",
     icon: Link,
   },
+  {
+    id: "6",
+    title: "Magic Eden",
+    url: "https://magiceden.io",
+    icon: Globe,
+  },
+  {
+    id: "7",
+    title: "Lumia",
+    url: "https://lumia.com",
+    icon: Globe,
+  },
+  {
+    id: "8",
+    title: "gTrade",
+    url: "https://gains.trade",
+    icon: Globe,
+  },
+  {
+    id: "9",
+    title: "Raydium",
+    url: "https://raydium.io",
+    icon: Globe,
+  },
+  {
+    id: "10",
+    title: "MarginFi",
+    url: "https://www.marginfi.com",
+    icon: Globe,
+  },
+  {
+    id: "11",
+    title: "PlatoAi",
+    url: "https://plato.ai",
+    icon: Globe,
+  },
+  {
+    id: "12",
+    title: "Plato Analyst",
+    url: "https://plato.ai/analyst",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
