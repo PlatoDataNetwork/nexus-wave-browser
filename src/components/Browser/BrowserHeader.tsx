@@ -3,7 +3,6 @@ import React from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
-import ProtocolTicker from "./ProtocolTicker";
 import { Tab } from "@/lib/dummyData";
 
 interface BrowserHeaderProps {
@@ -50,7 +49,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
         canGoBack={canGoBack}
         canGoForward={canGoForward}
       />
-      <ProtocolTicker onNavigate={onNavigate} />
       <Bookmarks onNavigate={onNavigate} />
     </div>
   );

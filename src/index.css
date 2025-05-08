@@ -91,4 +91,30 @@
   .nexus-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-nexus-purple/50 rounded-full hover:bg-nexus-purple transition-colors;
   }
+  
+  /* Protocol ticker animation */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    display: flex;
+    animation: marquee 30s linear infinite;
+    min-width: max-content;
+  }
+  
+  .animate-marquee-slower {
+    display: flex;
+    animation: marquee 60s linear infinite;
+    min-width: max-content;
+  }
+
+  .animate-marquee:hover, .animate-marquee-slower:hover {
+    animation-play-state: paused;
+  }
 }
