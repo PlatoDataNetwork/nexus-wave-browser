@@ -50,7 +50,7 @@ const BrowserFooter: React.FC = () => {
           size="sm" 
           className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white font-medium px-3 py-1 rounded-md"
         >
-          Nexus Bridge
+          Nexus Bridget
         </Button>
       </div>
     </div>
