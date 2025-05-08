@@ -92,7 +92,7 @@ const FallbackInterface: React.FC<{ domain: string }> = ({ domain }) => {
   return (
     <div className="text-center py-10 px-4 max-w-3xl mx-auto">
       <Globe className="mx-auto h-20 w-20 text-[#8c7ae6] mb-6" />
-      <h2 className="text-3xl font-bold mb-3 text-white">Nexus Wave Browser Web3 V2.1</h2>
+      <h2 className="text-3xl font-bold mb-3 text-white">Nexus Web3 Browser</h2>
       
       <p className="text-lg text-gray-300 mb-6">
         Currently displaying: <span className="text-[#8c7ae6]">{domain}</span>
