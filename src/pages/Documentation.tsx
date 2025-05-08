@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -668,3 +669,31 @@ const Documentation: React.FC = () => {
                   </Card>
 
                   <Card className="border-nexus-purple/20">
+                    <CardContent className="p-6">
+                      <h3 className="text-md font-medium mb-3">Supported Networks</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Nexus Wave works with major blockchain networks:
+                      </p>
+                      <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                        <li>Ethereum</li>
+                        <li>Polygon</li>
+                        <li>Binance Smart Chain</li>
+                        <li>Solana</li>
+                        <li>Avalanche</li>
+                        <li>Arbitrum</li>
+                        <li>Optimism</li>
+                        <li>And many more...</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </ScrollArea>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Documentation;
