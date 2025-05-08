@@ -36,7 +36,7 @@ export const topProtocols: Protocol[] = [
   { id: "25", name: "SushiSwap", url: "https://sushi.com", color: "#F25A91" },
   { id: "26", name: "Synthetix", url: "https://synthetix.io", color: "#00D1FF" },
   { id: "27", name: "Tezos", url: "https://tezos.com", color: "#2C7DF7" },
-  { id: "28", name: "TheGraph", url: "https://thegraph.com", color: "#6747ED" },
+  { id: "28", name: "The Graph", url: "https://thegraph.com", color: "#6747ED" },
   { id: "29", name: "Uniswap", url: "https://uniswap.org", color: "#FF007A" },
   { id: "30", name: "Yearn", url: "https://yearn.finance", color: "#0657F9" }
 ];

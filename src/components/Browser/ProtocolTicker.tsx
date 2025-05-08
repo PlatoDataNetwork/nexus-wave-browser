@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { topProtocols, Protocol } from "@/lib/protocolData";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
@@ -14,8 +14,6 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
   const { toast } = useToast();
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
   
   const handleProtocolClick = (protocol: Protocol) => {
     toast({
@@ -42,47 +40,8 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
     }
   };
 
-  // Auto scroll animation
-  const animate = () => {
-    if (scrollRef.current && !isPaused) {
-      const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
-      
-      if (scrollPosition >= maxScroll) {
-        // Reset to beginning when reached the end
-        setScrollPosition(0);
-        scrollRef.current.scrollTo({ left: 0 });
-      } else {
-        // Increment scroll position
-        const newPosition = scrollPosition + 0.5; // Adjust speed here
-        setScrollPosition(newPosition);
-        scrollRef.current.scrollTo({ left: newPosition });
-      }
-    }
-    
-    animationRef.current = requestAnimationFrame(animate);
-  };
-
-  // Start animation on component mount
-  useEffect(() => {
-    animationRef.current = requestAnimationFrame(animate);
-    
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [scrollPosition, isPaused]);
-
-  // Pause scrolling when hovering
-  const handleMouseEnter = () => setIsPaused(true);
-  const handleMouseLeave = () => setIsPaused(false);
-
   return (
-    <div 
-      className="w-full bg-muted border-b border-border py-2 flex items-center"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className="w-full bg-muted border-b border-border py-2 flex items-center">
       <Button 
         variant="ghost" 
         size="icon" 
@@ -105,16 +64,12 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
               onClick={() => handleProtocolClick(protocol)}
               className="flex items-center space-x-2 px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer transition-colors flex-shrink-0"
             >
-              <img 
-                src={`/protocol-icons/${protocol.name.toLowerCase()}.svg`}
-                alt={`${protocol.name} icon`}
-                className="w-5 h-5 object-contain"
-                onError={(e) => {
-                  // Fallback for missing icons
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/protocol-icons/default.svg";
-                }}
-              />
+              <div 
+                className="w-6 h-6 rounded-full flex items-center justify-center text-white font-semibold text-xs"
+                style={{ backgroundColor: protocol.color }}
+              >
+                {protocol.name.charAt(0)}
+              </div>
               <span className="text-xs whitespace-nowrap">{protocol.name}</span>
             </div>
           ))}
