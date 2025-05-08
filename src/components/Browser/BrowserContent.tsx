@@ -15,7 +15,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({
 }) => {
   return (
     <div className="flex-1 grid grid-cols-5 gap-4 p-4 overflow-hidden">
-      <div className="col-span-4 h-full">
+      <div className="col-span-4 h-full flex flex-col">
         <WebviewFrame url={currentUrl} />
       </div>
       <div className="col-span-1 space-y-4">
