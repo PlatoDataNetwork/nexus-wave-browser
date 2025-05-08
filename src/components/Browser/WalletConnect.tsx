@@ -335,30 +335,30 @@ const WalletConnect: React.FC = () => {
 
   if (loading) {
     return (
-      <Card className="nexus-glass animate-pulse-glow">
-        <CardContent className="p-6">
+      <div className="animate-pulse-glow">
+        <div className="p-6">
           <div className="flex items-center justify-center h-40">
             <span className="text-muted-foreground">Loading wallet...</span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="nexus-glass animate-pulse-glow w-full max-w-[700px] transform scale-[1.75]">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-medium flex items-center">
+    <div className="animate-pulse-glow w-full max-w-[700px] transform scale-[1.75]">
+      <div className="pb-3">
+        <div className="text-lg font-medium flex items-center">
           <div className="flex items-center">
             <NBLogo />
             <span className="ml-2">Nexus Wave Bridge</span>
           </div>
-        </CardTitle>
-        <CardDescription>
-          Connect your wallet to interact with DApps
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Connect your wallet to interact with and Web3 DApps
+        </p>
+      </div>
+      <div>
         {connectionError && (
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
@@ -538,7 +538,7 @@ const WalletConnect: React.FC = () => {
                     <span className="ml-2">Nexus Wave Bridge</span>
                   </DialogTitle>
                   <DialogDescription>
-                    Choose a wallet provider to connect with Nexus.
+                    Connect your wallet to interact with and Web3 DApps
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -641,9 +641,10 @@ const WalletConnect: React.FC = () => {
             </div>
           </DialogContent>
         </Dialog>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
 export default WalletConnect;
+
