@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -60,10 +59,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
   useEffect(() => {
     setInputValue(currentUrl);
   }, [currentUrl]);
-
-  const handleAdminClick = () => {
-    onNavigate("/extension-admin");
-  };
 
   return (
     <div className="flex items-center space-x-2 px-2 py-2">
@@ -175,15 +170,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
         >
           NWF3 Rewards
-        </Button>
-
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-[#9333EA] hover:bg-[#9333EA]/80 text-white border-none h-9 px-4"
-          onClick={handleAdminClick}
-        >
-          Admin
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>

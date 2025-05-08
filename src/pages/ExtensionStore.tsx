@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,17 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Filter, Search, Package, Grid2x2, List, Star } from "lucide-react";
+import { 
+  Filter, 
+  Search, 
+  Package, 
+  Grid2x2, 
+  List, 
+  Star, 
+  ShoppingCart, 
+  Zap, 
+  Shield 
+} from "lucide-react";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 
@@ -19,13 +30,14 @@ const ExtensionStore: React.FC = () => {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [extensions, setExtensions] = useState(extensionsData);
   
   // Get unique categories from extensions
   const categories = ["all", ...new Set(extensionsData.map(ext => ext.category))];
 
-  // Filter extensions based on search query and active category
+  // Filter extensions based on search query, active category, and tab
   const filteredExtensions = extensions.filter(extension => {
     const matchesSearch = 
       extension.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -33,7 +45,12 @@ const ExtensionStore: React.FC = () => {
     
     const matchesCategory = activeCategory === "all" || extension.category === activeCategory;
     
-    return matchesSearch && matchesCategory;
+    const matchesTab = 
+      activeTab === "all" || 
+      (activeTab === "installed" && extension.installed) ||
+      (activeTab === "featured" && extension.featured);
+    
+    return matchesSearch && matchesCategory && matchesTab;
   });
 
   const handleInstall = (id: number) => {
@@ -54,6 +71,14 @@ const ExtensionStore: React.FC = () => {
     }
   };
 
+  // Statistics data
+  const statsData = [
+    { title: "Available", value: extensions.length, icon: Package, color: "bg-gradient-to-br from-purple-500/20 to-purple-700/20" },
+    { title: "Installed", value: extensions.filter(ext => ext.installed).length, icon: ShoppingCart, color: "bg-gradient-to-br from-blue-500/20 to-blue-700/20" },
+    { title: "Featured", value: extensions.filter(ext => ext.featured).length, icon: Star, color: "bg-gradient-to-br from-pink-500/20 to-pink-700/20" },
+    { title: "Security", value: extensions.filter(ext => ext.category === "Security").length, icon: Shield, color: "bg-gradient-to-br from-emerald-500/20 to-emerald-700/20" }
+  ];
+
   return (
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header - moved to left alignment and increased size */}
@@ -61,6 +86,34 @@ const ExtensionStore: React.FC = () => {
         <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
           Nexus Wave Extension Library
         </h1>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {statsData.map((stat, index) => (
+          <Card key={index} className={stat.color}>
+            <div className="flex items-center justify-between p-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
+              </div>
+              <div className="bg-background/80 p-2 rounded-full">
+                <stat.icon className="h-5 w-5 text-muted-foreground" />
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+      
+      {/* Tabs for filtering */}
+      <div className="mb-6">
+        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-3 sm:grid-cols-3">
+            <TabsTrigger value="all">All Extensions</TabsTrigger>
+            <TabsTrigger value="installed">Installed</TabsTrigger>
+            <TabsTrigger value="featured">Featured</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
       {/* Search and filter bar */}
