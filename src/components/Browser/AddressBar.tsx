@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -150,7 +149,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none h-9 px-4"
+          className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/80 text-white border-none h-9 px-4"
         >
           Buy $NWF3
         </Button>
