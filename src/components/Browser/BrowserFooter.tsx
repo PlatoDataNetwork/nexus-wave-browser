@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
 import {
@@ -15,6 +15,7 @@ import {
 const BrowserFooter: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   
   const handleActionClick = (action: string) => {
@@ -89,7 +90,7 @@ const BrowserFooter: React.FC = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-7"
+              className={`h-7 ${location.pathname === '/documentation' ? 'bg-muted' : ''}`}
               onClick={handleDocumentationClick}
             >
               <FileText className="h-3 w-3 mr-1" />
@@ -104,7 +105,7 @@ const BrowserFooter: React.FC = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-7"
+              className={`h-7 ${location.pathname === '/settings' ? 'bg-muted' : ''}`}
               onClick={handleSettingsClick}
             >
               <Settings className="h-3 w-3 mr-1" />

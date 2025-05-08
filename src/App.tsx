@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
+import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
 
@@ -19,11 +20,11 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings-docs" element={<Documentation />} />
-          <Route path="/documentation" element={<Documentation />} />
+          <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
+          <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
+          <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
