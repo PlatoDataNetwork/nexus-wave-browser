@@ -134,6 +134,12 @@ export const bookmarks: Bookmark[] = [
     url: "https://honey.land",
     icon: Globe,
   },
+  {
+    id: "17",
+    title: "Layer3",
+    url: "https://layer3.xyz",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
