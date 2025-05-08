@@ -3,16 +3,21 @@ import React from "react";
 import { Chrome, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BrowserFooter: React.FC = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleActionClick = (action: string) => {
     toast({
       title: `${action} clicked`,
       description: `This would open the ${action.toLowerCase()} in a real browser`,
     });
+  };
+
+  const handleSettingsClick = () => {
+    navigate('/settings-docs');
   };
 
   return (
@@ -27,17 +32,25 @@ const BrowserFooter: React.FC = () => {
           <Chrome className="h-3 w-3 mr-1" />
           <span>Extensions</span>
         </Button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-7"
+          onClick={() => handleActionClick("Settings")}
+        >
+          <Settings className="h-3 w-3 mr-1" />
+          <span>Settings</span>
+        </Button>
       </div>
       
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center gap-3">
         <span>Nexus Wave Browser Web3 V2.1</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="bg-pink-600 hover:bg-pink-700 text-white h-7"
-          asChild
+        <Button 
+          onClick={handleSettingsClick}
+          size="sm" 
+          className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white font-medium px-3 py-1 rounded-md"
         >
-          <Link to="/settings">Settings</Link>
+          Nexus Bridge
         </Button>
       </div>
     </div>
