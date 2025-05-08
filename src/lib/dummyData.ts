@@ -158,6 +158,12 @@ export const bookmarks: Bookmark[] = [
     url: "https://Gamblex.casino",
     icon: Globe,
   },
+  {
+    id: "21",
+    title: "UPFI",
+    url: "https://upfi.network",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
