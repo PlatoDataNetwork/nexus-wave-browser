@@ -1,9 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { topProtocols, Protocol } from "@/lib/protocolData";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProtocolTickerProps {
@@ -13,7 +13,9 @@ interface ProtocolTickerProps {
 const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
   const { toast } = useToast();
   const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
   
   const handleProtocolClick = (protocol: Protocol) => {
     toast({
@@ -40,8 +42,50 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
     }
   };
 
+  // Automatic scrolling animation
+  useEffect(() => {
+    const startScrolling = () => {
+      if (scrollRef.current && !isHovering) {
+        const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+        
+        if (scrollPosition >= maxScroll) {
+          // Reset to beginning when reached the end
+          setScrollPosition(0);
+          scrollRef.current.scrollTo({
+            left: 0,
+            behavior: 'auto'
+          });
+        } else {
+          // Continue scrolling
+          const newPosition = scrollPosition + 1;
+          setScrollPosition(newPosition);
+          scrollRef.current.scrollTo({
+            left: newPosition,
+            behavior: 'auto'
+          });
+        }
+      }
+      
+      animationRef.current = requestAnimationFrame(startScrolling);
+    };
+
+    // Start animation
+    animationRef.current = requestAnimationFrame(startScrolling);
+    
+    // Cleanup animation on unmount
+    return () => {
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [scrollPosition, isHovering]);
+
   return (
-    <div className="w-full bg-muted border-b border-border py-2 flex items-center">
+    <div 
+      className="w-full bg-muted border-b border-border py-2 flex items-center"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <Button 
         variant="ghost" 
         size="icon" 
@@ -49,7 +93,7 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
         className="flex-shrink-0 hover:bg-primary/20 transition-all mx-1"
         aria-label="Scroll left"
       >
-        <ChevronLeft className="h-7 w-7 text-primary" />
+        <ChevronLeft className="h-8 w-8 text-primary" />
       </Button>
       
       <ScrollArea className="w-full" scrollHideDelay={0}>
@@ -64,11 +108,8 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
               onClick={() => handleProtocolClick(protocol)}
               className="flex items-center space-x-2 px-2 py-1 rounded-md hover:bg-muted/50 cursor-pointer transition-colors flex-shrink-0"
             >
-              <div 
-                className="w-6 h-6 rounded-full flex items-center justify-center text-white font-semibold text-xs"
-                style={{ backgroundColor: protocol.color }}
-              >
-                {protocol.name.charAt(0)}
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-white bg-primary/80">
+                <Globe className="h-4 w-4" />
               </div>
               <span className="text-xs whitespace-nowrap">{protocol.name}</span>
             </div>
@@ -83,7 +124,7 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
         className="flex-shrink-0 hover:bg-primary/20 transition-all mx-1"
         aria-label="Scroll right"
       >
-        <ChevronRight className="h-7 w-7 text-primary" />
+        <ChevronRight className="h-8 w-8 text-primary" />
       </Button>
     </div>
   );
