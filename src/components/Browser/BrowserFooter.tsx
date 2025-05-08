@@ -11,7 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const BrowserFooter: React.FC = () => {
+const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNavigate }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +37,11 @@ const BrowserFooter: React.FC = () => {
   };
   
   const handleExtensionStoreClick = () => {
-    navigate('/extension-store');
+    if (onNavigate) {
+      onNavigate("/extension-store");
+    } else {
+      navigate('/extension-store');
+    }
   };
 
   return (
@@ -48,14 +52,16 @@ const BrowserFooter: React.FC = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-7 ${location.pathname === '/extension-store' ? 'bg-muted' : ''}`}
+              className={`h-7 ${location.pathname === '/extension-store' || onNavigate && currentUrl === '/extension-store' ? 'bg-muted' : ''}`}
               onClick={handleExtensionStoreClick}
             >
               <Chrome className="h-3 w-3 mr-1" />
               <span>Extensions</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Browse extension store</TooltipContent>
+          <TooltipContent>
+            <p>Browse extension store</p>
+          </TooltipContent>
         </Tooltip>
 
         <Tooltip>

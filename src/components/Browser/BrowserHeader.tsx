@@ -3,6 +3,7 @@ import React from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
+import BrowserFooter from "./BrowserFooter";
 import { Tab } from "@/lib/dummyData";
 
 interface BrowserHeaderProps {

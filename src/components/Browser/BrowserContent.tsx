@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import WalletConnect from "./WalletConnect";
+import ExtensionStore from "@/pages/ExtensionStore";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -93,6 +95,17 @@ const ProtocolTicker: React.FC = () => {
 
 const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate }) => {
   const isHomepage = currentUrl === initialTabs[0].url;
+  const isExtensionStore = currentUrl === "/extension-store";
+
+  if (isExtensionStore) {
+    return (
+      <div className="flex-1 relative overflow-hidden">
+        <div className="absolute inset-0 overflow-y-auto">
+          <ExtensionStore />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 relative overflow-hidden">
