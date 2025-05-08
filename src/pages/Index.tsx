@@ -25,7 +25,7 @@ const Index = () => {
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar - would be handled by the native window in a real app */}
       <div className="flex items-center justify-center h-8 bg-card border-b border-border nexus-gradient-bg">
-        <h1 className="text-xs font-medium">Nexus Wave Browser - Web3 Enhanced</h1>
+        <h1 className="text-xs font-medium">Nexus Wave Browser Web3 V2.1</h1>
       </div>
       
       {/* Browser interface */}

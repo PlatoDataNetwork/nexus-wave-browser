@@ -49,7 +49,7 @@ const BrowserFooter: React.FC = () => {
       </div>
       
       <div>
-        <span>Nexus Wave Browser v1.0</span>
+        <span>Nexus Wave Browser Web3 V2.1</span>
       </div>
     </div>
   );
