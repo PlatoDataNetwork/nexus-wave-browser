@@ -140,6 +140,18 @@ export const bookmarks: Bookmark[] = [
     url: "https://layer3.xyz",
     icon: Globe,
   },
+  {
+    id: "18",
+    title: "Galxe",
+    url: "https://glaxe.com",
+    icon: Globe,
+  },
+  {
+    id: "19",
+    title: "Saber",
+    url: "https://saberdao.so",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
