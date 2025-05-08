@@ -150,17 +150,9 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
-        >
-          NWF3 Rewards
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
           className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none h-9 px-4"
         >
-          Buy NWF3
+          Buy $NWF3
         </Button>
 
         <Button 
@@ -169,6 +161,14 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/80 text-white border-none h-9 px-4"
         >
           NWF3 Staking
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
+        >
+          NWF3 Rewards
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
