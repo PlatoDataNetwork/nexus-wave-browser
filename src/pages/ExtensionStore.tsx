@@ -1,10 +1,8 @@
-
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +10,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Filter, Search, Package, Grid2x2, List, Tag, Star } from "lucide-react";
+import { Filter, Search, Package, Grid2x2, List, Star } from "lucide-react";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 
@@ -107,22 +105,6 @@ const ExtensionStore: React.FC = () => {
             <List className={`h-4 w-4 ${viewMode === "list" ? "text-primary" : "text-muted-foreground"}`} />
           </Button>
         </div>
-      </div>
-
-      {/* Categories bar */}
-      <div className="mb-6 overflow-x-auto">
-        <Tabs defaultValue={activeCategory} value={activeCategory} onValueChange={setActiveCategory} className="w-full">
-          <TabsList className="flex h-10 w-full">
-            <TabsTrigger value="all" className="flex-grow">
-              <Package className="h-4 w-4 mr-2" /> All
-            </TabsTrigger>
-            {categories.filter(c => c !== "all").sort().map((category) => (
-              <TabsTrigger key={category} value={category} className="flex-grow">
-                <Tag className="h-4 w-4 mr-2" /> {category}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
       </div>
 
       {/* Extensions grid/list */}
