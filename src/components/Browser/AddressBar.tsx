@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -150,7 +149,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#00ffb3] hover:bg-[#00ffb3]/80 text-white border-none h-9 px-4"
+          className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
         >
           Rewards
         </Button>
@@ -168,7 +167,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           size="sm" 
           className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/80 text-white border-none h-9 px-4"
         >
-          Staking
+          NWF3 Staking
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
