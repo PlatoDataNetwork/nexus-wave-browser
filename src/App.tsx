@@ -20,7 +20,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
-          <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
