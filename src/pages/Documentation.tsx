@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -20,7 +19,7 @@ const Documentation: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState("overview");
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col bg-background" style={{ height: "calc(100vh - 48px)" }}>
       {/* Header */}
       <div className="flex items-center justify-center h-8 bg-card border-b border-border">
         <h1 className="text-xs font-medium">Nexus Wave Browser - Documentation</h1>
@@ -686,6 +685,58 @@ const Documentation: React.FC = () => {
                       </ul>
                     </CardContent>
                   </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="privacy" className="p-6 space-y-6 mt-0">
+                <div>
+                  <h2 className="text-xl font-medium mb-2">Privacy & Security</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Learn about Nexus Wave's robust privacy and security features
+                  </p>
+                </div>
+
+                <Card className="border-nexus-purple/20">
+                  <CardContent className="p-6">
+                    <h3 className="text-md font-medium mb-3">Privacy Features</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Nexus Wave was built with privacy at its core, offering features like:
+                    </p>
+                    <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
+                      <li>Automatic tracker blocking</li>
+                      <li>Fingerprint protection</li>
+                      <li>Private browsing mode</li>
+                      <li>Cookie management</li>
+                      <li>HTTPS Everywhere</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="settings" className="p-6 space-y-6 mt-0">
+                <div>
+                  <h2 className="text-xl font-medium mb-2">Settings Guide</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Learn how to configure Nexus Wave for optimal performance
+                  </p>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="shortcuts" className="p-6 space-y-6 mt-0">
+                <div>
+                  <h2 className="text-xl font-medium mb-2">Keyboard Shortcuts</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Master Nexus Wave with these time-saving keyboard shortcuts
+                  </p>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="troubleshooting" className="p-6 space-y-6 mt-0">
+                <div>
+                  <h2 className="text-xl font-medium mb-2">Troubleshooting</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Solutions for common issues you might encounter
+                  </p>
                 </div>
               </TabsContent>
             </Tabs>
