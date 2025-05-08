@@ -158,7 +158,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#1EAEDB] hover:bg-[#1EAEDB]/80 text-white border-none h-9 px-4"
+          className="bg-[#4c5fd7] hover:bg-[#4c5fd7]/80 text-white border-none h-9 px-4"
         >
           NWF3 Staking
         </Button>
