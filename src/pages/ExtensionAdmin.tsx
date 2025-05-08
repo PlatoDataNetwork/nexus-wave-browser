@@ -21,10 +21,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ArrowLeft, MoreVertical, Search, Settings, Star, FileText, Shield, Package } from "lucide-react";
+import { ArrowLeft, MoreVertical, Settings, Star, FileText, Shield, Package } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { extensionsData } from "@/lib/extensionsData";
 import PageLayout from "@/components/Layout/PageLayout";
+import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
 
 const ExtensionAdmin: React.FC = () => {
   const navigate = useNavigate();
@@ -32,6 +33,11 @@ const ExtensionAdmin: React.FC = () => {
   const [extensions, setExtensions] = useState(extensionsData);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  // Get unique categories from extensions
+  const categories = ["all", ...new Set(extensionsData.map(ext => ext.category))];
 
   const installedExtensions = extensions.filter(ext => ext.installed);
   const featuredExtensions = extensions.filter(ext => ext.featured);
@@ -42,10 +48,15 @@ const ExtensionAdmin: React.FC = () => {
       ? installedExtensions
       : featuredExtensions;
 
-  const filteredExtensions = currentExtensions.filter(ext =>
-    ext.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    ext.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredExtensions = currentExtensions.filter(ext => {
+    const matchesSearch = 
+      ext.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ext.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = activeCategory === "all" || ext.category === activeCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
 
   const toggleExtension = (id: number) => {
     setExtensions(
@@ -152,25 +163,41 @@ const ExtensionAdmin: React.FC = () => {
             ))}
           </div>
           
-          {/* Controls */}
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-            <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search extensions..." 
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+          {/* Unified control bar - matching ExtensionStore layout */}
+          <div className="flex items-center justify-between gap-4 mt-6 mb-8">
+            <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="flex-shrink-0">
+              <TabsList className="h-12 bg-background/30">
+                <TabsTrigger 
+                  value="all" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                >
+                  All Extensions
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="installed" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                >
+                  Installed
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="featured" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                >
+                  Featured
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            <div className="flex-grow flex justify-end">
+              <ExtensionSearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                categories={categories}
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
               />
-            </div>
-            <div>
-              <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
-                  <TabsTrigger value="all">All Extensions</TabsTrigger>
-                  <TabsTrigger value="installed">Installed</TabsTrigger>
-                  <TabsTrigger value="featured">Featured</TabsTrigger>
-                </TabsList>
-              </Tabs>
             </div>
           </div>
 
