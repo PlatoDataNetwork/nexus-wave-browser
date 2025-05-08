@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Plus,
@@ -148,8 +147,8 @@ const UserSettingsTray: React.FC = () => {
     <div className="flex items-center gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-16 w-16 rounded-full">
-            <Settings className="h-12 w-12 text-nexus-purple" />
+          <Button variant="ghost" size="icon" className="h-16 w-16 rounded-full flex items-center justify-center">
+            <Settings className="h-14 w-14 text-nexus-purple" />
             <span className="sr-only">Settings</span>
           </Button>
         </DropdownMenuTrigger>
