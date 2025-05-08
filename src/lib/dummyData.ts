@@ -106,7 +106,7 @@ export const bookmarks: Bookmark[] = [
   },
   {
     id: "12",
-    title: "Fynn",
+    title: "FYNN",
     url: "https://fynn.fyntechnical.com/",
     icon: Globe,
   },
