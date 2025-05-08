@@ -123,7 +123,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </TooltipProvider>
       </div>
       
-      <div className="flex-1">
+      <div className="flex-1 mx-2">
         <form onSubmit={handleSubmit} className="w-full">
           <div className="address-bar flex items-center px-3 py-1.5 rounded-md bg-background border border-input hover:border-muted-foreground/50 focus-within:border-nexus-purple focus-within:ring-1 focus-within:ring-nexus-purple">
             <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
@@ -146,37 +146,55 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </form>
       </div>
       
-      <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
-        <DialogTrigger asChild>
-          <Button 
-            variant="secondary" 
-            size="sm" 
-            className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
-          >
-            Nexus Wave Bridge
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
-                NB
-              </div>
-              <span className="ml-2">Nexus Wave Bridge</span>
-            </DialogTitle>
-            <DialogDescription>
-              Connect your wallet to interact with Web3 applications.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <WalletConnect />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <div className="flex items-center space-x-2">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white border-none"
+        >
+          Action 1
+        </Button>
+        
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none"
+        >
+          Action 2
+        </Button>
+      
+        <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
+            >
+              Nexus Wave Bridge
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center">
+                <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
+                  NB
+                </div>
+                <span className="ml-2">Nexus Wave Bridge</span>
+              </DialogTitle>
+              <DialogDescription>
+                Connect your wallet to interact with Web3 applications.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <WalletConnect />
+            </div>
+          </DialogContent>
+        </Dialog>
 
-      {/* User Settings Tray */}
-      <div className="ml-2">
-        <UserSettingsTray />
+        {/* User Settings Tray */}
+        <div className="ml-2">
+          <UserSettingsTray />
+        </div>
       </div>
     </div>
   );
