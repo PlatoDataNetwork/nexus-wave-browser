@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -44,7 +45,7 @@ import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 
 // Define wallet types
-type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom';
+type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger';
 
 interface WalletConnection {
   id?: string;
@@ -59,9 +60,11 @@ const walletOptions = [
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw' },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' },
+  { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: 'https://cryptologos.cc/logos/ledger-wallet-logo.png' },
   { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
   { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' },
   { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: 'https://cryptorank.io/public/wallet-logos/solflare.svg' },
+  { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to your Trezor hardware wallet', logoUrl: 'https://trezor.io/static/images/trezor-logo.svg' },
   { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: 'https://trustwallet.com/assets/images/media/assets/trust_platform.png' },
   { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
   { id: 'walletconnect', name: 'Wallet Connect', icon: '🔗', description: 'Connect with Wallet Connect protocol', logoUrl: 'https://1000logos.net/wp-content/uploads/2023/02/WalletConnect-logo.png' },
@@ -324,7 +327,7 @@ const WalletConnect: React.FC = () => {
   }
 
   return (
-    <Card className="nexus-glass animate-pulse-glow">
+    <Card className="nexus-glass animate-pulse-glow w-full max-w-[700px] transform scale-[1.75]">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-medium flex items-center">
           <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-nexus-purple'} mr-2 ${isConnected ? '' : 'animate-pulse'}`}></div>
@@ -505,7 +508,7 @@ const WalletConnect: React.FC = () => {
                   Connect Wallet
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[600px]">
+              <DialogContent className="sm:max-w-[850px]">
                 <DialogHeader>
                   <DialogTitle>Connect Wallet</DialogTitle>
                   <DialogDescription>
@@ -565,7 +568,7 @@ const WalletConnect: React.FC = () => {
           
           <div className="pt-2">
             <p className="text-xs text-muted-foreground">
-              Supports MetaMask, Coinbase Wallet, Solflare, Wallet Connect, Trust Wallet, Phantom and more
+              Supports MetaMask, Coinbase Wallet, Ledger, Trezor, Solflare, Wallet Connect, Trust Wallet, Phantom and more
             </p>
           </div>
         </div>
