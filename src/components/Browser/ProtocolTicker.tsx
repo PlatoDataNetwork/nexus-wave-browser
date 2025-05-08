@@ -41,15 +41,15 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="w-full bg-card border-t border-border py-1 flex items-center">
+    <div className="w-full bg-muted border-b border-border py-2 flex items-center">
       <Button 
         variant="ghost" 
         size="icon" 
         onClick={() => handleScroll('left')}
-        className="flex-shrink-0"
+        className="flex-shrink-0 hover:bg-primary/20 transition-all mx-1"
         aria-label="Scroll left"
       >
-        <ChevronLeft className="h-5 w-5" />
+        <ChevronLeft className="h-7 w-7 text-primary" />
       </Button>
       
       <ScrollArea className="w-full" scrollHideDelay={0}>
@@ -80,10 +80,10 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
         variant="ghost" 
         size="icon" 
         onClick={() => handleScroll('right')}
-        className="flex-shrink-0"
+        className="flex-shrink-0 hover:bg-primary/20 transition-all mx-1"
         aria-label="Scroll right"
       >
-        <ChevronRight className="h-5 w-5" />
+        <ChevronRight className="h-7 w-7 text-primary" />
       </Button>
     </div>
   );

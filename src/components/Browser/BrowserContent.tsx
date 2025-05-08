@@ -14,7 +14,6 @@ const BrowserContent: React.FC<BrowserContentProps> = ({
 }) => {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <ProtocolTicker onNavigate={onNavigate} />
       <div className="flex-1 p-4 overflow-hidden">
         <WebviewFrame url={currentUrl} />
       </div>
