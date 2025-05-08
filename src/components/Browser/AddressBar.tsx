@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,7 +35,7 @@ interface AddressBarProps {
 
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
-  <div className="w-7 h-7 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold text-sm">
+  <div className="w-7 h-7 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold text-sm">
     NB
   </div>
 );
@@ -166,7 +167,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           <Button 
             variant="secondary" 
             size="sm" 
-            className="bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white"
+            className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
           >
             Nexus Wave Bridge
           </Button>
@@ -174,7 +175,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+              <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
                 NB
               </div>
               <span className="ml-2">Nexus Wave Bridge</span>
