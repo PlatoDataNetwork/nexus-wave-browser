@@ -52,7 +52,7 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-7 ${location.pathname === '/extension-store' || onNavigate && currentUrl === '/extension-store' ? 'bg-muted' : ''}`}
+              className={`h-7 ${location.pathname === '/extension-store' ? 'bg-muted' : ''}`}
               onClick={handleExtensionStoreClick}
             >
               <Chrome className="h-3 w-3 mr-1" />
