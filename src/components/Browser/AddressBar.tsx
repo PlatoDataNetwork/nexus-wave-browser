@@ -162,6 +162,14 @@ const AddressBar: React.FC<AddressBarProps> = ({
         >
           Buy NWF3
         </Button>
+
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="bg-[#9b87f5] hover:bg-[#9b87f5]/80 text-white border-none h-9 px-4"
+        >
+          Staking
+        </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
           <DialogTrigger asChild>
