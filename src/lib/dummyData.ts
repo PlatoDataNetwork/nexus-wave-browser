@@ -63,18 +63,6 @@ export const bookmarks: Bookmark[] = [
     icon: Globe,
   },
   {
-    id: "3",
-    title: "Etherscan",
-    url: "https://etherscan.io",
-    icon: Search,
-  },
-  {
-    id: "4",
-    title: "MetaMask",
-    url: "https://metamask.io",
-    icon: Settings,
-  },
-  {
     id: "5",
     title: "Aave",
     url: "https://aave.com",
