@@ -67,7 +67,7 @@ const ExtensionStore: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
-      <div className="flex justify-start mb-6">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
           Nexus Wave Extension Library
         </h1>
@@ -76,9 +76,9 @@ const ExtensionStore: React.FC = () => {
       {/* Stats Cards */}
       <ExtensionStats extensions={extensions} />
       
-      {/* Tabs for filtering */}
-      <div className="mb-6">
-        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+      {/* Tabs for filtering and SearchBar */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
           <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-4 sm:grid-cols-4">
             <TabsTrigger value="all">All Extensions</TabsTrigger>
             <TabsTrigger value="installed">Installed</TabsTrigger>
@@ -89,19 +89,18 @@ const ExtensionStore: React.FC = () => {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+        
+        <ExtensionSearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+          onAdminNavigation={handleAdminNavigation}
+        />
       </div>
-      
-      {/* Search and filter bar */}
-      <ExtensionSearchBar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        categories={categories}
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        onAdminNavigation={handleAdminNavigation}
-      />
 
       {/* Extensions grid/list */}
       <ExtensionList 
