@@ -54,18 +54,18 @@ interface WalletConnection {
   last_connected?: string;
 }
 
-// Wallet options
+// Wallet options - alphabetized
 const walletOptions = [
-  { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw' },
-  { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: 'https://cryptorank.io/public/wallet-logos/solflare.svg' },
-  { id: 'walletconnect', name: 'Wallet Connect', icon: '🔗', description: 'Connect with Wallet Connect protocol', logoUrl: 'https://1000logos.net/wp-content/uploads/2023/02/WalletConnect-logo.png' },
-  { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
-  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: 'https://play-lh.googleusercontent.com/Mf45WzShFQN7Ep3JVvHvZ_ZmDfPej_OoE-QwRn3urG8h3ZcAuRGLY9BZ-iUaGm6Q7g=w240-h480-rw' },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' },
+  { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
+  { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' },
+  { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: 'https://cryptorank.io/public/wallet-logos/solflare.svg' },
   { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: 'https://trustwallet.com/assets/images/media/assets/trust_platform.png' },
-  { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' }
+  { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
+  { id: 'walletconnect', name: 'Wallet Connect', icon: '🔗', description: 'Connect with Wallet Connect protocol', logoUrl: 'https://1000logos.net/wp-content/uploads/2023/02/WalletConnect-logo.png' },
+  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: 'https://play-lh.googleusercontent.com/Mf45WzShFQN7Ep3JVvHvZ_ZmDfPej_OoE-QwRn3urG8h3ZcAuRGLY9BZ-iUaGm6Q7g=w240-h480-rw' },
 ];
 
 // Shortened address helper
@@ -505,7 +505,7 @@ const WalletConnect: React.FC = () => {
                   Connect Wallet
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
                   <DialogTitle>Connect Wallet</DialogTitle>
                   <DialogDescription>
@@ -524,14 +524,14 @@ const WalletConnect: React.FC = () => {
                           <RadioGroup 
                             onValueChange={field.onChange} 
                             defaultValue={field.value}
-                            className="grid gap-3"
+                            className="grid grid-cols-2 gap-3"
                           >
                             {walletOptions.map(wallet => (
                               <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
                                 <RadioGroupItem value={wallet.id} id={wallet.id} />
                                 <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
                                   <div className="flex items-center">
-                                    <Avatar className="h-8 w-8 mr-2">
+                                    <Avatar className="h-10 w-10 mr-2">
                                       <AvatarImage src={wallet.logoUrl} alt={wallet.name} />
                                       <AvatarFallback>{wallet.icon}</AvatarFallback>
                                     </Avatar>
