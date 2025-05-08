@@ -365,7 +365,7 @@ const WalletConnect: React.FC = () => {
           </div>
         </CardTitle>
         <CardDescription>
-          Connect you wallet and transport yourself with Nexus
+          Connect you wallet and transport yourself with Nexus.
         </CardDescription>
       </CardHeader>
       <CardContent>
