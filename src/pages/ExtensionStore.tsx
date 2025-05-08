@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,8 +57,8 @@ const ExtensionStore: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
-      <div className="flex items-center justify-center h-12 bg-card border-b border-border mb-6">
-        <h1 className="text-xl font-medium bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+      <div className="flex items-center justify-center h-16 mb-6">
+        <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
           Nexus Wave Extension Library
         </h1>
       </div>
