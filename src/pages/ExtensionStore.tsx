@@ -76,15 +76,39 @@ const ExtensionStore: React.FC = () => {
       {/* Stats Cards */}
       <ExtensionStats extensions={extensions} />
       
-      {/* Tabs for filtering and SearchBar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
-          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-4 sm:grid-cols-4">
-            <TabsTrigger value="all">All Extensions</TabsTrigger>
-            <TabsTrigger value="installed">Installed</TabsTrigger>
-            <TabsTrigger value="featured">Featured</TabsTrigger>
-            <TabsTrigger value="admin" onClick={handleAdminNavigation} className="bg-nexus-purple/10 hover:bg-nexus-purple/20">
-              <UserCog className="h-4 w-4 mr-1" />
+      {/* Unified control bar */}
+      <div className="flex flex-col lg:flex-row justify-between items-center mb-8 gap-4 bg-muted/30 p-4 rounded-lg">
+        <Tabs 
+          defaultValue="all" 
+          value={activeTab} 
+          onValueChange={setActiveTab} 
+          className="w-full lg:w-auto"
+        >
+          <TabsList className="w-full lg:w-auto p-1 h-12 bg-background/30">
+            <TabsTrigger 
+              value="all" 
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+            >
+              All Extensions
+            </TabsTrigger>
+            <TabsTrigger 
+              value="installed" 
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+            >
+              Installed
+            </TabsTrigger>
+            <TabsTrigger 
+              value="featured" 
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+            >
+              Featured
+            </TabsTrigger>
+            <TabsTrigger 
+              value="admin" 
+              onClick={handleAdminNavigation} 
+              className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 data-[state=active]:bg-background"
+            >
+              <UserCog className="h-5 w-5 mr-2" />
               Admin
             </TabsTrigger>
           </TabsList>
