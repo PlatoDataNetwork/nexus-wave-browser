@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Chrome, Settings, Download, Bookmark } from "lucide-react";
+import { Chrome, Settings, Download, Bookmark, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -78,6 +78,21 @@ const BrowserFooter: React.FC = () => {
             </Button>
           </TooltipTrigger>
           <TooltipContent>View saved bookmarks</TooltipContent>
+        </Tooltip>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-7"
+              onClick={() => handleActionClick("Documentation")}
+            >
+              <FileText className="h-3 w-3 mr-1" />
+              <span>Documentation</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>View browser documentation</TooltipContent>
         </Tooltip>
 
         <Tooltip>
