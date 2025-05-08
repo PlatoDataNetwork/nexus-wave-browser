@@ -119,10 +119,14 @@ const ExtensionStore: React.FC = () => {
       {/* Tabs for filtering */}
       <div className="mb-6">
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-3 sm:grid-cols-3">
+          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-4 sm:grid-cols-4">
             <TabsTrigger value="all">All Extensions</TabsTrigger>
             <TabsTrigger value="installed">Installed</TabsTrigger>
             <TabsTrigger value="featured">Featured</TabsTrigger>
+            <TabsTrigger value="admin" onClick={handleAdminNavigation} className="bg-nexus-purple/10 hover:bg-nexus-purple/20">
+              <UserCog className="h-4 w-4 mr-1" />
+              Admin
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
