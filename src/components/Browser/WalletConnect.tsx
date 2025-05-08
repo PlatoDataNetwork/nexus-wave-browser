@@ -355,7 +355,7 @@ const WalletConnect: React.FC = () => {
           </div>
         </CardTitle>
         <CardDescription>
-          Connect your wallet to interact with DApps
+          Connect your wallet to interact with Any Web3 Application
         </CardDescription>
       </CardHeader>
       <CardContent>
