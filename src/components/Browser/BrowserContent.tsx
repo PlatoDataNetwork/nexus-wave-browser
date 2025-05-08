@@ -1,7 +1,6 @@
 
 import React from "react";
 import WebviewFrame from "./WebviewFrame";
-import ProtocolTicker from "./ProtocolTicker";
 
 interface BrowserContentProps {
   currentUrl: string;
