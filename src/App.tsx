@@ -16,8 +16,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/settings-docs" element={<Index />} />
+          <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
+          <Route path="/settings-docs" element={<Index defaultUrl="https://Platodata.io" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

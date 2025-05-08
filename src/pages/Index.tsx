@@ -6,7 +6,11 @@ import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 
-const Index = () => {
+interface IndexProps {
+  defaultUrl?: string;
+}
+
+const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) => {
   const { 
     tabs, 
     currentUrl, 
@@ -19,7 +23,7 @@ const Index = () => {
     refreshPage,
     canGoBack,
     canGoForward
-  } = useTabs();
+  } = useTabs(defaultUrl);
 
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
