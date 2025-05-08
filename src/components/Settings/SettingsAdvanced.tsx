@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Download, Upload } from "lucide-react";
+import { Download, Upload, MessageCircle, LifeBuoy, Send } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 
 const SettingsAdvanced: React.FC = () => {
   const [hardwareAcceleration, setHardwareAcceleration] = useState(true);
@@ -18,6 +20,13 @@ const SettingsAdvanced: React.FC = () => {
   const [smoothScrolling, setSmoothScrolling] = useState(true);
   const [tabDiscarding, setTabDiscarding] = useState(true);
   const [webGL, setWebGL] = useState(true);
+  const [supportIssue, setSupportIssue] = useState("");
+  const [supportEmail, setSupportEmail] = useState("");
+  const [supportMessages, setSupportMessages] = useState([
+    { sender: "system", content: "Welcome to Nexus Wave Support. How can we help you today?", timestamp: new Date().toISOString() }
+  ]);
+  const [messageInput, setMessageInput] = useState("");
+  const [troubleshootTab, setTroubleshootTab] = useState("reset");
   const { toast } = useToast();
 
   const handleResetSettings = () => {
@@ -46,6 +55,43 @@ const SettingsAdvanced: React.FC = () => {
       title: "Export Settings",
       description: "Settings exported to file",
     });
+  };
+
+  const handleSupportSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (supportIssue.trim() && supportEmail.trim()) {
+      toast({
+        title: "Support ticket created",
+        description: "A support representative will contact you shortly",
+      });
+      setSupportIssue("");
+      setSupportEmail("");
+    } else {
+      toast({
+        title: "Form incomplete",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (!messageInput.trim()) return;
+    
+    // Add user message
+    const userMessage = { sender: "user", content: messageInput, timestamp: new Date().toISOString() };
+    setSupportMessages(prev => [...prev, userMessage]);
+    setMessageInput("");
+    
+    // Simulate agent response after a short delay
+    setTimeout(() => {
+      const agentMessage = { 
+        sender: "agent", 
+        content: "Thanks for reaching out! Our support team has received your message and will respond shortly. For urgent issues, please call our support line at 1-800-NEXUS-HELP.", 
+        timestamp: new Date().toISOString() 
+      };
+      setSupportMessages(prev => [...prev, agentMessage]);
+    }, 1000);
   };
 
   return (
@@ -211,31 +257,112 @@ const SettingsAdvanced: React.FC = () => {
         <div>
           <h3 className="text-md font-medium mb-3">Troubleshooting</h3>
           
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="reset-settings">
-              <AccordionTrigger className="text-sm py-2">Reset settings</AccordionTrigger>
-              <AccordionContent>
-                <p className="text-xs text-muted-foreground mb-3">
-                  This will reset all Nexus Wave settings to their default values.
-                </p>
-                <Button variant="destructive" size="sm" onClick={handleResetSettings}>
-                  Reset settings
-                </Button>
-              </AccordionContent>
-            </AccordionItem>
+          <Tabs value={troubleshootTab} onValueChange={setTroubleshootTab} className="w-full">
+            <TabsList className="grid grid-cols-3 mb-2">
+              <TabsTrigger value="reset" className="text-xs">Reset Settings</TabsTrigger>
+              <TabsTrigger value="clear" className="text-xs">Clear Data</TabsTrigger>
+              <TabsTrigger value="support" className="text-xs">Get Support</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="reset" className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                This will reset all Nexus Wave settings to their default values.
+              </p>
+              <Button variant="destructive" size="sm" onClick={handleResetSettings}>
+                Reset settings
+              </Button>
+            </TabsContent>
             
-            <AccordionItem value="clear-data">
-              <AccordionTrigger className="text-sm py-2">Clear browsing data</AccordionTrigger>
-              <AccordionContent>
-                <p className="text-xs text-muted-foreground mb-3">
-                  This will clear all your browsing history, cookies, and site data.
-                </p>
-                <Button variant="destructive" size="sm" onClick={handleClearData}>
-                  Clear data
-                </Button>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+            <TabsContent value="clear" className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                This will clear all your browsing history, cookies, and site data.
+              </p>
+              <Button variant="destructive" size="sm" onClick={handleClearData}>
+                Clear data
+              </Button>
+            </TabsContent>
+            
+            <TabsContent value="support" className="space-y-4">
+              <div className="space-y-4">
+                <div className="bg-muted/50 rounded-md p-4 space-y-4">
+                  <h4 className="text-sm font-medium">Contact Support</h4>
+                  <form onSubmit={handleSupportSubmit} className="space-y-3">
+                    <div>
+                      <label htmlFor="supportEmail" className="text-xs font-medium">Email Address</label>
+                      <Input 
+                        id="supportEmail" 
+                        type="email" 
+                        value={supportEmail} 
+                        onChange={(e) => setSupportEmail(e.target.value)}
+                        placeholder="your.email@example.com"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="supportIssue" className="text-xs font-medium">Describe your issue</label>
+                      <Textarea 
+                        id="supportIssue"
+                        value={supportIssue}
+                        onChange={(e) => setSupportIssue(e.target.value)} 
+                        placeholder="Please provide details about the problem you're experiencing..." 
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    <Button size="sm" type="submit" className="w-full">
+                      <LifeBuoy className="h-4 w-4 mr-2" />
+                      Submit support request
+                    </Button>
+                  </form>
+                </div>
+                
+                <div className="bg-muted/50 rounded-md p-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-sm font-medium">Live Support Chat</h4>
+                    <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">Online</span>
+                  </div>
+                  
+                  <div className="bg-background border rounded-md h-48 overflow-y-auto p-3 space-y-2">
+                    {supportMessages.map((message, index) => (
+                      <div 
+                        key={index}
+                        className={`flex flex-col ${message.sender === 'user' ? 'items-end' : 'items-start'}`}
+                      >
+                        <div 
+                          className={`max-w-[85%] rounded-lg px-3 py-2 text-xs ${
+                            message.sender === 'user' 
+                              ? 'bg-primary text-primary-foreground' 
+                              : message.sender === 'system' 
+                                ? 'bg-muted text-foreground' 
+                                : 'bg-card text-card-foreground border'
+                          }`}
+                        >
+                          {message.content}
+                        </div>
+                        <span className="text-[10px] text-muted-foreground mt-1">
+                          {new Date(message.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Input
+                      value={messageInput}
+                      onChange={(e) => setMessageInput(e.target.value)}
+                      placeholder="Type your message..."
+                      className="flex-1 text-sm"
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    />
+                    <Button size="sm" onClick={handleSendMessage}>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
