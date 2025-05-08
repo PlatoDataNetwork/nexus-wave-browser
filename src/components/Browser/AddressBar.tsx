@@ -176,7 +176,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <Button 
               variant="secondary" 
               size="sm" 
-              className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white h-9 px-4"
+              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white h-9 px-4"
             >
               Nexus Bridge
             </Button>
