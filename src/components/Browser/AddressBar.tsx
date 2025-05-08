@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight, Settings } from "lucide-react";
+import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
@@ -13,15 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -32,13 +23,6 @@ interface AddressBarProps {
   canGoBack: boolean;
   canGoForward: boolean;
 }
-
-// Custom NB Logo component for Nexus Wave Bridge
-const NBLogo = () => (
-  <div className="w-7 h-7 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold text-sm">
-    NB
-  </div>
-);
 
 const AddressBar: React.FC<AddressBarProps> = ({ 
   currentUrl, 
