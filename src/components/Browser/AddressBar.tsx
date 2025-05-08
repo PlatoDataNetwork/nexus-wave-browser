@@ -3,6 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import WalletConnect from "./WalletConnect";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -25,6 +34,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(currentUrl);
   const [isLoading, setIsLoading] = useState(false);
+  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,22 +145,28 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </form>
       </div>
       
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="secondary" 
-              size="sm" 
-              className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
-            >
-              Connect Wallet
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Connect to Web3</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
+        <DialogTrigger asChild>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
+          >
+            Connect Wallet
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Connect Wallet</DialogTitle>
+            <DialogDescription>
+              Connect your wallet to interact with Web3 applications.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <WalletConnect />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
