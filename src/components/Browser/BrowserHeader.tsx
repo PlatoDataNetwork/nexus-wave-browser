@@ -40,15 +40,17 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
         onCloseTab={onCloseTab}
         onActivateTab={onActivateTab}
       />
-      <AddressBar
-        currentUrl={currentUrl}
-        onNavigate={onNavigate}
-        onGoBack={onGoBack}
-        onGoForward={onGoForward}
-        onRefresh={onRefresh}
-        canGoBack={canGoBack}
-        canGoForward={canGoForward}
-      />
+      <div className="flex-none">
+        <AddressBar
+          currentUrl={currentUrl}
+          onNavigate={onNavigate}
+          onGoBack={onGoBack}
+          onGoForward={onGoForward}
+          onRefresh={onRefresh}
+          canGoBack={canGoBack}
+          canGoForward={canGoForward}
+        />
+      </div>
       <Bookmarks onNavigate={onNavigate} />
     </div>
   );

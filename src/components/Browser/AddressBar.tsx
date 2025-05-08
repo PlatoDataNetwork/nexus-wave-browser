@@ -175,7 +175,9 @@ const AddressBar: React.FC<AddressBarProps> = ({
       </Dialog>
 
       {/* User Settings Tray */}
-      <UserSettingsTray />
+      <div className="ml-2">
+        <UserSettingsTray />
+      </div>
     </div>
   );
 };
