@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -10,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
-import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, X } from "lucide-react";
+import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -347,16 +346,6 @@ const WalletConnect: React.FC = () => {
 
   return (
     <Card className="nexus-glass animate-pulse-glow w-full max-w-[700px] transform scale-[1.75] relative">
-      {/* Close button positioned at the top right corner */}
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="absolute right-2 top-2 z-10 rounded-full w-8 h-8"
-        onClick={() => console.log("Close clicked")}
-      >
-        <X className="h-5 w-5" />
-      </Button>
-      
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-medium flex items-center">
           <div className="flex items-center">
