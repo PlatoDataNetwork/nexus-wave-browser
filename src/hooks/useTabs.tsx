@@ -8,10 +8,23 @@ interface TabHistory {
   [tabId: string]: string[];
 }
 
-export function useTabs() {
-  const [tabs, setTabs] = useState<Tab[]>(initialTabs);
+export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
+  const [tabs, setTabs] = useState<Tab[]>(() => {
+    // Update initialTabs with the provided defaultUrl for the active tab
+    return initialTabs.map(tab => {
+      if (tab.isActive) {
+        return {
+          ...tab,
+          url: defaultUrl,
+          title: defaultUrl.replace(/^https?:\/\//, '').split('/')[0]
+        };
+      }
+      return tab;
+    });
+  });
+  
   const [currentUrl, setCurrentUrl] = useState<string>(
-    initialTabs.find(tab => tab.isActive)?.url || "https://nexus.wave/dashboard"
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://nexus.wave/dashboard")
   );
   
   // History management for each tab
