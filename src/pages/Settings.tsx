@@ -147,10 +147,10 @@ const Settings: React.FC = () => {
       </div>
 
       <div className="flex justify-between p-4 border-t border-border bg-card">
-        <Button asChild>
+        <Button asChild className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white">
           <Link to="/settings-docs">View Documentation</Link>
         </Button>
-        <Button asChild>
+        <Button asChild className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white">
           <Link to="/">Return to Browser</Link>
         </Button>
       </div>
