@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Plus,
@@ -26,10 +25,8 @@ import {
   X,
   MinusIcon,
   PlusIcon,
-  Maximize2,
-  BookOpen
+  Maximize2
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
@@ -278,14 +275,6 @@ const UserSettingsTray: React.FC = () => {
           />
           
           <DropdownMenuSeparator />
-          
-          <Link to="/settings-docs" className="block w-full">
-            <MenuItem 
-              icon={BookOpen} 
-              label="Settings Documentation" 
-              onClick={() => {}} 
-            />
-          </Link>
           
           <MenuItem 
             icon={HelpCircle} 
