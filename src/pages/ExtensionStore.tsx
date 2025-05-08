@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -120,14 +119,10 @@ const ExtensionStore: React.FC = () => {
       {/* Tabs for filtering */}
       <div className="mb-6">
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-4 sm:grid-cols-4">
+          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-3 sm:grid-cols-3">
             <TabsTrigger value="all">All Extensions</TabsTrigger>
             <TabsTrigger value="installed">Installed</TabsTrigger>
             <TabsTrigger value="featured">Featured</TabsTrigger>
-            <TabsTrigger value="admin" onClick={handleAdminNavigation} className="bg-nexus-purple/10 hover:bg-nexus-purple/20">
-              <UserCog className="h-4 w-4 mr-1" />
-              Admin
-            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -165,6 +160,15 @@ const ExtensionStore: React.FC = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button
+            variant="outline"
+            size="icon"
+            className="bg-nexus-purple/10 hover:bg-nexus-purple/20"
+            onClick={handleAdminNavigation}
+          >
+            <UserCog className="h-4 w-4" />
+          </Button>
         </div>
 
         <div className="flex items-center space-x-2">
