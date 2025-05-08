@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
-import ExtensionStore from "./pages/ExtensionStore";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
 import PageLayout from "./components/Layout/PageLayout";
 
@@ -25,8 +24,8 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/extension-store" element={<ExtensionStore />} />
-          <Route path="/extension-admin" element={<ExtensionAdmin />} />
+          <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+          <Route path="/extension-admin" element={<PageLayout includeFooter={true}><ExtensionAdmin /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />
         </Routes>

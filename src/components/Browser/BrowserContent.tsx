@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -97,21 +96,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
   const isHomepage = currentUrl === initialTabs[0].url;
   const isExtensionStore = currentUrl === "/extension-store";
 
-  if (isExtensionStore) {
-    return (
-      <div className="flex-1 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-y-auto">
-          <ExtensionStore />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex-1 relative overflow-hidden">
       {/* Main webview frame - this would be a real webview in an Electron app */}
       <div className="absolute inset-0 overflow-y-auto">
-        <WebviewFrame url={currentUrl} />
+        {!isExtensionStore && <WebviewFrame url={currentUrl} />}
         
         {/* Homepage content - only shown for the default URL */}
         {isHomepage && (
@@ -123,6 +112,13 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
             <div className="col-span-1">
               <WalletConnect />
             </div>
+          </div>
+        )}
+        
+        {/* Extension Store - shown when URL is /extension-store */}
+        {isExtensionStore && (
+          <div className="h-full overflow-y-auto">
+            <ExtensionStore />
           </div>
         )}
       </div>

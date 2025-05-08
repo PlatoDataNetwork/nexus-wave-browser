@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,10 +55,6 @@ const ExtensionStore: React.FC = () => {
     }
   };
 
-  const navigateToAdmin = () => {
-    window.location.href = "/extension-admin";
-  };
-
   return (
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
@@ -108,10 +105,6 @@ const ExtensionStore: React.FC = () => {
           </Button>
           <Button variant="outline" size="sm" onClick={() => setViewMode("list")}>
             <List className={`h-4 w-4 ${viewMode === "list" ? "text-primary" : "text-muted-foreground"}`} />
-          </Button>
-          <Button variant="default" size="sm" onClick={navigateToAdmin} className="bg-nexus-purple hover:bg-nexus-deep-purple">
-            <Settings className="h-4 w-4 mr-2" />
-            Manage Extensions
           </Button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,8 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
     }
   };
 
+  const isExtensionStoreActive = location.pathname === '/extension-store';
+
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
@@ -52,7 +55,7 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-7 ${location.pathname === '/extension-store' ? 'bg-muted' : ''}`}
+              className={`h-7 ${isExtensionStoreActive ? 'bg-muted' : ''}`}
               onClick={handleExtensionStoreClick}
             >
               <Chrome className="h-3 w-3 mr-1" />
