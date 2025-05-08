@@ -33,7 +33,7 @@ const BrowserFooter: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-card border-t border-border text-xs text-muted-foreground">
+    <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
         <Tooltip>
           <TooltipTrigger asChild>
