@@ -1,12 +1,11 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +13,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { Filter, Search, Package, Grid2x2, List, Settings, Download, Star, Users, Info, Tag } from "lucide-react";
-import BrowserFooter from "@/components/Browser/BrowserFooter";
+import { Filter, Search, Package, Grid2x2, List, Settings, Tag } from "lucide-react";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 import PageLayout from "@/components/Layout/PageLayout";
@@ -64,11 +62,9 @@ const ExtensionStore: React.FC = () => {
     navigate("/extension-admin");
   };
 
-  // Return a single-root component with PageLayout as the outer wrapper
   return (
     <PageLayout includeFooter={true}>
-      {/* Main Content */}
-      <div className="flex-1 p-6 max-w-7xl mx-auto w-full">
+      <div className="p-6 max-w-7xl mx-auto w-full">
         {/* Header */}
         <div className="flex items-center justify-center h-12 bg-card border-b border-border mb-6">
           <h1 className="text-xl font-medium bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
