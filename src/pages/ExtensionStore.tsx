@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -21,12 +22,14 @@ import {
   Star, 
   ShoppingCart, 
   Zap, 
-  Shield 
+  Shield,
+  UserCog
 } from "lucide-react";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 
 const ExtensionStore: React.FC = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -71,6 +74,15 @@ const ExtensionStore: React.FC = () => {
     }
   };
 
+  // Handle Admin Navigation
+  const handleAdminNavigation = () => {
+    toast({
+      title: "Navigating to Admin",
+      description: "Opening Extension Admin Console"
+    });
+    navigate("/extension-admin");
+  };
+
   // Statistics data
   const statsData = [
     { title: "Available", value: extensions.length, icon: Package, color: "bg-gradient-to-br from-purple-500/20 to-purple-700/20" },
@@ -108,10 +120,14 @@ const ExtensionStore: React.FC = () => {
       {/* Tabs for filtering */}
       <div className="mb-6">
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-3 sm:grid-cols-3">
+          <TabsList className="grid w-full sm:w-auto sm:inline-grid grid-cols-4 sm:grid-cols-4">
             <TabsTrigger value="all">All Extensions</TabsTrigger>
             <TabsTrigger value="installed">Installed</TabsTrigger>
             <TabsTrigger value="featured">Featured</TabsTrigger>
+            <TabsTrigger value="admin" onClick={handleAdminNavigation} className="bg-nexus-purple/10 hover:bg-nexus-purple/20">
+              <UserCog className="h-4 w-4 mr-1" />
+              Admin
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
