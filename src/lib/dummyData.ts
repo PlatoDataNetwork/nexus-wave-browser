@@ -128,6 +128,12 @@ export const bookmarks: Bookmark[] = [
     url: "https://gate.io",
     icon: Globe,
   },
+  {
+    id: "16",
+    title: "Honeyland",
+    url: "https://honey.land",
+    icon: Globe,
+  },
 ];
 
 export const popularDApps: DApp[] = [
