@@ -107,9 +107,14 @@
     animation: marquee 30s linear infinite;
     min-width: max-content;
   }
+  
+  .animate-marquee-slower {
+    display: flex;
+    animation: marquee 60s linear infinite;
+    min-width: max-content;
+  }
 
-  .animate-marquee:hover {
+  .animate-marquee:hover, .animate-marquee-slower:hover {
     animation-play-state: paused;
   }
 }
-

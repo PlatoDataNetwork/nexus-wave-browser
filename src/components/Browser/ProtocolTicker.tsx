@@ -22,8 +22,8 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
 
   return (
     <div className="w-full bg-card border-t border-border py-1">
-      <ScrollArea orientation="horizontal" className="w-full">
-        <div className="flex space-x-3 px-3 py-1 animate-marquee">
+      <ScrollArea className="w-full">
+        <div className="flex space-x-3 px-3 py-1 animate-marquee-slower">
           {topProtocols.map((protocol) => (
             <div 
               key={protocol.id}
