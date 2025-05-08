@@ -101,10 +101,10 @@ const BrowserFooter: React.FC = () => {
           <TooltipTrigger asChild>
             <Button 
               size="sm" 
-              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
+              className="bg-[#3949AB] hover:bg-[#3949AB]/80 text-white font-medium px-3 py-1 rounded-md"
               onClick={handleHomeClick}
             >
-              Nexus Wave Browser V2.1
+              Nexus Wave V2.1
             </Button>
           </TooltipTrigger>
           <TooltipContent>Go to home page</TooltipContent>
