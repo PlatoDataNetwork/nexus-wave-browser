@@ -107,7 +107,7 @@ export const bookmarks: Bookmark[] = [
   {
     id: "12",
     title: "FYNN",
-    url: "https://fynn.fyntechnical.com/",
+    url: "https://fyntechnical.com/",
     icon: Globe,
   },
   {
@@ -162,6 +162,12 @@ export const bookmarks: Bookmark[] = [
     id: "21",
     title: "UPFI",
     url: "https://upfi.network",
+    icon: Globe,
+  },
+  {
+    id: "22",
+    title: "Vogon Cloud",
+    url: "https://www.spectralcapital.com/vogon",
     icon: Globe,
   },
 ];
