@@ -42,7 +42,7 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
     }
   };
 
-  // Automatic scrolling animation
+  // Automatic scrolling animation with a slower speed
   useEffect(() => {
     const startScrolling = () => {
       if (scrollRef.current && !isHovering) {
@@ -56,8 +56,8 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
             behavior: 'auto'
           });
         } else {
-          // Continue scrolling
-          const newPosition = scrollPosition + 1;
+          // Continue scrolling at a slower pace
+          const newPosition = scrollPosition + 0.5; // Reduced from 1 to 0.5 for slower scrolling
           setScrollPosition(newPosition);
           scrollRef.current.scrollTo({
             left: newPosition,
