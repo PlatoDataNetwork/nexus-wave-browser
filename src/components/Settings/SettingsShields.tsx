@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { 
   Select, 
   SelectContent, 
@@ -15,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 
 const SettingsShields: React.FC = () => {
-  const [adBlocking, setAdBlocking] = useState("aggressive");
+  const [adBlocking, setAdBlocking] = useState(true);
   const [trackerBlocking, setTrackerBlocking] = useState("standard");
   const [fingerprintingProtection, setFingerprintingProtection] = useState(true);
   const [scriptBlocking, setScriptBlocking] = useState(false);
@@ -33,40 +31,18 @@ const SettingsShields: React.FC = () => {
       <div className="space-y-4">
         <div>
           <h3 className="text-md font-medium mb-3">Ad blocking</h3>
-          <RadioGroup value={adBlocking} onValueChange={setAdBlocking}>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="aggressive" id="ad-aggressive" />
-              <Label htmlFor="ad-aggressive">Aggressive</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0 ml-1">?</Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <p className="text-xs">
-                    Blocks all ads and trackers, but may cause some websites to break.
-                  </p>
-                </PopoverContent>
-              </Popover>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm">Block ads and trackers</p>
+              <p className="text-xs text-muted-foreground">
+                Blocks most ads and trackers across the web
+              </p>
             </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="standard" id="ad-standard" />
-              <Label htmlFor="ad-standard">Standard</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0 ml-1">?</Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <p className="text-xs">
-                    Blocks most ads and trackers while maintaining compatibility with most websites.
-                  </p>
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="allow" id="ad-allow" />
-              <Label htmlFor="ad-allow">Allow ads</Label>
-            </div>
-          </RadioGroup>
+            <Switch 
+              checked={adBlocking}
+              onCheckedChange={setAdBlocking}
+            />
+          </div>
         </div>
 
         <Separator />
