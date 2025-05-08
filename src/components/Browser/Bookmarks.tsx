@@ -24,6 +24,17 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     }
   };
 
+  // Add Alekbotto to the bookmarks
+  const allBookmarks = [
+    ...bookmarks,
+    {
+      id: "alekbot",
+      title: "Alekbotto",
+      url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
+      icon: bookmarks[0].icon // Using the icon from the first bookmark as a placeholder
+    }
+  ];
+
   return (
     <div className="relative flex items-center border-b border-border bg-secondary/20">
       {/* Left scroll button */}
@@ -43,7 +54,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
         className="flex items-center space-x-2 px-10 py-1 overflow-x-auto nexus-scrollbar scrollbar-hide"
         style={{ scrollBehavior: "smooth" }}
       >
-        {bookmarks.map((bookmark) => (
+        {allBookmarks.map((bookmark) => (
           <Button
             key={bookmark.id}
             variant="ghost"
