@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
+import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
@@ -12,6 +11,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
+import UserSettingsTray from "./UserSettingsTray";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -179,6 +188,9 @@ const AddressBar: React.FC<AddressBarProps> = ({
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* User Settings Tray */}
+      <UserSettingsTray />
     </div>
   );
 };
