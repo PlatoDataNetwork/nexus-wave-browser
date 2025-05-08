@@ -36,6 +36,10 @@ const BrowserFooter: React.FC = () => {
   const handleDocumentationClick = () => {
     navigate('/documentation');
   };
+  
+  const handleExtensionStoreClick = () => {
+    navigate('/extension-store');
+  };
 
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
@@ -45,14 +49,14 @@ const BrowserFooter: React.FC = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-7"
-              onClick={() => handleActionClick("Extensions")}
+              className={`h-7 ${location.pathname === '/extension-store' ? 'bg-muted' : ''}`}
+              onClick={handleExtensionStoreClick}
             >
               <Chrome className="h-3 w-3 mr-1" />
               <span>Extensions</span>
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Manage browser extensions</TooltipContent>
+          <TooltipContent>Browse extension store</TooltipContent>
         </Tooltip>
 
         <Tooltip>

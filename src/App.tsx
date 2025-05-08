@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
+import ExtensionStore from "./pages/ExtensionStore";
+import ExtensionAdmin from "./pages/ExtensionAdmin";
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
+          <Route path="/extension-store" element={<ExtensionStore />} />
+          <Route path="/extension-admin" element={<ExtensionAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />
         </Routes>
