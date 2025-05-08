@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -63,6 +64,9 @@ const trezorLogoUrl = "/lovable-uploads/e931de13-c6d4-4048-b5c5-b591236df7ae.png
 // Trust Wallet logo URL from the newly uploaded image
 const trustWalletLogoUrl = "/lovable-uploads/840d912c-ae1c-428a-8842-b9e74182176f.png";
 
+// Exodus logo URL from the newly uploaded image
+const exodusLogoUrl = "/lovable-uploads/ff280ee6-e289-4257-844d-f70c66f6b4cc.png";
+
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
   <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
@@ -74,7 +78,7 @@ const NBLogo = () => (
 const walletOptions = [
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
-  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' },
+  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: exodusLogoUrl },
   { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: 'https://cryptologos.cc/logos/ledger-wallet-logo.png' },
   { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
   { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' },
@@ -398,7 +402,7 @@ const WalletConnect: React.FC = () => {
                 <span className="text-sm text-muted-foreground">Wallet</span>
                 <span className="text-sm font-medium flex items-center">
                   <Avatar className="h-7 w-7 mr-2">
-                    <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0.5" />
+                    <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
                     <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   {getWalletName(activeWallet)}
@@ -438,7 +442,7 @@ const WalletConnect: React.FC = () => {
                     <div className="py-4 space-y-4">
                       <div className="flex justify-center mb-4">
                         <Avatar className="h-20 w-20">
-                          <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-1" />
+                          <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
                           <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                       </div>
@@ -520,9 +524,8 @@ const WalletConnect: React.FC = () => {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  className="w-full bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white flex items-center gap-2"
+                  className="w-full bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white"
                 >
-                  <NBLogo />
                   Nexus Wave Bridge
                 </Button>
               </DialogTrigger>
@@ -561,7 +564,7 @@ const WalletConnect: React.FC = () => {
                                       <AvatarImage 
                                         src={wallet.logoUrl} 
                                         alt={wallet.name} 
-                                        className={`p-1 ${wallet.circular ? 'rounded-full' : ''}`} 
+                                        className={`${wallet.circular ? 'rounded-full' : ''}`} 
                                       />
                                       <AvatarFallback>{wallet.icon}</AvatarFallback>
                                     </Avatar>
@@ -582,9 +585,8 @@ const WalletConnect: React.FC = () => {
                       <DialogClose asChild>
                         <Button variant="outline" type="button">Cancel</Button>
                       </DialogClose>
-                      <Button type="submit" className="bg-[#1EAEDB] hover:bg-[#0EA5E9] flex items-center">
-                        <NBLogo />
-                        <span className="ml-2">Connect</span>
+                      <Button type="submit" className="bg-[#1EAEDB] hover:bg-[#0EA5E9]">
+                        Connect
                       </Button>
                     </div>
                   </form>

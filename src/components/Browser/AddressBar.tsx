@@ -157,9 +157,8 @@ const AddressBar: React.FC<AddressBarProps> = ({
           <Button 
             variant="secondary" 
             size="sm" 
-            className="bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white flex items-center gap-2"
+            className="bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white"
           >
-            <NBLogo />
             Nexus Wave Bridge
           </Button>
         </DialogTrigger>
