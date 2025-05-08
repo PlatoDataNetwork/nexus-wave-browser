@@ -24,12 +24,12 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     }
   };
 
-  // Add Alekbotto to the bookmarks
+  // Add Alek Bot to the bookmarks
   const allBookmarks = [
     ...bookmarks,
     {
       id: "alekbot",
-      title: "Alekbotto",
+      title: "Alek Bot",
       url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
       icon: bookmarks[0].icon // Using the icon from the first bookmark as a placeholder
     }
