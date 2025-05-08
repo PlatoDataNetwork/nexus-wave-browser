@@ -44,7 +44,7 @@ import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 
 // Define wallet types
-type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus';
+type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust';
 
 interface WalletConnection {
   id?: string;
@@ -63,7 +63,8 @@ const walletOptions = [
   { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
   { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: 'https://play-lh.googleusercontent.com/Mf45WzShFQN7Ep3JVvHvZ_ZmDfPej_OoE-QwRn3urG8h3ZcAuRGLY9BZ-iUaGm6Q7g=w240-h480-rw' },
-  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' }
+  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' },
+  { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: 'https://trustwallet.com/assets/images/media/assets/trust_platform.png' }
 ];
 
 // Shortened address helper
@@ -563,7 +564,7 @@ const WalletConnect: React.FC = () => {
           
           <div className="pt-2">
             <p className="text-xs text-muted-foreground">
-              Supports MetaMask, Coinbase Wallet, Solflare, Wallet Connect and more
+              Supports MetaMask, Coinbase Wallet, Solflare, Wallet Connect, Trust Wallet and more
             </p>
           </div>
         </div>
