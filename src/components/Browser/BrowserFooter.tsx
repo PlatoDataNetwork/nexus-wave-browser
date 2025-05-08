@@ -6,7 +6,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
-import ExtensionStore from "../Extensions/ExtensionStore";
 import {
   Tooltip,
   TooltipContent,
@@ -18,7 +17,6 @@ const BrowserFooter: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
-  const [isExtensionsDialogOpen, setIsExtensionsDialogOpen] = useState(false);
   
   const handleActionClick = (action: string) => {
     toast({
@@ -42,29 +40,20 @@ const BrowserFooter: React.FC = () => {
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
-        <Dialog open={isExtensionsDialogOpen} onOpenChange={setIsExtensionsDialogOpen}>
-          <DialogTrigger asChild>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-7"
-                  onClick={() => setIsExtensionsDialogOpen(true)}
-                >
-                  <Chrome className="h-3 w-3 mr-1" />
-                  <span>Extensions</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Manage browser extensions</TooltipContent>
-            </Tooltip>
-          </DialogTrigger>
-          <DialogContent className="p-0 border-none max-w-6xl h-[80vh]">
-            <div className="flex items-center justify-center p-0 h-full overflow-auto">
-              <ExtensionStore />
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-7"
+              onClick={() => handleActionClick("Extensions")}
+            >
+              <Chrome className="h-3 w-3 mr-1" />
+              <span>Extensions</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Manage browser extensions</TooltipContent>
+        </Tooltip>
 
         <Tooltip>
           <TooltipTrigger asChild>
@@ -145,10 +134,13 @@ const BrowserFooter: React.FC = () => {
           <DialogTrigger asChild>
             <Button 
               size="icon" 
-              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-bold h-10 w-10 rounded-md flex items-center justify-center"
+              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium h-10 w-10 rounded-md flex items-center justify-center relative"
               onClick={() => setIsWalletDialogOpen(true)}
             >
-              <span className="text-sm">NB</span>
+              <div className="w-8 h-8 flex items-center justify-center font-bold">
+                NB
+              </div>
+              <span className="sr-only">Nexus Bridge V2.1</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="p-0 border-none max-w-4xl">
