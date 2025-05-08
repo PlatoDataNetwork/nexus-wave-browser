@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
@@ -39,9 +38,6 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
       <div className="flex-1">
         <div className="flex items-center">
           <span className="text-sm font-medium">{name}</span>
-          <div className="ml-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
-            Installed
-          </div>
         </div>
         <p className="text-xs text-muted-foreground mt-1">{description}</p>
       </div>
