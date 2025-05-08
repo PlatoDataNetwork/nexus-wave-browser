@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -31,7 +32,7 @@ const Documentation: React.FC = () => {
           <div className="p-4">
             <div className="flex items-center mb-4">
               <BookText className="h-5 w-5 mr-2 text-muted-foreground" />
-              <h2 className="font-medium">Nexus Wave Documentation</h2>
+              <h2 className="font-medium">Documentation</h2>
             </div>
             <div className="relative mb-4">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -949,3 +950,4 @@ const Documentation: React.FC = () => {
 };
 
 export default Documentation;
+
