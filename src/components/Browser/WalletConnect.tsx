@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -61,9 +60,19 @@ const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24
 // Trezor logo URL from the uploaded image
 const trezorLogoUrl = "/lovable-uploads/e931de13-c6d4-4048-b5c5-b591236df7ae.png";
 
+// Trust Wallet logo URL from the newly uploaded image
+const trustWalletLogoUrl = "/lovable-uploads/840d912c-ae1c-428a-8842-b9e74182176f.png";
+
+// Custom NB Logo component for Nexus Wave Bridge
+const NBLogo = () => (
+  <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+    NB
+  </div>
+);
+
 // Wallet options - alphabetized
 const walletOptions = [
-  { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw' },
+  { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: 'https://play-lh.googleusercontent.com/S-mGDzauQBYUZeKPJEtO11DX9IY1rvJYYc7xwXzoUCjZn1iwYZ7UiZ29NUWpr4zhCg=w240-h480-rw' },
   { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: 'https://cryptologos.cc/logos/ledger-wallet-logo.png' },
@@ -71,7 +80,7 @@ const walletOptions = [
   { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: 'https://www.phantom.app/img/phantom-logo.svg' },
   { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: 'https://cryptorank.io/public/wallet-logos/solflare.svg' },
   { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to your Trezor hardware wallet', logoUrl: trezorLogoUrl },
-  { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: 'https://trustwallet.com/assets/images/media/assets/trust_platform.png' },
+  { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: trustWalletLogoUrl },
   { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: 'https://cryptologos.cc/logos/uniswap-uni-logo.png' },
   { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', description: 'Connect with WalletConnect protocol', logoUrl: walletConnectLogoUrl },
   { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: 'https://play-lh.googleusercontent.com/Mf45WzShFQN7Ep3JVvHvZ_ZmDfPej_OoE-QwRn3urG8h3ZcAuRGLY9BZ-iUaGm6Q7g=w240-h480-rw' },
@@ -337,14 +346,8 @@ const WalletConnect: React.FC = () => {
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-medium flex items-center">
           <div className="flex items-center">
-            <div className="w-8 h-8 rounded-full bg-white mr-2 flex items-center justify-center overflow-hidden">
-              <img 
-                src={walletConnectLogoUrl} 
-                alt="WalletConnect" 
-                className="w-7 h-7 object-contain"
-              />
-            </div>
-            Web3 Wallet
+            <NBLogo />
+            <span className="ml-2">Nexus Wave Bridge</span>
           </div>
         </CardTitle>
         <CardDescription>
@@ -517,29 +520,19 @@ const WalletConnect: React.FC = () => {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  className="w-full bg-nexus-purple hover:bg-nexus-light-purple text-white flex items-center gap-2"
+                  className="w-full bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white flex items-center gap-2"
                 >
-                  <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden">
-                    <img 
-                      src={walletConnectLogoUrl} 
-                      alt="WalletConnect" 
-                      className="w-6 h-6 object-contain"
-                    />
-                  </div>
-                  Connect Wallet
+                  <NBLogo />
+                  Nexus Wave Bridge
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[850px]">
                 <DialogHeader>
                   <DialogTitle className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
-                      <img 
-                        src={walletConnectLogoUrl} 
-                        alt="WalletConnect" 
-                        className="w-7 h-7 object-contain"
-                      />
+                    <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+                      NB
                     </div>
-                    Connect Wallet
+                    <span className="ml-2">Nexus Wave Bridge</span>
                   </DialogTitle>
                   <DialogDescription>
                     Choose a wallet provider to connect with Nexus.
@@ -564,8 +557,12 @@ const WalletConnect: React.FC = () => {
                                 <RadioGroupItem value={wallet.id} id={wallet.id} />
                                 <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
                                   <div className="flex items-center">
-                                    <Avatar className="h-12 w-12 mr-3">
-                                      <AvatarImage src={wallet.logoUrl} alt={wallet.name} className="p-1" />
+                                    <Avatar className="h-14 w-14 mr-3">
+                                      <AvatarImage 
+                                        src={wallet.logoUrl} 
+                                        alt={wallet.name} 
+                                        className={`p-1 ${wallet.circular ? 'rounded-full' : ''}`} 
+                                      />
                                       <AvatarFallback>{wallet.icon}</AvatarFallback>
                                     </Avatar>
                                     <div>
@@ -585,15 +582,9 @@ const WalletConnect: React.FC = () => {
                       <DialogClose asChild>
                         <Button variant="outline" type="button">Cancel</Button>
                       </DialogClose>
-                      <Button type="submit" className="bg-nexus-purple hover:bg-nexus-light-purple flex items-center">
-                        <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
-                          <img 
-                            src={walletConnectLogoUrl} 
-                            alt="WalletConnect" 
-                            className="w-6 h-6 object-contain"
-                          />
-                        </div>
-                        Connect
+                      <Button type="submit" className="bg-[#1EAEDB] hover:bg-[#0EA5E9] flex items-center">
+                        <NBLogo />
+                        <span className="ml-2">Connect</span>
                       </Button>
                     </div>
                   </form>
@@ -614,14 +605,8 @@ const WalletConnect: React.FC = () => {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center overflow-hidden mr-2">
-                  <img 
-                    src={walletConnectLogoUrl} 
-                    alt="WalletConnect" 
-                    className="w-7 h-7 object-contain"
-                  />
-                </div>
-                Repair Wallet Connection
+                <NBLogo />
+                <span className="ml-2">Repair Wallet Connection</span>
               </DialogTitle>
               <DialogDescription>
                 This will attempt to fix issues with your current wallet connection.
@@ -646,16 +631,10 @@ const WalletConnect: React.FC = () => {
               </DialogClose>
               <Button 
                 onClick={handleRepairConnection}
-                className="bg-nexus-purple hover:bg-nexus-light-purple flex items-center"
+                className="bg-[#1EAEDB] hover:bg-[#0EA5E9] flex items-center"
               >
-                <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center overflow-hidden mr-2">
-                  <img 
-                    src={walletConnectLogoUrl} 
-                    alt="WalletConnect" 
-                    className="w-6 h-6 object-contain"
-                  />
-                </div>
-                Repair Connection
+                <NBLogo />
+                <span className="ml-2">Repair Connection</span>
               </Button>
             </div>
           </DialogContent>

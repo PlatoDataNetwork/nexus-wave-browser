@@ -23,6 +23,13 @@ interface AddressBarProps {
   canGoForward: boolean;
 }
 
+// Custom NB Logo component for Nexus Wave Bridge
+const NBLogo = () => (
+  <div className="w-7 h-7 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold text-sm">
+    NB
+  </div>
+);
+
 const AddressBar: React.FC<AddressBarProps> = ({ 
   currentUrl, 
   onNavigate,
@@ -150,14 +157,20 @@ const AddressBar: React.FC<AddressBarProps> = ({
           <Button 
             variant="secondary" 
             size="sm" 
-            className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
+            className="bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white flex items-center gap-2"
           >
-            Connect Wallet
+            <NBLogo />
+            Nexus Wave Bridge
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Connect Wallet</DialogTitle>
+            <DialogTitle className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+                NB
+              </div>
+              <span className="ml-2">Nexus Wave Bridge</span>
+            </DialogTitle>
             <DialogDescription>
               Connect your wallet to interact with Web3 applications.
             </DialogDescription>
