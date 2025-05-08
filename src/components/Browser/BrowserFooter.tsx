@@ -133,11 +133,14 @@ const BrowserFooter: React.FC = () => {
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
           <DialogTrigger asChild>
             <Button 
-              size="sm" 
-              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
+              size="icon" 
+              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium h-10 w-10 rounded-md flex items-center justify-center relative"
               onClick={() => setIsWalletDialogOpen(true)}
             >
-              Nexus Bridge V2.1
+              <div className="w-8 h-8 flex items-center justify-center font-bold">
+                NB
+              </div>
+              <span className="sr-only">Nexus Bridge V2.1</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="p-0 border-none max-w-4xl">
