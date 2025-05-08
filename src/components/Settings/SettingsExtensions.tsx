@@ -4,6 +4,8 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import ExtensionStore from "../Extensions/ExtensionStore";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -78,6 +80,7 @@ const SettingsExtensions: React.FC = () => {
   
   const [allowIncognito, setAllowIncognito] = useState(true);
   const [autoUpdate, setAutoUpdate] = useState(true);
+  const [isStoreOpen, setIsStoreOpen] = useState(false);
   
   const { toast } = useToast();
 
@@ -88,10 +91,7 @@ const SettingsExtensions: React.FC = () => {
   };
 
   const handleBrowseExtensions = () => {
-    toast({
-      title: "Extension Store",
-      description: "Opening Nexus Wave extension store",
-    });
+    setIsStoreOpen(true);
   };
 
   return (
@@ -105,10 +105,19 @@ const SettingsExtensions: React.FC = () => {
 
       <div className="space-y-4">
         <div className="flex justify-end">
-          <Button variant="outline" size="sm" onClick={handleBrowseExtensions}>
-            <Download className="h-4 w-4 mr-2" />
-            Browse extensions
-          </Button>
+          <Dialog open={isStoreOpen} onOpenChange={setIsStoreOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" onClick={handleBrowseExtensions}>
+                <Download className="h-4 w-4 mr-2" />
+                Browse extensions
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="p-0 border-none max-w-6xl h-[80vh]">
+              <div className="flex items-center justify-center p-0 h-full overflow-auto">
+                <ExtensionStore />
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="border rounded-md divide-y">
