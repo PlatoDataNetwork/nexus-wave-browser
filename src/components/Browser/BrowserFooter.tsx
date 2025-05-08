@@ -31,6 +31,10 @@ const BrowserFooter: React.FC = () => {
   const handleHomeClick = () => {
     navigate('/');
   };
+  
+  const handleDocumentationClick = () => {
+    navigate('/documentation');
+  };
 
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
@@ -86,7 +90,7 @@ const BrowserFooter: React.FC = () => {
               variant="ghost" 
               size="sm" 
               className="h-7"
-              onClick={() => handleActionClick("Documentation")}
+              onClick={handleDocumentationClick}
             >
               <FileText className="h-3 w-3 mr-1" />
               <span>Documentation</span>
