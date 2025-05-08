@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -96,32 +97,38 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
   const isHomepage = currentUrl === initialTabs[0].url;
   const isExtensionStore = currentUrl === "/extension-store";
 
+  // Debug console logs to help identify what's happening
+  console.log("Current URL:", currentUrl);
+  console.log("Is Extension Store?", isExtensionStore);
+
   return (
     <div className="flex-1 relative overflow-hidden">
-      {/* Main webview frame - this would be a real webview in an Electron app */}
-      <div className="absolute inset-0 overflow-y-auto">
-        {!isExtensionStore && <WebviewFrame url={currentUrl} />}
-        
-        {/* Homepage content - only shown for the default URL */}
-        {isHomepage && (
-          <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="col-span-1 md:col-span-2 space-y-6">
-              <DAppSection onNavigate={onNavigate} />
-              <ProtocolTicker />
-            </div>
-            <div className="col-span-1">
-              <WalletConnect />
-            </div>
+      {/* Only show WebviewFrame if not showing extension store */}
+      {!isExtensionStore && (
+        <div className="absolute inset-0 overflow-y-auto">
+          <WebviewFrame url={currentUrl} />
+        </div>
+      )}
+      
+      {/* Homepage content - only shown for the default URL */}
+      {isHomepage && (
+        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="col-span-1 md:col-span-2 space-y-6">
+            <DAppSection onNavigate={onNavigate} />
+            <ProtocolTicker />
           </div>
-        )}
-        
-        {/* Extension Store - shown when URL is /extension-store */}
-        {isExtensionStore && (
-          <div className="h-full overflow-y-auto">
-            <ExtensionStore />
+          <div className="col-span-1">
+            <WalletConnect />
           </div>
-        )}
-      </div>
+        </div>
+      )}
+      
+      {/* Extension Store - shown when URL is /extension-store */}
+      {isExtensionStore && (
+        <div className="absolute inset-0 overflow-y-auto">
+          <ExtensionStore />
+        </div>
+      )}
     </div>
   );
 };

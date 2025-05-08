@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
+import ExtensionStore from "./pages/ExtensionStore";
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();

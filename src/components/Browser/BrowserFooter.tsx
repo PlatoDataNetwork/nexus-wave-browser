@@ -38,6 +38,7 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
   };
   
   const handleExtensionStoreClick = () => {
+    console.log("Extension store clicked, navigating");
     if (onNavigate) {
       onNavigate("/extension-store");
     } else {
@@ -46,6 +47,8 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
   };
 
   const isExtensionStoreActive = location.pathname === '/extension-store';
+  console.log("Current path:", location.pathname);
+  console.log("Is extension store active?", isExtensionStoreActive);
 
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
