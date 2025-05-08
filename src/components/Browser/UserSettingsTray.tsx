@@ -153,7 +153,7 @@ const UserSettingsTray: React.FC = () => {
             <span className="sr-only">Settings</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-72 py-2">
+        <DropdownMenuContent align="end" sideOffset={6} className="w-72 py-2 bg-card border-border">
           <MenuItem 
             icon={Plus} 
             label="New tab" 
@@ -183,8 +183,8 @@ const UserSettingsTray: React.FC = () => {
           
           <MenuItem 
             icon={Star} 
-            label="Leo" 
-            onClick={() => handleAction("Leo")} 
+            label="Apollo" 
+            onClick={() => handleAction("Apollo")} 
           />
           <MenuItem 
             icon={Wallet} 
@@ -193,8 +193,8 @@ const UserSettingsTray: React.FC = () => {
           />
           <MenuItem 
             icon={Shield} 
-            label="Brave VPN" 
-            onClick={() => handleAction("Brave VPN")} 
+            label="Nexus VPN" 
+            onClick={() => handleAction("Nexus VPN")} 
           />
           
           <DropdownMenuSeparator />
