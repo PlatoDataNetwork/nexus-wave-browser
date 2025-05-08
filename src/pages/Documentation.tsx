@@ -235,7 +235,7 @@ const Documentation: React.FC = () => {
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
                       <p>To import your data from another browser:</p>
                       <ol className="space-y-2 list-decimal pl-5">
-                        <li>Go to Settings > Advanced</li>
+                        <li>Go to Settings {'>'} Advanced</li>
                         <li>Click on "Import/Export"</li>
                         <li>Select "Import from browser"</li>
                         <li>Choose the browser you want to import from</li>
@@ -449,7 +449,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Transaction Confirmations:</strong> Set confirmation requirements based on value</li>
                         <li><strong>Gas Settings:</strong> Configure default gas price strategies</li>
                       </ul>
-                      <p className="mt-2">These settings can be found in Settings > Web3.</p>
+                      <p className="mt-2">These settings can be found in Settings {'>'} Web3.</p>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -587,7 +587,7 @@ const Documentation: React.FC = () => {
                         <li>Optional biometric authentication for accessing passwords</li>
                         <li>Import/export functionality to migrate from other password managers</li>
                       </ul>
-                      <p className="mt-2">Access your password manager in Settings > Autofill > Manage saved passwords.</p>
+                      <p className="mt-2">Access your password manager in Settings {'>'} Autofill {'>'} Manage saved passwords.</p>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -614,7 +614,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Tab Appearance:</strong> Customize the look and behavior of tabs</li>
                         <li><strong>Custom Fonts:</strong> Choose preferred fonts for website display</li>
                       </ul>
-                      <p className="mt-2">Access these settings in Settings > Appearance.</p>
+                      <p className="mt-2">Access these settings in Settings {'>'} Appearance.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -630,7 +630,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Safe Browsing:</strong> Configure protection against dangerous sites</li>
                         <li><strong>Privacy Reports:</strong> View and manage your privacy protection statistics</li>
                       </ul>
-                      <p className="mt-2">Access these settings in Settings > Privacy and security.</p>
+                      <p className="mt-2">Access these settings in Settings {'>'} Privacy and security.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -645,7 +645,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Extension Shortcuts:</strong> Configure keyboard shortcuts for extensions</li>
                         <li><strong>Developer Mode:</strong> Enable developer options for extension testing</li>
                       </ul>
-                      <p className="mt-2">Access these settings in Settings > Extensions.</p>
+                      <p className="mt-2">Access these settings in Settings {'>'} Extensions.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -661,7 +661,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Custom RPCs:</strong> Add and manage RPC endpoints</li>
                         <li><strong>Token Lists:</strong> Manage token visibility and custom tokens</li>
                       </ul>
-                      <p className="mt-2">Access these settings in Settings > Web3.</p>
+                      <p className="mt-2">Access these settings in Settings {'>'} Web3.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -677,7 +677,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Developer Tools:</strong> Access and configure developer features</li>
                         <li><strong>Experimental Features:</strong> Try out features still in development</li>
                       </ul>
-                      <p className="mt-2">Access these settings in Settings > Advanced.</p>
+                      <p className="mt-2">Access these settings in Settings {'>'} Advanced.</p>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -842,13 +842,13 @@ const Documentation: React.FC = () => {
                       <p>If Nexus Wave is running slowly, try these solutions:</p>
                       <ol className="space-y-2 list-decimal pl-5">
                         <li><strong>Update the browser</strong> to the latest version</li>
-                        <li><strong>Clear browsing data</strong> in Settings > Advanced > Clear browsing data</li>
+                        <li><strong>Clear browsing data</strong> in Settings {'>'} Advanced {'>'} Clear browsing data</li>
                         <li><strong>Disable unused extensions</strong> that may be consuming resources</li>
-                        <li><strong>Enable hardware acceleration</strong> in Settings > Advanced > System</li>
+                        <li><strong>Enable hardware acceleration</strong> in Settings {'>'} Advanced {'>'} System</li>
                         <li><strong>Check your computer's resources</strong> in Task Manager/Activity Monitor</li>
                         <li><strong>Close unnecessary tabs</strong> to free up memory</li>
                       </ol>
-                      <p className="mt-2">If problems persist, try resetting browser settings in Settings > Advanced > Reset settings.</p>
+                      <p className="mt-2">If problems persist, try resetting browser settings in Settings {'>'} Advanced {'>'} Reset settings.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -864,7 +864,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Try disconnecting and reconnecting</strong> the wallet</li>
                         <li><strong>Update your wallet software</strong> to the latest version</li>
                       </ol>
-                      <p className="mt-2">For persistent issues, check the connection logs in Settings > Web3 > Connection logs.</p>
+                      <p className="mt-2">For persistent issues, check the connection logs in Settings {'>'} Web3 {'>'} Connection logs.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -880,7 +880,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Check if the site is up-to-date</strong> with modern web standards</li>
                         <li><strong>Report the issue</strong> to help improve compatibility</li>
                       </ol>
-                      <p className="mt-2">For specific DApps, check the Web3 compatibility list in Settings > Web3 > Compatible DApps.</p>
+                      <p className="mt-2">For specific DApps, check the Web3 compatibility list in Settings {'>'} Web3 {'>'} Compatible DApps.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -893,10 +893,10 @@ const Documentation: React.FC = () => {
                         <li><strong>Disable problematic extensions</strong> one by one to identify issues</li>
                         <li><strong>Clear all browsing data</strong> including cache and cookies</li>
                         <li><strong>Check for malware or viruses</strong> on your system</li>
-                        <li><strong>Reset browser settings</strong> to default in Settings > Advanced</li>
+                        <li><strong>Reset browser settings</strong> to default in Settings {'>'} Advanced</li>
                         <li><strong>Reinstall the browser</strong> if problems persist</li>
                       </ol>
-                      <p className="mt-2">For technical users, check crash reports in Settings > Advanced > Crash reports.</p>
+                      <p className="mt-2">For technical users, check crash reports in Settings {'>'} Advanced {'>'} Crash reports.</p>
                     </AccordionContent>
                   </AccordionItem>
 
@@ -905,7 +905,7 @@ const Documentation: React.FC = () => {
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
                       <p>If your bookmarks, passwords, or settings aren't syncing correctly:</p>
                       <ol className="space-y-2 list-decimal pl-5">
-                        <li><strong>Verify your account status</strong> in Settings > Sync</li>
+                        <li><strong>Verify your account status</strong> in Settings {'>'} Sync</li>
                         <li><strong>Check which sync categories are enabled</strong> in sync settings</li>
                         <li><strong>Force a manual sync</strong> by clicking "Sync now"</li>
                         <li><strong>Sign out and sign back in</strong> to refresh your connection</li>
@@ -950,3 +950,4 @@ const Documentation: React.FC = () => {
 };
 
 export default Documentation;
+
