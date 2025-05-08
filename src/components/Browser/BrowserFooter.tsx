@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link, ExternalLink, Chrome, Settings } from "lucide-react";
+import { Chrome, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -37,19 +37,8 @@ const BrowserFooter: React.FC = () => {
         </Button>
       </div>
       
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center">
-          <Link className="h-3 w-3 mr-1 text-nexus-purple" />
-          <span>Connections: 2</span>
-        </div>
-        <div className="flex items-center">
-          <ExternalLink className="h-3 w-3 mr-1 text-nexus-purple" />
-          <span>DApps: 4</span>
-        </div>
-      </div>
-      
       <div>
-        <span>Nexus Wave Browser v1.0</span>
+        <span>Nexus Wave Browser Web3 V2.1</span>
       </div>
     </div>
   );

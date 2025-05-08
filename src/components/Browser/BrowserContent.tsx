@@ -1,8 +1,6 @@
 
 import React from "react";
 import WebviewFrame from "./WebviewFrame";
-import WalletConnect from "./WalletConnect";
-import DAppSection from "./DAppSection";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -14,14 +12,8 @@ const BrowserContent: React.FC<BrowserContentProps> = ({
   onNavigate
 }) => {
   return (
-    <div className="flex-1 grid grid-cols-5 gap-4 p-4 overflow-hidden">
-      <div className="col-span-4 h-full flex flex-col">
-        <WebviewFrame url={currentUrl} />
-      </div>
-      <div className="col-span-1 space-y-4">
-        <WalletConnect />
-        <DAppSection onNavigate={onNavigate} />
-      </div>
+    <div className="flex-1 p-4 overflow-hidden">
+      <WebviewFrame url={currentUrl} />
     </div>
   );
 };
