@@ -69,7 +69,7 @@ const exodusLogoUrl = "/lovable-uploads/ff280ee6-e289-4257-844d-f70c66f6b4cc.png
 
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
-  <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+  <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
     NB
   </div>
 );
@@ -524,7 +524,7 @@ const WalletConnect: React.FC = () => {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  className="w-full bg-[#1EAEDB] hover:bg-[#0EA5E9] text-white"
+                  className="w-full bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
                 >
                   Nexus Wave Bridge
                 </Button>
@@ -532,7 +532,7 @@ const WalletConnect: React.FC = () => {
               <DialogContent className="sm:max-w-[850px]">
                 <DialogHeader>
                   <DialogTitle className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-[#1EAEDB] flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
                       NB
                     </div>
                     <span className="ml-2">Nexus Wave Bridge</span>
@@ -585,7 +585,7 @@ const WalletConnect: React.FC = () => {
                       <DialogClose asChild>
                         <Button variant="outline" type="button">Cancel</Button>
                       </DialogClose>
-                      <Button type="submit" className="bg-[#1EAEDB] hover:bg-[#0EA5E9]">
+                      <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
                         Connect
                       </Button>
                     </div>
@@ -633,7 +633,7 @@ const WalletConnect: React.FC = () => {
               </DialogClose>
               <Button 
                 onClick={handleRepairConnection}
-                className="bg-[#1EAEDB] hover:bg-[#0EA5E9] flex items-center"
+                className="bg-[#e5007e] hover:bg-[#e5007e]/90 flex items-center"
               >
                 <NBLogo />
                 <span className="ml-2">Repair Connection</span>
