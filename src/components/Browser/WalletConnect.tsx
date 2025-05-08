@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -364,7 +365,7 @@ const WalletConnect: React.FC = () => {
           </div>
         </CardTitle>
         <CardDescription>
-          Connect you wallet and transport yourself with Nexus Wave
+          Connect you wallet and transport yourself with Nexus
         </CardDescription>
       </CardHeader>
       <CardContent>
