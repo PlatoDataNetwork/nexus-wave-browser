@@ -20,7 +20,7 @@ const BrowserFooter: React.FC = () => {
   };
 
   const handleSettingsClick = () => {
-    navigate('/settings-docs');
+    navigate('/settings');
   };
 
   return (
@@ -39,7 +39,7 @@ const BrowserFooter: React.FC = () => {
           variant="ghost" 
           size="sm" 
           className="h-7"
-          onClick={() => handleActionClick("Settings")}
+          onClick={handleSettingsClick}
         >
           <Settings className="h-3 w-3 mr-1" />
           <span>Settings</span>
