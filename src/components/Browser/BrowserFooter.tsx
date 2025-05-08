@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Chrome, Settings, Wallet, Shield, History, Bookmark, Download, Globe, Bell } from "lucide-react";
+import { Chrome, Settings, Wallet, Download, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -90,68 +90,10 @@ const BrowserFooter: React.FC = () => {
           </TooltipTrigger>
           <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-7"
-              onClick={() => handleActionClick("History")}
-            >
-              <History className="h-3 w-3 mr-1" />
-              <span>History</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>View browsing history</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-7"
-              onClick={() => handleActionClick("Shields")}
-            >
-              <Shield className="h-3 w-3 mr-1" />
-              <span>Shields</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Manage privacy shields</TooltipContent>
-        </Tooltip>
       </div>
       
       <div className="flex items-center gap-3">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-full"
-              onClick={() => handleActionClick("Notifications")}
-            >
-              <Bell className="h-3 w-3" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Notifications</TooltipContent>
-        </Tooltip>
-        
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-7 w-7 rounded-full"
-              onClick={() => handleActionClick("Language")}
-            >
-              <Globe className="h-3 w-3" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Change language</TooltipContent>
-        </Tooltip>
-        
-        <span>Nexus Wave Browser Web3 V2.1</span>
+        <span className="text-xs">Nexus Wave Browser V2.1</span>
         
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
           <DialogTrigger asChild>
