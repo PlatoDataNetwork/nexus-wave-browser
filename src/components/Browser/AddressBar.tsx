@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
+import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight, Award, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
@@ -150,17 +150,19 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white border-none"
+          className="bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white border-none h-9"
         >
-          Action 1
+          <Award className="h-4 w-4 mr-1" />
+          Rewards
         </Button>
         
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none"
+          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none h-9"
         >
-          Action 2
+          <ShoppingCart className="h-4 w-4 mr-1" />
+          Buy NWF3
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
@@ -168,9 +170,9 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <Button 
               variant="secondary" 
               size="sm" 
-              className="bg-nexus-purple hover:bg-nexus-light-purple text-white"
+              className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white h-9"
             >
-              Nexus Wave Bridge
+              Nexus Wave
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
@@ -179,7 +181,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
                   NB
                 </div>
-                <span className="ml-2">Nexus Wave Bridge</span>
+                <span className="ml-2">Nexus Wave</span>
               </DialogTitle>
               <DialogDescription>
                 Connect your wallet to interact with Web3 applications.
