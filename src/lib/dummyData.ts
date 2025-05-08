@@ -83,7 +83,7 @@ export const bookmarks: Bookmark[] = [
   {
     id: "8",
     title: "gTrade",
-    url: "https://gains.trade",
+    url: "https://sol.gains.trade/",
     icon: Globe,
   },
   {
