@@ -14,6 +14,7 @@ import SettingsAdvanced from "@/components/Settings/SettingsAdvanced";
 import SettingsWeb3 from "@/components/Settings/SettingsWeb3";
 import SettingsExtensions from "@/components/Settings/SettingsExtensions";
 import SettingsShields from "@/components/Settings/SettingsShields";
+import SupportTicketDialog from "@/components/SupportTicket/SupportTicketDialog";
 
 const Settings: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -147,11 +148,16 @@ const Settings: React.FC = () => {
       </div>
 
       <div className="flex justify-between p-4 border-t border-border bg-card">
-        <Button asChild 
-          className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white"
-        >
-          <Link to="/settings-docs">View Documentation</Link>
-        </Button>
+        <div className="flex space-x-2">
+          <Button asChild 
+            className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white"
+          >
+            <Link to="/settings-docs">View Documentation</Link>
+          </Button>
+          
+          <SupportTicketDialog buttonText="Get Support" />
+        </div>
+        
         <Button asChild 
           className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white"
         >
