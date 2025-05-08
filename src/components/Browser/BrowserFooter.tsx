@@ -3,21 +3,15 @@ import React from "react";
 import { Chrome, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
 
 const BrowserFooter: React.FC = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   
   const handleActionClick = (action: string) => {
     toast({
       title: `${action} clicked`,
       description: `This would open the ${action.toLowerCase()} in a real browser`,
     });
-  };
-
-  const handleSettingsClick = () => {
-    navigate('/settings-docs');
   };
 
   return (
@@ -43,15 +37,8 @@ const BrowserFooter: React.FC = () => {
         </Button>
       </div>
       
-      <div className="flex items-center gap-3">
+      <div>
         <span>Nexus Wave Browser Web3 V2.1</span>
-        <Button 
-          onClick={handleSettingsClick}
-          size="sm" 
-          className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white font-medium px-3 py-1 rounded-md"
-        >
-          Nexus Bridge
-        </Button>
       </div>
     </div>
   );

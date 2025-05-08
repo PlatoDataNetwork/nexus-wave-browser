@@ -26,8 +26,10 @@ import {
   X,
   MinusIcon,
   PlusIcon,
-  Maximize2
+  Maximize2,
+  BookOpen
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import {
   DropdownMenu,
@@ -130,9 +132,181 @@ const ZoomControls: React.FC = () => {
   );
 };
 
-// Empty container component now that Settings button is moved to the footer
 const UserSettingsTray: React.FC = () => {
-  return <div className="flex items-center gap-2"></div>;
+  const { toast } = useToast();
+
+  const handleAction = (action: string, shortcut?: string) => {
+    const message = shortcut 
+      ? `${action} activated (${shortcut})`
+      : `${action} activated`;
+      
+    toast({
+      title: message,
+      description: `You activated the ${action} feature.`
+    });
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-16 w-16 rounded-full flex items-center justify-center">
+            <Settings className="h-14 w-14 text-nexus-purple" />
+            <span className="sr-only">Settings</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" sideOffset={6} className="w-72 py-2 bg-card border-border">
+          <MenuItem 
+            icon={Plus} 
+            label="New tab" 
+            shortcut="Ctrl+T" 
+            onClick={() => handleAction("New tab", "Ctrl+T")} 
+          />
+          <MenuItem 
+            icon={AppWindow} 
+            label="New window" 
+            shortcut="Ctrl+N" 
+            onClick={() => handleAction("New window", "Ctrl+N")} 
+          />
+          <MenuItem 
+            icon={EyeOff} 
+            label="New private window" 
+            shortcut="Shift+Ctrl+N" 
+            onClick={() => handleAction("New private window", "Shift+Ctrl+N")} 
+          />
+          <MenuItem 
+            icon={Torus} 
+            label="New private window with Tor" 
+            shortcut="Alt+Shift+N" 
+            onClick={() => handleAction("New private window with Tor", "Alt+Shift+N")} 
+          />
+          
+          <DropdownMenuSeparator />
+          
+          <MenuItem 
+            icon={Star} 
+            label="Apollo" 
+            onClick={() => handleAction("Apollo")} 
+          />
+          <MenuItem 
+            icon={Wallet} 
+            label="Wallet" 
+            onClick={() => handleAction("Wallet")} 
+          />
+          <MenuItem 
+            icon={Shield} 
+            label="Nexus VPN" 
+            onClick={() => handleAction("Nexus VPN")} 
+          />
+          
+          <DropdownMenuSeparator />
+          
+          <MenuItem 
+            icon={LayoutPanelLeft} 
+            label="Sidebar" 
+            onClick={() => handleAction("Sidebar toggle")} 
+          />
+          
+          <DropdownMenuSeparator />
+          
+          <MenuItem 
+            icon={Key} 
+            label="Passwords and autofill" 
+            onClick={() => handleAction("Passwords and autofill")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={History} 
+            label="History" 
+            onClick={() => handleAction("History")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={Bookmark} 
+            label="Bookmarks and lists" 
+            onClick={() => handleAction("Bookmarks and lists")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={Download} 
+            label="Downloads" 
+            shortcut="Ctrl+J" 
+            onClick={() => handleAction("Downloads", "Ctrl+J")} 
+          />
+          <MenuItem 
+            icon={Puzzle} 
+            label="Extensions" 
+            onClick={() => handleAction("Extensions")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={Trash} 
+            label="Delete browsing data..." 
+            shortcut="Shift+Ctrl+Del" 
+            onClick={() => handleAction("Delete browsing data", "Shift+Ctrl+Del")} 
+          />
+          
+          <DropdownMenuSeparator />
+          
+          <ZoomControls />
+          
+          <DropdownMenuSeparator />
+          
+          <MenuItem 
+            icon={Printer} 
+            label="Print..." 
+            shortcut="Ctrl+P" 
+            onClick={() => handleAction("Print", "Ctrl+P")} 
+          />
+          <MenuItem 
+            icon={Pen} 
+            label="Find and edit" 
+            onClick={() => handleAction("Find and edit")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={Share} 
+            label="Save and share" 
+            onClick={() => handleAction("Save and share")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={MoreHorizontal} 
+            label="More tools" 
+            onClick={() => handleAction("More tools")} 
+            hasSubmenu={true}
+          />
+          
+          <DropdownMenuSeparator />
+          
+          <Link to="/settings-docs" className="block w-full">
+            <MenuItem 
+              icon={BookOpen} 
+              label="Settings Documentation" 
+              onClick={() => {}} 
+            />
+          </Link>
+          
+          <MenuItem 
+            icon={HelpCircle} 
+            label="Help" 
+            onClick={() => handleAction("Help")} 
+            hasSubmenu={true}
+          />
+          <MenuItem 
+            icon={Settings} 
+            label="Settings" 
+            onClick={() => handleAction("Settings")} 
+          />
+          <MenuItem 
+            icon={X} 
+            label="Exit" 
+            onClick={() => handleAction("Exit")} 
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
 };
 
 export default UserSettingsTray;
