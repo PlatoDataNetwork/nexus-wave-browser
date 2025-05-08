@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight, Settings } from "lucide-react";
+import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
@@ -169,15 +168,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
         >
           NWF3 Rewards
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-[#7d3c98] hover:bg-[#7d3c98]/80 text-white border-none h-9 px-4"
-          onClick={() => onNavigate("/extension-admin")}
-        >
-          Admin
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
