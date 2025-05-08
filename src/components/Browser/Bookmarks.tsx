@@ -33,7 +33,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
         className="absolute left-0 z-10 h-7 w-7 rounded-full bg-muted/90 shadow-sm hover:bg-muted"
         onClick={() => handleScroll("left")}
       >
-        <ArrowLeft className="h-4 w-4 text-nexus-purple" />
+        <ArrowLeft className="h-4 w-4 text-white" />
         <span className="sr-only">Scroll left</span>
       </Button>
       
@@ -64,7 +64,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
         className="absolute right-0 z-10 h-7 w-7 rounded-full bg-muted/90 shadow-sm hover:bg-muted"
         onClick={() => handleScroll("right")}
       >
-        <ArrowRight className="h-4 w-4 text-nexus-purple" />
+        <ArrowRight className="h-4 w-4 text-white" />
         <span className="sr-only">Scroll right</span>
       </Button>
     </div>
