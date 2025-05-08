@@ -1,3 +1,4 @@
+
 import { Settings, Search, Chrome, Globe, Link } from "lucide-react";
 
 export type Tab = {
@@ -99,8 +100,8 @@ export const bookmarks: Bookmark[] = [
   },
   {
     id: "11",
-    title: "Plato",
-    url: "https://platodata.io",
+    title: "PlatoAi",
+    url: "https://web3-vercel-nexus.vercel.app/",
     icon: Globe,
   },
   {
