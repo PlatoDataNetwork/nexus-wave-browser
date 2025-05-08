@@ -1,13 +1,16 @@
 
-import React from "react";
-import { Chrome, Settings } from "lucide-react";
+import React, { useState } from "react";
+import { Chrome, Settings, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import WalletConnect from "./WalletConnect";
 
 const BrowserFooter: React.FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   
   const handleActionClick = (action: string) => {
     toast({
@@ -45,13 +48,24 @@ const BrowserFooter: React.FC = () => {
       
       <div className="flex items-center gap-3">
         <span>Nexus Wave Browser Web3 V2.1</span>
-        <Button 
-          onClick={handleSettingsClick}
-          size="sm" 
-          className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
-        >
-          Nexus Bridge
-        </Button>
+        
+        <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              size="sm" 
+              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
+              onClick={() => setIsWalletDialogOpen(true)}
+            >
+              <Wallet className="h-3 w-3 mr-1" />
+              Nexus Bridge
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="p-0 border-none max-w-4xl">
+            <div className="flex items-center justify-center p-6">
+              <WalletConnect />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
