@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -149,7 +150,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white border-none h-9"
+          className="bg-[#4CAF50] hover:bg-[#4CAF50]/80 text-white border-none h-9 px-4"
         >
           Rewards
         </Button>
@@ -157,7 +158,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none h-9"
+          className="bg-[#2196F3] hover:bg-[#2196F3]/80 text-white border-none h-9 px-4"
         >
           Buy NWF3
         </Button>
@@ -167,7 +168,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <Button 
               variant="secondary" 
               size="sm" 
-              className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white h-9"
+              className="bg-[#D946EF] hover:bg-[#D946EF]/80 text-white h-9 px-4"
             >
               Nexus Bridge
             </Button>
