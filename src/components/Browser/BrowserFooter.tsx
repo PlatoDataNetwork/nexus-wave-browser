@@ -27,6 +27,10 @@ const BrowserFooter: React.FC = () => {
   const handleSettingsClick = () => {
     navigate('/settings');
   };
+  
+  const handleHomeClick = () => {
+    navigate('/');
+  };
 
   return (
     <div className="flex items-center justify-between px-4 py-2 bg-card border-t border-border text-xs text-muted-foreground">
@@ -93,7 +97,18 @@ const BrowserFooter: React.FC = () => {
       </div>
       
       <div className="flex items-center gap-3">
-        <span className="text-xs">Nexus Wave Browser V2.1</span>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              size="sm" 
+              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
+              onClick={handleHomeClick}
+            >
+              Nexus Wave Browser V2.1
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Go to home page</TooltipContent>
+        </Tooltip>
         
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
           <DialogTrigger asChild>
