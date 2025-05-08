@@ -1,3 +1,4 @@
+
 import { Settings, Search, Chrome, Globe, Link } from "lucide-react";
 
 export type Tab = {
@@ -105,8 +106,20 @@ export const bookmarks: Bookmark[] = [
   },
   {
     id: "12",
-    title: "FYNN Analyst",
+    title: "Fynn",
     url: "https://fynn.fyntechnical.com/",
+    icon: Globe,
+  },
+  {
+    id: "13",
+    title: "Atlas DEX",
+    url: "https://atlasdex.finance",
+    icon: Globe,
+  },
+  {
+    id: "14",
+    title: "Erratic",
+    url: "https://erratic.finance",
     icon: Globe,
   },
 ];
