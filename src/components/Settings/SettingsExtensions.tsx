@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, SettingsIcon } from "lucide-react";
+import { ChevronDown, SettingsIcon, Shield, Download } from "lucide-react";
 
 interface ExtensionItemProps {
   name: string;
@@ -54,6 +55,10 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
               <SettingsIcon className="mr-2 h-4 w-4" />
               Extension settings
             </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Shield className="mr-2 h-4 w-4" />
+              Extension permissions
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive">
               Remove extension
             </DropdownMenuItem>
@@ -70,6 +75,9 @@ const SettingsExtensions: React.FC = () => {
     { id: 2, name: "MetaMask", description: "Ethereum wallet and dApp browser", enabled: true },
     { id: 3, name: "Web3 Inspector", description: "Inspect blockchain transactions", enabled: false },
   ]);
+  
+  const [allowIncognito, setAllowIncognito] = useState(true);
+  const [autoUpdate, setAutoUpdate] = useState(true);
   
   const { toast } = useToast();
 
@@ -98,6 +106,7 @@ const SettingsExtensions: React.FC = () => {
       <div className="space-y-4">
         <div className="flex justify-end">
           <Button variant="outline" size="sm" onClick={handleBrowseExtensions}>
+            <Download className="h-4 w-4 mr-2" />
             Browse extensions
           </Button>
         </div>
@@ -112,6 +121,40 @@ const SettingsExtensions: React.FC = () => {
               onToggle={() => toggleExtension(ext.id)}
             />
           ))}
+        </div>
+
+        <Separator />
+        
+        <div>
+          <h3 className="text-md font-medium mb-3">Extension Settings</h3>
+          
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-sm">Allow in incognito mode</p>
+                <p className="text-xs text-muted-foreground">
+                  Enable extensions when browsing in incognito mode
+                </p>
+              </div>
+              <Switch 
+                checked={allowIncognito}
+                onCheckedChange={setAllowIncognito}
+              />
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-sm">Auto-update extensions</p>
+                <p className="text-xs text-muted-foreground">
+                  Automatically update extensions when new versions are available
+                </p>
+              </div>
+              <Switch 
+                checked={autoUpdate}
+                onCheckedChange={setAutoUpdate}
+              />
+            </div>
+          </div>
         </div>
 
         <Separator />

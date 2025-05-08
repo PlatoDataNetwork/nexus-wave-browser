@@ -9,8 +9,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const SettingsShields: React.FC = () => {
   const [adBlocking, setAdBlocking] = useState(true);
@@ -18,6 +19,10 @@ const SettingsShields: React.FC = () => {
   const [fingerprintingProtection, setFingerprintingProtection] = useState(true);
   const [scriptBlocking, setScriptBlocking] = useState(false);
   const [cookieControl, setCookieControl] = useState("block-third-party");
+  
+  const [socialMediaBlocking, setSocialMediaBlocking] = useState(true);
+  const [httpsOnly, setHttpsOnly] = useState(true);
+  const [webRTC, setWebRTC] = useState("default");
 
   return (
     <div className="space-y-6">
@@ -78,6 +83,62 @@ const SettingsShields: React.FC = () => {
               onCheckedChange={setFingerprintingProtection}
             />
           </div>
+        </div>
+
+        <Separator />
+        
+        <div>
+          <h3 className="text-md font-medium mb-3">Social media blocking</h3>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm">Block social media trackers and buttons</p>
+              <p className="text-xs text-muted-foreground">
+                Prevents social networks from tracking you across the web
+              </p>
+            </div>
+            <Switch 
+              checked={socialMediaBlocking}
+              onCheckedChange={setSocialMediaBlocking}
+            />
+          </div>
+        </div>
+
+        <Separator />
+        
+        <div>
+          <h3 className="text-md font-medium mb-3">HTTPS-Only Mode</h3>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm">Always use secure connections</p>
+              <p className="text-xs text-muted-foreground">
+                Upgrade connections to HTTPS when possible
+              </p>
+            </div>
+            <Switch 
+              checked={httpsOnly}
+              onCheckedChange={setHttpsOnly}
+            />
+          </div>
+        </div>
+
+        <Separator />
+
+        <div>
+          <h3 className="text-md font-medium mb-3">WebRTC IP handling</h3>
+          <RadioGroup value={webRTC} onValueChange={setWebRTC}>
+            <div className="flex items-center space-x-2 mb-2">
+              <RadioGroupItem value="default" id="webrtc-default" />
+              <Label htmlFor="webrtc-default">Default (Use system settings)</Label>
+            </div>
+            <div className="flex items-center space-x-2 mb-2">
+              <RadioGroupItem value="public" id="webrtc-public" />
+              <Label htmlFor="webrtc-public">Public IP only</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="disabled" id="webrtc-disabled" />
+              <Label htmlFor="webrtc-disabled">Disable non-proxy UDP</Label>
+            </div>
+          </RadioGroup>
         </div>
 
         <Separator />
