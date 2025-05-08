@@ -77,7 +77,7 @@ export const bookmarks: Bookmark[] = [
   {
     id: "7",
     title: "Lumia",
-    url: "https://lumia.com",
+    url: "https://lumia.org",
     icon: Globe,
   },
   {
