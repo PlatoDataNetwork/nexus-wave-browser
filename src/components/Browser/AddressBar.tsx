@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -166,7 +165,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-[#9b87f5] hover:bg-[#9b87f5]/80 text-white border-none h-9 px-4"
+          className="bg-[#5D4037] hover:bg-[#5D4037]/80 text-white border-none h-9 px-4"
         >
           Staking
         </Button>
