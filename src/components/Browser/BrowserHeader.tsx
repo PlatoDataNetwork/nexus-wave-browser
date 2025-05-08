@@ -3,6 +3,7 @@ import React from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
+import ThemeToggle from "./ThemeToggle";
 import { Tab } from "@/lib/dummyData";
 
 interface BrowserHeaderProps {
@@ -34,6 +35,9 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 }) => {
   return (
     <div className="flex flex-col">
+      <div className="flex items-center justify-end pr-2 pt-1">
+        <ThemeToggle />
+      </div>
       <TabBar
         tabs={tabs}
         onAddTab={onAddTab}

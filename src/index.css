@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    /* Default dark mode variables */
     --background: 240 25% 8%;
     --foreground: 210 40% 98%;
 
@@ -44,6 +45,46 @@
     --sidebar-border: 240 15% 20%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Light mode variables */
+  :root.light-mode {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 260 60% 50%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 260 30% 92%;
+    --secondary-foreground: 240 10% 3.9%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 260 30% 90%;
+    --accent-foreground: 240 10% 3.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 260 60% 50%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 10% 3.9%;
+    --sidebar-primary: 260 60% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 260 30% 90%;
+    --sidebar-accent-foreground: 240 10% 3.9%;
+    --sidebar-border: 240 5.9% 90%;
+    --sidebar-ring: 260 60% 50%;
+  }
 }
 
 @layer base {
@@ -54,15 +95,39 @@
   body {
     @apply bg-nexus-space-black text-foreground overflow-hidden;
   }
+  
+  /* Light mode body background */
+  .light-mode body {
+    @apply bg-background text-foreground overflow-hidden;
+  }
+
+  /* Light mode transition */
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
 }
 
 @layer components {
+  /* Keep existing component styles */
   .nexus-gradient-bg {
     background: linear-gradient(135deg, #1A1F2C 0%, #252B3D 100%);
   }
 
+  /* Light mode gradient background */
+  .light-mode .nexus-gradient-bg {
+    background: linear-gradient(135deg, #f0f0f5 0%, #e5e5f0 100%);
+    color: hsl(var(--foreground));
+  }
+
   .nexus-glass {
     background: rgba(26, 31, 44, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(123, 99, 221, 0.2);
+  }
+
+  /* Light mode glass effect */
+  .light-mode .nexus-glass {
+    background: rgba(240, 240, 245, 0.8);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
