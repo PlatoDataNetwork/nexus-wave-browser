@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Chrome, Settings, Wallet, Download, Bookmark } from "lucide-react";
+import { Chrome, Settings, Download, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -117,7 +117,6 @@ const BrowserFooter: React.FC = () => {
               className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
               onClick={() => setIsWalletDialogOpen(true)}
             >
-              <Wallet className="h-3 w-3 mr-1" />
               Nexus Bridge
             </Button>
           </DialogTrigger>
