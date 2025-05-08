@@ -95,15 +95,16 @@ const ProtocolTicker: React.FC = () => {
 
 const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate }) => {
   const isHomepage = currentUrl === initialTabs[0].url;
+  
+  // Fix the extension store URL comparison
   const isExtensionStore = currentUrl === "/extension-store";
-
-  // Debug console logs to help identify what's happening
+  
   console.log("Current URL:", currentUrl);
   console.log("Is Extension Store?", isExtensionStore);
 
   return (
     <div className="flex-1 relative overflow-hidden">
-      {/* Only show WebviewFrame if not showing extension store */}
+      {/* Show WebviewFrame for regular URLs */}
       {!isExtensionStore && (
         <div className="absolute inset-0 overflow-y-auto">
           <WebviewFrame url={currentUrl} />
@@ -125,7 +126,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
-        <div className="absolute inset-0 overflow-y-auto">
+        <div className="absolute inset-0 overflow-y-auto bg-background">
           <ExtensionStore />
         </div>
       )}

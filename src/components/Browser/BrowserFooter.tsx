@@ -39,14 +39,27 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
   
   const handleExtensionStoreClick = () => {
     console.log("Extension store clicked, navigating");
+    
+    // Use onNavigate for within-browser navigation if available
     if (onNavigate) {
       onNavigate("/extension-store");
     } else {
+      // Fall back to router navigation
       navigate('/extension-store');
     }
+    
+    // Show a toast to confirm the action
+    toast({
+      title: "Opening Extension Store",
+      description: "Loading the Nexus Wave Extension Store"
+    });
   };
 
-  const isExtensionStoreActive = location.pathname === '/extension-store';
+  // Check if we're on the extension store page
+  const isExtensionStoreActive = 
+    location.pathname === '/extension-store' || 
+    (location.pathname === '/' && onNavigate && location.search.includes('extension-store'));
+  
   console.log("Current path:", location.pathname);
   console.log("Is extension store active?", isExtensionStoreActive);
 

@@ -25,6 +25,10 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     canGoForward
   } = useTabs(defaultUrl);
 
+  // Debug log to check what URL is being loaded initially
+  console.log("Index component rendering with defaultUrl:", defaultUrl);
+  console.log("Current URL in tabs system:", currentUrl);
+
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar - would be handled by the native window in a real app */}
