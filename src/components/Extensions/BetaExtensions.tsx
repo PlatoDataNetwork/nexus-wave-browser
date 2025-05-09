@@ -14,7 +14,12 @@ import {
   Bot, 
   ShieldAlert, 
   Sparkles, 
-  Tv
+  Tv,
+  Bitcoin,
+  DollarSign,
+  BadgeDollarSign,
+  BadgeBitcoin,
+  Star
 } from "lucide-react";
 
 interface BetaExtensionProps {
@@ -24,6 +29,7 @@ interface BetaExtensionProps {
   iconBg: string;
   category: string;
   estimatedRelease: string;
+  rating?: number;
 }
 
 const betaExtensions: BetaExtensionProps[] = [
@@ -106,12 +112,58 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-amber-600",
     category: "Security",
     estimatedRelease: "November 2025",
-  }
+  },
+  // New Crypto Extensions
+  {
+    name: "CryptoTracker Pro",
+    description: "Advanced real-time cryptocurrency tracking with price alerts, portfolio analytics and market predictions",
+    icon: Bitcoin,
+    iconBg: "bg-gradient-to-br from-amber-500 to-amber-700",
+    category: "Crypto",
+    estimatedRelease: "June 2025",
+    rating: 4.9,
+  },
+  {
+    name: "Blockchain Explorer",
+    description: "Browse and analyze blockchain transactions, smart contracts, and token data with professional-grade tools",
+    icon: BadgeBitcoin,
+    iconBg: "bg-gradient-to-br from-purple-500 to-purple-700",
+    category: "Crypto",
+    estimatedRelease: "July 2025",
+    rating: 4.8,
+  },
+  {
+    name: "DeFi Dashboard",
+    description: "All-in-one dashboard for DeFi protocols, yield farming analytics, and LP management across chains",
+    icon: BadgeDollarSign,
+    iconBg: "bg-gradient-to-br from-blue-500 to-blue-700",
+    category: "Crypto",
+    estimatedRelease: "August 2025",
+    rating: 4.7,
+  },
+  {
+    name: "NFT Marketplace Scanner",
+    description: "Track NFT floor prices, rare item listings, and collection statistics with instant alerts for profitable opportunities",
+    icon: DollarSign,
+    iconBg: "bg-gradient-to-br from-emerald-500 to-emerald-700",
+    category: "Crypto",
+    estimatedRelease: "September 2025",
+    rating: 4.6,
+  },
+  {
+    name: "Crypto Tax Assistant",
+    description: "Automated cryptocurrency tax calculation, transaction history export, and tax form preparation for multiple jurisdictions",
+    icon: BadgeDollarSign,
+    iconBg: "bg-gradient-to-br from-sky-500 to-sky-700",
+    category: "Crypto",
+    estimatedRelease: "October 2025",
+    rating: 4.5,
+  },
 ];
 
 const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) => {
   const { toast } = useToast();
-  const { name, description, icon: Icon, iconBg, category, estimatedRelease } = extension;
+  const { name, description, icon: Icon, iconBg, category, estimatedRelease, rating } = extension;
   
   const handleRequestAccess = () => {
     toast({
@@ -146,6 +198,12 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
           <Badge variant="outline" className="bg-secondary/50 text-foreground">
             {category}
           </Badge>
+          {rating && (
+            <div className="flex items-center text-sm">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+              <span>{rating}</span>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
