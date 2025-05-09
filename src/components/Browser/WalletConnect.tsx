@@ -145,7 +145,11 @@ const getWalletNameFromMetadata = (metadata: any): string => {
   return "My Wallet"; // Default fallback
 };
 
-const WalletConnect: React.FC = () => {
+interface WalletConnectProps {
+  onClose?: () => void;
+}
+
+const WalletConnect: React.FC<WalletConnectProps> = ({ onClose }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [activeWallet, setActiveWallet] = useState<WalletProvider | null>(null);
   const [walletAddress, setWalletAddress] = useState<string>('');
@@ -426,7 +430,10 @@ const WalletConnect: React.FC = () => {
 
   const handleCloseCard = () => {
     setIsVisible(false);
-    // Optional: Add any additional logic when closing the card (like animation, etc.)
+    // Notify the parent component if a callback was provided
+    if (onClose) {
+      onClose();
+    }
     toast.info("Nexus Wave Bridge closed");
   };
 

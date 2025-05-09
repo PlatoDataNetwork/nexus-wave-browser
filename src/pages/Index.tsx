@@ -31,6 +31,10 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
   console.log("Index component rendering with defaultUrl:", defaultUrl);
   console.log("Current URL in tabs system:", currentUrl);
 
+  const handleCloseWalletConnect = () => {
+    setShowWalletConnect(false);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar - would be handled by the native window in a real app */}
@@ -60,7 +64,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
         
         {/* Nexus Wave Bridge overlay - centered in the browser */}
-        {showWalletConnect && <WalletConnect />}
+        {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
       </div>
       
       <CustomToaster position="bottom-right" />
