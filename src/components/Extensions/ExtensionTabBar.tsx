@@ -56,6 +56,12 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
             Featured
           </button>
           <button 
+            className={`px-4 py-3 ${activeTab === 'beta' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            onClick={() => handleTabChange('beta')}
+          >
+            Beta
+          </button>
+          <button 
             className={`px-4 py-3 ${activeTab === 'admin' ? 'bg-nexus-purple text-white' : 'text-white'}`}
             onClick={() => handleTabChange('admin')}
           >
@@ -63,8 +69,8 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
           </button>
         </div>
         
-        {/* Search Box - Only shown when not in Admin tab */}
-        {activeTab !== "admin" && setSearchQuery && (
+        {/* Search Box - Only shown when not in Beta or Admin tabs */}
+        {activeTab !== "beta" && activeTab !== "admin" && setSearchQuery && (
           <div className="flex-1 relative">
             <div className="relative flex items-center">
               <div className="absolute left-3">
