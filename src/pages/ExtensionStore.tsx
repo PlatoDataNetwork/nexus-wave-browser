@@ -141,7 +141,7 @@ const ExtensionStore: React.FC = () => {
   const extensionCounts = {
     available: extensions.length,
     installed: extensions.filter(e => e.installed).length,
-    featured: extensions.filter(e => e.featured).length,
+    cryptoWeb3: extensions.filter(e => e.category === "Web3 & Crypto").length,
     security: extensions.filter(e => e.category === "Privacy & Security").length,
     ai: extensions.filter(e => e.category === "AI").length
   };
@@ -165,8 +165,8 @@ const ExtensionStore: React.FC = () => {
             <div className="text-4xl font-bold">{extensionCounts.installed}</div>
           </div>
           <div className="bg-[#3a1e38] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">Featured</div>
-            <div className="text-4xl font-bold">{extensionCounts.featured}</div>
+            <div className="text-sm font-medium mb-2">Crypto / Web3</div>
+            <div className="text-4xl font-bold">{extensionCounts.cryptoWeb3}</div>
           </div>
           <div className="bg-[#1e3a38] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Security</div>
