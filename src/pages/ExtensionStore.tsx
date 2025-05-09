@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -186,7 +187,7 @@ const ExtensionStore: React.FC = () => {
           <div className="text-4xl font-bold">{extensionCounts.security}</div>
         </div>
         <div className="bg-[#3a1e48] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">AI</div>
+          <div className="text-sm font-medium mb-2">Generative AI</div>
           <div className="text-4xl font-bold">{extensionCounts.ai}</div>
         </div>
       </div>
