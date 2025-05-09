@@ -26,8 +26,17 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
   };
 
   const handleBookmarkClick = (url: string, title: string) => {
+    // Explicitly log and navigate to the URL
     console.log(`Navigating to bookmark: ${url}`);
-    onNavigate(url);
+    
+    // Make sure the URL has protocol
+    let processedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      processedUrl = `https://${url}`;
+    }
+    
+    // Use onNavigate to trigger navigation in the parent components
+    onNavigate(processedUrl);
     toast.info(`Loading ${title}...`);
   };
 

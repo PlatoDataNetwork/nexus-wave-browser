@@ -1,15 +1,14 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import SettingsDocumentation from "@/pages/SettingsDocumentation";
 import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
 import PageLayout from "@/components/Layout/PageLayout";
+import WebviewFrame from "./WebviewFrame";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -17,7 +16,6 @@ interface BrowserContentProps {
 }
 
 const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate }) => {
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams] = useSearchParams();
 
@@ -50,43 +48,9 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       return <SettingsDocumentation />;
     }
     
-    // Check for external URLs or other URLs with protocol
-    try {
-      // For URLs with protocol (external sites)
-      if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
-        // Render a simulated external website view
-        return (
-          <div className="flex flex-col items-center justify-center h-full py-8">
-            <div className="w-full max-w-4xl px-4">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold">
-                  External Website: {new URL(currentUrl).hostname}
-                </h2>
-                <Button variant="outline" size="sm" onClick={() => window.open(currentUrl, '_blank')}>
-                  Open Actual Website <ExternalLink className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-              
-              <Card className="w-full nexus-glass border-none shadow-lg">
-                <CardHeader>
-                  <CardTitle>Simulated Content for {new URL(currentUrl).hostname}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    This is a simulated view of {currentUrl}. The Nexus Wave Browser prototype doesn't actually load external websites.
-                  </p>
-                  <p>
-                    In a real implementation, this would display the actual content from {new URL(currentUrl).hostname}.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        );
-      }
-    } catch (error) {
-      console.error("Invalid URL:", currentUrl, error);
-      // Continue with default rendering for invalid URLs
+    // For external URLs (with protocol), use the WebviewFrame
+    if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
+      return <WebviewFrame url={currentUrl} />;
     }
 
     // Default content rendering for home or unknown pages
@@ -112,10 +76,6 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
               className="mt-4 w-full"
               onClick={() => {
                 onNavigate("https://platodata.io/analytics");
-                toast({
-                  title: "Navigating to Platodata Analytics",
-                  description: "Loading Web3 analytics platform...",
-                });
               }}
             >
               Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
