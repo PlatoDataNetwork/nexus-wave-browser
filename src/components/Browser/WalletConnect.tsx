@@ -135,21 +135,15 @@ interface WalletConnection {
   wallet_provider: string;
 }
 
-// Extend the Supabase database types to recognize the wallet_name field
-declare module '@supabase/supabase-js' {
-  interface Database {
-    public: {
-      Tables: {
-        wallet_connections: {
-          Row: WalletConnection;
-          Insert: Omit<WalletConnection, 'created_at' | 'id'> & { created_at?: string; id?: string };
-          Update: Partial<Omit<WalletConnection, 'id'>>;
-        };
-        // ... other tables
-      };
-    };
+// Get wallet name from metadata helper function
+const getWalletNameFromMetadata = (metadata: any): string => {
+  // Check if metadata exists and is an object (not an array)
+  if (metadata && typeof metadata === 'object' && !Array.isArray(metadata)) {
+    // Access wallet_name property from the metadata object if it exists
+    return metadata.wallet_name || "My Wallet";
   }
-}
+  return "My Wallet"; // Default fallback
+};
 
 const WalletConnect: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -237,8 +231,9 @@ const WalletConnect: React.FC = () => {
         setIsConnected(true);
         setActiveWallet(data.wallet_provider as WalletProvider);
         setWalletAddress(data.wallet_address);
-        // Extract wallet_name from metadata if it exists, otherwise use default
-        setWalletName(data.metadata?.wallet_name || "My Wallet");
+        
+        // Extract wallet_name from metadata properly
+        setWalletName(getWalletNameFromMetadata(data.metadata));
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
