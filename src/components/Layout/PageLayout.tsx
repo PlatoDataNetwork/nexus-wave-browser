@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
 import { useNavigate } from "react-router-dom";
@@ -54,11 +53,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       )}
       
-      {/* Show footer button that appears when the footer is hidden */}
+      {/* Show footer button with updated Medium Purple color (#7B63DD) */}
       {includeFooter && !isFooterVisible && (
         <Button 
           size="sm"
-          className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md shadow-lg z-50"
+          className="fixed bottom-4 right-4 bg-[#7B63DD] hover:bg-[#6E59A5] text-white font-medium px-3 py-1 rounded-md shadow-lg z-50"
           onClick={toggleFooter}
         >
           Show Footer

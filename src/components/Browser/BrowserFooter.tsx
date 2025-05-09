@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -87,12 +86,12 @@ const BrowserFooter: React.FC<{
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
-        {/* Hide Footer button moved to the left side */}
+        {/* Hide Footer button with updated color to Medium Purple (#7B63DD) */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
               size="sm" 
-              className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md h-7"
+              className="bg-[#7B63DD] hover:bg-[#6E59A5] text-white font-medium px-3 py-1 rounded-md h-7"
               onClick={onToggleFooter}
             >
               Hide Footer
