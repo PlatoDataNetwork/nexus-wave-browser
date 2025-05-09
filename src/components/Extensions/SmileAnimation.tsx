@@ -1,8 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { Smile } from 'lucide-react';
-import { Card, CardContent } from "@/components/ui/card";
 
 const SmileAnimation: React.FC = () => {
   const [showAnimation, setShowAnimation] = useState(false);
@@ -127,16 +125,12 @@ const SmileAnimation: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center h-[80vh]">
       {!showAnimation && !showConfetti && !countdown && (
-        <Card className="w-[350px] h-[350px] bg-gradient-to-br from-nexus-purple to-nexus-deep-purple shadow-xl rounded-2xl border-2 border-nexus-light-purple/30">
-          <CardContent className="flex items-center justify-center h-full p-6">
-            <button
-              onClick={() => setShowAnimation(true)}
-              className="px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-nexus-light-purple via-nexus-purple to-purple-700 hover:opacity-90 transition-all shadow-lg hover:shadow-nexus-purple/50 animate-pulse-glow"
-            >
-              Click for a surprise!
-            </button>
-          </CardContent>
-        </Card>
+        <button
+          onClick={() => setShowAnimation(true)}
+          className="text-3xl md:text-4xl font-bold text-nexus-purple hover:opacity-90 transition-all animate-pulse-glow"
+        >
+          Click for a surprise!
+        </button>
       )}
       
       {showAnimation && (
@@ -146,28 +140,28 @@ const SmileAnimation: React.FC = () => {
             onClick={triggerAnimation}
           >
             <div className="relative">
-              {/* Realistic smiley face using the uploaded image */}
+              {/* New smiley face using the uploaded image */}
               <div className="relative">
                 <img 
-                  src="/lovable-uploads/f21a20cb-deaf-4c60-86e2-3cd54f540dce.png" 
-                  alt="Smiley Face" 
+                  src="/lovable-uploads/59fcbd3f-64ae-400b-9714-977215702206.png" 
+                  alt="Happy Smiley Face" 
                   className="w-[300px] h-[300px]"
                   style={{
                     filter: "drop-shadow(0 0 15px rgba(255,255,0,0.7))"
                   }}
                 />
                 
-                {/* Eyes that can blink - overlaid on the image */}
+                {/* Eyes that can blink - positioned to match the new image */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="relative w-48 h-24 mt-[-40px]">
-                    {/* Left eye */}
-                    <div className={`absolute left-6 top-6 w-10 h-[18px] rounded-full ${blinkEyes ? 'h-1 bg-black' : ''}`}>
+                  {blinkEyes && (
+                    <div className="relative w-48 h-24 mt-[-40px]">
+                      {/* Left eye blink */}
+                      <div className="absolute left-6 top-6 w-10 h-1 bg-black rounded-full"></div>
+                      
+                      {/* Right eye blink */}
+                      <div className="absolute right-6 top-6 w-10 h-1 bg-black rounded-full"></div>
                     </div>
-                    
-                    {/* Right eye */}
-                    <div className={`absolute right-6 top-6 w-10 h-[18px] rounded-full ${blinkEyes ? 'h-1 bg-black' : ''}`}>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
               
