@@ -57,7 +57,6 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
               <div className="ml-4">
                 <div className="flex items-center">
                   <h3 className="font-medium">{extension.name}</h3>
-                  {/* Beta badge removed */}
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {extension.description}

@@ -650,12 +650,12 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[7]
   },
 
-  // Media & Entertainment
+  // Media - Split from "Media & Entertainment"
   {
     id: 36,
     name: "MediaMaster",
     description: "Enhanced video controls, picture-in-picture, audio extraction, and customizable playback speeds for streaming platforms.",
-    category: "Media & Entertainment",
+    category: "Media",
     rating: 4.8,
     users: 2345678,
     installed: true,
@@ -669,7 +669,7 @@ export const extensionsData: Extension[] = [
     id: 37,
     name: "NoiseControl",
     description: "Audio equalizer, volume boosting, and background noise suppression for better sound quality in videos and music.",
-    category: "Media & Entertainment",
+    category: "Media",
     rating: 4.7,
     users: 1987654,
     installed: false,
@@ -683,7 +683,7 @@ export const extensionsData: Extension[] = [
     id: 38,
     name: "DarkReader+",
     description: "Advanced dark mode with customizable themes, scheduled activation, and per-site settings for better nighttime browsing.",
-    category: "Media & Entertainment",
+    category: "Media",
     rating: 4.6,
     users: 1765432,
     installed: true,
@@ -693,11 +693,13 @@ export const extensionsData: Extension[] = [
     icon: Sunrise,
     iconBg: iconBackgrounds[7]
   },
+  
+  // Entertainment - Split from "Media & Entertainment"
   {
     id: 39,
     name: "NewsDigest",
     description: "Personalized news feed that aggregates content from multiple sources with AI summaries and fact-checking indicators.",
-    category: "Media & Entertainment",
+    category: "Entertainment",
     rating: 4.5,
     users: 1452369,
     installed: false,
@@ -711,7 +713,7 @@ export const extensionsData: Extension[] = [
     id: 40,
     name: "WeatherNow",
     description: "Real-time weather information with forecasts, radar, and severe weather alerts based on your current location.",
-    category: "Media & Entertainment",
+    category: "Entertainment",
     rating: 4.4,
     users: 1236547,
     installed: false,
