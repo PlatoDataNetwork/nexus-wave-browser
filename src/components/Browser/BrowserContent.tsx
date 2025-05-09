@@ -30,6 +30,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     return () => clearTimeout(timer);
   }, [currentUrl]);
 
+  // Helper function to determine if a URL is external
+  const isExternalUrl = (url: string) => {
+    return url.startsWith('http://') || url.startsWith('https://');
+  };
+
   // Render appropriate content based on URL path
   const renderContent = () => {
     // Log the current URL for debugging
@@ -49,7 +54,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     }
     
     // For external URLs (with protocol), use the WebviewFrame
-    if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
+    if (isExternalUrl(currentUrl)) {
       return (
         <div className="h-full w-full flex-1 overflow-hidden">
           <WebviewFrame url={currentUrl} />

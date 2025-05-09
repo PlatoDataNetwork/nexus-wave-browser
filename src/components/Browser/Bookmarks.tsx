@@ -35,7 +35,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     // Log and trigger navigation
     console.log(`Navigating to bookmark: ${processedUrl}`);
     onNavigate(processedUrl);
-    toast.info(`Loading ${title}...`);
+    toast.success(`Loading ${title}...`);
   };
 
   // Add Alek Bot to the bookmarks
@@ -73,7 +73,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
             key={bookmark.id}
             variant="ghost"
             size="sm"
-            className="flex items-center space-x-1 whitespace-nowrap"
+            className="flex items-center space-x-1 whitespace-nowrap hover:bg-primary/10"
             onClick={() => handleBookmarkClick(bookmark.url, bookmark.title)}
           >
             {bookmark.icon && <bookmark.icon className="h-3 w-3 text-muted-foreground" />}
