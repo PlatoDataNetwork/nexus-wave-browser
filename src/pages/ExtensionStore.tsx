@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -71,10 +72,18 @@ const ExtensionStore: React.FC = () => {
   return (
     <PageLayout>
       <div className="p-6 max-w-7xl mx-auto w-full">
-        {/* Header */}
-        <h1 className="text-xl md:text-2xl font-semibold mb-6 bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-          Nexus Wave Extension Library
-        </h1>
+        {/* Header with Admin Console */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+            Nexus Wave Extension Library
+          </h1>
+          <h1 
+            className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent cursor-pointer"
+            onClick={handleAdminNavigation}
+          >
+            Admin Console
+          </h1>
+        </div>
 
         {/* Stats Cards */}
         <ExtensionStats extensions={extensions} />
