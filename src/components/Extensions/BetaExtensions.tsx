@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -196,8 +197,11 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
     });
   };
 
+  // Make sure description ends with a period
+  const formattedDescription = description.endsWith('.') ? description : description + '.';
+
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-md ${isFavorite ? 'border-nexus-purple/40 bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
+    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#101019] ${isFavorite ? 'border-nexus-purple/40 bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3">
@@ -222,7 +226,7 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
       </CardHeader>
       <CardContent className="p-4 pt-2">
         <p className="text-sm text-muted-foreground line-clamp-3 h-[4.5rem] mb-4">
-          {description}
+          {formattedDescription}
         </p>
         <div className="flex items-center justify-between">
           <Badge variant="outline" className="bg-secondary/50 text-foreground">

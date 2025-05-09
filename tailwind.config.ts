@@ -69,6 +69,7 @@ export default {
 					'light-purple': '#9b87f5',
 					'deep-purple': '#6E59A5',
 					'space-black': '#121212',
+					'card-dark': '#101019',
 				}
 			},
 			borderRadius: {
