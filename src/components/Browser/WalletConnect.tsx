@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Card, 
@@ -53,7 +52,7 @@ type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | '
 const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24ea5.png";
 
 // Trezor logo URL from the uploaded image
-const trezorLogoUrl = "/lovable-uploads/e931de13-c6d4-4048-b5c5-b591236df7ae.png";
+const trezorLogoUrl = "/lovable-uploads/d66213e3-2f89-41e3-9451-0a8a65847a6f.png";
 
 // Trust Wallet logo URL from the newly uploaded image
 const trustWalletLogoUrl = "/lovable-uploads/840d912c-ae1c-428a-8842-b9e74182176f.png";
