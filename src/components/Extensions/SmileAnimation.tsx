@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { Smile } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/card";
 
 const SmileAnimation: React.FC = () => {
   const [showAnimation, setShowAnimation] = useState(false);
@@ -9,7 +10,7 @@ const SmileAnimation: React.FC = () => {
   const [countdown, setCountdown] = useState<number | null>(null);
   const [blinkEyes, setBlinkEyes] = useState(false);
   const blinkTimerRef = useRef<NodeJS.Timeout | null>(null);
-
+  
   // Manage blinking animation
   useEffect(() => {
     const startBlinking = () => {
@@ -124,14 +125,18 @@ const SmileAnimation: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      {!showAnimation && !showConfetti && (
-        <button
-          onClick={() => setShowAnimation(true)}
-          className="px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 hover:opacity-90 transition"
-        >
-          Click for a surprise!
-        </button>
+    <div className="flex flex-col items-center justify-center h-[80vh]">
+      {!showAnimation && !showConfetti && !countdown && (
+        <Card className="w-[350px] h-[350px] bg-gradient-to-br from-nexus-purple to-nexus-deep-purple shadow-xl rounded-2xl border-2 border-nexus-light-purple/30">
+          <CardContent className="flex items-center justify-center h-full p-6">
+            <button
+              onClick={() => setShowAnimation(true)}
+              className="px-8 py-4 text-xl font-bold text-white rounded-full bg-gradient-to-r from-nexus-light-purple via-nexus-purple to-purple-700 hover:opacity-90 transition-all shadow-lg hover:shadow-nexus-purple/50 animate-pulse-glow"
+            >
+              Click for a surprise!
+            </button>
+          </CardContent>
+        </Card>
       )}
       
       {showAnimation && (
@@ -141,30 +146,26 @@ const SmileAnimation: React.FC = () => {
             onClick={triggerAnimation}
           >
             <div className="relative">
-              {/* Rainbow gradient smiley face */}
+              {/* Realistic smiley face using the uploaded image */}
               <div className="relative">
-                <Smile 
-                  size={300}
-                  strokeWidth={1.5}
-                  className="text-yellow-400" 
+                <img 
+                  src="/lovable-uploads/f21a20cb-deaf-4c60-86e2-3cd54f540dce.png" 
+                  alt="Smiley Face" 
+                  className="w-[300px] h-[300px]"
                   style={{
-                    filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))",
-                    background: "radial-gradient(circle, #ffef5e, #ff9d00)",
-                    borderRadius: "50%"
+                    filter: "drop-shadow(0 0 15px rgba(255,255,0,0.7))"
                   }}
                 />
                 
-                {/* Eyes that can blink */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-48 h-24 mt-12">
+                {/* Eyes that can blink - overlaid on the image */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="relative w-48 h-24 mt-[-40px]">
                     {/* Left eye */}
-                    <div className="absolute left-6 top-6 w-10 h-10 bg-black rounded-full flex items-center justify-center">
-                      {!blinkEyes && <div className="w-4 h-4 bg-white rounded-full"></div>}
+                    <div className={`absolute left-6 top-6 w-10 h-[18px] rounded-full ${blinkEyes ? 'h-1 bg-black' : ''}`}>
                     </div>
                     
                     {/* Right eye */}
-                    <div className="absolute right-6 top-6 w-10 h-10 bg-black rounded-full flex items-center justify-center">
-                      {!blinkEyes && <div className="w-4 h-4 bg-white rounded-full"></div>}
+                    <div className={`absolute right-6 top-6 w-10 h-[18px] rounded-full ${blinkEyes ? 'h-1 bg-black' : ''}`}>
                     </div>
                   </div>
                 </div>
@@ -172,7 +173,7 @@ const SmileAnimation: React.FC = () => {
               
               {/* Countdown text */}
               {countdown !== null && (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl font-bold text-white drop-shadow-lg">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl font-bold text-white drop-shadow-lg countdown-animation">
                   {countdown === 0 ? "BOOM!" : countdown}
                 </div>
               )}
