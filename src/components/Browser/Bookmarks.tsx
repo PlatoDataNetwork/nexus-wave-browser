@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 
 interface BookmarksProps {
   onNavigate: (url: string) => void;
@@ -22,6 +23,12 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     } else {
       container.scrollLeft += scrollAmount;
     }
+  };
+
+  const handleBookmarkClick = (url: string, title: string) => {
+    console.log(`Navigating to bookmark: ${url}`);
+    onNavigate(url);
+    toast.info(`Loading ${title}...`);
   };
 
   // Add Alek Bot to the bookmarks
@@ -60,7 +67,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
             variant="ghost"
             size="sm"
             className="flex items-center space-x-1 whitespace-nowrap"
-            onClick={() => onNavigate(bookmark.url)}
+            onClick={() => handleBookmarkClick(bookmark.url, bookmark.title)}
           >
             {bookmark.icon && <bookmark.icon className="h-3 w-3 text-muted-foreground" />}
             <span className="text-xs">{bookmark.title}</span>

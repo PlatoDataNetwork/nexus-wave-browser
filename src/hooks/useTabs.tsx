@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { initialTabs, Tab } from "@/lib/dummyData";
 import { toast } from "@/components/ui/sonner";
@@ -130,33 +129,69 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
     });
   }, []);
 
+  // Enhanced navigation function to handle URLs correctly
   const navigateToUrl = useCallback((url: string) => {
-    // Ensure URL has protocol
-    let processedUrl = url;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      processedUrl = `https://${url}`;
+    // Debug log
+    console.log(`navigateToUrl called with: ${url}`);
+    
+    // Check for internal routes first (without protocol)
+    if (url === '/history' || url === '/settings-docs' || url === '/extension-store') {
+      console.log(`Detected internal route: ${url}`);
+      setCurrentUrl(url);
+      
+      // Update active tab with the internal route
+      updateActiveTabUrl(url);
+      
+      // Add to history
+      updateHistory(url);
+      return;
     }
     
-    const activeTabId = getActiveTabId();
-    if (!activeTabId) return;
+    // Ensure URL has protocol
+    let processedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      processedUrl = `https://${url}`;
+      console.log(`Added protocol to URL: ${processedUrl}`);
+    }
     
+    console.log(`Setting current URL to: ${processedUrl}`);
     setCurrentUrl(processedUrl);
     
-    // Update the active tab with new URL
+    // Update the active tab with the new URL
+    updateActiveTabUrl(processedUrl);
+    
+    // Add to history
+    updateHistory(processedUrl);
+    
+    toast.info(`Navigating to ${processedUrl}`);
+  }, []);
+  
+  // Helper function to update active tab's URL
+  const updateActiveTabUrl = useCallback((url: string) => {
     setTabs(prevTabs => {
       return prevTabs.map(tab => {
         if (tab.isActive) {
+          // Get a clean title from the URL
+          const title = url.startsWith('/') 
+            ? url.substring(1) // For internal routes, remove leading slash
+            : url.replace(/^https?:\/\//, '').split('/')[0]; // For external URLs
+            
           return {
             ...tab,
-            url: processedUrl,
-            title: processedUrl.replace(/^https?:\/\//, '').split('/')[0]
+            url,
+            title
           };
         }
         return tab;
       });
     });
+  }, []);
+  
+  // Helper function to update history for the active tab
+  const updateHistory = useCallback((url: string) => {
+    const activeTabId = getActiveTabId();
+    if (!activeTabId) return;
     
-    // Add to history for the active tab
     setTabHistory(prev => {
       const activeTabHistory = [...(prev[activeTabId] || [])];
       const currentPosition = historyPosition[activeTabId] || 0;
@@ -164,7 +199,7 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
       // If we navigated from a position that's not the end of history,
       // truncate the history from that point
       const newHistory = activeTabHistory.slice(0, currentPosition + 1);
-      newHistory.push(processedUrl);
+      newHistory.push(url);
       
       return {
         ...prev,
@@ -177,8 +212,6 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
       ...prev,
       [activeTabId]: (prev[activeTabId] || 0) + 1
     }));
-    
-    toast.info(`Navigating to ${processedUrl}`);
   }, [getActiveTabId, historyPosition]);
 
   // Go back in history

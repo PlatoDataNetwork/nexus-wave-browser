@@ -23,6 +23,8 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
   useEffect(() => {
     setIsLoading(true);
+    console.log(`Loading content for URL: ${currentUrl}`);
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500); // Simulate loading delay
@@ -35,36 +37,55 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     // Log the current URL for debugging
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 
-    // First check for internal app routes
+    // First check for internal app routes (without protocol)
     if (currentUrl === '/history') {
-      // Render HistoryPage directly, without wrapping in PageLayout
       return <HistoryPage />;
     }
     
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
-      // Render ExtensionStore directly, without wrapping in PageLayout
       return <ExtensionStore />;
     }
     
     if (currentUrl === '/settings-docs' || currentUrl.includes('/settings-docs')) {
-      // Render SettingsDocumentation directly, without wrapping in PageLayout
       return <SettingsDocumentation />;
     }
     
-    // Parse the URL for other routes that might include protocol
+    // Check for external URLs or other URLs with protocol
     try {
-      const url = new URL(currentUrl, window.location.origin);
-      
-      // Check for special internal URLs with protocol
-      if (url.pathname === '/history') {
-        return <HistoryPage />;
-      } else if (url.pathname === '/settings-docs') {
-        return <SettingsDocumentation />;
-      } else if (url.pathname === '/extension-store') {
-        return <ExtensionStore />;
+      // For URLs with protocol (external sites)
+      if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
+        // Render a simulated external website view
+        return (
+          <div className="flex flex-col items-center justify-center h-full py-8">
+            <div className="w-full max-w-4xl px-4">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold">
+                  External Website: {new URL(currentUrl).hostname}
+                </h2>
+                <Button variant="outline" size="sm" onClick={() => window.open(currentUrl, '_blank')}>
+                  Open Actual Website <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              
+              <Card className="w-full nexus-glass border-none shadow-lg">
+                <CardHeader>
+                  <CardTitle>Simulated Content for {new URL(currentUrl).hostname}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    This is a simulated view of {currentUrl}. The Nexus Wave Browser prototype doesn't actually load external websites.
+                  </p>
+                  <p>
+                    In a real implementation, this would display the actual content from {new URL(currentUrl).hostname}.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
       }
     } catch (error) {
-      console.error("Invalid URL:", currentUrl);
+      console.error("Invalid URL:", currentUrl, error);
       // Continue with default rendering for invalid URLs
     }
 
