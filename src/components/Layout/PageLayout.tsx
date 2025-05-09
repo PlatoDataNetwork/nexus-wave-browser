@@ -10,10 +10,12 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true }) => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <ScrollArea className="flex-1">
-        {children}
-      </ScrollArea>
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          {children}
+        </ScrollArea>
+      </div>
       {includeFooter && <BrowserFooter />}
     </div>
   );
