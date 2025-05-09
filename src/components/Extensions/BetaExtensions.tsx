@@ -195,7 +195,7 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
   };
 
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
+    <Card className={`overflow-hidden transition-all hover:shadow-md ${isFavorite ? 'border-nexus-purple/40 bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3">
@@ -227,9 +227,9 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
             {category}
           </Badge>
           {rating && (
-            <div className="flex items-center text-sm bg-black/60 px-2 py-1 rounded-md">
+            <div className="flex items-center text-sm">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-              <span className="font-medium text-white">{rating}</span>
+              <span>{rating}</span>
             </div>
           )}
         </div>
