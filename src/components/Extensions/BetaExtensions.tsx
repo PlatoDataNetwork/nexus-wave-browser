@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -207,14 +206,9 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
           {description}
         </p>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Badge variant="outline" className="bg-secondary/50 text-foreground">
-              {category}
-            </Badge>
-            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/50">
-              Beta
-            </Badge>
-          </div>
+          <Badge variant="outline" className="bg-secondary/50 text-foreground">
+            {category}
+          </Badge>
           {rating && (
             <div className="flex items-center text-sm">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
