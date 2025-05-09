@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,6 +22,9 @@ const ExtensionStore: React.FC = () => {
   
   // Combine regular and beta extensions
   const [extensions, setExtensions] = useState([...extensionsData, ...betaExtensionsData]);
+  
+  // Create a separate variable for all extensions to use in stats
+  const allExtensions = [...extensionsData, ...betaExtensionsData];
   
   // Parse tab from URL on initial load
   useEffect(() => {
@@ -146,8 +150,8 @@ const ExtensionStore: React.FC = () => {
         Nexus Wave Extension Library
       </h1>
       
-      {/* Stats Cards - Use the ExtensionStats component with all extensions */}
-      <ExtensionStats extensions={extensions} />
+      {/* Stats Cards - Pass ALL extensions to the stats component */}
+      <ExtensionStats extensions={allExtensions} />
       
       {/* Tab & Category navigation */}
       <ExtensionTabBar 
