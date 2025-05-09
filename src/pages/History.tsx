@@ -155,8 +155,8 @@ const HistoryPage: React.FC = () => {
   }, {} as Record<string, typeof historyItems>);
 
   return (
-    <ScrollArea className="h-full w-full">
-      <div className="flex flex-col h-full">
+    <div className="h-full w-full overflow-auto">
+      <div className="flex flex-col h-full pb-16">
         <Card className="nexus-glass animate-pulse-glow border-none shadow-none">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -308,7 +308,7 @@ const HistoryPage: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 
