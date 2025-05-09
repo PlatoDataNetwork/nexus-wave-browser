@@ -25,6 +25,7 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
     setShowFallback(false);
     
     console.log(`Loading URL in WebviewFrame: ${url}`);
+    toast.info(`Loading web content for: ${domain}`);
     
     const loadingInterval = setInterval(() => {
       setProgress(prev => {
@@ -39,6 +40,7 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
       
       setTimeout(() => {
         setIsLoading(false);
+        toast.success(`Loaded content from: ${domain}`);
       }, 300);
     }, 1000);
     
@@ -46,7 +48,7 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
       clearInterval(loadingInterval);
       clearTimeout(timer);
     };
-  }, [url]);
+  }, [url, domain]);
 
   const handleIframeError = () => {
     console.error("Iframe loading error!");

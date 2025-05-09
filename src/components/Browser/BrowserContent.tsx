@@ -9,6 +9,7 @@ import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
 import PageLayout from "@/components/Layout/PageLayout";
 import WebviewFrame from "./WebviewFrame";
+import { toast } from "@/components/ui/sonner";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -21,7 +22,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
   useEffect(() => {
     setIsLoading(true);
-    console.log(`Loading content for URL: ${currentUrl}`);
+    console.log(`BrowserContent: Loading content for URL: ${currentUrl}`);
     
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -56,6 +57,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     // For external URLs (with protocol), use the WebviewFrame
     if (isExternalUrl(currentUrl)) {
       console.log(`Rendering WebviewFrame for external URL: ${currentUrl}`);
+      toast.info(`Displaying content from: ${currentUrl.replace(/^https?:\/\//, '')}`);
       return (
         <div className="h-full w-full flex-1 overflow-hidden">
           <WebviewFrame url={currentUrl} />
