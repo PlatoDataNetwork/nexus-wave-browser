@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -5,7 +6,7 @@ import { extensionsData } from "@/lib/extensionsData";
 import ExtensionList from "@/components/Extensions/ExtensionList";
 import BetaExtensions from "@/components/Extensions/BetaExtensions";
 import PageLayout from "@/components/Layout/PageLayout";
-import ExtensionAdmin from "@/pages/ExtensionAdmin";
+import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
 import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
@@ -24,7 +25,7 @@ const ExtensionStore: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['all', 'installed', 'favorites', 'featured', 'beta', 'admin'].includes(tab)) {
+    if (tab && ['all', 'installed', 'favorites', 'featured', 'beta', 'smile'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [location.search]);
@@ -133,10 +134,8 @@ const ExtensionStore: React.FC = () => {
         
         {/* Extension Content based on active tab */}
         <div className="mt-6">
-          {activeTab === "admin" ? (
-            <div className="inline-block w-full">
-              <ExtensionAdmin />
-            </div>
+          {activeTab === "smile" ? (
+            <SmileAnimation />
           ) : activeTab === "beta" ? (
             <BetaExtensions />
           ) : (
