@@ -6,7 +6,6 @@ import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -78,7 +77,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white rounded-full p-2 shadow-lg z-50"
           onClick={toggleFooter}
         >
-          <Eye className="h-4 w-4 mr-1" /> Show Footer
+          Show Footer
         </Button>
       )}
       

@@ -4,7 +4,6 @@ import BrowserFooter from "../Browser/BrowserFooter";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -52,7 +51,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white rounded-full p-2 shadow-lg"
           onClick={toggleFooter}
         >
-          <Eye className="h-4 w-4 mr-1" /> Show Footer
+          Show Footer
         </Button>
       )}
     </div>
