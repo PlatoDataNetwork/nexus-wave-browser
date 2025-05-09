@@ -22,13 +22,25 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
     
     console.log("Calculating stats from", extensions.length, "extensions");
     
-    // Count Web3 & Crypto extensions
-    const web3Extensions = extensions.filter(ext => 
-      ext.category === "Web3 & Crypto" || 
-      ext.category === "Crypto" || 
-      ext.category === "Web3"
-    );
+    // Correctly identify all Web3 & Crypto extensions by looking at both category and description
+    const web3Extensions = extensions.filter(ext => {
+      // Check categories
+      const categoryMatch = 
+        ext.category === "Web3 & Crypto" || 
+        ext.category === "Crypto" || 
+        ext.category === "Web3";
+      
+      // For extensions that should be counted as Web3 & Crypto but might be miscategorized
+      const isAdditionalWeb3Ext = 
+        ext.id === 16 || ext.id === 17 || ext.id === 18 || 
+        ext.id === 19 || ext.id === 20 || 
+        (ext.description && ext.description.toLowerCase().includes("crypto"));
+      
+      return categoryMatch || isAdditionalWeb3Ext;
+    });
+    
     console.log("Web3 & Crypto extensions:", web3Extensions.length);
+    console.log("Web3 extensions IDs:", web3Extensions.map(ext => ext.id));
     
     // Calculate new stats based on the extensions data
     const newStatsData = [

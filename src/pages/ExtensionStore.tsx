@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -156,7 +155,7 @@ const ExtensionStore: React.FC = () => {
         Nexus Wave Extension Library
       </h1>
       
-      {/* Stats Cards - Pass ALL extensions to the stats component */}
+      {/* Stats Cards - Ensure we pass ALL extensions to the stats component */}
       <ExtensionStats extensions={allExtensions} />
       
       {/* Tab & Category navigation */}
