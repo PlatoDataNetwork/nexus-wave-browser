@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -65,6 +64,13 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
   console.log("Current path:", location.pathname);
   console.log("Is extension store active?", isExtensionStoreActive);
 
+  const handleSecurityClick = () => {
+    toast({
+      title: "Security Shield",
+      description: "All extensions are scanned for security vulnerabilities",
+    });
+  };
+
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
@@ -82,6 +88,24 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
           </TooltipTrigger>
           <TooltipContent>
             <p>Browse extension store</p>
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Shield security button - NEW */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-7 text-green-500"
+              onClick={handleSecurityClick}
+            >
+              <Shield className="h-3 w-3 mr-1 fill-green-500" />
+              <span>Security</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Extension security status</p>
           </TooltipContent>
         </Tooltip>
 
