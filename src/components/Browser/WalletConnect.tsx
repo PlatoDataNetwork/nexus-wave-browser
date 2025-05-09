@@ -145,6 +145,7 @@ const getWalletNameFromMetadata = (metadata: any): string => {
   return "My Wallet"; // Default fallback
 };
 
+// Interface for the wallet connection props
 interface WalletConnectProps {
   onClose?: () => void;
 }
@@ -456,7 +457,7 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="relative">
-        {/* X Close Button */}
+        {/* X Close Button - Improved UI matching reference image */}
         <button
           onClick={handleCloseCard}
           className="absolute -top-4 -right-4 bg-[#e5007e] hover:bg-[#e5007e]/80 text-white rounded-full p-1 z-10 shadow-md"
