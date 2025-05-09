@@ -122,7 +122,7 @@ const SmileAnimation: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-[80vh]">
+    <div className="flex flex-col items-center justify-center h-[100vh]">
       {!showAnimation && !showConfetti && !countdown && (
         <button
           onClick={() => setShowAnimation(true)}
@@ -139,26 +139,26 @@ const SmileAnimation: React.FC = () => {
             onClick={triggerAnimation}
           >
             <div className="relative">
-              {/* New smiley face using the uploaded image */}
+              {/* Enlarged smiley face */}
               <div className="relative">
                 <img 
                   src="/lovable-uploads/59fcbd3f-64ae-400b-9714-977215702206.png" 
                   alt="Happy Smiley Face" 
-                  className="w-[300px] h-[300px]"
+                  className="w-[75vh] h-[75vh]"
                   style={{
                     filter: "drop-shadow(0 0 15px rgba(255,255,0,0.7))"
                   }}
                 />
                 
-                {/* Eyes that can blink - positioned to match the new image */}
+                {/* Eyes that can blink - positioned to match the enlarged image */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   {blinkEyes && (
-                    <div className="relative w-48 h-24 mt-[-40px]">
+                    <div className="relative w-[40vh] h-[20vh] mt-[-10vh]">
                       {/* Left eye blink */}
-                      <div className="absolute left-6 top-6 w-10 h-1 bg-black rounded-full"></div>
+                      <div className="absolute left-6 top-6 w-20 h-2 bg-black rounded-full"></div>
                       
                       {/* Right eye blink */}
-                      <div className="absolute right-6 top-6 w-10 h-1 bg-black rounded-full"></div>
+                      <div className="absolute right-6 top-6 w-20 h-2 bg-black rounded-full"></div>
                     </div>
                   )}
                 </div>
