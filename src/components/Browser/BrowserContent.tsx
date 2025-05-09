@@ -128,9 +128,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
-        <div className="absolute inset-0 overflow-y-auto bg-background">
-          <ExtensionStore />
-        </div>
+        <ScrollArea className="absolute inset-0 h-full">
+          <div className="bg-background">
+            <ExtensionStore />
+          </div>
+        </ScrollArea>
       )}
     </div>
   );
