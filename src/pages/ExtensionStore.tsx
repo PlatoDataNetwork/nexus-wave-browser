@@ -184,7 +184,7 @@ const ExtensionStore: React.FC = () => {
           setActiveTab={handleTabChange}
         />
         
-        {/* Only show search and filtering when not on special tabs */}
+        {/* Only show search when not on special tabs */}
         {activeTab !== "smile" && activeTab !== "beta" && (
           <div className="mt-6">
             <ExtensionSearchBar
@@ -196,52 +196,6 @@ const ExtensionStore: React.FC = () => {
               viewMode={viewMode}
               setViewMode={setViewMode}
             />
-            
-            {/* Category Pills */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              <Button
-                variant={activeCategory === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => handleCategoryChange("all")}
-                className={activeCategory === "all" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}
-              >
-                All Categories
-              </Button>
-              
-              {categories
-                .filter(category => category !== "all")
-                .sort()
-                .map(category => (
-                  <Button
-                    key={category}
-                    variant={activeCategory === category ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handleCategoryChange(category)}
-                    className={activeCategory === category ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}
-                  >
-                    {category}
-                  </Button>
-                ))
-              }
-            </div>
-          </div>
-        )}
-        
-        {/* Active category indicator */}
-        {activeTab !== "smile" && activeTab !== "beta" && activeCategory !== "all" && (
-          <div className="mt-4 flex items-center text-sm">
-            <span className="text-muted-foreground">Category:</span>
-            <span className="ml-2 bg-nexus-purple/20 text-nexus-purple px-2 py-1 rounded-md font-medium">
-              {activeCategory}
-            </span>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="ml-2 h-7 px-2 text-muted-foreground"
-              onClick={() => handleCategoryChange("all")}
-            >
-              Clear
-            </Button>
           </div>
         )}
         
