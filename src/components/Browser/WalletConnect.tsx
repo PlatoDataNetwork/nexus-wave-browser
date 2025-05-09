@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -526,17 +527,20 @@ const WalletConnect: React.FC = () => {
             <div className="mt-auto">
               <Separator className="mb-4" />
               
-              {/* Wallet support text with justified alignment */}
+              {/* Updated wallet support text with bold title and left-aligned wallet names */}
               <div className="mb-4">
                 <p className="text-sm text-muted-foreground text-justify px-2">
-                  Nexus Wave currently supports the following wallets:
-                  Crypto.com, Exodus, Ledger, MetaMask, Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect, ZenGo, and Coinbase.
-                  More Wallets coming online soon.
+                  <span className="font-bold block">Nexus Wave supports the following wallets:</span>
+                  <span className="text-left block">
+                    Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
+                    Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
+                    More Wallets coming online soon.
+                  </span>
                 </p>
               </div>
               
-              {/* Added mt-4 to increase spacing between text and button */}
-              <div className="mt-4">
+              {/* Added mt-8 to increase spacing between text and button */}
+              <div className="mt-8">
                 {isConnected ? (
                   <Button 
                     onClick={handleDisconnect}
