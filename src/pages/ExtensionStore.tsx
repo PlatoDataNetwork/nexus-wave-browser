@@ -84,8 +84,8 @@ const ExtensionStore: React.FC = () => {
             onValueChange={setActiveTab} 
             className="w-full"
           >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
+            <div className="flex flex-col gap-4">
+              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700 w-full justify-start">
                 <TabsTrigger 
                   value="all" 
                   className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
@@ -119,18 +119,20 @@ const ExtensionStore: React.FC = () => {
                 </TabsTrigger>
               </TabsList>
               
-              {/* Search bar moved to the same line as tabs */}
-              {activeTab !== "beta" && (
-                <ExtensionSearchBar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  categories={categories}
-                  activeCategory={activeCategory}
-                  setActiveCategory={setActiveCategory}
-                  viewMode={viewMode}
-                  setViewMode={setViewMode}
-                />
-              )}
+              {/* Search bar below tabs with full width */}
+              <div className="w-full">
+                {activeTab !== "beta" && (
+                  <ExtensionSearchBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    categories={categories}
+                    activeCategory={activeCategory}
+                    setActiveCategory={setActiveCategory}
+                    viewMode={viewMode}
+                    setViewMode={setViewMode}
+                  />
+                )}
+              </div>
             </div>
 
             {/* Content based on active tab */}
