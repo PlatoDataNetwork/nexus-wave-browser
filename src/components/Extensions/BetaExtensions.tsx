@@ -1,10 +1,10 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { Star, Heart } from "lucide-react";
-import ExtensionNavBar from "./ExtensionNavBar";
 import { 
   AlertTriangle, 
   Brain, 
@@ -123,7 +123,7 @@ const betaExtensions: BetaExtensionProps[] = [
     estimatedRelease: "November 2025",
     rating: 4.7,
   },
-  // New Crypto Extensions
+  // Crypto Extensions
   {
     name: "CryptoTracker Pro",
     description: "Advanced real-time cryptocurrency tracking with price alerts, portfolio analytics and market predictions",
@@ -189,6 +189,12 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
 
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite);
+    toast({
+      title: isFavorite ? "Removed from favorites" : "Added to favorites",
+      description: isFavorite 
+        ? `${name} has been removed from your favorites` 
+        : `${name} has been added to your favorites`,
+    });
   };
 
   return (
