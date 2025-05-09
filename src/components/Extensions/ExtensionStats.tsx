@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Extension } from "@/lib/extensionsData";
+import { AlertTriangle, CheckCircle2, LockKeyhole, ShieldCheck, Sparkles } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ExtensionStatsProps {
   extensions: Extension[];
@@ -9,11 +11,41 @@ interface ExtensionStatsProps {
 const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
   // Use state to store calculated stats
   const [statsData, setStatsData] = useState([
-    { title: "Available", value: 0, bgColor: "bg-[#2a1e48]" },
-    { title: "Installed", value: 0, bgColor: "bg-[#1e2a48]" },
-    { title: "Web3 & Crypto", value: 0, bgColor: "bg-[#3a1e38]" },
-    { title: "Privacy & Security", value: 0, bgColor: "bg-[#1e3a38]" },
-    { title: "Generative AI", value: 0, bgColor: "bg-[#3a1e48]" }
+    { 
+      title: "Available", 
+      value: 0, 
+      bgColor: "bg-[#2a1e48]",
+      icon: CheckCircle2,
+      description: "Total extensions available",
+    },
+    { 
+      title: "Installed", 
+      value: 0, 
+      bgColor: "bg-[#1e2a48]",
+      icon: CheckCircle2,
+      description: "Currently installed extensions",
+    },
+    { 
+      title: "Web3 & Crypto", 
+      value: 0, 
+      bgColor: "bg-[#3a1e38]",
+      icon: Sparkles,
+      description: "Blockchain and cryptocurrency tools",
+    },
+    { 
+      title: "Privacy & Security", 
+      value: 0, 
+      bgColor: "bg-[#1e3a38]",
+      icon: ShieldCheck,
+      description: "Tools to protect your data and privacy",
+    },
+    { 
+      title: "Generative AI", 
+      value: 0, 
+      bgColor: "bg-[#3a1e48]",
+      icon: Sparkles,
+      description: "AI-powered content creation tools",
+    }
   ]);
 
   // Calculate stats whenever extensions prop changes
@@ -52,40 +84,78 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
     console.log("Web3 & Crypto extensions:", web3Extensions.length);
     console.log("Web3 extensions IDs:", web3Extensions.map(ext => ext.id));
     
+    // Identify Privacy & Security extensions
+    const privacySecurityExtensions = extensions.filter(ext => {
+      // Check for explicit privacy/security categories
+      const categoryMatch = 
+        ext.category === "Privacy & Security" || 
+        ext.category === "Security" ||
+        ext.category === "Privacy";
+      
+      // Check specific secure/privacy extension IDs
+      const specificIds = [6, 7, 8, 9, 10];
+      
+      // Check description for privacy/security terms
+      const descriptionMatch = ext.description && 
+        (ext.description.toLowerCase().includes("privacy") ||
+         ext.description.toLowerCase().includes("security") ||
+         ext.description.toLowerCase().includes("protection") ||
+         ext.description.toLowerCase().includes("blocker") ||
+         ext.description.toLowerCase().includes("secure") ||
+         ext.description.toLowerCase().includes("shield") ||
+         ext.description.toLowerCase().includes("tracking") ||
+         ext.description.toLowerCase().includes("vpn") ||
+         ext.description.toLowerCase().includes("encrypt"));
+      
+      return categoryMatch || specificIds.includes(ext.id) || descriptionMatch;
+    });
+    
+    console.log("Privacy & Security extensions:", privacySecurityExtensions.length);
+    
     // Calculate new stats based on the extensions data
     const newStatsData = [
       { 
         title: "Available", 
         value: extensions.length, 
-        bgColor: "bg-[#2a1e48]" 
+        bgColor: "bg-[#2a1e48]",
+        icon: CheckCircle2,
+        description: "Total extensions available",
       },
       { 
         title: "Installed", 
         value: extensions.filter(ext => ext.installed).length, 
-        bgColor: "bg-[#1e2a48]" 
+        bgColor: "bg-[#1e2a48]",
+        icon: CheckCircle2,
+        description: "Currently installed extensions",
       },
       { 
         title: "Web3 & Crypto", 
         value: web3Extensions.length, 
-        bgColor: "bg-[#3a1e38]" 
+        bgColor: "bg-[#3a1e38]",
+        icon: Sparkles,
+        description: "Blockchain and cryptocurrency tools",
       },
       { 
         title: "Privacy & Security", 
-        value: extensions.filter(ext => 
-          ext.category === "Privacy & Security" || 
-          ext.category === "Security" ||
-          ext.category === "Privacy"
-        ).length, 
-        bgColor: "bg-[#1e3a38]" 
+        value: privacySecurityExtensions.length, 
+        bgColor: "bg-[#1e3a38]",
+        icon: ShieldCheck,
+        description: "Tools to protect your data and privacy",
       },
       { 
         title: "Generative AI", 
         value: extensions.filter(ext => 
           ext.category === "AI" || 
           ext.category === "AI Tools" ||
-          ext.category === "Generative AI"
+          ext.category === "Generative AI" ||
+          (ext.description && 
+            (ext.description.toLowerCase().includes("ai") ||
+             ext.description.toLowerCase().includes("artificial intelligence") ||
+             ext.description.toLowerCase().includes("machine learning")))
         ).length, 
-        bgColor: "bg-[#3a1e48]" 
+        bgColor: "bg-[#3a1e48]",
+        icon: Sparkles,
+        description: "AI-powered content creation tools",
       }
     ];
     
@@ -94,12 +164,25 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-      {statsData.map((stat, index) => (
-        <div key={index} className={`${stat.bgColor} rounded-lg p-6`}>
-          <div className="text-sm font-medium mb-2">{stat.title}</div>
-          <div className="text-4xl font-bold">{stat.value}</div>
-        </div>
-      ))}
+      {statsData.map((stat, index) => {
+        const Icon = stat.icon;
+        return (
+          <Tooltip key={index}>
+            <TooltipTrigger asChild>
+              <div className={`${stat.bgColor} rounded-lg p-6 hover:opacity-95 transition-opacity cursor-help`}>
+                <div className="flex justify-between items-center mb-2">
+                  <div className="text-sm font-medium">{stat.title}</div>
+                  <Icon className="h-4 w-4 opacity-70" />
+                </div>
+                <div className="text-4xl font-bold">{stat.value}</div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{stat.description}</p>
+            </TooltipContent>
+          </Tooltip>
+        );
+      })}
     </div>
   );
 };
