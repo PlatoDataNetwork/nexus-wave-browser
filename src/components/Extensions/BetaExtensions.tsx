@@ -168,11 +168,15 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
   const { toast } = useToast();
   const { name, description, icon: Icon, iconBg, category, estimatedRelease, rating } = extension;
   const [isFavorite, setIsFavorite] = React.useState(false);
+  const [isInstalled, setIsInstalled] = React.useState(false);
   
-  const handleRequestAccess = () => {
+  const handleInstallClick = () => {
+    setIsInstalled(!isInstalled);
     toast({
-      title: "Access Requested",
-      description: `You've requested early access to ${name}. We'll notify you when it's available.`,
+      title: isInstalled ? "Extension uninstalled" : "Extension installed",
+      description: isInstalled 
+        ? `${name} has been removed from your browser` 
+        : `${name} has been added to your browser`,
     });
   };
 
@@ -222,10 +226,11 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button 
-          onClick={handleRequestAccess}
-          className="w-full bg-nexus-purple hover:bg-nexus-purple/90"
+          onClick={handleInstallClick}
+          className={`w-full ${isInstalled ? "bg-muted hover:bg-muted/80 text-foreground" : "bg-nexus-purple hover:bg-nexus-purple/90"}`}
+          variant={isInstalled ? "outline" : "default"}
         >
-          Request Early Access
+          {isInstalled ? "Uninstall" : "Install Now"}
         </Button>
       </CardFooter>
     </Card>
