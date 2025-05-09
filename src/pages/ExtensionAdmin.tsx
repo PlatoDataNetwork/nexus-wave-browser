@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -174,29 +175,29 @@ const ExtensionAdmin: React.FC = () => {
           {/* Unified control bar - matching ExtensionStore layout with hover effects */}
           <div className="flex items-center justify-between gap-4 mt-6 mb-8">
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="flex-shrink-0">
-              <TabsList className="h-12 bg-background/30">
+              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
                 <TabsTrigger 
                   value="all" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
                 >
                   All Extensions
                 </TabsTrigger>
                 <TabsTrigger 
                   value="installed" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
                 >
                   Installed
                 </TabsTrigger>
                 <TabsTrigger 
                   value="featured" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
                 >
                   Featured
                 </TabsTrigger>
                 <TabsTrigger 
                   value="beta" 
                   onClick={handleBetaNavigation} 
-                  className="text-base px-6 py-2.5 hover:bg-accent/50 transition-colors relative"
+                  className="text-base px-6 py-2.5 hover:bg-gray-700/80 transition-colors rounded-md"
                 >
                   Beta
                 </TabsTrigger>
