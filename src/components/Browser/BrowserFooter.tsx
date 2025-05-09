@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -183,7 +182,7 @@ const BrowserFooter: React.FC<{
               className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md"
               onClick={onToggleFooter}
             >
-              Hide Me
+              Hide Footer
             </Button>
           </TooltipTrigger>
           <TooltipContent>
