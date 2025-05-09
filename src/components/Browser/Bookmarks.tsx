@@ -32,10 +32,14 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
       processedUrl = `https://${url}`;
     }
     
-    // Log and trigger navigation
+    // Log and navigate
     console.log(`Navigating to bookmark: ${processedUrl}`);
-    onNavigate(processedUrl);
     toast.success(`Loading ${title}...`);
+    
+    // Force small delay to ensure the state update happens properly
+    setTimeout(() => {
+      onNavigate(processedUrl);
+    }, 10);
   };
 
   // Add Alek Bot to the bookmarks

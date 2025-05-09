@@ -40,7 +40,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     // Log the current URL for debugging
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 
-    // First check for internal app routes (without protocol)
+    // First check for internal routes (without protocol)
     if (currentUrl === '/history') {
       return <HistoryPage />;
     }
@@ -55,6 +55,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     
     // For external URLs (with protocol), use the WebviewFrame
     if (isExternalUrl(currentUrl)) {
+      console.log(`Rendering WebviewFrame for external URL: ${currentUrl}`);
       return (
         <div className="h-full w-full flex-1 overflow-hidden">
           <WebviewFrame url={currentUrl} />

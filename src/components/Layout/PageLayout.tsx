@@ -21,8 +21,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   // Create a navigation handler to use with the footer
   const handleNavigate = (url: string) => {
     if (onNavigate) {
+      console.log(`PageLayout: Navigating to ${url}`);
       onNavigate(url);
     } else {
+      console.log(`PageLayout: Navigating to ${url} using React Router`);
       navigate(url);
     }
   };
