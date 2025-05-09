@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -79,23 +78,6 @@ const BrowserFooter: React.FC<{
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className={`h-7 ${isExtensionStoreActive ? 'bg-muted' : ''}`}
-              onClick={handleExtensionStoreClick}
-            >
-              <Chrome className="h-3 w-3 mr-1" />
-              <span>Extensions</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Browse extension store</p>
-          </TooltipContent>
-        </Tooltip>
-
         {/* Shield security button */}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -111,6 +93,23 @@ const BrowserFooter: React.FC<{
           </TooltipTrigger>
           <TooltipContent>
             <p>Extension security status</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`h-7 ${isExtensionStoreActive ? 'bg-muted' : ''}`}
+              onClick={handleExtensionStoreClick}
+            >
+              <Chrome className="h-3 w-3 mr-1" />
+              <span>Extensions</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Browse extension store</p>
           </TooltipContent>
         </Tooltip>
 
@@ -174,20 +173,19 @@ const BrowserFooter: React.FC<{
           <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
         
-        {/* Toggle Footer Button */}
+        {/* Toggle Footer Button - more pronounced and green */}
         {toggleFooter && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-7 text-green-500"
+                className="h-7 bg-green-500/20 hover:bg-green-500/30 rounded-md text-green-500 px-3"
                 onClick={toggleFooter}
               >
                 {isFooterVisible ? 
                   <ChevronDown className="h-3 w-3 mr-1 text-green-500" /> : 
                   <ChevronUp className="h-3 w-3 mr-1 text-green-500" />}
-                <span>Toggle Footer</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
