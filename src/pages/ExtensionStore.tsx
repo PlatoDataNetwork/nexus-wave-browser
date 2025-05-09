@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -140,7 +139,6 @@ const ExtensionStore: React.FC = () => {
   };
 
   // Calculate extension counts by category for stats
-  // Updated to correctly count crypto/web3, security, and AI extensions
   const allExtensions = [...extensionsData, ...betaExtensionsData];
   
   const extensionCounts = {
