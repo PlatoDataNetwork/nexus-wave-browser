@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Package, Heart } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ExtensionListProps {
   extensions: Extension[];
@@ -33,91 +32,68 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
     );
   }
 
-  // Get unique categories from the extensions
-  const categories = ["All", ...new Set(extensions.map(ext => ext.category))].sort();
-
   return (
-    <Tabs defaultValue="All" className="w-full">
-      <TabsList className="mb-4 flex flex-wrap gap-2">
-        {categories.map((category) => (
-          <TabsTrigger 
-            key={category} 
-            value={category}
-            className="px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white"
-          >
-            {category}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      
-      {categories.map((category) => (
-        <TabsContent key={category} value={category} className="mt-0">
-          {viewMode === "grid" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {extensions
-                .filter(ext => category === "All" || ext.category === category)
-                .map((extension) => (
-                  <ExtensionCard 
-                    key={extension.id} 
-                    extension={extension}
-                    onInstall={() => onInstall(extension.id)}
-                    onToggleFavorite={() => onToggleFavorite && onToggleFavorite(extension.id)}
-                  />
-                ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {extensions
-                .filter(ext => category === "All" || ext.category === category)
-                .map((extension) => {
-                  const isFavorite = extension.featured;
-                  
-                  return (
-                    <Card key={extension.id} className="flex items-center p-4 hover:bg-muted/50 transition-colors">
-                      <div className="flex items-center flex-1">
-                        <div className={`h-10 w-10 rounded-md flex items-center justify-center ${extension.iconBg}`}>
-                          {extension.icon && <extension.icon className="h-5 w-5 text-white" />}
-                        </div>
-                        <div className="ml-4">
-                          <div className="flex items-center">
-                            <h3 className="font-medium">{extension.name}</h3>
-                          </div>
-                          <p className="text-sm text-muted-foreground line-clamp-1">
-                            {extension.description}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4 ml-4">
-                        <button
-                          onClick={() => onToggleFavorite && onToggleFavorite(extension.id)}
-                          className="text-muted-foreground hover:text-nexus-purple transition-colors"
-                          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-                        >
-                          <Heart 
-                            className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
-                          />
-                        </button>
-                        <Badge variant="outline" className="bg-secondary/50 text-foreground">{extension.category}</Badge>
-                        <div className="flex items-center text-sm">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-                          <span>{extension.rating}</span>
-                        </div>
-                        <Button 
-                          variant={extension.installed ? "outline" : "default"}
-                          onClick={() => onInstall(extension.id)}
-                          className={extension.installed ? "" : "bg-nexus-purple hover:bg-nexus-purple/90"}
-                        >
-                          {extension.installed ? "Uninstall" : "Install Now"}
-                        </Button>
-                      </div>
-                    </Card>
-                  );
-                })}
-            </div>
-          )}
-        </TabsContent>
-      ))}
-    </Tabs>
+    <div className="w-full">
+      {viewMode === "grid" ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {extensions.map((extension) => (
+            <ExtensionCard 
+              key={extension.id} 
+              extension={extension}
+              onInstall={() => onInstall(extension.id)}
+              onToggleFavorite={() => onToggleFavorite && onToggleFavorite(extension.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {extensions.map((extension) => {
+            const isFavorite = extension.featured;
+            
+            return (
+              <Card key={extension.id} className="flex items-center p-4 hover:bg-muted/50 transition-colors">
+                <div className="flex items-center flex-1">
+                  <div className={`h-10 w-10 rounded-md flex items-center justify-center ${extension.iconBg}`}>
+                    {extension.icon && <extension.icon className="h-5 w-5 text-white" />}
+                  </div>
+                  <div className="ml-4">
+                    <div className="flex items-center">
+                      <h3 className="font-medium">{extension.name}</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground line-clamp-1">
+                      {extension.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 ml-4">
+                  <button
+                    onClick={() => onToggleFavorite && onToggleFavorite(extension.id)}
+                    className="text-muted-foreground hover:text-nexus-purple transition-colors"
+                    aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                  >
+                    <Heart 
+                      className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
+                    />
+                  </button>
+                  <Badge variant="outline" className="bg-secondary/50 text-foreground">{extension.category}</Badge>
+                  <div className="flex items-center text-sm">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                    <span>{extension.rating}</span>
+                  </div>
+                  <Button 
+                    variant={extension.installed ? "outline" : "default"}
+                    onClick={() => onInstall(extension.id)}
+                    className={extension.installed ? "" : "bg-nexus-purple hover:bg-nexus-purple/90"}
+                  >
+                    {extension.installed ? "Uninstall" : "Install Now"}
+                  </Button>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 };
 
