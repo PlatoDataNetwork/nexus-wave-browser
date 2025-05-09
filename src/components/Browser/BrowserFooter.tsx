@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -38,6 +39,22 @@ const BrowserFooter: React.FC<{
   
   const handleDocumentationClick = () => {
     navigate('/documentation');
+  };
+
+  const handleTokenPageClick = () => {
+    // Use onNavigate for within-browser navigation if available
+    if (onNavigate) {
+      onNavigate("/token");
+    } else {
+      // Fall back to router navigation
+      navigate('/token');
+    }
+    
+    // Show a toast to confirm the action
+    toast({
+      title: "Opening Token Purchase Page",
+      description: "Loading the $NWF3 token purchase page"
+    });
   };
   
   const handleExtensionStoreClick = () => {
@@ -171,6 +188,21 @@ const BrowserFooter: React.FC<{
             </Button>
           </TooltipTrigger>
           <TooltipContent>Browser settings</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`h-7 ${location.pathname === '/token' ? 'bg-muted' : ''}`}
+              onClick={handleTokenPageClick}
+            >
+              <Coins className="h-3 w-3 mr-1" />
+              <span>Buy $NWF3</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Purchase $NWF3 tokens</TooltipContent>
         </Tooltip>
       </div>
       
