@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Bookmark, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
   // Extract domain for display purposes
   const domain = url.replace(/^https?:\/\//, "").split("/")[0];
 
-  // Handle iframe load events
+  // Handle iframe load events with improved reliability
   useEffect(() => {
     // Reset states on URL change
     setIsLoading(true);
@@ -27,22 +26,29 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
     console.log(`Loading URL in WebviewFrame: ${url}`);
     toast.info(`Loading web content for: ${domain}`);
     
-    const loadingInterval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + Math.random() * 20;
-        return newProgress >= 100 ? 100 : newProgress;
-      });
-    }, 200);
+    // Force a clear timeout to prevent any race conditions
+    let loadingInterval: NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
     
-    const timer = setTimeout(() => {
-      clearInterval(loadingInterval);
-      setProgress(100);
+    // Small delay to ensure React has fully updated before we start loading
+    setTimeout(() => {
+      loadingInterval = setInterval(() => {
+        setProgress(prev => {
+          const newProgress = prev + Math.random() * 20;
+          return newProgress >= 100 ? 100 : newProgress;
+        });
+      }, 200);
       
-      setTimeout(() => {
-        setIsLoading(false);
-        toast.success(`Loaded content from: ${domain}`);
-      }, 300);
-    }, 1000);
+      timer = setTimeout(() => {
+        clearInterval(loadingInterval);
+        setProgress(100);
+        
+        setTimeout(() => {
+          setIsLoading(false);
+          toast.success(`Loaded content from: ${domain}`);
+        }, 300);
+      }, 1500); // Increased delay for better visual feedback
+    }, 100);
     
     return () => {
       clearInterval(loadingInterval);
@@ -899,115 +905,3 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
               border-radius: 10px;
               padding: 20px;
               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            }
-          </style>
-        </head>
-        <body>
-          <header>
-            <h2>${domain}</h2>
-          </header>
-          <div class="hero">
-            <h1>Welcome to ${domain}</h1>
-            <p>This is a simulated view of ${url}</p>
-          </div>
-          <div class="content">
-            <p>The Nexus Wave Browser prototype is showing this website content.</p>
-            <p>In a real implementation, this would render actual web content via a browser engine.</p>
-            
-            <div class="cards">
-              ${Array(4).fill(0).map((_, i) => `
-                <div class="card">
-                  <h3>Featured Content ${i+1}</h3>
-                  <p>This is sample content for ${domain}. In a real browser, you would see the actual website content here.</p>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </body>
-      </html>
-    `;
-  };
-
-  return (
-    <div className="flex flex-col h-full w-full overflow-hidden">
-      {/* Loading bar */}
-      {isLoading && (
-        <div className="relative h-1">
-          <Progress value={progress} className="h-1 bg-muted" />
-        </div>
-      )}
-      
-      {/* Website content - taking up full available space */}
-      <div className="flex-1 flex items-center justify-center h-full w-full overflow-hidden">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full w-full">
-            <Loader2 className="h-8 w-8 text-nexus-purple animate-spin" />
-          </div>
-        ) : showFallback ? (
-          <FallbackInterface domain={domain} />
-        ) : (
-          <iframe 
-            srcDoc={generateDemoContent()}
-            className="w-full h-full border-0"
-            title={`Web content for ${domain}`}
-            onError={handleIframeError}
-            sandbox="allow-same-origin allow-scripts"
-            style={{ display: 'block', width: '100%', height: '100%' }}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Fallback interface when iframe fails to load or for restricted sites
-const FallbackInterface: React.FC<{ domain: string }> = ({ domain }) => {
-  return (
-    <div className="text-center py-10 px-4 max-w-3xl mx-auto">
-      <Globe className="mx-auto h-20 w-20 text-[#8c7ae6] mb-6" />
-      <h2 className="text-3xl font-bold mb-3 text-white">Nexus Web3 Browser</h2>
-      
-      <p className="text-lg text-gray-300 mb-6">
-        Currently displaying: <span className="text-[#8c7ae6]">{domain}</span>
-      </p>
-      
-      <p className="text-base text-gray-400 mb-10">
-        This website couldn't be displayed in the iframe due to security restrictions.
-        In a real implementation, this would render web content via Chromium's webview.
-      </p>
-      
-      <div className="bg-[#1e2132] rounded-lg p-6 mb-8 max-w-xl mx-auto border border-[#2a2f45]">
-        <div className="flex items-center mb-4">
-          <Globe className="h-6 w-6 mr-3 text-[#8c7ae6]" />
-          <h3 className="text-xl font-medium text-white">Web3-Optimized Features</h3>
-        </div>
-        
-        <ul className="space-y-3 text-left">
-          <li className="flex items-start">
-            <span className="w-2 h-2 rounded-full bg-[#8c7ae6] mt-2 mr-3 flex-shrink-0"></span>
-            <span className="text-gray-300">Built-in cryptocurrency wallet integration</span>
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 rounded-full bg-[#8c7ae6] mt-2 mr-3 flex-shrink-0"></span>
-            <span className="text-gray-300">DApp browser with Web3 support</span>
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 rounded-full bg-[#8c7ae6] mt-2 mr-3 flex-shrink-0"></span>
-            <span className="text-gray-300">Privacy-focused with built-in ad blocker</span>
-          </li>
-          <li className="flex items-start">
-            <span className="w-2 h-2 rounded-full bg-[#8c7ae6] mt-2 mr-3 flex-shrink-0"></span>
-            <span className="text-gray-300">Chromium-based for compatibility</span>
-          </li>
-        </ul>
-      </div>
-      
-      <Button className="bg-[#8c7ae6] hover:bg-[#7c6ad6] text-white px-6 py-2 rounded-md transition-colors flex items-center mx-auto">
-        <Bookmark className="h-5 w-5 mr-2" />
-        Add to Bookmarks
-      </Button>
-    </div>
-  );
-};
-
-export default WebviewFrame;

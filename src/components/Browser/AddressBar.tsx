@@ -13,6 +13,7 @@ import {
 import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/sonner";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -40,7 +41,18 @@ const AddressBar: React.FC<AddressBarProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNavigate(inputValue);
+    
+    // Process URL to ensure it has a protocol if needed
+    let processedUrl = inputValue.trim();
+    if (!processedUrl.startsWith('http://') && !processedUrl.startsWith('https://') && !processedUrl.startsWith('/')) {
+      processedUrl = `https://${processedUrl}`;
+    }
+    
+    console.log(`Address bar submitting URL: ${processedUrl}`);
+    toast.info(`Navigating to: ${processedUrl.replace(/^https?:\/\//, '')}`);
+    
+    // Give a small delay for React state updates to process correctly
+    setTimeout(() => onNavigate(processedUrl), 50);
     simulateLoading();
   };
 

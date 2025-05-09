@@ -42,7 +42,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 
     // First check for internal routes (without protocol)
-    if (currentUrl === '/history') {
+    if (currentUrl === '/history' || currentUrl.includes('history')) {
       return <HistoryPage />;
     }
     

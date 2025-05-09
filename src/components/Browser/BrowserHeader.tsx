@@ -32,6 +32,13 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   canGoBack,
   canGoForward
 }) => {
+  // Ensure navigation handler works reliably
+  const handleNavigate = (url: string) => {
+    console.log(`BrowserHeader: Navigation requested to ${url}`);
+    // Use setTimeout to ensure React state updates properly
+    setTimeout(() => onNavigate(url), 50);
+  };
+
   return (
     <div className="flex flex-col">
       <TabBar
@@ -43,7 +50,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
       <div className="flex-none">
         <AddressBar
           currentUrl={currentUrl}
-          onNavigate={onNavigate}
+          onNavigate={handleNavigate}
           onGoBack={onGoBack}
           onGoForward={onGoForward}
           onRefresh={onRefresh}
@@ -51,7 +58,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
           canGoForward={canGoForward}
         />
       </div>
-      <Bookmarks onNavigate={onNavigate} />
+      <Bookmarks onNavigate={handleNavigate} />
     </div>
   );
 };

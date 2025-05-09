@@ -25,7 +25,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       onNavigate(url);
     } else {
       console.log(`PageLayout: Navigating to ${url} using React Router`);
-      navigate(url);
+      // For internal routes, use React Router
+      if (url.startsWith('/')) {
+        navigate(url);
+      } else {
+        // For external URLs, use window.open if no onNavigate function is provided
+        window.open(url, '_blank');
+      }
     }
   };
 
