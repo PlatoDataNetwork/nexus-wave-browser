@@ -63,7 +63,7 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <PageLayout includeFooter={false}>
       <div className="p-6 max-w-7xl mx-auto w-full bg-black text-white">
         {/* Header section - restyled to match image */}
         <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
@@ -210,6 +210,9 @@ const ExtensionStore: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Adding a single footer here if we need one for this page */}
+      <BrowserFooter />
     </PageLayout>
   );
 };
