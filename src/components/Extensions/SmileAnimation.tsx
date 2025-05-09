@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 
@@ -126,7 +127,7 @@ const SmileAnimation: React.FC = () => {
       {!showAnimation && !showConfetti && !countdown && (
         <button
           onClick={() => setShowAnimation(true)}
-          className="text-8xl md:text-9xl xl:text-10xl font-bold text-nexus-purple hover:opacity-90 transition-all absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 whitespace-nowrap"
+          className="text-5xl md:text-6xl xl:text-7xl font-bold text-nexus-purple hover:opacity-90 transition-all absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 whitespace-nowrap"
         >
           Click for a surprise!
         </button>
