@@ -1,9 +1,9 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionList from "@/components/Extensions/ExtensionList";
-import BetaExtensions from "@/components/Extensions/BetaExtensions";
 import PageLayout from "@/components/Layout/PageLayout";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
@@ -24,7 +24,7 @@ const ExtensionStore: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab');
-    if (tab && ['all', 'installed', 'favorites', 'featured', 'beta', 'smile'].includes(tab)) {
+    if (tab && ['all', 'installed', 'favorites', 'featured', 'admin', 'smile'].includes(tab)) {
       setActiveTab(tab);
     }
   }, [location.search]);
@@ -135,8 +135,6 @@ const ExtensionStore: React.FC = () => {
         <div className="mt-6">
           {activeTab === "smile" ? (
             <SmileAnimation />
-          ) : activeTab === "beta" ? (
-            <BetaExtensions />
           ) : (
             <ExtensionList 
               extensions={filteredExtensions} 
