@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,14 +9,21 @@ import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
 
 const ExtensionStore: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   
@@ -47,9 +55,10 @@ const ExtensionStore: React.FC = () => {
   
   // Get unique categories from extensions, excluding "Communication"
   const categories = useMemo(() => {
-    return ["all", ...new Set([...allExtensions]
+    return [...new Set([...allExtensions]
       .map(ext => ext.category)
-      .filter(category => category !== "Communication"))];
+      .filter(category => category !== "Communication"))]
+      .sort(); // Sort categories alphabetically
   }, [allExtensions]);
   
   // Filter extensions based on search query, active category, and tab
@@ -59,7 +68,7 @@ const ExtensionStore: React.FC = () => {
         extension.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         extension.description.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesCategory = activeCategory === "all" || extension.category === activeCategory;
+      const matchesCategory = activeCategory === "" || extension.category === activeCategory;
       
       const matchesTab = 
         activeTab === "all" || 
@@ -116,8 +125,8 @@ const ExtensionStore: React.FC = () => {
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('tab', tab);
     
-    // Only include category if it's not "all"
-    if (activeCategory !== "all") {
+    // Only include category if it's not empty
+    if (activeCategory !== "") {
       searchParams.set('category', activeCategory);
     } else {
       searchParams.delete('category');
@@ -133,8 +142,8 @@ const ExtensionStore: React.FC = () => {
     // Update URL with the category parameter
     const searchParams = new URLSearchParams(location.search);
     
-    // Only include category if it's not "all"
-    if (category !== "all") {
+    // Only include category if it's not empty
+    if (category !== "") {
       searchParams.set('category', category);
     } else {
       searchParams.delete('category');
@@ -168,19 +177,32 @@ const ExtensionStore: React.FC = () => {
         setViewMode={setViewMode}
       />
 
-      {/* Category filters */}
-      <div className="flex flex-wrap gap-2 mt-4 mb-6">
-        {categories.map((category) => (
-          <Button
-            key={category}
-            size="sm"
-            variant={activeCategory === category ? "default" : "outline"}
-            className={activeCategory === category ? "bg-nexus-purple text-white" : ""}
-            onClick={() => handleCategoryChange(category)}
-          >
-            {category}
-          </Button>
-        ))}
+      {/* Category filter dropdown */}
+      <div className="flex items-center mt-4 mb-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Filter className="h-4 w-4" />
+              <span>Filter by Category{activeCategory ? `: ${activeCategory}` : ''}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-56 max-h-[300px] overflow-y-auto">
+            {activeCategory && (
+              <DropdownMenuItem onClick={() => handleCategoryChange("")}>
+                Clear Filter
+              </DropdownMenuItem>
+            )}
+            {categories.map((category) => (
+              <DropdownMenuItem 
+                key={category} 
+                onClick={() => handleCategoryChange(category)}
+                className={activeCategory === category ? "bg-accent" : ""}
+              >
+                {category}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       
       {/* Extension Content based on active tab */}

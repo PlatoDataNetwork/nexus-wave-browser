@@ -67,7 +67,9 @@ import {
   Beef,
   GlassWater,
   Medal,
-  Egg
+  Egg,
+  Globe,
+  Database
 } from "lucide-react";
 
 export interface Extension {
@@ -390,12 +392,12 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[3]
   },
 
-  // Search & Navigation
+  // Search - renamed from "Search & Navigation"
   {
     id: 21,
     name: "SuperSearch",
     description: "Enhanced search capabilities with multi-engine results, visual search history, and AI-powered search suggestions.",
-    category: "Search & Navigation",
+    category: "Search",
     rating: 4.7,
     users: 2154789,
     installed: true,
@@ -409,7 +411,7 @@ export const extensionsData: Extension[] = [
     id: 22,
     name: "TabMaster",
     description: "Advanced tab management with grouping, searching, vertical tabs, and session saving for better organization.",
-    category: "Search & Navigation",
+    category: "Search",
     rating: 4.6,
     users: 1852369,
     installed: false,
@@ -423,7 +425,7 @@ export const extensionsData: Extension[] = [
     id: 23,
     name: "QuickJump",
     description: "Navigate websites with keyboard shortcuts, custom commands, and quick access to frequently used features.",
-    category: "Search & Navigation",
+    category: "Search",
     rating: 4.5,
     users: 1523698,
     installed: true,
@@ -437,7 +439,7 @@ export const extensionsData: Extension[] = [
     id: 24,
     name: "HistoryMaster",
     description: "Enhanced browsing history with full-text search, visual timeline, and AI-categorized history entries for easy retrieval.",
-    category: "Search & Navigation",
+    category: "Search",
     rating: 4.4,
     users: 1254789,
     installed: false,
@@ -451,7 +453,7 @@ export const extensionsData: Extension[] = [
     id: 25,
     name: "LinkPreview",
     description: "See rich previews of links before clicking them, including content summaries, media, and security information.",
-    category: "Search & Navigation",
+    category: "Search",
     rating: 4.3,
     users: 987456,
     installed: false,
@@ -462,12 +464,12 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[4]
   },
 
-  // Shopping & Finance
+  // Shopping - Split from "Shopping & Finance"
   {
     id: 26,
     name: "PriceSpy",
     description: "Automatically finds and applies coupon codes, tracks price history, and alerts you to price drops on products you're watching.",
-    category: "Shopping & Finance",
+    category: "Shopping",
     rating: 4.8,
     users: 1987456,
     installed: true,
@@ -478,24 +480,10 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[5]
   },
   {
-    id: 27,
-    name: "BudgetGuard",
-    description: "Track your online spending, set budget limits for shopping categories, and get warnings before making impulse purchases.",
-    category: "Shopping & Finance",
-    rating: 4.7,
-    users: 1523698,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "2.8.0",
-    icon: CreditCard,
-    iconBg: iconBackgrounds[5]
-  },
-  {
     id: 28,
     name: "CashbackHunter",
     description: "Automatically activates cashback opportunities when shopping online and tracks your rewards across multiple programs.",
-    category: "Shopping & Finance",
+    category: "Shopping",
     rating: 4.6,
     users: 1254789,
     installed: true,
@@ -509,7 +497,7 @@ export const extensionsData: Extension[] = [
     id: 29,
     name: "InvoiceMaster",
     description: "Automatically captures and organizes receipts and invoices from your online purchases for expense tracking and taxes.",
-    category: "Shopping & Finance",
+    category: "Shopping",
     rating: 4.5,
     users: 982456,
     installed: false,
@@ -519,11 +507,27 @@ export const extensionsData: Extension[] = [
     icon: FileText,
     iconBg: iconBackgrounds[5]
   },
+
+  // Finance - Split from "Shopping & Finance"
+  {
+    id: 27,
+    name: "BudgetGuard",
+    description: "Track your online spending, set budget limits for shopping categories, and get warnings before making impulse purchases.",
+    category: "Finance",
+    rating: 4.7,
+    users: 1523698,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.8.0",
+    icon: CreditCard,
+    iconBg: iconBackgrounds[9]
+  },
   {
     id: 30,
     name: "StockRadar",
     description: "Track stock prices, get real-time market alerts, and access financial news and earnings reports directly in your browser.",
-    category: "Shopping & Finance",
+    category: "Finance",
     rating: 4.4,
     users: 856321,
     installed: false,
@@ -531,10 +535,52 @@ export const extensionsData: Extension[] = [
     featured: true,
     version: "1.6.2",
     icon: BarChart4,
+    iconBg: iconBackgrounds[9]
+  },
+  {
+    id: 72,
+    name: "LoanCalculator",
+    description: "Calculate loan payments, interest rates, and amortization schedules for mortgages, auto loans, and personal financing options.",
+    category: "Finance",
+    rating: 4.5,
+    users: 654321,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.2.7",
+    icon: Calculator,
+    iconBg: iconBackgrounds[5]
+  },
+  {
+    id: 73,
+    name: "SubscriptionManager",
+    description: "Track all your subscriptions in one place with renewal alerts, spending analysis, and suggestions for potential cost savings.",
+    category: "Finance",
+    rating: 4.5,
+    users: 547891,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.8.2",
+    icon: CreditCard,
+    iconBg: iconBackgrounds[5]
+  },
+  {
+    id: 75,
+    name: "FinancialAdvisor",
+    description: "AI-powered financial advisory with personalized recommendations for investing, saving, debt management, and retirement planning.",
+    category: "Finance",
+    rating: 4.3,
+    users: 325698,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.0.4",
+    icon: Landmark,
     iconBg: iconBackgrounds[5]
   },
 
-  // Communication - Split from "Communication & Social"
+  // Communication
   {
     id: 31,
     name: "MailAssistant",
@@ -606,7 +652,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[6]
   },
 
-  // Social - Split from "Communication & Social"
+  // Social
   {
     id: 36,
     name: "SocialScheduler",
@@ -678,7 +724,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[7]
   },
 
-  // Media - Split from "Media & Entertainment"
+  // Media
   {
     id: 36,
     name: "MediaMaster",
@@ -722,7 +768,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[7]
   },
   
-  // Entertainment - Split from "Media & Entertainment"
+  // Entertainment
   {
     id: 39,
     name: "NewsDigest",
@@ -752,7 +798,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[7]
   },
 
-  // Analytics - New Category
+  // Analytics
   {
     id: 51,
     name: "TrafficInsight",
@@ -824,7 +870,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[8]
   },
 
-  // SEO - New Category
+  // SEO
   {
     id: 56,
     name: "SEOAudit",
@@ -896,7 +942,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[9]
   },
 
-  // Gaming - New Category
+  // Gaming
   {
     id: 61,
     name: "GameBooster",
@@ -968,149 +1014,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[10]
   },
 
-  // Money Category (10)
-  {
-    id: 66,
-    name: "BudgetTracker",
-    description: "Personal finance tracker that helps you manage expenses, create budgets, and visualize spending patterns with customizable categories.",
-    category: "Money",
-    rating: 4.9,
-    users: 1845692,
-    installed: false,
-    enabled: false,
-    featured: true,
-    version: "2.7.3",
-    icon: Coins,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 67,
-    name: "InvestmentPortfolio",
-    description: "Track and analyze your investments across stocks, bonds, crypto, and real estate with performance metrics and allocation recommendations.",
-    category: "Money",
-    rating: 4.8,
-    users: 1427851,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "3.1.5",
-    icon: LineChart,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 68,
-    name: "TaxAssistant",
-    description: "Simplify tax preparation by organizing receipts, tracking deductions, and estimating tax liabilities throughout the year.",
-    category: "Money",
-    rating: 4.7,
-    users: 1124567,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "2.4.8",
-    icon: Receipt,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 69,
-    name: "BillReminder",
-    description: "Never miss a payment with automated bill tracking, due date reminders, and payment confirmation in one organized dashboard.",
-    category: "Money",
-    rating: 4.7,
-    users: 987452,
-    installed: false,
-    enabled: false,
-    featured: true,
-    version: "1.9.3",
-    icon: BadgeDollarSign,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 70,
-    name: "SavingsGoals",
-    description: "Set and achieve financial goals with progress tracking, milestone celebrations, and automated savings recommendations.",
-    category: "Money",
-    rating: 4.6,
-    users: 876543,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "2.5.1",
-    icon: PiggyBank,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 71,
-    name: "CurrencyConverter",
-    description: "Real-time currency conversion with historical rate charts and alerts for favorable exchange rates when traveling or shopping internationally.",
-    category: "Money",
-    rating: 4.6,
-    users: 765432,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "1.7.4",
-    icon: Banknote,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 72,
-    name: "LoanCalculator",
-    description: "Calculate loan payments, interest rates, and amortization schedules for mortgages, auto loans, and personal financing options.",
-    category: "Money",
-    rating: 4.5,
-    users: 654321,
-    installed: false,
-    enabled: false,
-    featured: true,
-    version: "2.2.7",
-    icon: Calculator,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 73,
-    name: "SubscriptionManager",
-    description: "Track all your subscriptions in one place with renewal alerts, spending analysis, and suggestions for potential cost savings.",
-    category: "Money",
-    rating: 4.5,
-    users: 547891,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "1.8.2",
-    icon: CreditCard,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 74,
-    name: "StockAlerts",
-    description: "Custom stock price alerts, earnings notifications, and financial news tailored to your investment portfolio and watchlists.",
-    category: "Money",
-    rating: 4.4,
-    users: 438752,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "2.6.3",
-    icon: TrendingUp,
-    iconBg: iconBackgrounds[5]
-  },
-  {
-    id: 75,
-    name: "FinancialAdvisor",
-    description: "AI-powered financial advisory with personalized recommendations for investing, saving, debt management, and retirement planning.",
-    category: "Money",
-    rating: 4.3,
-    users: 325698,
-    installed: false,
-    enabled: false,
-    featured: true,
-    version: "3.0.4",
-    icon: Landmark,
-    iconBg: iconBackgrounds[5]
-  },
-
-  // Health & Fitness Category (10)
+  // Health & Fitness
   {
     id: 76,
     name: "WorkoutTracker",
@@ -1252,7 +1156,7 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[6]
   },
 
-  // Nutrition Category (10)
+  // Nutrition
   {
     id: 86,
     name: "MealPlanner",
@@ -1392,5 +1296,149 @@ export const extensionsData: Extension[] = [
     version: "2.4.6",
     icon: Salad,
     iconBg: iconBackgrounds[4]
+  },
+
+  // Web3 Explorers - New Category
+  {
+    id: 120,
+    name: "BlockExplorer",
+    description: "Comprehensive blockchain explorer for multiple networks with transaction history, smart contract analysis, and address tracking.",
+    category: "Web3 Explorers",
+    rating: 4.9,
+    users: 1123456,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.2.1",
+    icon: Database,
+    iconBg: iconBackgrounds[3]
+  },
+  {
+    id: 121,
+    name: "TokenScanner",
+    description: "Advanced token explorer with price charts, holder statistics, and detailed tokenomics analysis across multiple blockchains.",
+    category: "Web3 Explorers",
+    rating: 4.8,
+    users: 986532,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.4.5",
+    icon: Eye,
+    iconBg: iconBackgrounds[3]
+  },
+  {
+    id: 122,
+    name: "DAppNavigator",
+    description: "Discover and interact with decentralized applications across various blockchain ecosystems with ratings and security analysis.",
+    category: "Web3 Explorers",
+    rating: 4.7,
+    users: 845217,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.8.3",
+    icon: Globe,
+    iconBg: iconBackgrounds[3]
+  },
+  {
+    id: 123,
+    name: "TransactionTracker",
+    description: "Real-time transaction monitoring across multiple blockchains with alerts, gas optimization, and detailed transaction breakdown.",
+    category: "Web3 Explorers",
+    rating: 4.7,
+    users: 734218,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.7.2",
+    icon: Search,
+    iconBg: iconBackgrounds[3]
+  },
+  {
+    id: 124,
+    name: "NetworkMonitor",
+    description: "Monitor blockchain network health, gas prices, congestion levels, and validator performance across multiple networks.",
+    category: "Web3 Explorers",
+    rating: 4.6,
+    users: 625431,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.5.7",
+    icon: Activity,
+    iconBg: iconBackgrounds[3]
+  },
+
+  // News & Intelligence - New Category
+  {
+    id: 130,
+    name: "CryptoInsights",
+    description: "AI-powered crypto market intelligence with sentiment analysis, news aggregation, and predictive trend forecasting.",
+    category: "News & Intelligence",
+    rating: 4.9,
+    users: 1345789,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.5.2",
+    icon: Lightbulb,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 131,
+    name: "MarketPulse",
+    description: "Real-time market updates, breaking news alerts, and personalized content feeds from trusted crypto and Web3 sources.",
+    category: "News & Intelligence",
+    rating: 4.8,
+    users: 1123654,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.8.4",
+    icon: Newspaper,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 132,
+    name: "OnchainAnalyst",
+    description: "Advanced on-chain data analysis with whale movement tracking, liquidity flow visualization, and smart money indicators.",
+    category: "News & Intelligence",
+    rating: 4.8,
+    users: 987654,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.3.6",
+    icon: BarChart,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 133,
+    name: "TokenPulse",
+    description: "Comprehensive token research platform with fundamental analysis, development activity tracking, and community metrics.",
+    category: "News & Intelligence",
+    rating: 4.7,
+    users: 876543,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "1.9.5",
+    icon: PieChart,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 134,
+    name: "TrendRadar",
+    description: "Discover emerging trends in Web3, DeFi, and NFTs before they go mainstream with social sentiment and developer activity analysis.",
+    category: "News & Intelligence",
+    rating: 4.6,
+    users: 765432,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.1.7",
+    icon: TrendingUp,
+    iconBg: iconBackgrounds[8]
   },
 ];
