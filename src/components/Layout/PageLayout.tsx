@@ -21,7 +21,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           {children}
         </div>
       </ScrollArea>
-      {/* Force footer to always be visible */}
+      {/* Always show footer regardless of includeFooter prop */}
       <BrowserFooter onNavigate={onNavigate} />
     </div>
   );
