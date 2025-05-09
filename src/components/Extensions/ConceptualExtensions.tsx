@@ -428,7 +428,7 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
   };
 
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-md bg-nexus-card-navy border border-nexus-light-purple/50 ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
+    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#1E1C2E] border border-[#433E56] ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3">
@@ -436,30 +436,30 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
               <Icon className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h3 className="font-medium text-lg line-clamp-1">{name}</h3>
-              <div className="text-xs text-muted-foreground">v{version} (Beta)</div>
+              <h3 className="font-medium text-lg line-clamp-1 text-white">{name}</h3>
+              <div className="text-xs text-gray-400">v{version} (Beta)</div>
             </div>
           </div>
           <button
             onClick={handleFavoriteClick}
-            className="text-muted-foreground hover:text-nexus-purple transition-colors"
+            className="text-gray-400 hover:text-nexus-purple transition-colors"
             aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart 
-              className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
+              className={`h-5 w-5 ${isFavorite ? 'fill-[#9271FF] text-[#9271FF]' : ''}`} 
             />
           </button>
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-2">
-        <p className="text-sm text-muted-foreground line-clamp-3 h-[4.5rem] mb-4">
+        <p className="text-sm text-gray-400 line-clamp-3 h-[4.5rem] mb-4">
           {description}
         </p>
         <div className="flex items-center justify-between">
-          <Badge variant="outline" className="bg-secondary/50 text-foreground">
+          <Badge variant="outline" className="bg-[#2A263D] text-gray-300 border-[#433E56]">
             {category}
           </Badge>
-          <div className="flex items-center text-sm">
+          <div className="flex items-center text-sm text-gray-300">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
             <span>{rating}</span>
           </div>
@@ -468,7 +468,7 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
       <CardFooter className="p-4 pt-0">
         <Button 
           onClick={handleInstallClick}
-          className={`w-full ${isInstalled ? "bg-muted hover:bg-muted/80 text-foreground" : "bg-nexus-purple hover:bg-nexus-purple/90"}`}
+          className={`w-full ${isInstalled ? "bg-[#2A263D] hover:bg-[#2A263D]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
           variant={isInstalled ? "outline" : "default"}
         >
           {isInstalled ? "Uninstall" : "Install Now"}
