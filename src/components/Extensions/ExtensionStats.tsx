@@ -22,21 +22,31 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
     
     console.log("Calculating stats from", extensions.length, "extensions");
     
-    // Correctly identify all Web3 & Crypto extensions by looking at both category and description
+    // Identify all Web3 & Crypto extensions
+    // This includes explicit crypto categories plus specific crypto extensions by ID or description
     const web3Extensions = extensions.filter(ext => {
-      // Check categories
+      // Check for explicit crypto categories
       const categoryMatch = 
         ext.category === "Web3 & Crypto" || 
         ext.category === "Crypto" || 
         ext.category === "Web3";
       
-      // For extensions that should be counted as Web3 & Crypto but might be miscategorized
-      const isAdditionalWeb3Ext = 
-        ext.id === 16 || ext.id === 17 || ext.id === 18 || 
-        ext.id === 19 || ext.id === 20 || 
-        (ext.description && ext.description.toLowerCase().includes("crypto"));
+      // Check specific IDs that we know are crypto-related (from ConceptualExtensions and BetaExtensions)
+      const specificCryptoIds = [16, 17, 18, 19, 20, 21, 22, 23, 24];
       
-      return categoryMatch || isAdditionalWeb3Ext;
+      // Additional check for crypto/web3/blockchain mentions in description
+      const descriptionMatch = ext.description && 
+        (ext.description.toLowerCase().includes("crypto") ||
+         ext.description.toLowerCase().includes("web3") ||
+         ext.description.toLowerCase().includes("blockchain") ||
+         ext.description.toLowerCase().includes("token") ||
+         ext.description.toLowerCase().includes("defi") ||
+         ext.description.toLowerCase().includes("nft"));
+      
+      // Check all BetaExtensions with crypto category
+      const isBetaCryptoExt = ext.isBeta && ext.category === "Crypto";
+      
+      return categoryMatch || specificCryptoIds.includes(ext.id) || descriptionMatch || isBetaCryptoExt;
     });
     
     console.log("Web3 & Crypto extensions:", web3Extensions.length);
