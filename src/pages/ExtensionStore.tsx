@@ -206,21 +206,12 @@ const ExtensionStore: React.FC = () => {
           ) : activeTab === "beta" ? (
             <ConceptualExtensions />
           ) : (
-            <>
-              {/* Results count */}
-              <p className="text-sm text-muted-foreground mb-4">
-                Showing {filteredExtensions.length} {filteredExtensions.length === 1 ? 'extension' : 'extensions'}
-                {activeCategory !== "all" ? ` in ${activeCategory}` : ""}
-                {searchQuery ? ` matching "${searchQuery}"` : ""}
-              </p>
-              
-              <ExtensionList 
-                extensions={filteredExtensions} 
-                viewMode={viewMode} 
-                onInstall={handleInstall}
-                onToggleFavorite={handleToggleFavorite}
-              />
-            </>
+            <ExtensionList 
+              extensions={filteredExtensions} 
+              viewMode={viewMode} 
+              onInstall={handleInstall}
+              onToggleFavorite={handleToggleFavorite}
+            />
           )}
         </div>
       </div>
