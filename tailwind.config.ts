@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -70,6 +69,7 @@ export default {
 					'deep-purple': '#6E59A5',
 					'space-black': '#121212',
 					'card-dark': '#101019',
+					'card-navy': '#0d0d1a',  // Added new darker navy color
 				}
 			},
 			borderRadius: {
