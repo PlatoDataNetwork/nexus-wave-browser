@@ -1,7 +1,7 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { extensionsData } from "@/lib/extensionsData";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
+import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import BetaExtensions from "@/components/Extensions/BetaExtensions";
 
 const ExtensionAdmin: React.FC = () => {
@@ -117,13 +118,6 @@ const ExtensionAdmin: React.FC = () => {
     setActiveTab("beta");
   };
 
-  const statsData = [
-    { title: "Available", value: extensions.length, icon: Package, color: "bg-gradient-to-br from-purple-500/20 to-purple-700/20" },
-    { title: "Installed", value: installedExtensions.length, icon: FileText, color: "bg-gradient-to-br from-blue-500/20 to-blue-700/20" },
-    { title: "Featured", value: featuredExtensions.length, icon: Star, color: "bg-gradient-to-br from-pink-500/20 to-pink-700/20" },
-    { title: "Security", value: extensions.filter(ext => ext.category === "Security").length, icon: Shield, color: "bg-gradient-to-br from-emerald-500/20 to-emerald-700/20" },
-  ];
-
   return (
     <PageLayout>
       <div className="flex flex-col min-h-screen bg-background">
@@ -154,55 +148,41 @@ const ExtensionAdmin: React.FC = () => {
           </h1>
           
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {statsData.map((stat, index) => (
-              <Card key={index} className={stat.color}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="absolute top-4 right-4 bg-background/80 p-2 rounded-full">
-                    <stat.icon className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <ExtensionStats extensions={extensions} />
           
           {/* Tabs and search controls */}
           <div className="mt-8">
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
-                <TabsTrigger 
-                  value="all" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-                >
-                  All Extensions
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="installed" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-                >
-                  Installed
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="featured" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-                >
-                  Featured
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="beta" 
-                  onClick={handleBetaNavigation} 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-                >
-                  Beta
-                </TabsTrigger>
-              </TabsList>
-              
-              {/* Search bar */}
-              <div className="flex-grow flex justify-end my-4">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
+                  <TabsTrigger 
+                    value="all" 
+                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  >
+                    All Extensions
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="installed" 
+                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  >
+                    Installed
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="featured" 
+                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  >
+                    Featured
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="beta" 
+                    onClick={handleBetaNavigation} 
+                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  >
+                    Beta
+                  </TabsTrigger>
+                </TabsList>
+                
+                {/* Search bar moved to the same line as tabs */}
                 {activeTab !== "beta" && (
                   <ExtensionSearchBar
                     searchQuery={searchQuery}
@@ -217,11 +197,11 @@ const ExtensionAdmin: React.FC = () => {
               </div>
               
               {/* Content based on active tab */}
-              <TabsContent value="beta" className="mt-0 p-0">
+              <TabsContent value="beta" className="mt-6 p-0">
                 <BetaExtensions />
               </TabsContent>
 
-              <TabsContent value="all" className="mt-0 p-0">
+              <TabsContent value="all" className="mt-6 p-0">
                 {/* Extensions table */}
                 <div className="rounded-md border">
                   <Table>
@@ -319,7 +299,7 @@ const ExtensionAdmin: React.FC = () => {
                 )}
               </TabsContent>
 
-              <TabsContent value="installed" className="mt-0 p-0">
+              <TabsContent value="installed" className="mt-6 p-0">
                 {/* Reuse the same table but with installedExtensions */}
                 <div className="rounded-md border">
                   <Table>
@@ -409,7 +389,7 @@ const ExtensionAdmin: React.FC = () => {
                 )}
               </TabsContent>
 
-              <TabsContent value="featured" className="mt-0 p-0">
+              <TabsContent value="featured" className="mt-6 p-0">
                 {/* Reuse the same table but with featuredExtensions */}
                 <div className="rounded-md border">
                   <Table>
