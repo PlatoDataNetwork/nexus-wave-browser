@@ -7,7 +7,7 @@ interface ExtensionStatsProps {
 }
 
 const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
-  // Statistics data
+  // Calculate statistics data from extensions passed in props
   const statsData = [
     { 
       title: "Available", 

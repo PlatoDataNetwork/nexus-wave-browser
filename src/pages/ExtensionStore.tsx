@@ -7,6 +7,7 @@ import ExtensionList from "@/components/Extensions/ExtensionList";
 import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
+import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import { Button } from "@/components/ui/button";
 
 const ExtensionStore: React.FC = () => {
@@ -138,27 +139,6 @@ const ExtensionStore: React.FC = () => {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  // Calculate extension counts by category for stats
-  const allExtensions = [...extensionsData, ...betaExtensionsData];
-  
-  const extensionCounts = {
-    available: allExtensions.length,
-    installed: allExtensions.filter(e => e.installed).length,
-    cryptoWeb3: allExtensions.filter(e => 
-      e.category === "Web3 & Crypto" || 
-      e.category === "Crypto" || 
-      e.category === "Web3"
-    ).length,
-    security: allExtensions.filter(e => 
-      e.category === "Privacy & Security" || 
-      e.category === "Security"
-    ).length,
-    ai: allExtensions.filter(e => 
-      e.category === "AI" || 
-      e.category === "AI Tools"
-    ).length
-  };
-
   return (
     <div className="w-full pb-16">
       {/* Header section */}
@@ -166,29 +146,8 @@ const ExtensionStore: React.FC = () => {
         Nexus Wave Extension Library
       </h1>
       
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-        <div className="bg-[#2a1e48] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Available</div>
-          <div className="text-4xl font-bold">{extensionCounts.available}</div>
-        </div>
-        <div className="bg-[#1e2a48] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Installed</div>
-          <div className="text-4xl font-bold">{extensionCounts.installed}</div>
-        </div>
-        <div className="bg-[#3a1e38] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Web3 & Crypto</div>
-          <div className="text-4xl font-bold">{extensionCounts.cryptoWeb3}</div>
-        </div>
-        <div className="bg-[#1e3a38] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Privacy & Security</div>
-          <div className="text-4xl font-bold">{extensionCounts.security}</div>
-        </div>
-        <div className="bg-[#3a1e48] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Generative AI</div>
-          <div className="text-4xl font-bold">{extensionCounts.ai}</div>
-        </div>
-      </div>
+      {/* Stats Cards - Use the ExtensionStats component with all extensions */}
+      <ExtensionStats extensions={extensions} />
       
       {/* Tab & Category navigation */}
       <ExtensionTabBar 
