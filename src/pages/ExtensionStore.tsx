@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
@@ -84,7 +84,7 @@ const ExtensionStore: React.FC = () => {
             defaultValue="all" 
             value={activeTab} 
             onValueChange={setActiveTab} 
-            className="flex-shrink-0"
+            className="flex-shrink-0 w-full"
           >
             <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
               <TabsTrigger 
@@ -119,33 +119,51 @@ const ExtensionStore: React.FC = () => {
                 Admin
               </TabsTrigger>
             </TabsList>
-          </Tabs>
           
-          <div className="flex-grow flex justify-end">
-            {activeTab !== "beta" && (
-              <ExtensionSearchBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                categories={categories}
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-                viewMode={viewMode}
-                setViewMode={setViewMode}
-              />
-            )}
-          </div>
-        </div>
+            <div className="flex-grow flex justify-end my-4">
+              {activeTab !== "beta" && (
+                <ExtensionSearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                  viewMode={viewMode}
+                  setViewMode={setViewMode}
+                />
+              )}
+            </div>
 
-        {/* Main content based on active tab */}
-        {activeTab === "beta" ? (
-          <BetaExtensions />
-        ) : (
-          <ExtensionList 
-            extensions={filteredExtensions} 
-            viewMode={viewMode} 
-            onInstall={handleInstall} 
-          />
-        )}
+            {/* Content based on active tab */}
+            <TabsContent value="all" className="mt-0 p-0">
+              <ExtensionList 
+                extensions={filteredExtensions} 
+                viewMode={viewMode} 
+                onInstall={handleInstall} 
+              />
+            </TabsContent>
+
+            <TabsContent value="installed" className="mt-0 p-0">
+              <ExtensionList 
+                extensions={extensions.filter(ext => ext.installed)} 
+                viewMode={viewMode} 
+                onInstall={handleInstall} 
+              />
+            </TabsContent>
+
+            <TabsContent value="featured" className="mt-0 p-0">
+              <ExtensionList 
+                extensions={extensions.filter(ext => ext.featured)} 
+                viewMode={viewMode} 
+                onInstall={handleInstall} 
+              />
+            </TabsContent>
+
+            <TabsContent value="beta" className="mt-0 p-0">
+              <BetaExtensions />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </PageLayout>
   );
