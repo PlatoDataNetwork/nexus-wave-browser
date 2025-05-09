@@ -534,9 +534,6 @@ const WalletConnect: React.FC = () => {
                     Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
                     Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
                   </span>
-                  <span className="text-left block mt-1">
-                    More Wallets coming online soon.
-                  </span>
                 </p>
               </div>
               
