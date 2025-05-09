@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Extension } from "@/lib/extensionsData";
 
 interface ExtensionStatsProps {
@@ -7,44 +7,62 @@ interface ExtensionStatsProps {
 }
 
 const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
-  // Calculate statistics data from extensions passed in props
-  const statsData = [
-    { 
-      title: "Available", 
-      value: extensions.length, 
-      bgColor: "bg-[#2a1e48]" 
-    },
-    { 
-      title: "Installed", 
-      value: extensions.filter(ext => ext.installed).length, 
-      bgColor: "bg-[#1e2a48]" 
-    },
-    { 
-      title: "Web3 & Crypto", 
-      value: extensions.filter(ext => 
-        ext.category === "Web3 & Crypto" || 
-        ext.category === "Crypto" || 
-        ext.category === "Web3"
-      ).length, 
-      bgColor: "bg-[#3a1e38]" 
-    },
-    { 
-      title: "Privacy & Security", 
-      value: extensions.filter(ext => 
-        ext.category === "Privacy & Security" || 
-        ext.category === "Security"
-      ).length, 
-      bgColor: "bg-[#1e3a38]" 
-    },
-    { 
-      title: "Generative AI", 
-      value: extensions.filter(ext => 
-        ext.category === "AI" || 
-        ext.category === "AI Tools"
-      ).length, 
-      bgColor: "bg-[#3a1e48]" 
-    }
-  ];
+  // Use state to store calculated stats
+  const [statsData, setStatsData] = useState([
+    { title: "Available", value: 0, bgColor: "bg-[#2a1e48]" },
+    { title: "Installed", value: 0, bgColor: "bg-[#1e2a48]" },
+    { title: "Web3 & Crypto", value: 0, bgColor: "bg-[#3a1e38]" },
+    { title: "Privacy & Security", value: 0, bgColor: "bg-[#1e3a38]" },
+    { title: "Generative AI", value: 0, bgColor: "bg-[#3a1e48]" }
+  ]);
+
+  // Calculate stats whenever extensions prop changes
+  useEffect(() => {
+    if (!extensions || extensions.length === 0) return;
+    
+    console.log("Calculating stats from", extensions.length, "extensions");
+    
+    // Calculate new stats based on the extensions data
+    const newStatsData = [
+      { 
+        title: "Available", 
+        value: extensions.length, 
+        bgColor: "bg-[#2a1e48]" 
+      },
+      { 
+        title: "Installed", 
+        value: extensions.filter(ext => ext.installed).length, 
+        bgColor: "bg-[#1e2a48]" 
+      },
+      { 
+        title: "Web3 & Crypto", 
+        value: extensions.filter(ext => 
+          ext.category === "Web3 & Crypto" || 
+          ext.category === "Crypto" || 
+          ext.category === "Web3"
+        ).length, 
+        bgColor: "bg-[#3a1e38]" 
+      },
+      { 
+        title: "Privacy & Security", 
+        value: extensions.filter(ext => 
+          ext.category === "Privacy & Security" || 
+          ext.category === "Security"
+        ).length, 
+        bgColor: "bg-[#1e3a38]" 
+      },
+      { 
+        title: "Generative AI", 
+        value: extensions.filter(ext => 
+          ext.category === "AI" || 
+          ext.category === "AI Tools"
+        ).length, 
+        bgColor: "bg-[#3a1e48]" 
+      }
+    ];
+    
+    setStatsData(newStatsData);
+  }, [extensions]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">

@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { extensionsData } from "@/lib/extensionsData";
@@ -23,8 +22,10 @@ const ExtensionStore: React.FC = () => {
   // Combine regular and beta extensions
   const [extensions, setExtensions] = useState([...extensionsData, ...betaExtensionsData]);
   
-  // Create a separate variable for all extensions to use in stats
-  const allExtensions = [...extensionsData, ...betaExtensionsData];
+  // Memoize the combined extensions to avoid unnecessary re-renders
+  const allExtensions = useMemo(() => {
+    return [...extensionsData, ...betaExtensionsData];
+  }, []);
   
   // Parse tab from URL on initial load
   useEffect(() => {
@@ -45,27 +46,31 @@ const ExtensionStore: React.FC = () => {
   }, [location.search]);
   
   // Get unique categories from extensions, excluding "Communication"
-  const categories = ["all", ...new Set([...extensionsData, ...betaExtensionsData]
-    .map(ext => ext.category)
-    .filter(category => category !== "Communication"))];
+  const categories = useMemo(() => {
+    return ["all", ...new Set([...allExtensions]
+      .map(ext => ext.category)
+      .filter(category => category !== "Communication"))];
+  }, [allExtensions]);
   
   // Filter extensions based on search query, active category, and tab
-  const filteredExtensions = extensions.filter(extension => {
-    const matchesSearch = 
-      extension.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      extension.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = activeCategory === "all" || extension.category === activeCategory;
-    
-    const matchesTab = 
-      activeTab === "all" || 
-      (activeTab === "installed" && extension.installed) ||
-      (activeTab === "featured" && extension.featured) ||
-      (activeTab === "favorites" && extension.featured) || // Using featured as favorites for demo
-      (activeTab === "beta" && extension.isBeta); // Use isBeta property for beta tab filtering
-    
-    return matchesSearch && matchesCategory && matchesTab;
-  });
+  const filteredExtensions = useMemo(() => {
+    return extensions.filter(extension => {
+      const matchesSearch = 
+        extension.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        extension.description.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      const matchesCategory = activeCategory === "all" || extension.category === activeCategory;
+      
+      const matchesTab = 
+        activeTab === "all" || 
+        (activeTab === "installed" && extension.installed) ||
+        (activeTab === "featured" && extension.featured) ||
+        (activeTab === "favorites" && extension.featured) || // Using featured as favorites for demo
+        (activeTab === "beta" && extension.isBeta); // Use isBeta property for beta tab filtering
+      
+      return matchesSearch && matchesCategory && matchesTab;
+    });
+  }, [extensions, searchQuery, activeCategory, activeTab]);
 
   const handleInstall = (id: number) => {
     setExtensions(
@@ -151,7 +156,7 @@ const ExtensionStore: React.FC = () => {
       </h1>
       
       {/* Stats Cards - Pass ALL extensions to the stats component */}
-      <ExtensionStats extensions={allExtensions} />
+      <ExtensionStats extensions={extensions} />
       
       {/* Tab & Category navigation */}
       <ExtensionTabBar 
