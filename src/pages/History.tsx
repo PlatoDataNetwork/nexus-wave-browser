@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import {
   Clock, 
   FileText, 
   Globe, 
-  History, 
+  History as HistoryIcon, // Renamed to HistoryIcon to avoid conflict
   Search, 
   Trash2, 
   X 
@@ -74,7 +75,7 @@ const mockHistoryData = [
   }
 ];
 
-const History: React.FC = () => {
+const HistoryPage: React.FC = () => { // Renamed component to HistoryPage
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [historyItems, setHistoryItems] = useState(mockHistoryData);
@@ -159,7 +160,7 @@ const History: React.FC = () => {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-2xl font-bold flex items-center gap-2">
-              <History className="h-6 w-6" />
+              <HistoryIcon className="h-6 w-6" />
               Browser History
             </CardTitle>
             <Button 
@@ -211,7 +212,7 @@ const History: React.FC = () => {
               <ScrollArea className="h-[calc(100vh-280px)] pr-4">
                 {Object.keys(groupedHistory).length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-                    <History className="h-12 w-12 mb-2 opacity-50" />
+                    <HistoryIcon className="h-12 w-12 mb-2 opacity-50" />
                     <h3 className="text-lg font-medium">No history found</h3>
                     <p className="text-sm">Your browsing history will appear here</p>
                   </div>
@@ -306,4 +307,4 @@ const History: React.FC = () => {
   );
 };
 
-export default History;
+export default HistoryPage;

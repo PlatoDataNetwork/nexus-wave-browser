@@ -10,7 +10,7 @@ import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
 import ExtensionStore from "./pages/ExtensionStore";
-import History from "./pages/History";
+import HistoryPage from "./pages/History"; // Updated import to match renamed component
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
@@ -26,7 +26,7 @@ const App = () => (
           <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/history" element={<PageLayout includeFooter={true}><History /></PageLayout>} />
+          <Route path="/history" element={<PageLayout includeFooter={true}><HistoryPage /></PageLayout>} />
           {/* Always use the browser interface for the extension store */}
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
           {/* Legacy path, keep it for backward compatibility */}
