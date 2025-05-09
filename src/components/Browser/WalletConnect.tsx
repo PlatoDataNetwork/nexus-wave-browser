@@ -85,8 +85,8 @@ const atomicWalletLogoUrl = "/lovable-uploads/127a38a8-38dc-4895-83ec-7dea24d355
 // Binance Wallet logo URL - updated with the newly uploaded image
 const binanceWalletLogoUrl = "/lovable-uploads/73f65900-61e9-4142-b508-85561d2e931d.png";
 
-// Kraken Wallet logo URL (placeholder - will need to be uploaded)
-const krakenWalletLogoUrl = "https://play-lh.googleusercontent.com/KgGNbQEGhJkWPG-cNK7zKFCpqFz6aYMcXb90N2jMRKl8tA4OGWuZeYZGn5W9VJIM93g=w240-h480-rw";
+// Kraken Wallet logo URL - updated with the newly uploaded image
+const krakenWalletLogoUrl = "/lovable-uploads/0da84cdf-8701-4028-8ce6-ed43f5d70780.png";
 
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
@@ -123,7 +123,7 @@ const shortenAddress = (address: string): string => {
 };
 
 // Type definition for the wallet connection data from Supabase
-// Adding the wallet_name field that was missing
+// Make sure to match the exact structure in the database
 interface WalletConnection {
   created_at: string;
   id: string;
@@ -133,7 +133,23 @@ interface WalletConnection {
   user_id: string;
   wallet_address: string;
   wallet_provider: string;
-  wallet_name?: string; // Added this field that was missing
+  wallet_name: string; // Updated to be required since we always provide a default
+}
+
+// Extend the Supabase database types to recognize the wallet_name field
+declare module '@supabase/supabase-js' {
+  interface Database {
+    public: {
+      Tables: {
+        wallet_connections: {
+          Row: WalletConnection;
+          Insert: Omit<WalletConnection, 'created_at' | 'id'> & { created_at?: string; id?: string };
+          Update: Partial<Omit<WalletConnection, 'id'>>;
+        };
+        // ... other tables
+      };
+    };
+  }
 }
 
 const WalletConnect: React.FC = () => {
@@ -284,8 +300,6 @@ const WalletConnect: React.FC = () => {
           wallet_name: name,
           is_connected: true,
           last_connected: new Date().toISOString()
-        }, {
-          onConflict: 'user_id, wallet_provider'
         });
 
       if (error) throw error;
@@ -351,8 +365,8 @@ const WalletConnect: React.FC = () => {
       // Update wallet name in Supabase
       const { error } = await supabase
         .from('wallet_connections')
-        .update({ 
-          wallet_name: walletName 
+        .update({
+          wallet_name: walletName
         })
         .eq('user_id', user.id)
         .eq('wallet_provider', activeWallet);
