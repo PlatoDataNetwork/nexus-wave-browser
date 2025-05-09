@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Card, 
   CardContent, 
@@ -60,6 +61,9 @@ const trustWalletLogoUrl = "/lovable-uploads/840d912c-ae1c-428a-8842-b9e74182176
 // Exodus logo URL from the newly uploaded image
 const exodusLogoUrl = "/lovable-uploads/ff280ee6-e289-4257-844d-f70c66f6b4cc.png";
 
+// Crypto.com logo URL from the newly uploaded image
+const cryptoComLogoUrl = "/lovable-uploads/adb0bf22-cda9-4603-92ba-21ce2b7fe3b8.png";
+
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
   <div className="w-10 h-10 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
@@ -70,7 +74,7 @@ const NBLogo = () => (
 // Wallet options - alphabetized
 const walletOptions = [
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
-  { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: 'https://cryptologos.cc/logos/crypto-com-chain-cro-logo.png' },
+  { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: cryptoComLogoUrl },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: exodusLogoUrl },
   { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: 'https://cryptologos.cc/logos/ledger-wallet-logo.png' },
   { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },

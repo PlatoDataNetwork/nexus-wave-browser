@@ -4,24 +4,43 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { popularDApps } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 
 interface DAppSectionProps {
   onNavigate: (url: string) => void;
 }
 
 const DAppSection: React.FC<DAppSectionProps> = ({ onNavigate }) => {
+  const [visibleDApps, setVisibleDApps] = React.useState(popularDApps);
+
+  const handleClose = (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setVisibleDApps(visibleDApps.filter(dapp => dapp.id !== id));
+    toast.info("DApp removed from view");
+  };
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-medium">Popular DApps</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 nexus-scrollbar overflow-y-auto" style={{ maxHeight: "260px" }}>
-        {popularDApps.map((dapp) => (
+        {visibleDApps.map((dapp) => (
           <div 
             key={dapp.id}
-            className="p-3 bg-secondary/30 rounded-md border border-border hover:border-nexus-purple/50 transition-all cursor-pointer"
+            className="relative p-3 bg-secondary/30 rounded-md border border-border hover:border-nexus-purple/50 transition-all cursor-pointer"
             onClick={() => onNavigate(dapp.url)}
           >
+            {/* Close Button */}
+            <button
+              onClick={(e) => handleClose(dapp.id, e)}
+              className="absolute -top-2 -right-2 bg-nexus-purple text-white rounded-full p-1 shadow-md hover:bg-nexus-light-purple z-10"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-9 h-9 rounded-md bg-muted flex items-center justify-center">
