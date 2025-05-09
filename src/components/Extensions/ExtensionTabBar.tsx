@@ -70,7 +70,7 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
         </div>
         
         {/* Search Box - Only shown when not in Beta or Admin tabs */}
-        {activeTab !== "beta" && activeTab !== "admin" && setSearchQuery && (
+        {activeTab !== "admin" && setSearchQuery && (
           <div className="flex-1 relative">
             <div className="relative flex items-center">
               <div className="absolute left-3">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { extensionsData } from "@/lib/extensionsData";
+import { betaExtensionsData } from "@/lib/betaExtensionsData";
 import ExtensionList from "@/components/Extensions/ExtensionList";
 import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
@@ -17,7 +18,9 @@ const ExtensionStore: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [extensions, setExtensions] = useState(extensionsData);
+  
+  // Combine regular and beta extensions
+  const [extensions, setExtensions] = useState([...extensionsData, ...betaExtensionsData]);
   const [categoryFilters, setCategoryFilters] = useState<string[]>([]);
   
   // Parse tab from URL on initial load
@@ -36,11 +39,8 @@ const ExtensionStore: React.FC = () => {
   }, [location.search]);
   
   // Get unique categories from extensions
-  const categories = ["all", ...new Set(extensionsData.map(ext => ext.category))];
+  const categories = ["all", ...new Set([...extensionsData, ...betaExtensionsData].map(ext => ext.category))];
   
-  // Add favorites filter
-  const favoriteExtensions = extensions.filter(ext => ext.featured);
-
   // Filter extensions based on search query, active category, and tab
   const filteredExtensions = extensions.filter(extension => {
     const matchesSearch = 
@@ -53,7 +53,8 @@ const ExtensionStore: React.FC = () => {
       activeTab === "all" || 
       (activeTab === "installed" && extension.installed) ||
       (activeTab === "featured" && extension.featured) ||
-      (activeTab === "favorites" && extension.featured); // Using featured as favorites for demo
+      (activeTab === "favorites" && extension.featured) || // Using featured as favorites for demo
+      (activeTab === "beta" && extension.isBeta); // Use isBeta property for beta tab filtering
     
     return matchesSearch && matchesCategory && matchesTab;
   });
@@ -138,9 +139,9 @@ const ExtensionStore: React.FC = () => {
   const extensionCounts = {
     available: extensions.length,
     installed: extensions.filter(e => e.installed).length,
-    cryptoWeb3: extensions.filter(e => e.category === "Web3 & Crypto").length,
-    security: extensions.filter(e => e.category === "Privacy & Security").length,
-    ai: extensions.filter(e => e.category === "AI").length
+    cryptoWeb3: extensions.filter(e => e.category === "Web3 & Crypto" || e.category === "Crypto").length,
+    security: extensions.filter(e => e.category === "Privacy & Security" || e.category === "Security").length,
+    ai: extensions.filter(e => e.category === "AI" || e.category === "AI Tools").length
   };
 
   return (
@@ -184,8 +185,6 @@ const ExtensionStore: React.FC = () => {
       <div className="mt-6">
         {activeTab === "smile" ? (
           <SmileAnimation />
-        ) : activeTab === "beta" ? (
-          <ConceptualExtensions />
         ) : (
           <ExtensionList 
             extensions={filteredExtensions} 

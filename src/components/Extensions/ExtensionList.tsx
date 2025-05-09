@@ -55,7 +55,14 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
                 {extension.icon && <extension.icon className="h-5 w-5 text-white" />}
               </div>
               <div className="ml-4">
-                <h3 className="font-medium">{extension.name}</h3>
+                <div className="flex items-center">
+                  <h3 className="font-medium">{extension.name}</h3>
+                  {extension.isBeta && (
+                    <Badge variant="outline" className="ml-2 bg-yellow-500/20 text-yellow-400 border-yellow-600">
+                      BETA
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {extension.description}
                 </p>

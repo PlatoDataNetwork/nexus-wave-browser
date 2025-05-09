@@ -1,3 +1,4 @@
+
 import { 
   Shield, 
   Lock, 
@@ -51,6 +52,8 @@ export interface Extension {
   version: string;
   icon: LucideIcon;
   iconBg: string;
+  isBeta?: boolean;
+  estimatedRelease?: string;
 }
 
 const iconBackgrounds = [
