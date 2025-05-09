@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -222,20 +221,6 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
 const BetaExtensions: React.FC = () => {
   return (
     <div className="space-y-8">
-      <div className="bg-gradient-to-r from-purple-800/20 via-nexus-purple/20 to-nexus-light-purple/20 p-6 rounded-lg border border-purple-500/30">
-        <h2 className="text-xl font-semibold mb-2">Nexus Wave Beta Program</h2>
-        <p className="text-muted-foreground mb-2">
-          Get early access to experimental extensions before they're released to the public.
-        </p>
-        <p className="text-muted-foreground mb-4">
-          These extensions are still under development and may contain bugs or limited functionality.
-        </p>
-        <div className="flex items-center text-sm text-muted-foreground">
-          <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
-          <span>Extensions in beta are experimental and may be unstable</span>
-        </div>
-      </div>
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {betaExtensions.map((extension, index) => (
           <BetaCard key={index} extension={extension} />
