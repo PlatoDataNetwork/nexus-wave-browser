@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,18 @@ import {
   Link,
   Network,
   Image,
-  Music
+  Music,
+  Sparkles,
+  Code,
+  Search,
+  Brain,
+  Bot,
+  Camera,
+  MessageSquare,
+  Headphones,
+  Wand,
+  Monitor,
+  Settings
 } from "lucide-react";
 
 interface ConceptualExtensionProps {
@@ -398,6 +408,228 @@ const conceptualExtensions: ConceptualExtensionProps[] = [
     estimatedRelease: "November 2025",
     rating: 4.6,
     version: "0.7.8"
+  },
+
+  // AI Category (20 new extensions)
+  {
+    id: 31,
+    name: "AIWriter Pro",
+    description: "Advanced AI writing assistant that enhances your writing with context-aware suggestions, tone adjustments, and complete document generation.",
+    category: "AI",
+    icon: Bot,
+    iconBg: iconBackgrounds[0],
+    estimatedRelease: "June 2025",
+    rating: 4.9,
+    version: "0.9.8"
+  },
+  {
+    id: 32,
+    name: "ImageGenius",
+    description: "Generate custom images from text descriptions with fine-tuned style controls and advanced editing capabilities right in your browser.",
+    category: "AI",
+    icon: Image,
+    iconBg: iconBackgrounds[0],
+    estimatedRelease: "July 2025",
+    rating: 4.8,
+    version: "0.8.6"
+  },
+  {
+    id: 33,
+    name: "CodeCopilot",
+    description: "AI-powered code assistant that provides real-time code suggestions, bug detection, and optimization recommendations while you program.",
+    category: "AI",
+    icon: Code,
+    iconBg: iconBackgrounds[0],
+    estimatedRelease: "August 2025",
+    rating: 4.9,
+    version: "0.9.5"
+  },
+  {
+    id: 34,
+    name: "SummaryAI",
+    description: "Instantly generate concise summaries of long articles, documents and videos with key points highlighted for quick understanding.",
+    category: "AI",
+    icon: FileText,
+    iconBg: iconBackgrounds[0],
+    estimatedRelease: "July 2025",
+    rating: 4.7,
+    version: "0.8.2"
+  },
+  {
+    id: 35,
+    name: "ResearchAssistant",
+    description: "AI research tool that finds, analyzes, and synthesizes information from multiple sources with automatic citation generation.",
+    category: "AI",
+    icon: Search,
+    iconBg: iconBackgrounds[0],
+    estimatedRelease: "August 2025",
+    rating: 4.8,
+    version: "0.9.1"
+  },
+  {
+    id: 36,
+    name: "VoiceGenius",
+    description: "Convert text to natural-sounding speech in 40+ languages with customizable voices, emotions, and accents for content creation.",
+    category: "AI",
+    icon: Headphones,
+    iconBg: iconBackgrounds[1],
+    estimatedRelease: "June 2025",
+    rating: 4.9,
+    version: "0.9.7"
+  },
+  {
+    id: 37,
+    name: "PresentationAI",
+    description: "Generate professional slides and presentations from simple text prompts with custom themes, graphics, and talking points.",
+    category: "AI",
+    icon: Monitor,
+    iconBg: iconBackgrounds[1],
+    estimatedRelease: "September 2025",
+    rating: 4.6,
+    version: "0.8.3"
+  },
+  {
+    id: 38,
+    name: "MeetingMinds",
+    description: "AI meeting assistant that transcribes, summarizes, and extracts action items from your virtual meetings with assigned responsibilities.",
+    category: "AI",
+    icon: MessageSquare,
+    iconBg: iconBackgrounds[1],
+    estimatedRelease: "July 2025",
+    rating: 4.7,
+    version: "0.9.0"
+  },
+  {
+    id: 39,
+    name: "DataVizard",
+    description: "Transform complex data into insightful visualizations and interactive charts with AI-powered analysis and recommendations.",
+    category: "AI",
+    icon: BarChart4,
+    iconBg: iconBackgrounds[1],
+    estimatedRelease: "August 2025",
+    rating: 4.8,
+    version: "0.8.5"
+  },
+  {
+    id: 40,
+    name: "TranslatorGenius",
+    description: "Real-time AI translation for 100+ languages with contextual understanding, slang interpretation, and cultural nuance preservation.",
+    category: "AI",
+    icon: Globe,
+    iconBg: iconBackgrounds[1],
+    estimatedRelease: "June 2025",
+    rating: 4.9,
+    version: "0.9.6"
+  },
+  {
+    id: 41,
+    name: "StyleAI",
+    description: "AI fashion assistant that analyzes your wardrobe, suggests outfit combinations, and provides personalized shopping recommendations.",
+    category: "AI",
+    icon: Wand,
+    iconBg: iconBackgrounds[2],
+    estimatedRelease: "October 2025",
+    rating: 4.6,
+    version: "0.7.9"
+  },
+  {
+    id: 42,
+    name: "PhotoEnhancer",
+    description: "AI-powered photo editing tool that automatically enhances images, removes unwanted elements, and applies professional-grade effects.",
+    category: "AI",
+    icon: Camera,
+    iconBg: iconBackgrounds[2],
+    estimatedRelease: "July 2025",
+    rating: 4.8,
+    version: "0.9.2"
+  },
+  {
+    id: 43,
+    name: "AITutor",
+    description: "Personalized learning assistant that adapts to your learning style with interactive explanations and custom practice problems.",
+    category: "AI",
+    icon: Brain,
+    iconBg: iconBackgrounds[2],
+    estimatedRelease: "August 2025",
+    rating: 4.7,
+    version: "0.8.4"
+  },
+  {
+    id: 44,
+    name: "BioMedAI",
+    description: "Medical information assistant that provides evidence-based health information, symptom analysis, and research updates from trusted sources.",
+    category: "AI",
+    icon: Shield,
+    iconBg: iconBackgrounds[2],
+    estimatedRelease: "September 2025",
+    rating: 4.9,
+    version: "0.9.0"
+  },
+  {
+    id: 45,
+    name: "AIComposer",
+    description: "Create original music and sound compositions with AI that can match specific moods, genres, or complement your visual content.",
+    category: "AI",
+    icon: Music,
+    iconBg: iconBackgrounds[2],
+    estimatedRelease: "November 2025",
+    rating: 4.7,
+    version: "0.8.1"
+  },
+  {
+    id: 46,
+    name: "SmartChat",
+    description: "Customizable AI chatbot platform to create personalized assistants for customer support, research, productivity, or entertainment.",
+    category: "AI",
+    icon: MessageSquare,
+    iconBg: iconBackgrounds[3],
+    estimatedRelease: "June 2025",
+    rating: 4.9,
+    version: "0.9.8"
+  },
+  {
+    id: 47,
+    name: "VideoDirector",
+    description: "AI video creation tool that transforms text scripts into fully animated videos with custom scenes, characters, and voiceovers.",
+    category: "AI",
+    icon: Video,
+    iconBg: iconBackgrounds[3],
+    estimatedRelease: "October 2025",
+    rating: 4.6,
+    version: "0.7.5"
+  },
+  {
+    id: 48,
+    name: "PromptPerfect",
+    description: "Advanced prompt engineering tool that optimizes your AI interactions with suggested improvements and templates for better results.",
+    category: "AI",
+    icon: Sparkles,
+    iconBg: iconBackgrounds[3],
+    estimatedRelease: "July 2025",
+    rating: 4.8,
+    version: "0.8.9"
+  },
+  {
+    id: 49,
+    name: "CodeReviewer",
+    description: "AI code reviewer that analyzes your code for security vulnerabilities, performance issues, and suggests best practice improvements.",
+    category: "AI",
+    icon: ShieldCheck,
+    iconBg: iconBackgrounds[3],
+    estimatedRelease: "August 2025",
+    rating: 4.7,
+    version: "0.8.3"
+  },
+  {
+    id: 50,
+    name: "AIWorkflow",
+    description: "Create custom AI automation workflows combining multiple AI models and tools with drag-and-drop simplicity for complex tasks.",
+    category: "AI",
+    icon: Settings,
+    iconBg: iconBackgrounds[3],
+    estimatedRelease: "September 2025",
+    rating: 4.9,
+    version: "0.9.3"
   },
 ];
 

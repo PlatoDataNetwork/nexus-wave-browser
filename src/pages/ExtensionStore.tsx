@@ -107,10 +107,10 @@ const ExtensionStore: React.FC = () => {
         </h1>
         
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-[#2a1e48] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Available</div>
-            <div className="text-4xl font-bold">40</div>
+            <div className="text-4xl font-bold">60</div>
           </div>
           <div className="bg-[#1e2a48] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Installed</div>
@@ -123,6 +123,10 @@ const ExtensionStore: React.FC = () => {
           <div className="bg-[#1e3a38] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Security</div>
             <div className="text-4xl font-bold">0</div>
+          </div>
+          <div className="bg-[#3a1e48] rounded-lg p-6">
+            <div className="text-sm font-medium mb-2">AI</div>
+            <div className="text-4xl font-bold">20</div>
           </div>
         </div>
         
