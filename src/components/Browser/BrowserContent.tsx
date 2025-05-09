@@ -37,15 +37,18 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
     // First check for internal app routes
     if (currentUrl === '/history') {
-      return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
+      // Render HistoryPage directly, without wrapping in PageLayout
+      return <HistoryPage />;
     }
     
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
-      return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
+      // Render ExtensionStore directly, without wrapping in PageLayout
+      return <ExtensionStore />;
     }
     
     if (currentUrl === '/settings-docs' || currentUrl.includes('/settings-docs')) {
-      return <PageLayout includeFooter={true} onNavigate={onNavigate}><SettingsDocumentation /></PageLayout>;
+      // Render SettingsDocumentation directly, without wrapping in PageLayout
+      return <SettingsDocumentation />;
     }
     
     // Parse the URL for other routes that might include protocol
@@ -54,11 +57,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       // Check for special internal URLs with protocol
       if (url.pathname === '/history') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
+        return <HistoryPage />;
       } else if (url.pathname === '/settings-docs') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><SettingsDocumentation /></PageLayout>;
+        return <SettingsDocumentation />;
       } else if (url.pathname === '/extension-store') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
+        return <ExtensionStore />;
       }
     } catch (error) {
       console.error("Invalid URL:", currentUrl);
@@ -67,53 +70,53 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
     // Default content rendering for home or unknown pages
     return (
-      <PageLayout includeFooter={true} onNavigate={onNavigate}>
-        <div className="flex flex-col items-center justify-center h-full pt-8">
-          <h1 className="text-2xl font-bold text-center mb-4">
-            Welcome to Nexus Wave Browser!
-          </h1>
-          <p className="text-muted-foreground text-center mb-8">
-            Explore the decentralized web with confidence.
-          </p>
-          <Card className="w-4/5 max-w-md nexus-glass border-none shadow-none">
-            <CardHeader>
-              <CardTitle>Web3 Analytics Platform</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Analyze blockchain data, track NFT trends, and discover DeFi
-                protocols.
-              </p>
-              <Button
-                variant="secondary"
-                className="mt-4 w-full"
-                onClick={() => {
-                  onNavigate("https://platodata.io/analytics");
-                  toast({
-                    title: "Navigating to Platodata Analytics",
-                    description: "Loading Web3 analytics platform...",
-                  });
-                }}
-              >
-                Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </PageLayout>
+      <div className="flex flex-col items-center justify-center h-full pt-8">
+        <h1 className="text-2xl font-bold text-center mb-4">
+          Welcome to Nexus Wave Browser!
+        </h1>
+        <p className="text-muted-foreground text-center mb-8">
+          Explore the decentralized web with confidence.
+        </p>
+        <Card className="w-4/5 max-w-md nexus-glass border-none shadow-none">
+          <CardHeader>
+            <CardTitle>Web3 Analytics Platform</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              Analyze blockchain data, track NFT trends, and discover DeFi
+              protocols.
+            </p>
+            <Button
+              variant="secondary"
+              className="mt-4 w-full"
+              onClick={() => {
+                onNavigate("https://platodata.io/analytics");
+                toast({
+                  title: "Navigating to Platodata Analytics",
+                  description: "Loading Web3 analytics platform...",
+                });
+              }}
+            >
+              Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     );
   };
 
   return (
-    <div className="flex-1 overflow-auto">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      ) : (
-        renderContent()
-      )}
-    </div>
+    <PageLayout includeFooter={true} onNavigate={onNavigate}>
+      <div className="flex-1 overflow-auto">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        ) : (
+          renderContent()
+        )}
+      </div>
+    </PageLayout>
   );
 };
 

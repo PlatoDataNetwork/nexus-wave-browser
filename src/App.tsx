@@ -6,10 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import SettingsDocumentation from "./pages/SettingsDocumentation";
-import ExtensionAdmin from "./pages/ExtensionAdmin";
-import ExtensionStore from "./pages/ExtensionStore";
-import HistoryPage from "./pages/History";
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
@@ -28,7 +24,7 @@ const App = () => (
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
           
           {/* Fallback route */}
-          <Route path="*" element={<PageLayout includeFooter={true}><NotFound /></PageLayout>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

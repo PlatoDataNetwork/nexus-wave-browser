@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import {
   Clock, 
   FileText, 
   Globe, 
-  History as HistoryIcon, // Renamed to HistoryIcon to avoid conflict
+  History as HistoryIcon, 
   Search, 
   Trash2, 
   X 
@@ -74,7 +75,7 @@ const mockHistoryData = [
   }
 ];
 
-const HistoryPage: React.FC = () => { // Renamed component to HistoryPage
+const HistoryPage: React.FC = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [historyItems, setHistoryItems] = useState(mockHistoryData);
