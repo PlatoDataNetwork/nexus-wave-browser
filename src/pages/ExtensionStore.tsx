@@ -68,7 +68,7 @@ const ExtensionStore: React.FC = () => {
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+        <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
           Nexus Wave Extension Library
         </h1>
       </div>
