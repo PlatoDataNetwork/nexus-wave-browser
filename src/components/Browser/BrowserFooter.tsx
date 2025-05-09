@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield, ChevronUp, ChevronDown } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield, ChevronUp, ChevronDown, ToggleLeft, ToggleRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -173,19 +173,19 @@ const BrowserFooter: React.FC<{
           <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
         
-        {/* Toggle Footer Button - more pronounced and green */}
+        {/* Toggle Footer Button - green like Security with toggle icon */}
         {toggleFooter && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="h-7 bg-green-500/20 hover:bg-green-500/30 rounded-md text-green-500 px-3"
+                className="h-7 text-green-500"
                 onClick={toggleFooter}
               >
                 {isFooterVisible ? 
-                  <ChevronDown className="h-3 w-3 mr-1 text-green-500" /> : 
-                  <ChevronUp className="h-3 w-3 mr-1 text-green-500" />}
+                  <ToggleRight className="h-4 w-4 text-white fill-green-500" /> : 
+                  <ToggleLeft className="h-4 w-4 text-white fill-green-500" />}
               </Button>
             </TooltipTrigger>
             <TooltipContent>
