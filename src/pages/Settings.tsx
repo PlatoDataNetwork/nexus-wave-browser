@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, Search, Settings as SettingsIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
 import SettingsAppearance from "@/components/Settings/SettingsAppearance";
 import SettingsPrivacySecurity from "@/components/Settings/SettingsPrivacySecurity";
 import SettingsAutofill from "@/components/Settings/SettingsAutofill";
@@ -13,14 +12,14 @@ import SettingsAdvanced from "@/components/Settings/SettingsAdvanced";
 import SettingsWeb3 from "@/components/Settings/SettingsWeb3";
 import SettingsExtensions from "@/components/Settings/SettingsExtensions";
 import SettingsShields from "@/components/Settings/SettingsShields";
-import BrowserFooter from "@/components/Browser/BrowserFooter";
+import PageLayout from "@/components/Layout/PageLayout";
 
 const Settings: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("appearance");
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <PageLayout>
       {/* Header */}
       <div className="flex items-center justify-center h-8 bg-card border-b border-border">
         <h1 className="text-xs font-medium">Nexus Wave Browser - Settings</h1>
@@ -145,10 +144,7 @@ const Settings: React.FC = () => {
           </ScrollArea>
         </div>
       </div>
-
-      {/* Replace the custom footer with BrowserFooter */}
-      <BrowserFooter />
-    </div>
+    </PageLayout>
   );
 };
 

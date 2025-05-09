@@ -87,6 +87,22 @@ const BrowserFooter: React.FC<{
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
+        {/* Hide Footer button moved to the left side */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              size="sm" 
+              className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md h-7"
+              onClick={onToggleFooter}
+            >
+              Hide Footer
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Hide footer</p>
+          </TooltipContent>
+        </Tooltip>
+
         {/* Shield security button */}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -184,21 +200,6 @@ const BrowserFooter: React.FC<{
       </div>
       
       <div className="flex items-center gap-3">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              size="sm" 
-              className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md"
-              onClick={onToggleFooter}
-            >
-              Hide Footer
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Hide footer</p>
-          </TooltipContent>
-        </Tooltip>
-        
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
