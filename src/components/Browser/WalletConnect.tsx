@@ -535,88 +535,88 @@ const WalletConnect: React.FC = () => {
                 </p>
               </div>
               
-              {/* Moved button to bottom of card */}
-              {isConnected ? (
-                <Button 
-                  onClick={handleDisconnect}
-                  className="w-full bg-destructive hover:bg-destructive/90 text-white"
-                >
-                  Disconnect Wallet
-                </Button>
-              ) : (
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
-                    >
-                      Nexus Wave Bridge
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[850px]">
-                    <DialogHeader>
-                      <DialogTitle className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
-                          NB
-                        </div>
-                        <span className="ml-2">Nexus Wave Bridge</span>
-                      </DialogTitle>
-                      <DialogDescription>
-                        Choose a wallet provider to connect with Nexus.
-                      </DialogDescription>
-                    </DialogHeader>
-                    
-                    <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
-                        <FormField
-                          control={form.control}
-                          name="walletProvider"
-                          render={({ field }) => (
-                            <FormItem className="space-y-3">
-                              <FormLabel>Wallet Provider</FormLabel>
-                              <RadioGroup 
-                                onValueChange={field.onChange} 
-                                defaultValue={field.value}
-                                className="grid grid-cols-2 gap-3"
-                              >
-                                {walletOptions.map(wallet => (
-                                  <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
-                                    <RadioGroupItem value={wallet.id} id={wallet.id} />
-                                    <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
-                                      <div className="flex items-center">
-                                        <Avatar className="h-14 w-14 mr-3">
-                                          <AvatarImage 
-                                            src={wallet.logoUrl} 
-                                            alt={wallet.name} 
-                                            className={`${wallet.circular ? 'rounded-full' : ''}`} 
-                                          />
-                                          <AvatarFallback>{wallet.icon}</AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                          <p className="font-medium">{wallet.name}</p>
-                                          <p className="text-xs text-muted-foreground">{wallet.description}</p>
+              {/* Added mt-4 to increase spacing between text and button */}
+              <div className="mt-4">
+                {isConnected ? (
+                  <Button 
+                    onClick={handleDisconnect}
+                    className="w-full bg-destructive hover:bg-destructive/90 text-white"
+                  >
+                    Disconnect Wallet
+                  </Button>
+                ) : (
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button 
+                        className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
+                      >
+                        Nexus Wave Bridge
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[850px]">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center">
+                          <NBLogo />
+                          <span className="ml-2">Nexus Wave Bridge</span>
+                        </DialogTitle>
+                        <DialogDescription>
+                          Choose a wallet provider to connect with Nexus.
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                          <FormField
+                            control={form.control}
+                            name="walletProvider"
+                            render={({ field }) => (
+                              <FormItem className="space-y-3">
+                                <FormLabel>Wallet Provider</FormLabel>
+                                <RadioGroup 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                  className="grid grid-cols-2 gap-3"
+                                >
+                                  {walletOptions.map(wallet => (
+                                    <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
+                                      <RadioGroupItem value={wallet.id} id={wallet.id} />
+                                      <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <Avatar className="h-14 w-14 mr-3">
+                                            <AvatarImage 
+                                              src={wallet.logoUrl} 
+                                              alt={wallet.name} 
+                                              className={`${wallet.circular ? 'rounded-full' : ''}`} 
+                                            />
+                                            <AvatarFallback>{wallet.icon}</AvatarFallback>
+                                          </Avatar>
+                                          <div>
+                                            <p className="font-medium">{wallet.name}</p>
+                                            <p className="text-xs text-muted-foreground">{wallet.description}</p>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </Label>
-                                  </div>
-                                ))}
-                              </RadioGroup>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <div className="flex justify-end gap-3 pt-2">
-                          <DialogClose asChild>
-                            <Button variant="outline" type="button">Cancel</Button>
-                          </DialogClose>
-                          <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
-                            Connect
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              )}
+                                      </Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="flex justify-end gap-3 pt-2">
+                            <DialogClose asChild>
+                              <Button variant="outline" type="button">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
+                              Connect
+                            </Button>
+                          </div>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>
