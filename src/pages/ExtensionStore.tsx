@@ -21,6 +21,9 @@ const ExtensionStore: React.FC = () => {
   
   // Get unique categories from extensions
   const categories = ["all", ...new Set(extensionsData.map(ext => ext.category))];
+  
+  // Add favorites filter
+  const favoriteExtensions = extensions.filter(ext => ext.featured);
 
   // Filter extensions based on search query, active category, and tab
   const filteredExtensions = extensions.filter(extension => {
@@ -33,7 +36,8 @@ const ExtensionStore: React.FC = () => {
     const matchesTab = 
       activeTab === "all" || 
       (activeTab === "installed" && extension.installed) ||
-      (activeTab === "featured" && extension.featured);
+      (activeTab === "featured" && extension.featured) ||
+      (activeTab === "favorites" && extension.featured); // Using featured as favorites for demo
     
     return matchesSearch && matchesCategory && matchesTab;
   });
@@ -77,43 +81,49 @@ const ExtensionStore: React.FC = () => {
         <ExtensionStats extensions={extensions} />
         
         {/* Tabs and search controls */}
-        <div className="mt-8">
+        <div className="mt-6">
           <Tabs 
             defaultValue="all" 
             value={activeTab} 
             onValueChange={setActiveTab} 
             className="w-full"
           >
-            <div className="flex flex-col gap-4">
-              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700 w-full justify-start">
+            <div className="flex flex-col gap-3">
+              <TabsList className="h-10 bg-muted/40 rounded-md border border-border w-full justify-start">
                 <TabsTrigger 
                   value="all" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                 >
-                  All Extensions
+                  All
                 </TabsTrigger>
                 <TabsTrigger 
                   value="installed" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                 >
                   Installed
                 </TabsTrigger>
                 <TabsTrigger 
+                  value="favorites" 
+                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                >
+                  Favorites
+                </TabsTrigger>
+                <TabsTrigger 
                   value="featured" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                 >
                   Featured
                 </TabsTrigger>
                 <TabsTrigger 
                   value="beta" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                 >
                   Beta
                 </TabsTrigger>
                 <TabsTrigger 
                   value="admin" 
                   onClick={handleAdminNavigation} 
-                  className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors rounded-md"
+                  className="text-sm px-4 py-2 bg-nexus-purple/10 hover:bg-nexus-purple/30 transition-colors rounded"
                 >
                   Admin
                 </TabsTrigger>
@@ -147,6 +157,14 @@ const ExtensionStore: React.FC = () => {
             <TabsContent value="installed" className="mt-6 p-0">
               <ExtensionList 
                 extensions={extensions.filter(ext => ext.installed)} 
+                viewMode={viewMode} 
+                onInstall={handleInstall} 
+              />
+            </TabsContent>
+            
+            <TabsContent value="favorites" className="mt-6 p-0">
+              <ExtensionList 
+                extensions={favoriteExtensions} 
                 viewMode={viewMode} 
                 onInstall={handleInstall} 
               />

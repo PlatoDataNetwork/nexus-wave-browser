@@ -30,12 +30,12 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
   setViewMode
 }) => {
   return (
-    <div className="flex items-center gap-3 w-full">
+    <div className="flex items-center gap-2 w-full">
       <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input 
           placeholder="Search extensions..." 
-          className="pl-10 h-11 text-base"
+          className="pl-10 h-9 text-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -43,8 +43,8 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="h-11 px-4 gap-2">
-            <Filter className="h-5 w-5" />
+          <Button variant="outline" className="h-9 px-3 gap-1 text-sm">
+            <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">Filter</span>
           </Button>
         </DropdownMenuTrigger>
@@ -67,16 +67,16 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
         <Button 
           variant={viewMode === "grid" ? "default" : "outline"}
           onClick={() => setViewMode("grid")} 
-          className="h-11 rounded-none border-0 px-4"
+          className={`h-9 rounded-none border-0 px-2 ${viewMode === "grid" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
         >
-          <Grid2x2 className="h-5 w-5" />
+          <Grid2x2 className="h-4 w-4" />
         </Button>
         <Button 
           variant={viewMode === "list" ? "default" : "outline"}
           onClick={() => setViewMode("list")} 
-          className="h-11 rounded-none border-0 border-l border-input px-4"
+          className={`h-9 rounded-none border-0 border-l border-input px-2 ${viewMode === "list" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
         >
-          <List className="h-5 w-5" />
+          <List className="h-4 w-4" />
         </Button>
       </div>
     </div>
