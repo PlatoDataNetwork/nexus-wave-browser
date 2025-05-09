@@ -1,30 +1,54 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 
 interface ExtensionCardProps {
   extension: Extension;
   onInstall: () => void;
+  onToggleFavorite?: () => void;
 }
 
-const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall }) => {
+const ExtensionCard: React.FC<ExtensionCardProps> = ({ 
+  extension, 
+  onInstall,
+  onToggleFavorite 
+}) => {
   const { id, name, description, category, rating, installed, featured, icon: Icon, iconBg, version } = extension;
+  const [isFavorite, setIsFavorite] = useState(extension.featured || false);
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+    if (onToggleFavorite) {
+      onToggleFavorite();
+    }
+  };
 
   return (
     <Card className={`overflow-hidden transition-all hover:shadow-md ${featured ? 'border-nexus-purple/40 bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
-        <div className="flex items-start space-x-3">
-          <div className={`h-12 w-12 rounded-md flex items-center justify-center ${iconBg}`}>
-            {Icon && <Icon className="h-6 w-6 text-white" />}
+        <div className="flex items-start justify-between">
+          <div className="flex items-start space-x-3">
+            <div className={`h-12 w-12 rounded-md flex items-center justify-center ${iconBg}`}>
+              {Icon && <Icon className="h-6 w-6 text-white" />}
+            </div>
+            <div>
+              <h3 className="font-medium text-lg line-clamp-1">{name}</h3>
+              <div className="text-xs text-muted-foreground">v{version}</div>
+            </div>
           </div>
-          <div>
-            <h3 className="font-medium text-lg line-clamp-1">{name}</h3>
-            <div className="text-xs text-muted-foreground">v{version}</div>
-          </div>
+          <button
+            onClick={handleFavoriteClick}
+            className="text-muted-foreground hover:text-nexus-purple transition-colors"
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
+            />
+          </button>
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-2">

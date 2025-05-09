@@ -62,6 +62,24 @@ const ExtensionStore: React.FC = () => {
       });
     }
   };
+  
+  const handleToggleFavorite = (id: number) => {
+    setExtensions(
+      extensions.map(ext => 
+        ext.id === id ? { ...ext, featured: !ext.featured } : ext
+      )
+    );
+    
+    const extension = extensions.find(ext => ext.id === id);
+    if (extension) {
+      toast({
+        title: extension.featured ? "Removed from favorites" : "Added to favorites",
+        description: extension.featured 
+          ? `${extension.name} has been removed from your favorites` 
+          : `${extension.name} has been added to your favorites`,
+      });
+    }
+  };
 
   return (
     <PageLayout includeFooter={false}>
@@ -196,7 +214,8 @@ const ExtensionStore: React.FC = () => {
               <ExtensionList 
                 extensions={filteredExtensions} 
                 viewMode={viewMode} 
-                onInstall={handleInstall} 
+                onInstall={handleInstall}
+                onToggleFavorite={handleToggleFavorite}
               />
             )}
           </div>
