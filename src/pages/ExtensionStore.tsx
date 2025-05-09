@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -69,35 +70,6 @@ const ExtensionStore: React.FC = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
           Nexus Wave Extension Library
         </h1>
-
-        {/* Stats Cards - Restyled to match image */}
-        {activeTab !== "admin" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {/* Available */}
-            <div className="bg-[#2a1e48] rounded-lg p-6">
-              <div className="text-sm font-medium mb-2">Available</div>
-              <div className="text-4xl font-bold">{extensions.length}</div>
-            </div>
-            
-            {/* Installed */}
-            <div className="bg-[#1e2a48] rounded-lg p-6">
-              <div className="text-sm font-medium mb-2">Installed</div>
-              <div className="text-4xl font-bold">{extensions.filter(ext => ext.installed).length}</div>
-            </div>
-            
-            {/* Featured */}
-            <div className="bg-[#3a1e38] rounded-lg p-6">
-              <div className="text-sm font-medium mb-2">Featured</div>
-              <div className="text-4xl font-bold">{extensions.filter(ext => ext.featured).length}</div>
-            </div>
-            
-            {/* Security */}
-            <div className="bg-[#1e3a38] rounded-lg p-6">
-              <div className="text-sm font-medium mb-2">Security</div>
-              <div className="text-4xl font-bold">{extensions.filter(ext => ext.category === "Security").length}</div>
-            </div>
-          </div>
-        )}
         
         {/* Tabs and search controls - restyled to match image */}
         <div className="mt-6">
