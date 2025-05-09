@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, LayoutGrid, List, Filter } from "lucide-react";
 
 interface ExtensionTabBarProps {
   activeTab: string;
@@ -89,9 +89,7 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
         
         {/* Filter Button */}
         <button className="bg-[#151515] text-white px-4 py-3 rounded-lg flex items-center space-x-2">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 6H21M7 12H17M11 18H13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <Filter className="h-5 w-5" />
           <span>Filter</span>
         </button>
         
@@ -101,21 +99,16 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
             <button
               className={`p-3 ${viewMode === 'grid' ? 'bg-nexus-purple' : 'bg-transparent'}`}
               onClick={() => setViewMode('grid')}
+              aria-label="Grid view"
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="3" width="6" height="6" rx="1" stroke="white" strokeWidth="2"/>
-                <rect x="3" y="11" width="6" height="6" rx="1" stroke="white" strokeWidth="2"/>
-                <rect x="11" y="3" width="6" height="6" rx="1" stroke="white" strokeWidth="2"/>
-                <rect x="11" y="11" width="6" height="6" rx="1" stroke="white" strokeWidth="2"/>
-              </svg>
+              <LayoutGrid className="h-5 w-5 text-white" />
             </button>
             <button
               className={`p-3 ${viewMode === 'list' ? 'bg-nexus-purple' : 'bg-transparent'}`}
               onClick={() => setViewMode('list')}
+              aria-label="List view"
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 5H17M3 10H17M3 15H17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+              <List className="h-5 w-5 text-white" />
             </button>
           </div>
         )}

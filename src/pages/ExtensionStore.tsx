@@ -8,7 +8,7 @@ import ExtensionList from "@/components/Extensions/ExtensionList";
 import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
-import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
+import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
 import { Button } from "@/components/ui/button";
 
 const ExtensionStore: React.FC = () => {
@@ -37,6 +37,9 @@ const ExtensionStore: React.FC = () => {
     if (category) {
       setActiveCategory(category);
     }
+    
+    // Reset extensions to ensure they're properly loaded
+    setExtensions([...extensionsData, ...betaExtensionsData]);
   }, [location.search]);
   
   // Get unique categories from extensions
@@ -176,11 +179,30 @@ const ExtensionStore: React.FC = () => {
         </div>
       </div>
       
-      {/* New navigation bar */}
-      <ExtensionNavBar
+      {/* Tab & Category navigation */}
+      <ExtensionTabBar 
         activeTab={activeTab}
         setActiveTab={handleTabChange}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
       />
+
+      {/* Category filters */}
+      <div className="flex flex-wrap gap-2 mt-4 mb-6">
+        {categories.map((category) => (
+          <Button
+            key={category}
+            size="sm"
+            variant={activeCategory === category ? "default" : "outline"}
+            className={activeCategory === category ? "bg-nexus-purple text-white" : ""}
+            onClick={() => handleCategoryChange(category)}
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
       
       {/* Extension Content based on active tab */}
       <div className="mt-6">
