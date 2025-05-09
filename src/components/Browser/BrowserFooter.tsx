@@ -55,10 +55,12 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
     });
   };
 
-  // Check if we're on the extension store page
+  // Improved check for extension store page
   const isExtensionStoreActive = 
     location.pathname === '/extension-store' || 
-    (location.pathname === '/' && onNavigate && location.search.includes('extension-store'));
+    (location.pathname === '/' && onNavigate && 
+     (window.location.href.includes('extension-store') || 
+      window.location.search.includes('extension-store')));
   
   console.log("Current path:", location.pathname);
   console.log("Is extension store active?", isExtensionStoreActive);

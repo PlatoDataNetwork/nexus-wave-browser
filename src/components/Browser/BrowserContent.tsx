@@ -96,8 +96,10 @@ const ProtocolTicker: React.FC = () => {
 const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate }) => {
   const isHomepage = currentUrl === initialTabs[0].url;
   
-  // Fix the extension store URL comparison
-  const isExtensionStore = currentUrl === "/extension-store";
+  // Fix the extension store URL detection logic
+  const isExtensionStore = currentUrl === "/extension-store" || 
+                           currentUrl.includes("/extension-store") ||
+                           currentUrl.endsWith("extension-store");
   
   console.log("Current URL:", currentUrl);
   console.log("Is Extension Store?", isExtensionStore);
