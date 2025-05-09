@@ -28,7 +28,6 @@ const App = () => (
           <Route path="/documentation" element={<Index defaultUrl="/documentation" />} />
           <Route path="/history" element={<Index defaultUrl="/history" />} />
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-          <Route path="/extension-browser" element={<Index defaultUrl="/extension-store" />} />
           
           {/* Fallback route */}
           <Route path="*" element={<PageLayout includeFooter={true}><NotFound /></PageLayout>} />

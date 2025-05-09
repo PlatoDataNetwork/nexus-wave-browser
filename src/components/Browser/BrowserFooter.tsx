@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,15 +47,13 @@ const BrowserFooter: React.FC<{
   const handleExtensionStoreClick = () => {
     console.log("Extension store clicked, navigating");
     
-    // Use onNavigate for within-browser navigation if available
+    // Fix the navigation to extension store
     if (onNavigate) {
       onNavigate("/extension-store");
     } else {
-      // Fall back to router navigation
-      navigate('/extension-store?tab=all');
+      navigate('/extension-store');
     }
     
-    // Show a toast to confirm the action
     toast({
       title: "Opening Extension Store",
       description: "Loading the Nexus Wave Extension Store"
@@ -66,10 +63,9 @@ const BrowserFooter: React.FC<{
   // Improved check for extension store page
   const isExtensionStoreActive = 
     location.pathname === '/extension-store' || 
-    (location.pathname === '/' && onNavigate && 
-     (window.location.href.includes('extension-store') || 
-      window.location.search.includes('extension-store')));
+    (location.pathname === '/' && currentUrl?.includes('extension-store'));
   
+  // Add a debug log to help troubleshoot
   console.log("Current path:", location.pathname);
   console.log("Is extension store active?", isExtensionStoreActive);
 

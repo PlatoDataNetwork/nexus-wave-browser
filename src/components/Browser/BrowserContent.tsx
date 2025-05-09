@@ -36,29 +36,43 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     // Log the current URL for debugging
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 
-    // Check for relative URLs first
+    // First check for internal app routes
     if (currentUrl === '/history') {
       return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
     }
     
-    // Parse the URL for other routes
+    if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
+      return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
+    }
+    
+    if (currentUrl === '/documentation') {
+      return <PageLayout includeFooter={true} onNavigate={onNavigate}><Documentation /></PageLayout>;
+    }
+    
+    if (currentUrl === '/settings') {
+      return <PageLayout includeFooter={true} onNavigate={onNavigate}><Settings /></PageLayout>;
+    }
+    
+    // Parse the URL for other routes that might include protocol
     try {
       const url = new URL(currentUrl, window.location.origin);
       
-      // Check for special internal URLs
+      // Check for special internal URLs with protocol
       if (url.pathname === '/documentation') {
         return <PageLayout includeFooter={true} onNavigate={onNavigate}><Documentation /></PageLayout>;
       } else if (url.pathname === '/settings') {
         return <PageLayout includeFooter={true} onNavigate={onNavigate}><Settings /></PageLayout>;
       } else if (url.pathname === '/extension-store') {
         return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
+      } else if (url.pathname === '/history') {
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
       }
     } catch (error) {
       console.error("Invalid URL:", currentUrl);
       // Continue with default rendering for invalid URLs
     }
 
-    // Default content rendering
+    // Default content rendering for home or unknown pages
     return (
       <PageLayout includeFooter={true} onNavigate={onNavigate}>
         <div className="flex flex-col items-center justify-center h-full pt-8">
