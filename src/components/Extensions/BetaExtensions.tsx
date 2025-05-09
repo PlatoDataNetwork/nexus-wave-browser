@@ -11,7 +11,7 @@ import {
   Globe, 
   Lock,
   MessagesSquare, 
-  Robot, 
+  Bot, 
   ShieldAlert, 
   Sparkles, 
   Tv
@@ -94,7 +94,7 @@ const betaExtensions: BetaExtensionProps[] = [
   {
     name: "Automated Tester",
     description: "Run accessibility, performance, and security tests on any webpage instantly",
-    icon: Robot,
+    icon: Bot,
     iconBg: "bg-teal-600",
     category: "Developer",
     estimatedRelease: "September 2025",
