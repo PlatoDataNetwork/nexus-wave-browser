@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -178,7 +179,7 @@ const ExtensionStore: React.FC = () => {
           <div className="text-4xl font-bold">{extensionCounts.installed}</div>
         </div>
         <div className="bg-[#3a1e38] rounded-lg p-6">
-          <div className="text-sm font-medium mb-2">Crypto / Web3</div>
+          <div className="text-sm font-medium mb-2">Web3 & Crypto</div>
           <div className="text-4xl font-bold">{extensionCounts.cryptoWeb3}</div>
         </div>
         <div className="bg-[#1e3a38] rounded-lg p-6">
