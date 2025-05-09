@@ -1,4 +1,3 @@
-
 import { 
   Shield, 
   Lock, 
@@ -36,7 +35,11 @@ import {
   Share2, 
   Settings, 
   KeyRound, 
-  LucideIcon  
+  LucideIcon,
+  MessageSquare, 
+  Search as SearchIcon, 
+  BarChart, 
+  Gamepad
 } from "lucide-react";
 
 export interface Extension {
@@ -65,6 +68,9 @@ const iconBackgrounds = [
   "bg-gradient-to-br from-sky-500 to-sky-700",
   "bg-gradient-to-br from-rose-500 to-rose-700",
   "bg-gradient-to-br from-indigo-500 to-indigo-700",
+  "bg-gradient-to-br from-green-500 to-green-700",
+  "bg-gradient-to-br from-orange-500 to-orange-700",
+  "bg-gradient-to-br from-red-500 to-red-700",
 ];
 
 export const extensionsData: Extension[] = [
@@ -500,12 +506,12 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[5]
   },
 
-  // Communication & Social
+  // Communication - Split from "Communication & Social"
   {
     id: 31,
     name: "MailAssistant",
     description: "Smart email notifications, scheduling, templates, and tracking for Gmail and other webmail services with AI response suggestions.",
-    category: "Communication & Social",
+    category: "Communication",
     rating: 4.7,
     users: 1654321,
     installed: true,
@@ -517,23 +523,9 @@ export const extensionsData: Extension[] = [
   },
   {
     id: 32,
-    name: "SocialScheduler",
-    description: "Schedule and post to multiple social media platforms directly from your browser with analytics and content suggestions.",
-    category: "Communication & Social",
-    rating: 4.6,
-    users: 1456789,
-    installed: false,
-    enabled: false,
-    featured: false,
-    version: "3.0.1",
-    icon: Share2,
-    iconBg: iconBackgrounds[6]
-  },
-  {
-    id: 33,
     name: "MeetingManager",
     description: "Video meeting enhancements with automatic note-taking, recording, transcription, and calendar integration.",
-    category: "Communication & Social",
+    category: "Communication",
     rating: 4.5,
     users: 1234567,
     installed: false,
@@ -544,10 +536,10 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[6]
   },
   {
-    id: 34,
+    id: 33,
     name: "NotificationCenter",
     description: "Centralized notification management for all your web apps and services with custom filters and scheduled quiet hours.",
-    category: "Communication & Social",
+    category: "Communication",
     rating: 4.4,
     users: 987654,
     installed: true,
@@ -558,10 +550,10 @@ export const extensionsData: Extension[] = [
     iconBg: iconBackgrounds[6]
   },
   {
-    id: 35,
+    id: 34,
     name: "TranslateNow",
     description: "Instant webpage translation with support for 100+ languages, including offline mode and specialized terminology.",
-    category: "Communication & Social",
+    category: "Communication",
     rating: 4.3,
     users: 852147,
     installed: false,
@@ -570,6 +562,92 @@ export const extensionsData: Extension[] = [
     version: "1.5.7",
     icon: Languages,
     iconBg: iconBackgrounds[6]
+  },
+  {
+    id: 35,
+    name: "ChatConnect",
+    description: "Universal chat platform that connects all your messaging apps into one unified inbox with smart filtering and priority sorting.",
+    category: "Communication",
+    rating: 4.6,
+    users: 1123456,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.4.1",
+    icon: MessageSquare,
+    iconBg: iconBackgrounds[6]
+  },
+
+  // Social - Split from "Communication & Social"
+  {
+    id: 36,
+    name: "SocialScheduler",
+    description: "Schedule and post to multiple social media platforms directly from your browser with analytics and content suggestions.",
+    category: "Social",
+    rating: 4.6,
+    users: 1456789,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "3.0.1",
+    icon: Share2,
+    iconBg: iconBackgrounds[7]
+  },
+  {
+    id: 37,
+    name: "InfluenceTracker",
+    description: "Track your social media growth, engagement metrics, and audience demographics across all major platforms.",
+    category: "Social",
+    rating: 4.5,
+    users: 892345,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.7.3",
+    icon: BarChart4,
+    iconBg: iconBackgrounds[7]
+  },
+  {
+    id: 38,
+    name: "ContentCalendar",
+    description: "Visual calendar for planning and organizing social media content with team collaboration and approval workflows.",
+    category: "Social",
+    rating: 4.4,
+    users: 743218,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "1.9.5",
+    icon: Clock,
+    iconBg: iconBackgrounds[7]
+  },
+  {
+    id: 39,
+    name: "TrendAlert",
+    description: "Get real-time alerts about trending topics and viral content relevant to your interests or business niche.",
+    category: "Social",
+    rating: 4.3,
+    users: 654987,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.2.7",
+    icon: Lightbulb,
+    iconBg: iconBackgrounds[7]
+  },
+  {
+    id: 40,
+    name: "ProfileOptimizer",
+    description: "Optimize your social media profiles with AI-powered suggestions for better visibility and engagement.",
+    category: "Social",
+    rating: 4.2,
+    users: 524863,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.6.4",
+    icon: UserRound,
+    iconBg: iconBackgrounds[7]
   },
 
   // Media & Entertainment
@@ -642,5 +720,221 @@ export const extensionsData: Extension[] = [
     version: "1.7.6",
     icon: CloudRain,
     iconBg: iconBackgrounds[7]
+  },
+
+  // Analytics - New Category
+  {
+    id: 51,
+    name: "TrafficInsight",
+    description: "Comprehensive website analytics with visitor tracking, heatmaps, conversion funnels, and detailed reporting dashboards.",
+    category: "Analytics",
+    rating: 4.8,
+    users: 1456789,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.2.5",
+    icon: BarChart,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 52,
+    name: "EventTracker",
+    description: "Track user interactions and custom events on your website with real-time analytics and behavior flow visualization.",
+    category: "Analytics",
+    rating: 4.7,
+    users: 987456,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.8.3",
+    icon: PieChart,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 53,
+    name: "CompetitorMonitor",
+    description: "Benchmark your website's performance against competitors with side-by-side analytics and traffic comparison reports.",
+    category: "Analytics",
+    rating: 4.6,
+    users: 762345,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.1.7",
+    icon: BarChart4,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 54,
+    name: "ConversionOptimizer",
+    description: "A/B testing tool for optimizing landing pages, forms, and checkout processes with statistical significance reporting.",
+    category: "Analytics",
+    rating: 4.7,
+    users: 654987,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.5.2",
+    icon: BarChart,
+    iconBg: iconBackgrounds[8]
+  },
+  {
+    id: 55,
+    name: "UserJourney",
+    description: "Visualize and analyze customer journeys across your website with path analysis, drop-off points, and improvement suggestions.",
+    category: "Analytics",
+    rating: 4.5,
+    users: 543876,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.9.4",
+    icon: PieChart,
+    iconBg: iconBackgrounds[8]
+  },
+
+  // SEO - New Category
+  {
+    id: 56,
+    name: "SEOAudit",
+    description: "Comprehensive SEO audit tool that analyzes your website and provides actionable recommendations for better search rankings.",
+    category: "SEO",
+    rating: 4.9,
+    users: 1345678,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.5.1",
+    icon: SearchIcon,
+    iconBg: iconBackgrounds[9]
+  },
+  {
+    id: 57,
+    name: "KeywordTracker",
+    description: "Monitor your keyword rankings across search engines and track improvements over time with competitor comparison.",
+    category: "SEO",
+    rating: 4.7,
+    users: 876543,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.6.3",
+    icon: SearchIcon,
+    iconBg: iconBackgrounds[9]
+  },
+  {
+    id: 58,
+    name: "BacklinkAnalyzer",
+    description: "Discover and monitor backlinks pointing to your website with quality assessment and opportunity identification.",
+    category: "SEO",
+    rating: 4.6,
+    users: 765432,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.2.5",
+    icon: Link,
+    iconBg: iconBackgrounds[9]
+  },
+  {
+    id: 59,
+    name: "ContentOptimizer",
+    description: "Analyze and optimize your content for search engines with keyword suggestions, readability checks, and on-page SEO factors.",
+    category: "SEO",
+    rating: 4.8,
+    users: 654321,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.9.7",
+    icon: FileText,
+    iconBg: iconBackgrounds[9]
+  },
+  {
+    id: 60,
+    name: "LocalSEOBooster",
+    description: "Improve your local search presence with business listing management, review monitoring, and local keyword optimization.",
+    category: "SEO",
+    rating: 4.5,
+    users: 543210,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.8.4",
+    icon: SearchIcon,
+    iconBg: iconBackgrounds[9]
+  },
+
+  // Gaming - New Category
+  {
+    id: 61,
+    name: "GameBooster",
+    description: "Optimize your system for gaming with automatic resource allocation, background process management, and performance monitoring.",
+    category: "Gaming",
+    rating: 4.9,
+    users: 2345678,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.7.2",
+    icon: Gamepad,
+    iconBg: iconBackgrounds[10]
+  },
+  {
+    id: 62,
+    name: "StreamOverlay",
+    description: "Customizable overlay for game streaming with viewer interactions, alerts, chat integration, and performance stats.",
+    category: "Gaming",
+    rating: 4.8,
+    users: 1876543,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.8.5",
+    icon: Gamepad,
+    iconBg: iconBackgrounds[10]
+  },
+  {
+    id: 63,
+    name: "GameDeals",
+    description: "Find the best deals on games across multiple platforms with price history tracking, wish list notifications, and discount alerts.",
+    category: "Gaming",
+    rating: 4.7,
+    users: 1654321,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "2.4.3",
+    icon: ShoppingBag,
+    iconBg: iconBackgrounds[10]
+  },
+  {
+    id: 64,
+    name: "AchievementTracker",
+    description: "Track your gaming achievements and progress across multiple gaming platforms in one unified dashboard.",
+    category: "Gaming",
+    rating: 4.6,
+    users: 1432567,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.1.9",
+    icon: Gamepad,
+    iconBg: iconBackgrounds[10]
+  },
+  {
+    id: 65,
+    name: "GameCommunity",
+    description: "Connect with fellow gamers, join communities, and schedule gaming sessions with friends across different platforms.",
+    category: "Gaming",
+    rating: 4.5,
+    users: 1234567,
+    installed: false,
+    enabled: false,
+    featured: false,
+    version: "1.9.6",
+    icon: UserRound,
+    iconBg: iconBackgrounds[10]
   },
 ];
