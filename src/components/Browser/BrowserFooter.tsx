@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield, ChevronUp, ChevronDown, ToggleLeft, ToggleRight } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -13,9 +14,7 @@ import {
 
 const BrowserFooter: React.FC<{ 
   onNavigate?: (url: string) => void,
-  toggleFooter?: () => void,
-  isFooterVisible?: boolean
-}> = ({ onNavigate, toggleFooter, isFooterVisible = true }) => {
+}> = ({ onNavigate }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -172,27 +171,6 @@ const BrowserFooter: React.FC<{
           </TooltipTrigger>
           <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
-        
-        {/* Toggle Footer Button - green like Security with toggle icon */}
-        {toggleFooter && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-7 text-green-500"
-                onClick={toggleFooter}
-              >
-                {isFooterVisible ? 
-                  <ToggleRight className="h-4 w-4 text-white fill-green-500" /> : 
-                  <ToggleLeft className="h-4 w-4 text-white fill-green-500" />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{isFooterVisible ? "Hide footer" : "Show footer"}</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
       </div>
       
       <div className="flex items-center gap-3">
