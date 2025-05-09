@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ interface BetaExtensionProps {
 const betaExtensions: BetaExtensionProps[] = [
   {
     name: "AI Content Detector",
-    description: "Advanced algorithm to detect AI-generated content across websites with high accuracy",
+    description: "Advanced algorithm to detect AI-generated content across websites with high accuracy.",
     icon: Brain,
     iconBg: "bg-indigo-600",
     category: "AI Tools",
@@ -44,7 +43,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Privacy Guardian Pro",
-    description: "Next-generation privacy protection with advanced tracker blocking and fingerprint masking",
+    description: "Next-generation privacy protection with advanced tracker blocking and fingerprint masking.",
     icon: ShieldAlert,
     iconBg: "bg-red-600",
     category: "Security",
@@ -53,7 +52,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Multilingual Assistant",
-    description: "Real-time webpage translation in 50+ languages with contextual understanding",
+    description: "Real-time webpage translation in 50+ languages with contextual understanding.",
     icon: Globe,
     iconBg: "bg-green-600",
     category: "Productivity",
@@ -62,7 +61,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Code Inspector",
-    description: "Analyze and optimize JavaScript, CSS, and HTML in real-time while browsing",
+    description: "Analyze and optimize JavaScript, CSS, and HTML in real-time while browsing.",
     icon: Code,
     iconBg: "bg-blue-600",
     category: "Developer",
@@ -71,7 +70,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Quantum VPN",
-    description: "Built-in VPN service with quantum-resistant encryption protocols",
+    description: "Built-in VPN service with quantum-resistant encryption protocols.",
     icon: Lock,
     iconBg: "bg-purple-600",
     category: "Security",
@@ -80,7 +79,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Smart Screen Reader",
-    description: "Advanced screen reader with natural language processing for better accessibility",
+    description: "Advanced screen reader with natural language processing for better accessibility.",
     icon: Tv,
     iconBg: "bg-yellow-600",
     category: "Accessibility",
@@ -89,7 +88,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Web3 Navigator",
-    description: "Seamless integration with blockchain apps and decentralized services",
+    description: "Seamless integration with blockchain apps and decentralized services.",
     icon: Sparkles,
     iconBg: "bg-orange-600",
     category: "Crypto",
@@ -98,7 +97,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "AI Chat Companion",
-    description: "Context-aware chatbot that helps with research and online tasks",
+    description: "Context-aware chatbot that helps with research and online tasks.",
     icon: MessagesSquare,
     iconBg: "bg-pink-600",
     category: "AI Tools",
@@ -107,7 +106,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Automated Tester",
-    description: "Run accessibility, performance, and security tests on any webpage instantly",
+    description: "Run accessibility, performance, and security tests on any webpage instantly.",
     icon: Bot,
     iconBg: "bg-teal-600",
     category: "Developer",
@@ -116,7 +115,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Vulnerability Scanner",
-    description: "Real-time detection of security vulnerabilities, phishing attempts, and malicious code",
+    description: "Real-time detection of security vulnerabilities, phishing attempts, and malicious code.",
     icon: AlertTriangle,
     iconBg: "bg-amber-600",
     category: "Security",
@@ -126,7 +125,7 @@ const betaExtensions: BetaExtensionProps[] = [
   // Crypto Extensions
   {
     name: "CryptoTracker Pro",
-    description: "Advanced real-time cryptocurrency tracking with price alerts, portfolio analytics and market predictions",
+    description: "Advanced real-time cryptocurrency tracking with price alerts, portfolio analytics and market predictions.",
     icon: Bitcoin,
     iconBg: "bg-gradient-to-br from-amber-500 to-amber-700",
     category: "Crypto",
@@ -135,7 +134,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Blockchain Explorer",
-    description: "Browse and analyze blockchain transactions, smart contracts, and token data with professional-grade tools",
+    description: "Browse and analyze blockchain transactions, smart contracts, and token data with professional-grade tools.",
     icon: BadgeCheck,
     iconBg: "bg-gradient-to-br from-purple-500 to-purple-700",
     category: "Crypto",
@@ -144,7 +143,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "DeFi Dashboard",
-    description: "All-in-one dashboard for DeFi protocols, yield farming analytics, and LP management across chains",
+    description: "All-in-one dashboard for DeFi protocols, yield farming analytics, and LP management across chains.",
     icon: BadgeDollarSign,
     iconBg: "bg-gradient-to-br from-blue-500 to-blue-700",
     category: "Crypto",
@@ -153,7 +152,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "NFT Marketplace Scanner",
-    description: "Track NFT floor prices, rare item listings, and collection statistics with instant alerts for profitable opportunities",
+    description: "Track NFT floor prices, rare item listings, and collection statistics with instant alerts for profitable opportunities.",
     icon: DollarSign,
     iconBg: "bg-gradient-to-br from-emerald-500 to-emerald-700",
     category: "Crypto",
@@ -162,7 +161,7 @@ const betaExtensions: BetaExtensionProps[] = [
   },
   {
     name: "Crypto Tax Assistant",
-    description: "Automated cryptocurrency tax calculation, transaction history export, and tax form preparation for multiple jurisdictions",
+    description: "Automated cryptocurrency tax calculation, transaction history export, and tax form preparation for multiple jurisdictions.",
     icon: BadgeDollarSign,
     iconBg: "bg-gradient-to-br from-sky-500 to-sky-700",
     category: "Crypto",
