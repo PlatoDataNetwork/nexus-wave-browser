@@ -127,13 +127,12 @@ const shortenAddress = (address: string): string => {
 interface WalletConnection {
   created_at: string;
   id: string;
-  is_connected: boolean;
+  is_connected: boolean | null;
   last_connected: string;
   metadata: any; // Using any for Json type
   user_id: string;
   wallet_address: string;
   wallet_provider: string;
-  wallet_name: string; // Updated to be required since we always provide a default
 }
 
 // Extend the Supabase database types to recognize the wallet_name field
@@ -165,7 +164,7 @@ const WalletConnect: React.FC = () => {
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isVisible, setIsVisible] = useState(true);
-  const [walletName, setWalletName] = useState<string>("");
+  const [walletName, setWalletName] = useState<string>("My Wallet");
   const [isEditingName, setIsEditingName] = useState(false);
 
   // Form setup
@@ -226,7 +225,7 @@ const WalletConnect: React.FC = () => {
       setConnectionError(null);
       const { data, error } = await supabase
         .from('wallet_connections')
-        .select('*')
+        .select('*, metadata')  // Explicitly select metadata
         .eq('user_id', userId)
         .eq('is_connected', true)
         .maybeSingle();
@@ -234,12 +233,12 @@ const WalletConnect: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        // Cast data to the interface with wallet_name field
-        const walletData = data as WalletConnection;
+        // Store wallet_name in the metadata field as a workaround
         setIsConnected(true);
-        setActiveWallet(walletData.wallet_provider as WalletProvider);
-        setWalletAddress(walletData.wallet_address);
-        setWalletName(walletData.wallet_name || "My Wallet"); // Use stored name or default
+        setActiveWallet(data.wallet_provider as WalletProvider);
+        setWalletAddress(data.wallet_address);
+        // Extract wallet_name from metadata if it exists, otherwise use default
+        setWalletName(data.metadata?.wallet_name || "My Wallet");
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
@@ -290,16 +289,17 @@ const WalletConnect: React.FC = () => {
       const name = customName || `${getWalletName(provider)}`;
       setWalletName(name);
 
-      // Store wallet connection in Supabase with wallet_name field
+      // Store wallet connection in Supabase with wallet_name in metadata field
       const { error } = await supabase
         .from('wallet_connections')
         .upsert({
           user_id: user.id,
           wallet_provider: provider,
           wallet_address: mockAddress,
-          wallet_name: name,
           is_connected: true,
-          last_connected: new Date().toISOString()
+          last_connected: new Date().toISOString(),
+          // Store wallet_name in the metadata field as a workaround
+          metadata: { wallet_name: name }
         });
 
       if (error) throw error;
@@ -362,11 +362,11 @@ const WalletConnect: React.FC = () => {
     if (!user || !activeWallet) return;
 
     try {
-      // Update wallet name in Supabase
+      // Update wallet name in metadata in Supabase
       const { error } = await supabase
         .from('wallet_connections')
         .update({
-          wallet_name: walletName
+          metadata: { wallet_name: walletName }
         })
         .eq('user_id', user.id)
         .eq('wallet_provider', activeWallet);
