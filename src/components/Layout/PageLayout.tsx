@@ -46,9 +46,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       {/* Show footer button that appears when the footer is hidden */}
       {includeFooter && !isFooterVisible && (
         <Button 
-          variant="ghost" 
           size="sm"
-          className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white rounded-full p-2 shadow-lg"
+          className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md shadow-lg z-50"
           onClick={toggleFooter}
         >
           Show Footer
