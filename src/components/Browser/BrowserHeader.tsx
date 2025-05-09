@@ -32,11 +32,20 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   canGoBack,
   canGoForward
 }) => {
-  // Ensure navigation handler works reliably
+  // Ensure navigation handler properly handles URLs
   const handleNavigate = (url: string) => {
     console.log(`BrowserHeader: Navigation requested to ${url}`);
-    // Use setTimeout to ensure React state updates properly
-    setTimeout(() => onNavigate(url), 50);
+    
+    // Format URL if needed
+    let formattedUrl = url;
+    
+    // If URL doesn't start with http(s):// or /, add https://
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      formattedUrl = `https://${url}`;
+    }
+    
+    // Pass the formatted URL to the navigation handler
+    onNavigate(formattedUrl);
   };
 
   return (

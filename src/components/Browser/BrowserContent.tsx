@@ -54,46 +54,10 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       return <SettingsDocumentation />;
     }
     
-    // For external URLs (with protocol), use the WebviewFrame
-    if (isExternalUrl(currentUrl)) {
-      console.log(`Rendering WebviewFrame for external URL: ${currentUrl}`);
-      toast.info(`Displaying content from: ${currentUrl.replace(/^https?:\/\//, '')}`);
-      return (
-        <div className="h-full w-full flex-1 overflow-hidden">
-          <WebviewFrame url={currentUrl} />
-        </div>
-      );
-    }
-
-    // Default content rendering for home or unknown pages
+    // For external URLs (with protocol) or any other URL, use the WebviewFrame
     return (
-      <div className="flex flex-col items-center justify-center h-full pt-8">
-        <h1 className="text-2xl font-bold text-center mb-4">
-          Welcome to Nexus Wave Browser!
-        </h1>
-        <p className="text-muted-foreground text-center mb-8">
-          Explore the decentralized web with confidence.
-        </p>
-        <Card className="w-4/5 max-w-md nexus-glass border-none shadow-none">
-          <CardHeader>
-            <CardTitle>Web3 Analytics Platform</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Analyze blockchain data, track NFT trends, and discover DeFi
-              protocols.
-            </p>
-            <Button
-              variant="secondary"
-              className="mt-4 w-full"
-              onClick={() => {
-                onNavigate("https://platodata.io/analytics");
-              }}
-            >
-              Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="h-full w-full flex-1 overflow-hidden">
+        <WebviewFrame url={currentUrl} />
       </div>
     );
   };
