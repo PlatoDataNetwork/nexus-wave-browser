@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -223,8 +224,10 @@ const BetaExtensions: React.FC = () => {
     <div className="space-y-8">
       <div className="bg-gradient-to-r from-purple-800/20 via-nexus-purple/20 to-nexus-light-purple/20 p-6 rounded-lg border border-purple-500/30">
         <h2 className="text-xl font-semibold mb-2">Nexus Wave Beta Program</h2>
-        <p className="text-muted-foreground mb-4">
+        <p className="text-muted-foreground mb-2">
           Get early access to experimental extensions before they're released to the public.
+        </p>
+        <p className="text-muted-foreground mb-4">
           These extensions are still under development and may contain bugs or limited functionality.
         </p>
         <div className="flex items-center text-sm text-muted-foreground">
