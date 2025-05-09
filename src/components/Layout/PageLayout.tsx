@@ -2,6 +2,7 @@
 import React from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNavigate } from "react-router-dom";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   includeFooter = true, 
   onNavigate 
 }) => {
+  const navigate = useNavigate();
+  
+  // Create a navigation handler to use with the footer
+  const handleNavigate = (url: string) => {
+    if (onNavigate) {
+      onNavigate(url);
+    } else {
+      navigate(url);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -22,7 +34,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       </ScrollArea>
       
-      {includeFooter && <BrowserFooter onNavigate={onNavigate} />}
+      {includeFooter && <BrowserFooter onNavigate={handleNavigate} />}
     </div>
   );
 };
