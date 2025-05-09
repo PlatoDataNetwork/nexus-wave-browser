@@ -1,10 +1,12 @@
 
-import React from "react";
+import React, { useState } from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
+import { ChevronUp, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -24,6 +26,12 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     canGoBack,
     canGoForward
   } = useTabs(defaultUrl);
+
+  const [footerVisible, setFooterVisible] = useState(true);
+  
+  const toggleFooter = () => {
+    setFooterVisible(prev => !prev);
+  };
 
   // Debug log to check what URL is being loaded initially
   console.log("Index component rendering with defaultUrl:", defaultUrl);
@@ -58,8 +66,20 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
       </div>
       
-      {/* Make sure the footer is explicitly rendered in the Index component */}
-      <BrowserFooter onNavigate={navigateToUrl} />
+      {/* Footer toggle button */}
+      <div className="flex justify-center">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={toggleFooter}
+          className="h-6 my-1 rounded-full bg-muted/50 hover:bg-muted"
+        >
+          {footerVisible ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+        </Button>
+      </div>
+      
+      {/* Only show footer if visible */}
+      {footerVisible && <BrowserFooter onNavigate={navigateToUrl} />}
       
       <CustomToaster position="bottom-right" />
     </div>
