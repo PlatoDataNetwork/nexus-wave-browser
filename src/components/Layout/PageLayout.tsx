@@ -11,11 +11,11 @@ interface PageLayoutProps {
 const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true }) => {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
+      <ScrollArea className="flex-1">
+        <div className="p-4">
           {children}
-        </ScrollArea>
-      </div>
+        </div>
+      </ScrollArea>
       {includeFooter && <BrowserFooter />}
     </div>
   );

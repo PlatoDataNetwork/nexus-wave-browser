@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,8 +24,9 @@ const App = () => (
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/extension-store" element={<ExtensionStore />} />
-          {/* Also provide the extension store through the browser interface */}
+          {/* Use the browser interface for the extension store */}
+          <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+          {/* Legacy path, keep it for backward compatibility */}
           <Route path="/extension-browser" element={<Index defaultUrl="/extension-store" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />

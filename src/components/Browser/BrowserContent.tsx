@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import WalletConnect from "./WalletConnect";
 import ExtensionStore from "@/pages/ExtensionStore";
+import PageLayout from "@/components/Layout/PageLayout";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -95,19 +97,19 @@ const ProtocolTicker: React.FC = () => {
 const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate }) => {
   const isHomepage = currentUrl === initialTabs[0].url;
   
-  // Fix the extension store URL detection logic
+  // Improve extension store URL detection logic
   const isExtensionStore = currentUrl === "/extension-store" || 
-                           currentUrl.includes("/extension-store") ||
-                           currentUrl.endsWith("extension-store");
+                          currentUrl.includes("/extension-store") ||
+                          currentUrl.endsWith("extension-store");
   
-  console.log("Current URL:", currentUrl);
+  console.log("Browser Content: Current URL:", currentUrl);
   console.log("Is Extension Store?", isExtensionStore);
 
   return (
     <div className="flex-1 relative overflow-hidden">
-      {/* Show WebviewFrame for regular URLs */}
-      {!isExtensionStore && (
-        <div className="absolute inset-0 overflow-y-auto">
+      {/* Show WebviewFrame for regular URLs (non-extension store) */}
+      {!isExtensionStore && !isHomepage && (
+        <div className="absolute inset-0 overflow-hidden">
           <WebviewFrame url={currentUrl} />
         </div>
       )}
@@ -127,8 +129,10 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
-        <div className="absolute inset-0 h-full overflow-auto">
-          <ExtensionStore />
+        <div className="flex-1 h-full overflow-hidden">
+          <PageLayout includeFooter={false}>
+            <ExtensionStore />
+          </PageLayout>
         </div>
       )}
     </div>

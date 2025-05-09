@@ -4,11 +4,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionList from "@/components/Extensions/ExtensionList";
 import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
-import PageLayout from "@/components/Layout/PageLayout";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
-import BrowserFooter from "@/components/Browser/BrowserFooter";
 import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
-import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
 import { Button } from "@/components/ui/button";
 
@@ -147,7 +144,7 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto w-full bg-black text-white">
+    <div className="w-full">
       {/* Header section */}
       <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
         Nexus Wave Extension Library
