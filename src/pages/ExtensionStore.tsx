@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -156,7 +157,7 @@ const ExtensionStore: React.FC = () => {
       </h1>
       
       {/* Stats Cards - Pass ALL extensions to the stats component */}
-      <ExtensionStats extensions={extensions} />
+      <ExtensionStats extensions={allExtensions} />
       
       {/* Tab & Category navigation */}
       <ExtensionTabBar 

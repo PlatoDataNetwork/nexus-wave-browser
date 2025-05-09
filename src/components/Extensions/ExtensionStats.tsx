@@ -22,6 +22,14 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
     
     console.log("Calculating stats from", extensions.length, "extensions");
     
+    // Count Web3 & Crypto extensions
+    const web3Extensions = extensions.filter(ext => 
+      ext.category === "Web3 & Crypto" || 
+      ext.category === "Crypto" || 
+      ext.category === "Web3"
+    );
+    console.log("Web3 & Crypto extensions:", web3Extensions.length);
+    
     // Calculate new stats based on the extensions data
     const newStatsData = [
       { 
@@ -36,18 +44,15 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
       },
       { 
         title: "Web3 & Crypto", 
-        value: extensions.filter(ext => 
-          ext.category === "Web3 & Crypto" || 
-          ext.category === "Crypto" || 
-          ext.category === "Web3"
-        ).length, 
+        value: web3Extensions.length, 
         bgColor: "bg-[#3a1e38]" 
       },
       { 
         title: "Privacy & Security", 
         value: extensions.filter(ext => 
           ext.category === "Privacy & Security" || 
-          ext.category === "Security"
+          ext.category === "Security" ||
+          ext.category === "Privacy"
         ).length, 
         bgColor: "bg-[#1e3a38]" 
       },
@@ -55,7 +60,8 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
         title: "Generative AI", 
         value: extensions.filter(ext => 
           ext.category === "AI" || 
-          ext.category === "AI Tools"
+          ext.category === "AI Tools" ||
+          ext.category === "Generative AI"
         ).length, 
         bgColor: "bg-[#3a1e48]" 
       }
