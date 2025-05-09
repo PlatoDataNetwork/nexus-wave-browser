@@ -67,7 +67,7 @@ const cryptoComLogoUrl = "/lovable-uploads/adb0bf22-cda9-4603-92ba-21ce2b7fe3b8.
 const ledgerLogoUrl = "/lovable-uploads/ddec5898-47c3-4e44-9a00-6b9f4710dc0a.png";
 
 // Phantom logo URL from the newly uploaded image
-const phantomLogoUrl = "/lovable-uploads/2a5f5e84-3a4f-4171-8d8a-f4e2cd03b06c.png";
+const phantomLogoUrl = "/lovable-uploads/8ec3b583-c41f-4c9b-a739-40e657c0801e.png";
 
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
