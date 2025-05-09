@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -39,8 +40,10 @@ const ExtensionStore: React.FC = () => {
     setExtensions([...extensionsData, ...betaExtensionsData]);
   }, [location.search]);
   
-  // Get unique categories from extensions
-  const categories = ["all", ...new Set([...extensionsData, ...betaExtensionsData].map(ext => ext.category))];
+  // Get unique categories from extensions, excluding "Communication"
+  const categories = ["all", ...new Set([...extensionsData, ...betaExtensionsData]
+    .map(ext => ext.category)
+    .filter(category => category !== "Communication"))];
   
   // Filter extensions based on search query, active category, and tab
   const filteredExtensions = extensions.filter(extension => {
@@ -146,7 +149,7 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <div className="w-full pb-16"> {/* Added padding at the bottom to ensure content doesn't get hidden behind footer */}
+    <div className="w-full pb-16">
       {/* Header section */}
       <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
         Nexus Wave Extension Library
