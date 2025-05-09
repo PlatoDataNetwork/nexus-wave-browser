@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,13 +8,6 @@ import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
-import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const ExtensionStore: React.FC = () => {
@@ -23,7 +15,7 @@ const ExtensionStore: React.FC = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   
@@ -55,10 +47,9 @@ const ExtensionStore: React.FC = () => {
   
   // Get unique categories from extensions, excluding "Communication"
   const categories = useMemo(() => {
-    return [...new Set([...allExtensions]
+    return ["all", ...new Set([...allExtensions]
       .map(ext => ext.category)
-      .filter(category => category !== "Communication"))]
-      .sort(); // Sort categories alphabetically
+      .filter(category => category !== "Communication"))];
   }, [allExtensions]);
   
   // Filter extensions based on search query, active category, and tab
@@ -68,7 +59,7 @@ const ExtensionStore: React.FC = () => {
         extension.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         extension.description.toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesCategory = activeCategory === "" || extension.category === activeCategory;
+      const matchesCategory = activeCategory === "all" || extension.category === activeCategory;
       
       const matchesTab = 
         activeTab === "all" || 
@@ -121,12 +112,12 @@ const ExtensionStore: React.FC = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     
-    // Update URL with the tab parameter
+    // Update URL with the tab and category parameters
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('tab', tab);
     
-    // Only include category if it's not empty
-    if (activeCategory !== "") {
+    // Only include category if it's not "all"
+    if (activeCategory !== "all") {
       searchParams.set('category', activeCategory);
     } else {
       searchParams.delete('category');
@@ -142,8 +133,8 @@ const ExtensionStore: React.FC = () => {
     // Update URL with the category parameter
     const searchParams = new URLSearchParams(location.search);
     
-    // Only include category if it's not empty
-    if (category !== "") {
+    // Only include category if it's not "all"
+    if (category !== "all") {
       searchParams.set('category', category);
     } else {
       searchParams.delete('category');
@@ -167,48 +158,29 @@ const ExtensionStore: React.FC = () => {
       {/* Stats Cards - Ensure we pass ALL extensions to the stats component */}
       <ExtensionStats extensions={allExtensions} />
       
-      {/* Tab navigation and filter dropdown */}
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        {/* Tabs */}
-        <ExtensionTabBar 
-          activeTab={activeTab}
-          setActiveTab={handleTabChange}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
-        />
+      {/* Tab & Category navigation */}
+      <ExtensionTabBar 
+        activeTab={activeTab}
+        setActiveTab={handleTabChange}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
 
-        {/* Category Filter Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button 
-              variant="outline" 
-              className="ml-auto flex items-center gap-2 bg-[#151515] text-white hover:bg-[#252525] border-0"
-            >
-              <Filter className="h-4 w-4" />
-              <span>Filter by Category</span>
-              {activeCategory && <span className="ml-1 text-nexus-purple">: {activeCategory}</span>}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 bg-[#151515] border-nexus-purple/30">
-            <DropdownMenuItem 
-              className="text-white hover:bg-nexus-purple/20 cursor-pointer" 
-              onClick={() => handleCategoryChange("")}
-            >
-              All Categories
-            </DropdownMenuItem>
-            {categories.map((category) => (
-              <DropdownMenuItem 
-                key={category} 
-                className="text-white hover:bg-nexus-purple/20 cursor-pointer"
-                onClick={() => handleCategoryChange(category)}
-              >
-                {category}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* Category filters */}
+      <div className="flex flex-wrap gap-2 mt-4 mb-6">
+        {categories.map((category) => (
+          <Button
+            key={category}
+            size="sm"
+            variant={activeCategory === category ? "default" : "outline"}
+            className={activeCategory === category ? "bg-nexus-purple text-white" : ""}
+            onClick={() => handleCategoryChange(category)}
+          >
+            {category}
+          </Button>
+        ))}
       </div>
       
       {/* Extension Content based on active tab */}
