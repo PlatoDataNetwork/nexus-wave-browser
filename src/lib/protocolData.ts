@@ -12,10 +12,10 @@ export const topProtocols: Protocol[] = [
   { id: "1", name: "Aave", url: "https://aave.com", color: "#B6509E" },
   { id: "2", name: "Algorand", url: "https://algorand.com", color: "#000000" },
   { id: "3", name: "Arbitrum", url: "https://arbitrum.io", color: "#2D374B" },
-  { id: "4", name: "Arweave", url: "https://arweave.org", color: "#F2FCE2" },  // Changed to a soft green color
+  { id: "4", name: "Arweave", url: "https://arweave.org", color: "#E5DEFF" },  // Changed to a lighter color
   { id: "5", name: "Atlas DEX", url: "https://atlasdex.finance", color: "#FF7A00" },
   { id: "6", name: "Avalanche", url: "https://avax.network", color: "#E84142" },
-  { id: "7", name: "Balancer", url: "https://balancer.fi", color: "#FEF7CD" },  // Changed to a soft yellow color
+  { id: "7", name: "Balancer", url: "https://balancer.fi", color: "#D3E4FD" },  // Changed to a lighter color
   { id: "8", name: "Bitcoin", url: "https://bitcoin.org", color: "#F7931A" },
   { id: "9", name: "Cardano", url: "https://cardano.org", color: "#0033AD" },
   { id: "10", name: "Chainlink", url: "https://chain.link", color: "#2A5ADA" },
