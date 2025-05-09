@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,18 +22,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Use Index component for all browser-like routes */}
           <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
-          <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
-          <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          {/* Update the history route to use the browser UI with header */}
+          <Route path="/settings" element={<Index defaultUrl="/settings" />} />
+          <Route path="/documentation" element={<Index defaultUrl="/documentation" />} />
           <Route path="/history" element={<Index defaultUrl="/history" />} />
-          {/* Always use the browser interface for the extension store */}
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-          {/* Legacy path, keep it for backward compatibility */}
           <Route path="/extension-browser" element={<Index defaultUrl="/extension-store" />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />
+          
+          {/* Fallback route */}
+          <Route path="*" element={<PageLayout includeFooter={true}><NotFound /></PageLayout>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

@@ -47,11 +47,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       // Check for special internal URLs
       if (url.pathname === '/documentation') {
-        return <Documentation />;
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><Documentation /></PageLayout>;
       } else if (url.pathname === '/settings') {
-        return <Settings />;
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><Settings /></PageLayout>;
       } else if (url.pathname === '/extension-store') {
-        return <ExtensionStore />;
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
       }
     } catch (error) {
       console.error("Invalid URL:", currentUrl);
@@ -60,43 +60,45 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
     // Default content rendering
     return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <h1 className="text-2xl font-bold text-center mb-4">
-          Welcome to Nexus Wave Browser!
-        </h1>
-        <p className="text-muted-foreground text-center mb-8">
-          Explore the decentralized web with confidence.
-        </p>
-        <Card className="w-4/5 max-w-md nexus-glass animate-pulse-glow border-none shadow-none">
-          <CardHeader>
-            <CardTitle>Web3 Analytics Platform</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Analyze blockchain data, track NFT trends, and discover DeFi
-              protocols.
-            </p>
-            <Button
-              variant="secondary"
-              className="mt-4 w-full"
-              onClick={() => {
-                onNavigate("https://platodata.io/analytics");
-                toast({
-                  title: "Navigating to Platodata Analytics",
-                  description: "Loading Web3 analytics platform...",
-                });
-              }}
-            >
-              Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <PageLayout includeFooter={true} onNavigate={onNavigate}>
+        <div className="flex flex-col items-center justify-center h-full pt-8">
+          <h1 className="text-2xl font-bold text-center mb-4">
+            Welcome to Nexus Wave Browser!
+          </h1>
+          <p className="text-muted-foreground text-center mb-8">
+            Explore the decentralized web with confidence.
+          </p>
+          <Card className="w-4/5 max-w-md nexus-glass border-none shadow-none">
+            <CardHeader>
+              <CardTitle>Web3 Analytics Platform</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Analyze blockchain data, track NFT trends, and discover DeFi
+                protocols.
+              </p>
+              <Button
+                variant="secondary"
+                className="mt-4 w-full"
+                onClick={() => {
+                  onNavigate("https://platodata.io/analytics");
+                  toast({
+                    title: "Navigating to Platodata Analytics",
+                    description: "Loading Web3 analytics platform...",
+                  });
+                }}
+              >
+                Explore Analytics <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </PageLayout>
     );
   };
 
   return (
-    <div className="flex-1 overflow-auto p-4">
+    <div className="flex-1 overflow-auto">
       {isLoading ? (
         <div className="flex items-center justify-center h-full">
           <p className="text-muted-foreground">Loading...</p>

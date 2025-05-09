@@ -1,10 +1,9 @@
 
-import React, { useState } from "react";
+import React from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
-import PageLayout from "@/components/Layout/PageLayout";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -30,7 +29,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
   console.log("Current URL in tabs system:", currentUrl);
 
   return (
-    <div className="flex flex-col h-screen bg-nexus-dark-blue relative">
+    <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar - would be handled by the native window in a real app */}
       <div className="flex items-center justify-center h-8 bg-card border-b border-border nexus-gradient-bg">
         <h1 className="text-xs font-medium">Nexus Wave Browser - Web3 V2.1</h1>
@@ -52,12 +51,10 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           canGoForward={canGoForward()}
         />
         
-        <PageLayout includeFooter={true} onNavigate={navigateToUrl}>
-          <BrowserContent 
-            currentUrl={currentUrl} 
-            onNavigate={navigateToUrl}
-          />
-        </PageLayout>
+        <BrowserContent 
+          currentUrl={currentUrl} 
+          onNavigate={navigateToUrl}
+        />
       </div>
       
       <CustomToaster position="bottom-right" />

@@ -34,14 +34,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full relative">
-      <ScrollArea className="flex-1">
-        <div className="p-4">
+    <div className="flex flex-col h-full">
+      <ScrollArea className="flex-1 h-[calc(100vh-180px)]">
+        <div className="p-4 pb-16">
           {children}
         </div>
       </ScrollArea>
       
-      {includeFooter && isFooterVisible && <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />}
+      {includeFooter && isFooterVisible && (
+        <div className="mt-auto">
+          <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />
+        </div>
+      )}
       
       {/* Show footer button that appears when the footer is hidden */}
       {includeFooter && !isFooterVisible && (
