@@ -9,7 +9,11 @@ interface PageLayoutProps {
   onNavigate?: (url: string) => void;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true, onNavigate }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ 
+  children, 
+  includeFooter = true, 
+  onNavigate 
+}) => {
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -17,7 +21,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true,
           {children}
         </div>
       </ScrollArea>
-      {includeFooter && <BrowserFooter onNavigate={onNavigate} />}
+      {/* Force footer to always be visible */}
+      <BrowserFooter onNavigate={onNavigate} />
     </div>
   );
 };
