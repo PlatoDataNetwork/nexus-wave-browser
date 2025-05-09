@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
-import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock, X } from "lucide-react";
+import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock, X, Edit2, Save } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -28,6 +28,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { 
   Sheet,
   SheetContent,
@@ -135,6 +136,8 @@ const WalletConnect: React.FC = () => {
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isVisible, setIsVisible] = useState(true);
+  const [walletName, setWalletName] = useState<string>("");
+  const [isEditingName, setIsEditingName] = useState(false);
 
   // Form setup
   const form = useForm({
@@ -205,6 +208,7 @@ const WalletConnect: React.FC = () => {
         setIsConnected(true);
         setActiveWallet(data.wallet_provider as WalletProvider);
         setWalletAddress(data.wallet_address);
+        setWalletName(data.wallet_name || "My Wallet"); // Use stored name or default
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
@@ -218,10 +222,11 @@ const WalletConnect: React.FC = () => {
     setActiveWallet(null);
     setWalletAddress('');
     setConnectionError(null);
+    setWalletName("My Wallet");
   };
 
   // Handle connect action
-  const handleConnect = async (provider: WalletProvider) => {
+  const handleConnect = async (provider: WalletProvider, customName?: string) => {
     if (!user) {
       toast.error("Please sign in to connect your wallet");
       return;
@@ -245,10 +250,14 @@ const WalletConnect: React.FC = () => {
         case 'solflare':
           mockAddress = `sol${Math.random().toString(36).substring(2, 12)}${Math.random().toString(36).substring(2, 12)}`;
           break;
-        case 'walletconnect':
+        default:
           mockAddress = `0x${Math.random().toString(36).substring(2, 12)}${Math.random().toString(36).substring(2, 12)}`;
           break;
       }
+
+      // Use the provided custom name or default to the wallet provider name
+      const name = customName || `${getWalletName(provider)}`;
+      setWalletName(name);
 
       // Store wallet connection in Supabase
       const { error } = await supabase
@@ -257,6 +266,7 @@ const WalletConnect: React.FC = () => {
           user_id: user.id,
           wallet_provider: provider,
           wallet_address: mockAddress,
+          wallet_name: name,
           is_connected: true,
           last_connected: new Date().toISOString()
         }, {
@@ -270,7 +280,7 @@ const WalletConnect: React.FC = () => {
       setActiveWallet(provider);
       setWalletAddress(mockAddress);
       
-      toast.success(`Successfully connected to ${getWalletName(provider)}`);
+      toast.success(`Successfully connected to ${name}`);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
       setConnectionError(errorMsg);
@@ -316,7 +326,27 @@ const WalletConnect: React.FC = () => {
   };
 
   const onSubmit = (data: { walletProvider: WalletProvider }) => {
-    handleConnect(data.walletProvider);
+    handleConnect(data.walletProvider, walletName);
+  };
+  
+  const handleSaveWalletName = async () => {
+    if (!user || !activeWallet) return;
+
+    try {
+      // Update wallet name in Supabase
+      const { error } = await supabase
+        .from('wallet_connections')
+        .update({ wallet_name: walletName })
+        .eq('user_id', user.id)
+        .eq('wallet_provider', activeWallet);
+
+      if (error) throw error;
+
+      setIsEditingName(false);
+      toast.success("Wallet name updated");
+    } catch (error) {
+      toast.error(`Failed to update name: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleRepairConnection = async () => {
@@ -462,6 +492,39 @@ const WalletConnect: React.FC = () => {
                 {isConnected && activeWallet && (
                   <div className="pt-2">
                     <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Wallet Name</span>
+                      {isEditingName ? (
+                        <div className="flex items-center">
+                          <Input 
+                            className="h-7 px-2 py-1 text-sm w-32"
+                            value={walletName}
+                            onChange={(e) => setWalletName(e.target.value)}
+                          />
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-7 w-7 ml-1"
+                            onClick={handleSaveWalletName}
+                          >
+                            <Save className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-medium flex items-center">
+                          {walletName}
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-6 w-6 ml-1"
+                            onClick={() => setIsEditingName(true)}
+                          >
+                            <Edit2 className="h-3 w-3" />
+                          </Button>
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Wallet</span>
                       <span className="text-sm font-medium flex items-center">
                         <Avatar className="h-7 w-7 mr-2">
@@ -511,6 +574,39 @@ const WalletConnect: React.FC = () => {
                             </div>
                             
                             <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">Name:</span>
+                                {isEditingName ? (
+                                  <div className="flex items-center">
+                                    <Input 
+                                      className="h-7 px-2 py-1 text-sm w-32"
+                                      value={walletName}
+                                      onChange={(e) => setWalletName(e.target.value)}
+                                    />
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-7 w-7 ml-1"
+                                      onClick={handleSaveWalletName}
+                                    >
+                                      <Save className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <span className="flex items-center">
+                                    {walletName}
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-6 w-6 ml-1"
+                                      onClick={() => setIsEditingName(true)}
+                                    >
+                                      <Edit2 className="h-3 w-3" />
+                                    </Button>
+                                  </span>
+                                )}
+                              </div>
+                              
                               <div className="flex justify-between items-center">
                                 <span className="font-medium">Provider:</span>
                                 <span>{getWalletName(activeWallet!)}</span>
@@ -620,6 +716,18 @@ const WalletConnect: React.FC = () => {
                         
                         <Form {...form}>
                           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                            {/* Custom wallet name input */}
+                            <div className="flex items-center space-x-2 mb-4">
+                              <Label htmlFor="walletName">Your Wallet Name:</Label>
+                              <Input
+                                id="walletName"
+                                value={walletName}
+                                onChange={(e) => setWalletName(e.target.value)}
+                                placeholder="My Wallet"
+                                className="max-w-xs"
+                              />
+                            </div>
+                            
                             <FormField
                               control={form.control}
                               name="walletProvider"
