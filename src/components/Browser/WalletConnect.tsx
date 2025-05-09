@@ -380,7 +380,7 @@ const WalletConnect: React.FC = () => {
               Connect you wallet and transport yourself with Nexus.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col h-[320px]">
             {connectionError && (
               <Alert variant="destructive" className="mb-4">
                 <AlertCircle className="h-4 w-4" />
@@ -409,7 +409,7 @@ const WalletConnect: React.FC = () => {
               </Alert>
             )}
 
-            <div className="space-y-4 flex flex-col h-[220px]">
+            <div className="space-y-4 flex flex-col flex-1">
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Status</span>
@@ -544,102 +544,98 @@ const WalletConnect: React.FC = () => {
                 )}
               </div>
               
-              <div className="mt-auto">
-                <Separator className="mb-4" />
-                
-                {/* Updated wallet support text to match Nexus Wave Bridge white color and made text size larger */}
-                <div className="mb-4">
-                  <p className="text-sm text-justify px-2">
-                    <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
-                    <span className="text-left block">
-                      Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
-                      Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
-                    </span>
-                  </p>
-                </div>
-                
-                {/* Added mt-8 to increase spacing between text and button */}
-                <div className="mt-8">
-                  {isConnected ? (
-                    <Button 
-                      onClick={handleDisconnect}
-                      className="w-full bg-destructive hover:bg-destructive/90 text-white"
-                    >
-                      Disconnect Wallet
-                    </Button>
-                  ) : (
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                      <DialogTrigger asChild>
-                        <Button 
-                          className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
-                        >
-                          Nexus Wave Bridge
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[850px]">
-                        <DialogHeader>
-                          <DialogTitle className="flex items-center">
-                            <NBLogo />
-                            <span className="ml-2">Nexus Wave Bridge</span>
-                          </DialogTitle>
-                          <DialogDescription>
-                            Choose a wallet provider to connect with Nexus.
-                          </DialogDescription>
-                        </DialogHeader>
-                        
-                        <Form {...form}>
-                          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
-                            <FormField
-                              control={form.control}
-                              name="walletProvider"
-                              render={({ field }) => (
-                                <FormItem className="space-y-3">
-                                  <FormLabel>Wallet Provider</FormLabel>
-                                  <RadioGroup 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                    className="grid grid-cols-2 gap-3"
-                                  >
-                                    {walletOptions.map(wallet => (
-                                      <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
-                                        <RadioGroupItem value={wallet.id} id={wallet.id} />
-                                        <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
-                                          <div className="flex items-center">
-                                            <Avatar className="h-14 w-14 mr-3">
-                                              <AvatarImage 
-                                                src={wallet.logoUrl} 
-                                                alt={wallet.name} 
-                                                className={`${wallet.circular ? 'rounded-full' : ''}`} 
-                                              />
-                                              <AvatarFallback>{wallet.icon}</AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                              <p className="font-medium">{wallet.name}</p>
-                                              <p className="text-xs text-muted-foreground">{wallet.description}</p>
-                                            </div>
+              {/* Wallet support text */}
+              <div>
+                <p className="text-sm text-center px-2">
+                  <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
+                  <span className="text-left block">
+                    Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
+                    Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
+                  </span>
+                </p>
+              </div>
+              
+              {/* Moved the button to the bottom with mt-auto to push it to the bottom */}
+              <div className="mt-auto pt-2">
+                {isConnected ? (
+                  <Button 
+                    onClick={handleDisconnect}
+                    className="w-full bg-destructive hover:bg-destructive/90 text-white"
+                  >
+                    Disconnect Wallet
+                  </Button>
+                ) : (
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button 
+                        className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
+                      >
+                        Nexus Wave Bridge
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[850px]">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center">
+                          <NBLogo />
+                          <span className="ml-2">Nexus Wave Bridge</span>
+                        </DialogTitle>
+                        <DialogDescription>
+                          Choose a wallet provider to connect with Nexus.
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                          <FormField
+                            control={form.control}
+                            name="walletProvider"
+                            render={({ field }) => (
+                              <FormItem className="space-y-3">
+                                <FormLabel>Wallet Provider</FormLabel>
+                                <RadioGroup 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                  className="grid grid-cols-2 gap-3"
+                                >
+                                  {walletOptions.map(wallet => (
+                                    <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
+                                      <RadioGroupItem value={wallet.id} id={wallet.id} />
+                                      <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
+                                        <div className="flex items-center">
+                                          <Avatar className="h-14 w-14 mr-3">
+                                            <AvatarImage 
+                                              src={wallet.logoUrl} 
+                                              alt={wallet.name} 
+                                              className={`${wallet.circular ? 'rounded-full' : ''}`} 
+                                            />
+                                            <AvatarFallback>{wallet.icon}</AvatarFallback>
+                                          </Avatar>
+                                          <div>
+                                            <p className="font-medium">{wallet.name}</p>
+                                            <p className="text-xs text-muted-foreground">{wallet.description}</p>
                                           </div>
-                                        </Label>
-                                      </div>
-                                    ))}
-                                  </RadioGroup>
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <div className="flex justify-end gap-3 pt-2">
-                              <DialogClose asChild>
-                                <Button variant="outline" type="button">Cancel</Button>
-                              </DialogClose>
-                              <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
-                                Connect
-                              </Button>
-                            </div>
-                          </form>
-                        </Form>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                </div>
+                                        </div>
+                                      </Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="flex justify-end gap-3 pt-2">
+                            <DialogClose asChild>
+                              <Button variant="outline" type="button">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
+                              Connect
+                            </Button>
+                          </div>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
             </div>
           </CardContent>
