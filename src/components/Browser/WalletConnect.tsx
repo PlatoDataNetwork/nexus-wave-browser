@@ -46,14 +46,6 @@ import { supabase } from "@/integrations/supabase/client";
 // Define wallet types
 type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger';
 
-interface WalletConnection {
-  id?: string;
-  wallet_provider: WalletProvider;
-  wallet_address: string;
-  is_connected: boolean;
-  last_connected?: string;
-}
-
 // Official WalletConnect logo URL
 const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24ea5.png";
 
@@ -68,7 +60,7 @@ const exodusLogoUrl = "/lovable-uploads/ff280ee6-e289-4257-844d-f70c66f6b4cc.png
 
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
-  <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
+  <div className="w-10 h-10 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
     NB
   </div>
 );
@@ -345,303 +337,305 @@ const WalletConnect: React.FC = () => {
   }
 
   return (
-    <Card className="nexus-glass animate-pulse-glow w-full max-w-[700px] transform scale-[1.75] relative">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-medium flex items-center">
-          <div className="flex items-center">
-            <NBLogo />
-            <span className="ml-2">Nexus Wave Bridge</span>
-          </div>
-        </CardTitle>
-        <CardDescription>
-          Connect you wallet and transport yourself with Nexus.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {connectionError && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Connection Error</AlertTitle>
-            <AlertDescription>
-              {connectionError}
-              <div className="mt-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="mr-2"
-                  onClick={() => setIsRepairModalOpen(true)}
-                >
-                  <RefreshCw className="mr-1 h-3 w-3" />
-                  Repair
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={reportIssue}
-                >
-                  Report Issue
-                </Button>
-              </div>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-foreground">Status</span>
-            <span className="text-sm font-medium flex items-center">
-              <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-destructive'} mr-2`}></span>
-              {isConnected ? 'Connected' : 'Disconnected'}
-            </span>
-          </div>
-          
-          {isConnected && activeWallet && (
-            <div className="pt-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Wallet</span>
-                <span className="text-sm font-medium flex items-center">
-                  <Avatar className="h-7 w-7 mr-2">
-                    <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
-                    <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  {getWalletName(activeWallet)}
-                </span>
-              </div>
-              
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-sm text-muted-foreground">Address</span>
-                <span className="text-sm font-medium flex items-center">
-                  {shortenAddress(walletAddress)}
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <Card className="nexus-glass animate-pulse-glow w-[400px] h-[400px] aspect-square">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-medium flex items-center">
+            <div className="flex items-center">
+              <NBLogo />
+              <span className="ml-2">Nexus Wave Bridge</span>
+            </div>
+          </CardTitle>
+          <CardDescription>
+            Connect you wallet and transport yourself with Nexus.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {connectionError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Connection Error</AlertTitle>
+              <AlertDescription>
+                {connectionError}
+                <div className="mt-2">
                   <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-6 w-6 ml-1"
-                    onClick={copyAddress}
+                    variant="outline" 
+                    size="sm" 
+                    className="mr-2"
+                    onClick={() => setIsRepairModalOpen(true)}
                   >
-                    {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    <RefreshCw className="mr-1 h-3 w-3" />
+                    Repair
                   </Button>
-                </span>
-              </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={reportIssue}
+                  >
+                    Report Issue
+                  </Button>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
 
-              <div className="mt-2 flex justify-end">
-                <Sheet open={isDetailsSheetOpen} onOpenChange={setIsDetailsSheetOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="sm" className="text-xs">
-                      Details
-                      <ExternalLink className="ml-1 h-3 w-3" />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Status</span>
+              <span className="text-sm font-medium flex items-center">
+                <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-destructive'} mr-2`}></span>
+                {isConnected ? 'Connected' : 'Disconnected'}
+              </span>
+            </div>
+            
+            {isConnected && activeWallet && (
+              <div className="pt-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Wallet</span>
+                  <span className="text-sm font-medium flex items-center">
+                    <Avatar className="h-7 w-7 mr-2">
+                      <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
+                      <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    {getWalletName(activeWallet)}
+                  </span>
+                </div>
+                
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-sm text-muted-foreground">Address</span>
+                  <span className="text-sm font-medium flex items-center">
+                    {shortenAddress(walletAddress)}
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 ml-1"
+                      onClick={copyAddress}
+                    >
+                      {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Wallet Details</SheetTitle>
-                      <SheetDescription>
-                        View and manage your connected wallet.
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="py-4 space-y-4">
-                      <div className="flex justify-center mb-4">
-                        <Avatar className="h-20 w-20">
-                          <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
-                          <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Provider:</span>
-                          <span>{getWalletName(activeWallet!)}</span>
+                  </span>
+                </div>
+
+                <div className="mt-2 flex justify-end">
+                  <Sheet open={isDetailsSheetOpen} onOpenChange={setIsDetailsSheetOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Details
+                        <ExternalLink className="ml-1 h-3 w-3" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                      <SheetHeader>
+                        <SheetTitle>Wallet Details</SheetTitle>
+                        <SheetDescription>
+                          View and manage your connected wallet.
+                        </SheetDescription>
+                      </SheetHeader>
+                      <div className="py-4 space-y-4">
+                        <div className="flex justify-center mb-4">
+                          <Avatar className="h-20 w-20">
+                            <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
+                            <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
+                          </Avatar>
                         </div>
                         
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Full Address:</span>
-                          <div className="flex items-center gap-1">
-                            <span className="text-sm break-all max-w-[180px]">
-                              {walletAddress}
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">Provider:</span>
+                            <span>{getWalletName(activeWallet!)}</span>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">Full Address:</span>
+                            <div className="flex items-center gap-1">
+                              <span className="text-sm break-all max-w-[180px]">
+                                {walletAddress}
+                              </span>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-6 w-6"
+                                onClick={copyAddress}
+                              >
+                                {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">Connection Status:</span>
+                            <span className="flex items-center">
+                              <span className="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+                              Active
                             </span>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-6 w-6"
-                              onClick={copyAddress}
-                            >
-                              {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                            </Button>
                           </div>
                         </div>
                         
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">Connection Status:</span>
-                          <span className="flex items-center">
-                            <span className="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
-                            Active
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <Separator className="my-4" />
-                      
-                      <Alert>
-                        <AlertTitle>Troubleshooting</AlertTitle>
-                        <AlertDescription>
-                          If you're experiencing issues with your wallet connection, try repairing the connection or reconnecting.
-                        </AlertDescription>
-                      </Alert>
-                      
-                      <SheetFooter className="flex justify-between">
-                        <Button 
-                          variant="outline"
-                          onClick={handleRepairConnection}
-                          className="bg-secondary hover:bg-secondary/80"
-                        >
-                          <RefreshCw className="w-4 h-4 mr-2" />
-                          Repair
-                        </Button>
-                        <Button 
-                          onClick={handleDisconnect}
-                          className="bg-destructive hover:bg-destructive/90 text-white"
-                        >
-                          Disconnect Wallet
-                        </Button>
-                      </SheetFooter>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
-            </div>
-          )}
-          
-          <Separator className="my-2" />
-          
-          {isConnected ? (
-            <Button 
-              onClick={handleDisconnect}
-              className="w-full bg-destructive hover:bg-destructive/90 text-white"
-            >
-              Disconnect Wallet
-            </Button>
-          ) : (
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  className="w-full bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
-                >
-                  Nexus Wave Bridge
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[850px]">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
-                      NB
-                    </div>
-                    <span className="ml-2">Nexus Wave Bridge</span>
-                  </DialogTitle>
-                  <DialogDescription>
-                    Choose a wallet provider to connect with Nexus.
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
-                    <FormField
-                      control={form.control}
-                      name="walletProvider"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Wallet Provider</FormLabel>
-                          <RadioGroup 
-                            onValueChange={field.onChange} 
-                            defaultValue={field.value}
-                            className="grid grid-cols-2 gap-3"
+                        <Separator className="my-4" />
+                        
+                        <Alert>
+                          <AlertTitle>Troubleshooting</AlertTitle>
+                          <AlertDescription>
+                            If you're experiencing issues with your wallet connection, try repairing the connection or reconnecting.
+                          </AlertDescription>
+                        </Alert>
+                        
+                        <SheetFooter className="flex justify-between">
+                          <Button 
+                            variant="outline"
+                            onClick={handleRepairConnection}
+                            className="bg-secondary hover:bg-secondary/80"
                           >
-                            {walletOptions.map(wallet => (
-                              <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
-                                <RadioGroupItem value={wallet.id} id={wallet.id} />
-                                <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
-                                  <div className="flex items-center">
-                                    <Avatar className="h-14 w-14 mr-3">
-                                      <AvatarImage 
-                                        src={wallet.logoUrl} 
-                                        alt={wallet.name} 
-                                        className={`${wallet.circular ? 'rounded-full' : ''}`} 
-                                      />
-                                      <AvatarFallback>{wallet.icon}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                      <p className="font-medium">{wallet.name}</p>
-                                      <p className="text-xs text-muted-foreground">{wallet.description}</p>
-                                    </div>
-                                  </div>
-                                </Label>
-                              </div>
-                            ))}
-                          </RadioGroup>
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <div className="flex justify-end gap-3 pt-2">
-                      <DialogClose asChild>
-                        <Button variant="outline" type="button">Cancel</Button>
-                      </DialogClose>
-                      <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
-                        Connect
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-          )}
-          
-          <div className="pt-2">
-            <p className="text-xs text-muted-foreground">
-              Supports MetaMask, Coinbase Wallet, Ledger, Trezor, Solflare, WalletConnect, Trust Wallet, Phantom and more
-            </p>
-          </div>
-        </div>
-        
-        {/* Repair Connection Modal */}
-        <Dialog open={isRepairModalOpen} onOpenChange={setIsRepairModalOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle className="flex items-center">
-                <NBLogo />
-                <span className="ml-2">Repair Wallet Connection</span>
-              </DialogTitle>
-              <DialogDescription>
-                This will attempt to fix issues with your current wallet connection.
-              </DialogDescription>
-            </DialogHeader>
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                            Repair
+                          </Button>
+                          <Button 
+                            onClick={handleDisconnect}
+                            className="bg-destructive hover:bg-destructive/90 text-white"
+                          >
+                            Disconnect Wallet
+                          </Button>
+                        </SheetFooter>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
+              </div>
+            )}
             
-            <div className="py-4">
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Troubleshooting Steps</AlertTitle>
-                <AlertDescription className="text-xs space-y-2">
-                  <p>1. Check your wallet application is running</p>
-                  <p>2. Make sure you're logged into your wallet</p>
-                  <p>3. Try refreshing the page if issues persist</p>
-                </AlertDescription>
-              </Alert>
-            </div>
+            <Separator className="my-2" />
             
-            <div className="flex justify-end gap-3 pt-2">
-              <DialogClose asChild>
-                <Button variant="outline" type="button">Cancel</Button>
-              </DialogClose>
+            {isConnected ? (
               <Button 
-                onClick={handleRepairConnection}
-                className="bg-[#e5007e] hover:bg-[#e5007e]/90 flex items-center"
+                onClick={handleDisconnect}
+                className="w-full bg-destructive hover:bg-destructive/90 text-white"
               >
-                <NBLogo />
-                <span className="ml-2">Repair Connection</span>
+                Disconnect Wallet
               </Button>
+            ) : (
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    className="w-full bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
+                  >
+                    Nexus Wave Bridge
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[850px]">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center">
+                      <div className="w-8 h-8 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
+                        NB
+                      </div>
+                      <span className="ml-2">Nexus Wave Bridge</span>
+                    </DialogTitle>
+                    <DialogDescription>
+                      Choose a wallet provider to connect with Nexus.
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                      <FormField
+                        control={form.control}
+                        name="walletProvider"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel>Wallet Provider</FormLabel>
+                            <RadioGroup 
+                              onValueChange={field.onChange} 
+                              defaultValue={field.value}
+                              className="grid grid-cols-2 gap-3"
+                            >
+                              {walletOptions.map(wallet => (
+                                <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
+                                  <RadioGroupItem value={wallet.id} id={wallet.id} />
+                                  <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
+                                    <div className="flex items-center">
+                                      <Avatar className="h-14 w-14 mr-3">
+                                        <AvatarImage 
+                                          src={wallet.logoUrl} 
+                                          alt={wallet.name} 
+                                          className={`${wallet.circular ? 'rounded-full' : ''}`} 
+                                        />
+                                        <AvatarFallback>{wallet.icon}</AvatarFallback>
+                                      </Avatar>
+                                      <div>
+                                        <p className="font-medium">{wallet.name}</p>
+                                        <p className="text-xs text-muted-foreground">{wallet.description}</p>
+                                      </div>
+                                    </div>
+                                  </Label>
+                                </div>
+                              ))}
+                            </RadioGroup>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="flex justify-end gap-3 pt-2">
+                        <DialogClose asChild>
+                          <Button variant="outline" type="button">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
+                          Connect
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
+            )}
+            
+            <div className="pt-2">
+              <p className="text-xs text-muted-foreground">
+                Supports MetaMask, Coinbase Wallet, Ledger, Trezor, Solflare, WalletConnect, Trust Wallet, Phantom and more
+              </p>
             </div>
-          </DialogContent>
-        </Dialog>
-      </CardContent>
-    </Card>
+          </div>
+          
+          {/* Repair Connection Modal */}
+          <Dialog open={isRepairModalOpen} onOpenChange={setIsRepairModalOpen}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle className="flex items-center">
+                  <NBLogo />
+                  <span className="ml-2">Repair Wallet Connection</span>
+                </DialogTitle>
+                <DialogDescription>
+                  This will attempt to fix issues with your current wallet connection.
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="py-4">
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Troubleshooting Steps</AlertTitle>
+                  <AlertDescription className="text-xs space-y-2">
+                    <p>1. Check your wallet application is running</p>
+                    <p>2. Make sure you're logged into your wallet</p>
+                    <p>3. Try refreshing the page if issues persist</p>
+                  </AlertDescription>
+                </Alert>
+              </div>
+              
+              <div className="flex justify-end gap-3 pt-2">
+                <DialogClose asChild>
+                  <Button variant="outline" type="button">Cancel</Button>
+                </DialogClose>
+                <Button 
+                  onClick={handleRepairConnection}
+                  className="bg-[#e5007e] hover:bg-[#e5007e]/90 flex items-center"
+                >
+                  <NBLogo />
+                  <span className="ml-2">Repair Connection</span>
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

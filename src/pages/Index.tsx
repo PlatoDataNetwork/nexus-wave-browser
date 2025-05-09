@@ -4,6 +4,7 @@ import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
+import WalletConnect from "@/components/Browser/WalletConnect";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -55,6 +56,9 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           currentUrl={currentUrl} 
           onNavigate={navigateToUrl}
         />
+        
+        {/* Nexus Wave Bridge overlay */}
+        <WalletConnect />
       </div>
       
       <CustomToaster position="bottom-right" />
