@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, Star, Shield } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 
@@ -41,15 +41,15 @@ const ExtensionStats: React.FC<ExtensionStatsProps> = ({ extensions }) => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       {statsData.map((stat, index) => (
         <Card key={index} className={stat.color}>
-          <div className="flex items-center justify-between p-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-              <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
-            </div>
-            <div className="bg-background/80 p-2 rounded-full">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stat.value}</div>
+            <div className="absolute top-4 right-4 bg-background/80 p-2 rounded-full">
               <stat.icon className="h-5 w-5 text-muted-foreground" />
             </div>
-          </div>
+          </CardContent>
         </Card>
       ))}
     </div>

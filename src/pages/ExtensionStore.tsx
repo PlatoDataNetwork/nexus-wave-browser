@@ -69,22 +69,20 @@ const ExtensionStore: React.FC = () => {
     <PageLayout>
       <div className="p-6 max-w-7xl mx-auto w-full">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-            Nexus Wave Extension Library
-          </h1>
-        </div>
+        <h1 className="text-xl md:text-2xl font-semibold mb-6 bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+          Nexus Wave Extension Library
+        </h1>
 
         {/* Stats Cards */}
         <ExtensionStats extensions={extensions} />
         
-        {/* Control bar - all in one line */}
-        <div className="flex items-center justify-between gap-4 mt-6 mb-8">
+        {/* Tabs and search controls */}
+        <div className="mt-8">
           <Tabs 
             defaultValue="all" 
             value={activeTab} 
             onValueChange={setActiveTab} 
-            className="flex-shrink-0 w-full"
+            className="w-full"
           >
             <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
               <TabsTrigger 
@@ -120,6 +118,7 @@ const ExtensionStore: React.FC = () => {
               </TabsTrigger>
             </TabsList>
           
+            {/* Search bar */}
             <div className="flex-grow flex justify-end my-4">
               {activeTab !== "beta" && (
                 <ExtensionSearchBar
