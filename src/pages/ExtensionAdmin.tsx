@@ -26,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { extensionsData } from "@/lib/extensionsData";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
+import BetaExtensions from "@/components/Extensions/BetaExtensions";
 
 const ExtensionAdmin: React.FC = () => {
   const navigate = useNavigate();
@@ -114,11 +115,7 @@ const ExtensionAdmin: React.FC = () => {
 
   // Handle Beta Navigation
   const handleBetaNavigation = () => {
-    toast({
-      title: "Beta Features",
-      description: "Opening Beta Extension Features"
-    });
-    // This could navigate to a beta features page in the future
+    setActiveTab("beta");
   };
 
   const statsData = [
@@ -204,7 +201,7 @@ const ExtensionAdmin: React.FC = () => {
                 <TabsTrigger 
                   value="beta" 
                   onClick={handleBetaNavigation} 
-                  className="text-base px-6 py-2.5 hover:bg-gray-700/80 transition-colors rounded-md"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
                 >
                   Beta
                 </TabsTrigger>
@@ -212,113 +209,308 @@ const ExtensionAdmin: React.FC = () => {
             </Tabs>
             
             <div className="flex-grow flex justify-end">
-              <ExtensionSearchBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                categories={categories}
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-                viewMode={viewMode}
-                setViewMode={setViewMode}
-              />
+              {activeTab !== "beta" && (
+                <ExtensionSearchBar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                  viewMode={viewMode}
+                  setViewMode={setViewMode}
+                />
+              )}
             </div>
           </div>
 
-          {/* Extensions table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Users</TableHead>
-                  <TableHead>Featured</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredExtensions.map((extension) => (
-                  <TableRow key={extension.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center">
-                        <div className={`h-8 w-8 rounded flex items-center justify-center ${extension.iconBg}`}>
-                          {extension.icon && <extension.icon className="h-4 w-4 text-white" />}
+          {/* Content based on active tab */}
+          <TabsContent value="beta" className="mt-0">
+            <BetaExtensions />
+          </TabsContent>
+
+          <TabsContent value="all" className="mt-0">
+            {/* Extensions table */}
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Users</TableHead>
+                    <TableHead>Featured</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExtensions.map((extension) => (
+                    <TableRow key={extension.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center">
+                          <div className={`h-8 w-8 rounded flex items-center justify-center ${extension.iconBg}`}>
+                            {extension.icon && <extension.icon className="h-4 w-4 text-white" />}
+                          </div>
+                          <div className="ml-3">
+                            <div>{extension.name}</div>
+                            <div className="text-xs text-muted-foreground">{extension.version}</div>
+                          </div>
                         </div>
-                        <div className="ml-3">
-                          <div>{extension.name}</div>
-                          <div className="text-xs text-muted-foreground">{extension.version}</div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{extension.category}</Badge>
+                      </TableCell>
+                      <TableCell>{extension.users.toLocaleString()}</TableCell>
+                      <TableCell>
+                        {extension.installed && (
+                          <Switch 
+                            checked={extension.featured} 
+                            onCheckedChange={() => toggleFeatured(extension.id)} 
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {extension.installed ? (
+                          <Switch 
+                            checked={extension.enabled} 
+                            onCheckedChange={() => toggleExtension(extension.id)}
+                          />
+                        ) : (
+                          <Badge variant="outline" className="bg-muted">Not installed</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => toast({
+                                title: "Extension settings",
+                                description: `Opening settings for ${extension.name}`
+                              })}
+                            >
+                              <Settings className="mr-2 h-4 w-4" />
+                              <span>Settings</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(extension.id.toString())}>
+                              Copy ID
+                            </DropdownMenuItem>
+                            {extension.installed && (
+                              <DropdownMenuItem 
+                                className="text-destructive"
+                                onClick={() => uninstallExtension(extension.id)}
+                              >
+                                Uninstall
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {filteredExtensions.length === 0 && (
+              <div className="flex flex-col items-center justify-center p-10 bg-muted/20 rounded-lg border border-dashed mt-6">
+                <Package className="h-10 w-10 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No extensions found</h3>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Try searching for something else or clearing your filters
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="installed" className="mt-0">
+            {/* Reuse the same table but with installedExtensions */}
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Users</TableHead>
+                    <TableHead>Featured</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExtensions.map((extension) => (
+                    <TableRow key={extension.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center">
+                          <div className={`h-8 w-8 rounded flex items-center justify-center ${extension.iconBg}`}>
+                            {extension.icon && <extension.icon className="h-4 w-4 text-white" />}
+                          </div>
+                          <div className="ml-3">
+                            <div>{extension.name}</div>
+                            <div className="text-xs text-muted-foreground">{extension.version}</div>
+                          </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{extension.category}</Badge>
-                    </TableCell>
-                    <TableCell>{extension.users.toLocaleString()}</TableCell>
-                    <TableCell>
-                      {extension.installed && (
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{extension.category}</Badge>
+                      </TableCell>
+                      <TableCell>{extension.users.toLocaleString()}</TableCell>
+                      <TableCell>
                         <Switch 
                           checked={extension.featured} 
                           onCheckedChange={() => toggleFeatured(extension.id)} 
                         />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {extension.installed ? (
+                      </TableCell>
+                      <TableCell>
                         <Switch 
                           checked={extension.enabled} 
                           onCheckedChange={() => toggleExtension(extension.id)}
                         />
-                      ) : (
-                        <Badge variant="outline" className="bg-muted">Not installed</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem 
-                            onClick={() => toast({
-                              title: "Extension settings",
-                              description: `Opening settings for ${extension.name}`
-                            })}
-                          >
-                            <Settings className="mr-2 h-4 w-4" />
-                            <span>Settings</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => navigator.clipboard.writeText(extension.id.toString())}>
-                            Copy ID
-                          </DropdownMenuItem>
-                          {extension.installed && (
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => toast({
+                                title: "Extension settings",
+                                description: `Opening settings for ${extension.name}`
+                              })}
+                            >
+                              <Settings className="mr-2 h-4 w-4" />
+                              <span>Settings</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(extension.id.toString())}>
+                              Copy ID
+                            </DropdownMenuItem>
                             <DropdownMenuItem 
                               className="text-destructive"
                               onClick={() => uninstallExtension(extension.id)}
                             >
                               Uninstall
                             </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-
-          {filteredExtensions.length === 0 && (
-            <div className="flex flex-col items-center justify-center p-10 bg-muted/20 rounded-lg border border-dashed mt-6">
-              <Package className="h-10 w-10 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium">No extensions found</h3>
-              <p className="text-sm text-muted-foreground mt-2">
-                Try searching for something else or clearing your filters
-              </p>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
-          )}
+
+            {filteredExtensions.length === 0 && (
+              <div className="flex flex-col items-center justify-center p-10 bg-muted/20 rounded-lg border border-dashed mt-6">
+                <Package className="h-10 w-10 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No installed extensions found</h3>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Visit the Extension Store to install extensions
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="featured" className="mt-0">
+            {/* Reuse the same table but with featuredExtensions */}
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Users</TableHead>
+                    <TableHead>Featured</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredExtensions.map((extension) => (
+                    <TableRow key={extension.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center">
+                          <div className={`h-8 w-8 rounded flex items-center justify-center ${extension.iconBg}`}>
+                            {extension.icon && <extension.icon className="h-4 w-4 text-white" />}
+                          </div>
+                          <div className="ml-3">
+                            <div>{extension.name}</div>
+                            <div className="text-xs text-muted-foreground">{extension.version}</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{extension.category}</Badge>
+                      </TableCell>
+                      <TableCell>{extension.users.toLocaleString()}</TableCell>
+                      <TableCell>
+                        <Switch 
+                          checked={extension.featured} 
+                          onCheckedChange={() => toggleFeatured(extension.id)} 
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {extension.installed ? (
+                          <Switch 
+                            checked={extension.enabled} 
+                            onCheckedChange={() => toggleExtension(extension.id)}
+                          />
+                        ) : (
+                          <Badge variant="outline" className="bg-muted">Not installed</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => toast({
+                                title: "Extension settings",
+                                description: `Opening settings for ${extension.name}`
+                              })}
+                            >
+                              <Settings className="mr-2 h-4 w-4" />
+                              <span>Settings</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(extension.id.toString())}>
+                              Copy ID
+                            </DropdownMenuItem>
+                            {extension.installed && (
+                              <DropdownMenuItem 
+                                className="text-destructive"
+                                onClick={() => uninstallExtension(extension.id)}
+                              >
+                                Uninstall
+                              </DropdownMenuItem>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {filteredExtensions.length === 0 && (
+              <div className="flex flex-col items-center justify-center p-10 bg-muted/20 rounded-lg border border-dashed mt-6">
+                <Star className="h-10 w-10 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No featured extensions found</h3>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Mark extensions as featured using the toggle
+                </p>
+              </div>
+            )}
+          </TabsContent>
         </div>
       </div>
     </PageLayout>

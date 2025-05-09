@@ -7,6 +7,8 @@ import { extensionsData } from "@/lib/extensionsData";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
 import ExtensionList from "@/components/Extensions/ExtensionList";
+import BetaExtensions from "@/components/Extensions/BetaExtensions";
+import PageLayout from "@/components/Layout/PageLayout";
 
 const ExtensionStore: React.FC = () => {
   const navigate = useNavigate();
@@ -63,91 +65,89 @@ const ExtensionStore: React.FC = () => {
     navigate("/extension-admin");
   };
 
-  // Handle Beta Navigation
-  const handleBetaNavigation = () => {
-    toast({
-      title: "Beta Features",
-      description: "Opening Beta Extension Features"
-    });
-    // For now, just show a toast. Later this could navigate to a beta features page
-  };
-
   return (
-    <div className="p-6 max-w-7xl mx-auto w-full">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-          Nexus Wave Extension Library
-        </h1>
-      </div>
-
-      {/* Stats Cards */}
-      <ExtensionStats extensions={extensions} />
-      
-      {/* Control bar - all in one line */}
-      <div className="flex items-center justify-between gap-4 mt-6 mb-8">
-        <Tabs 
-          defaultValue="all" 
-          value={activeTab} 
-          onValueChange={setActiveTab} 
-          className="flex-shrink-0"
-        >
-          <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
-            <TabsTrigger 
-              value="all" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-            >
-              All Extensions
-            </TabsTrigger>
-            <TabsTrigger 
-              value="installed" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-            >
-              Installed
-            </TabsTrigger>
-            <TabsTrigger 
-              value="featured" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-            >
-              Featured
-            </TabsTrigger>
-            <TabsTrigger 
-              value="beta" 
-              onClick={handleBetaNavigation} 
-              className="text-base px-6 py-2.5 hover:bg-gray-700/80 transition-colors rounded-md"
-            >
-              Beta
-            </TabsTrigger>
-            <TabsTrigger 
-              value="admin" 
-              onClick={handleAdminNavigation} 
-              className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors rounded-md"
-            >
-              Admin
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-        
-        <div className="flex-grow flex justify-end">
-          <ExtensionSearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            categories={categories}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-          />
+    <PageLayout>
+      <div className="p-6 max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+            Nexus Wave Extension Library
+          </h1>
         </div>
-      </div>
 
-      {/* Extensions grid/list */}
-      <ExtensionList 
-        extensions={filteredExtensions} 
-        viewMode={viewMode} 
-        onInstall={handleInstall} 
-      />
-    </div>
+        {/* Stats Cards */}
+        <ExtensionStats extensions={extensions} />
+        
+        {/* Control bar - all in one line */}
+        <div className="flex items-center justify-between gap-4 mt-6 mb-8">
+          <Tabs 
+            defaultValue="all" 
+            value={activeTab} 
+            onValueChange={setActiveTab} 
+            className="flex-shrink-0"
+          >
+            <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
+              <TabsTrigger 
+                value="all" 
+                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+              >
+                All Extensions
+              </TabsTrigger>
+              <TabsTrigger 
+                value="installed" 
+                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+              >
+                Installed
+              </TabsTrigger>
+              <TabsTrigger 
+                value="featured" 
+                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+              >
+                Featured
+              </TabsTrigger>
+              <TabsTrigger 
+                value="beta" 
+                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+              >
+                Beta
+              </TabsTrigger>
+              <TabsTrigger 
+                value="admin" 
+                onClick={handleAdminNavigation} 
+                className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors rounded-md"
+              >
+                Admin
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
+          <div className="flex-grow flex justify-end">
+            {activeTab !== "beta" && (
+              <ExtensionSearchBar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                categories={categories}
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Main content based on active tab */}
+        {activeTab === "beta" ? (
+          <BetaExtensions />
+        ) : (
+          <ExtensionList 
+            extensions={filteredExtensions} 
+            viewMode={viewMode} 
+            onInstall={handleInstall} 
+          />
+        )}
+      </div>
+    </PageLayout>
   );
 };
 
