@@ -10,6 +10,14 @@ interface BookmarksProps {
   onNavigate: (url: string) => void;
 }
 
+// Extend the Bookmark type to include color
+interface EnhancedBookmark {
+  id: string;
+  title: string;
+  url: string;
+  color?: string;
+}
+
 const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -17,7 +25,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     if (!scrollContainerRef.current) return;
     
     const container = scrollContainerRef.current;
-    const scrollAmount = 200; // Increased scroll amount for smoother experience
+    const scrollAmount = 300; // Increase scroll amount for faster navigation
     
     if (direction === "left") {
       container.scrollLeft -= scrollAmount;
@@ -77,11 +85,14 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
   };
 
   // Create a combined and alphabetized list of bookmarks
-  const getAlphabetizedBookmarks = () => {
+  const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     // Create a combined array of bookmarks and protocols
-    const combinedBookmarks = [
-      // Include the original bookmarks
-      ...bookmarks,
+    const combinedBookmarks: EnhancedBookmark[] = [
+      // Include the original bookmarks with added color property
+      ...bookmarks.map(bookmark => ({
+        ...bookmark,
+        color: getColorFromName(bookmark.title)
+      })),
       // Include Alek Bot
       {
         id: "alekbot",
@@ -134,7 +145,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
               key={bookmark.id}
               variant="ghost"
               size="sm"
-              className="flex items-center space-x-2 whitespace-nowrap p-1 h-8 hover:bg-primary/10"
+              className="flex items-center space-x-1 whitespace-nowrap p-1 h-8 hover:bg-primary/10"
               onClick={() => handleBookmarkClick(bookmark.url, bookmark.title)}
             >
               <div 
