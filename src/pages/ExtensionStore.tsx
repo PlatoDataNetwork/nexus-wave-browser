@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -140,12 +139,25 @@ const ExtensionStore: React.FC = () => {
   };
 
   // Calculate extension counts by category for stats
+  // Updated to correctly count crypto/web3, security, and AI extensions
+  const allExtensions = [...extensionsData, ...betaExtensionsData];
+  
   const extensionCounts = {
-    available: extensions.length,
-    installed: extensions.filter(e => e.installed).length,
-    cryptoWeb3: extensions.filter(e => e.category === "Web3 & Crypto" || e.category === "Crypto").length,
-    security: extensions.filter(e => e.category === "Privacy & Security" || e.category === "Security").length,
-    ai: extensions.filter(e => e.category === "AI" || e.category === "AI Tools").length
+    available: allExtensions.length,
+    installed: allExtensions.filter(e => e.installed).length,
+    cryptoWeb3: allExtensions.filter(e => 
+      e.category === "Web3 & Crypto" || 
+      e.category === "Crypto" || 
+      e.category === "Web3"
+    ).length,
+    security: allExtensions.filter(e => 
+      e.category === "Privacy & Security" || 
+      e.category === "Security"
+    ).length,
+    ai: allExtensions.filter(e => 
+      e.category === "AI" || 
+      e.category === "AI Tools"
+    ).length
   };
 
   return (
