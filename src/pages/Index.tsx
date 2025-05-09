@@ -57,7 +57,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           onNavigate={navigateToUrl}
         />
         
-        {/* Nexus Wave Bridge overlay */}
+        {/* Nexus Wave Bridge overlay - centered in the browser */}
         <WalletConnect />
       </div>
       
