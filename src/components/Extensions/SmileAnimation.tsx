@@ -80,8 +80,8 @@ const SmileAnimation: React.FC = () => {
       clearInterval(blinkTimerRef.current);
     }
     
-    // Start countdown
-    setCountdown(3);
+    // Start countdown from 5 instead of 3
+    setCountdown(5);
     
     // Create countdown sequence
     const countdownInterval = setInterval(() => {
