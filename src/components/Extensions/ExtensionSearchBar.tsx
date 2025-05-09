@@ -30,7 +30,7 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
   setViewMode
 }) => {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 w-full md:w-auto">
       <div className="relative flex-grow">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input 
@@ -43,7 +43,7 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="lg" className="h-11 px-4 gap-2">
+          <Button variant="outline" className="h-11 px-4 gap-2">
             <Filter className="h-5 w-5" />
             <span className="hidden sm:inline">Filter</span>
           </Button>

@@ -84,42 +84,42 @@ const ExtensionStore: React.FC = () => {
             onValueChange={setActiveTab} 
             className="w-full"
           >
-            <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
-              <TabsTrigger 
-                value="all" 
-                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-              >
-                All Extensions
-              </TabsTrigger>
-              <TabsTrigger 
-                value="installed" 
-                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-              >
-                Installed
-              </TabsTrigger>
-              <TabsTrigger 
-                value="featured" 
-                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-              >
-                Featured
-              </TabsTrigger>
-              <TabsTrigger 
-                value="beta" 
-                className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
-              >
-                Beta
-              </TabsTrigger>
-              <TabsTrigger 
-                value="admin" 
-                onClick={handleAdminNavigation} 
-                className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors rounded-md"
-              >
-                Admin
-              </TabsTrigger>
-            </TabsList>
-          
-            {/* Search bar */}
-            <div className="flex-grow flex justify-end my-4">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
+                <TabsTrigger 
+                  value="all" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                >
+                  All Extensions
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="installed" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                >
+                  Installed
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="featured" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                >
+                  Featured
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="beta" 
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                >
+                  Beta
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="admin" 
+                  onClick={handleAdminNavigation} 
+                  className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors rounded-md"
+                >
+                  Admin
+                </TabsTrigger>
+              </TabsList>
+              
+              {/* Search bar moved to the same line as tabs */}
               {activeTab !== "beta" && (
                 <ExtensionSearchBar
                   searchQuery={searchQuery}
@@ -134,7 +134,7 @@ const ExtensionStore: React.FC = () => {
             </div>
 
             {/* Content based on active tab */}
-            <TabsContent value="all" className="mt-0 p-0">
+            <TabsContent value="all" className="mt-6 p-0">
               <ExtensionList 
                 extensions={filteredExtensions} 
                 viewMode={viewMode} 
@@ -142,7 +142,7 @@ const ExtensionStore: React.FC = () => {
               />
             </TabsContent>
 
-            <TabsContent value="installed" className="mt-0 p-0">
+            <TabsContent value="installed" className="mt-6 p-0">
               <ExtensionList 
                 extensions={extensions.filter(ext => ext.installed)} 
                 viewMode={viewMode} 
@@ -150,7 +150,7 @@ const ExtensionStore: React.FC = () => {
               />
             </TabsContent>
 
-            <TabsContent value="featured" className="mt-0 p-0">
+            <TabsContent value="featured" className="mt-6 p-0">
               <ExtensionList 
                 extensions={extensions.filter(ext => ext.featured)} 
                 viewMode={viewMode} 
@@ -158,7 +158,7 @@ const ExtensionStore: React.FC = () => {
               />
             </TabsContent>
 
-            <TabsContent value="beta" className="mt-0 p-0">
+            <TabsContent value="beta" className="mt-6 p-0">
               <BetaExtensions />
             </TabsContent>
           </Tabs>
