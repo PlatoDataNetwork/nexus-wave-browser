@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-indigo-600",
     category: "AI Tools",
     estimatedRelease: "June 2025",
+    rating: 4.8,
   },
   {
     name: "Privacy Guardian Pro",
@@ -50,6 +52,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-red-600",
     category: "Security",
     estimatedRelease: "July 2025",
+    rating: 4.7,
   },
   {
     name: "Multilingual Assistant",
@@ -58,6 +61,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-green-600",
     category: "Productivity",
     estimatedRelease: "August 2025",
+    rating: 4.5,
   },
   {
     name: "Code Inspector",
@@ -66,6 +70,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-blue-600",
     category: "Developer",
     estimatedRelease: "June 2025",
+    rating: 4.9,
   },
   {
     name: "Quantum VPN",
@@ -74,6 +79,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-purple-600",
     category: "Security",
     estimatedRelease: "September 2025",
+    rating: 4.6,
   },
   {
     name: "Smart Screen Reader",
@@ -82,6 +88,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-yellow-600",
     category: "Accessibility",
     estimatedRelease: "July 2025",
+    rating: 4.7,
   },
   {
     name: "Web3 Navigator",
@@ -90,6 +97,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-orange-600",
     category: "Crypto",
     estimatedRelease: "August 2025",
+    rating: 4.8,
   },
   {
     name: "AI Chat Companion",
@@ -98,6 +106,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-pink-600",
     category: "AI Tools",
     estimatedRelease: "October 2025",
+    rating: 4.6,
   },
   {
     name: "Automated Tester",
@@ -106,6 +115,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-teal-600",
     category: "Developer",
     estimatedRelease: "September 2025",
+    rating: 4.5,
   },
   {
     name: "Vulnerability Scanner",
@@ -114,6 +124,7 @@ const betaExtensions: BetaExtensionProps[] = [
     iconBg: "bg-amber-600",
     category: "Security",
     estimatedRelease: "November 2025",
+    rating: 4.7,
   },
   // New Crypto Extensions
   {
@@ -216,9 +227,9 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
             {category}
           </Badge>
           {rating && (
-            <div className="flex items-center text-sm">
+            <div className="flex items-center text-sm bg-black/60 px-2 py-1 rounded-md">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-              <span>{rating}</span>
+              <span className="font-medium text-white">{rating}</span>
             </div>
           )}
         </div>
