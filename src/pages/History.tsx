@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -160,8 +159,11 @@ const HistoryPage: React.FC = () => { // Renamed component to HistoryPage
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-2xl font-bold flex items-center gap-2">
-              <HistoryIcon className="h-6 w-6" />
-              Browser History
+              <div className="flex items-center">
+                <span className="text-[#3949AB] mr-2">Nexus Wave V2.1</span>
+                <HistoryIcon className="h-6 w-6" />
+                <span className="ml-1">Browser History</span>
+              </div>
             </CardTitle>
             <Button 
               variant="destructive" 
