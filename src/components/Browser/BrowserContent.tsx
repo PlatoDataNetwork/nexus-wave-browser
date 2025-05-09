@@ -130,7 +130,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
         <div className="flex-1 h-full overflow-hidden">
-          <PageLayout includeFooter={false}>
+          <PageLayout includeFooter={true} onNavigate={onNavigate}>
             <ExtensionStore />
           </PageLayout>
         </div>

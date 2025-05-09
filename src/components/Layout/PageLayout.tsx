@@ -6,9 +6,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 interface PageLayoutProps {
   children: React.ReactNode;
   includeFooter?: boolean;
+  onNavigate?: (url: string) => void;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true, onNavigate }) => {
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -16,7 +17,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children, includeFooter = true 
           {children}
         </div>
       </ScrollArea>
-      {includeFooter && <BrowserFooter />}
+      {includeFooter && <BrowserFooter onNavigate={onNavigate} />}
     </div>
   );
 };

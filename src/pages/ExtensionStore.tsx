@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -145,7 +146,7 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-16"> {/* Added padding at the bottom to ensure content doesn't get hidden behind footer */}
       {/* Header section */}
       <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
         Nexus Wave Extension Library
