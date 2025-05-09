@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Card, 
@@ -55,7 +56,7 @@ const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24
 const trezorLogoUrl = "/lovable-uploads/d66213e3-2f89-41e3-9451-0a8a65847a6f.png";
 
 // Trust Wallet logo URL from the newly uploaded image
-const trustWalletLogoUrl = "/lovable-uploads/840d912c-ae1c-428a-8842-b9e74182176f.png";
+const trustWalletLogoUrl = "/lovable-uploads/4b857f27-9625-4e28-a3c5-7682b9405b0f.png";
 
 // Exodus logo URL from the newly uploaded image
 const exodusLogoUrl = "/lovable-uploads/ff280ee6-e289-4257-844d-f70c66f6b4cc.png";
