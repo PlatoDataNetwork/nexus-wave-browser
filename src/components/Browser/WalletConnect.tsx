@@ -79,8 +79,8 @@ const uniswapLogoUrl = "/lovable-uploads/c9c107c4-4a2f-4dac-b874-1dcaf9912e8a.pn
 // ZenGo logo URL from the newly uploaded image
 const zengoLogoUrl = "/lovable-uploads/ba144354-b855-4059-9368-df5d3ccd0d92.png";
 
-// Atomic Wallet logo URL (placeholder - will need to be uploaded)
-const atomicWalletLogoUrl = "https://play-lh.googleusercontent.com/UXYJiEter-aQQEKnoXON7pxm-9-t0YE4y_VF0Ujef7eTJzXo1zWcJBsJLRxE5ON3Krs=w240-h480-rw";
+// Atomic Wallet logo URL - updated with the newly uploaded image
+const atomicWalletLogoUrl = "/lovable-uploads/127a38a8-38dc-4895-83ec-7dea24d35525.png";
 
 // Binance Wallet logo URL (placeholder - will need to be uploaded)
 const binanceWalletLogoUrl = "https://play-lh.googleusercontent.com/kjiRCe9E-,kUzpNP5gH0p7nkOKGjkdNUwNbZyxqgaFUV7MyBUw-N_nTQhPFRhYu944s=w240-h480-rw";
