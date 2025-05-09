@@ -44,11 +44,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
     // First check for internal routes (without protocol)
     if (currentUrl === '/history' || currentUrl.includes('history')) {
-      return (
-        <ScrollArea className="h-full w-full">
-          <HistoryPage />
-        </ScrollArea>
-      );
+      return <HistoryPage />;
     }
     
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
