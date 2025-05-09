@@ -2,7 +2,6 @@
 import React from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
-import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 
@@ -58,9 +57,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
       </div>
       
-      {/* Browser footer */}
-      <BrowserFooter onNavigate={navigateToUrl} />
-      
+      {/* Only render BrowserFooter from PageLayout */}
       <CustomToaster position="bottom-right" />
     </div>
   );
