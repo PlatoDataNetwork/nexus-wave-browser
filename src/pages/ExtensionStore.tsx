@@ -10,7 +10,7 @@ import BrowserFooter from "@/components/Browser/BrowserFooter";
 import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 const ExtensionStore: React.FC = () => {
   const navigate = useNavigate();
