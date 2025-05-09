@@ -177,6 +177,12 @@ const ExtensionAdmin: React.FC = () => {
                   >
                     Featured
                   </TabsTrigger>
+                  <TabsTrigger 
+                    value="beta" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Beta
+                  </TabsTrigger>
                 </TabsList>
                 
                 {/* Search bar moved to the same line as tabs */}
@@ -196,6 +202,10 @@ const ExtensionAdmin: React.FC = () => {
               </div>
               
               {/* Content based on active tab */}
+              <TabsContent value="beta" className="mt-6 p-0">
+                <BetaExtensions />
+              </TabsContent>
+
               <TabsContent value="all" className="mt-6 p-0">
                 {/* Extensions table */}
                 <div className="rounded-md border">
