@@ -4,6 +4,7 @@ import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { topProtocols } from "@/lib/protocolData";
 
 interface BookmarksProps {
   onNavigate: (url: string) => void;
@@ -16,7 +17,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     if (!scrollContainerRef.current) return;
     
     const container = scrollContainerRef.current;
-    const scrollAmount = 150; // Amount to scroll each time
+    const scrollAmount = 200; // Increased scroll amount for smoother experience
     
     if (direction === "left") {
       container.scrollLeft -= scrollAmount;
@@ -36,22 +37,74 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
     console.log(`Bookmark clicked: ${title} - Navigating to: ${processedUrl}`);
     toast.success(`Loading ${title}...`);
     
-    // Call the navigation function with a forced delay to ensure proper state update
-    setTimeout(() => {
-      onNavigate(processedUrl);
-    }, 100);
+    // Call the navigation function
+    onNavigate(processedUrl);
   };
 
-  // Add Alek Bot to the bookmarks
-  const allBookmarks = [
-    ...bookmarks,
-    {
-      id: "alekbot",
-      title: "Alek Bot",
-      url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
-      icon: bookmarks[0].icon // Using the icon from the first bookmark as a placeholder
+  // Create a merged and alphabetized list of bookmarks
+  const getColorFromName = (name: string) => {
+    // Generate a consistent color based on the name
+    const colors = [
+      "#9b87f5", // Primary Purple
+      "#7E69AB", // Secondary Purple
+      "#6E59A5", // Tertiary Purple
+      "#8B5CF6", // Vivid Purple
+      "#D946EF", // Magenta Pink
+      "#F97316", // Bright Orange
+      "#0EA5E9", // Ocean Blue
+      "#1EAEDB", // Bright Blue
+      "#33C3F0", // Sky Blue
+      "#E84142", // Red
+      "#00D395", // Teal
+      "#2A5ADA", // Blue
+      "#FF007A", // Pink
+      "#F7931A", // Orange
+      "#0033AD", // Navy
+      "#6747ED", // Purple
+      "#E42575", // Hot Pink
+      "#1AAB9B", // Seafoam
+      "#0657F9", // Royal Blue
+      "#00FFA3", // Bright Green
+    ];
+    
+    // Use a simple hash function to pick a color
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
-  ];
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  };
+
+  // Create a combined and alphabetized list of bookmarks
+  const getAlphabetizedBookmarks = () => {
+    // Create a combined array of bookmarks and protocols
+    const combinedBookmarks = [
+      // Include the original bookmarks
+      ...bookmarks,
+      // Include Alek Bot
+      {
+        id: "alekbot",
+        title: "Alek Bot",
+        url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
+        color: getColorFromName("Alek Bot")
+      },
+      // Include top protocols
+      ...topProtocols.map(protocol => ({
+        id: protocol.id,
+        title: protocol.name,
+        url: protocol.url,
+        color: protocol.color || getColorFromName(protocol.name)
+      }))
+    ];
+
+    // Sort alphabetically by title
+    return combinedBookmarks.sort((a, b) => 
+      a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+    );
+  };
+
+  const alphabetizedBookmarks = getAlphabetizedBookmarks();
 
   return (
     <div className="relative flex items-center border-b border-border bg-secondary/20">
@@ -69,21 +122,31 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
       {/* Bookmarks container with horizontal scrolling */}
       <div 
         ref={scrollContainerRef}
-        className="flex items-center space-x-2 px-10 py-1 overflow-x-auto nexus-scrollbar scrollbar-hide"
+        className="flex items-center space-x-3 px-10 py-2 overflow-x-auto nexus-scrollbar scrollbar-hide"
         style={{ scrollBehavior: "smooth" }}
       >
-        {allBookmarks.map((bookmark) => (
-          <Button
-            key={bookmark.id}
-            variant="ghost"
-            size="sm"
-            className="flex items-center space-x-1 whitespace-nowrap hover:bg-primary/10"
-            onClick={() => handleBookmarkClick(bookmark.url, bookmark.title)}
-          >
-            {bookmark.icon && <bookmark.icon className="h-3 w-3 text-muted-foreground" />}
-            <span className="text-xs">{bookmark.title}</span>
-          </Button>
-        ))}
+        {alphabetizedBookmarks.map((bookmark) => {
+          const initial = bookmark.title.charAt(0).toUpperCase();
+          const bgColor = bookmark.color || getColorFromName(bookmark.title);
+          
+          return (
+            <Button
+              key={bookmark.id}
+              variant="ghost"
+              size="sm"
+              className="flex items-center space-x-2 whitespace-nowrap p-1 h-8 hover:bg-primary/10"
+              onClick={() => handleBookmarkClick(bookmark.url, bookmark.title)}
+            >
+              <div 
+                className="flex items-center justify-center h-6 w-6 rounded-full text-white font-medium text-xs"
+                style={{ backgroundColor: bgColor }}
+              >
+                {initial}
+              </div>
+              <span className="text-xs">{bookmark.title}</span>
+            </Button>
+          );
+        })}
       </div>
       
       {/* Right scroll button */}
