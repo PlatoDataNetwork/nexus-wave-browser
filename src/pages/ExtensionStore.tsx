@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { UserCog } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
@@ -64,6 +64,15 @@ const ExtensionStore: React.FC = () => {
     navigate("/extension-admin");
   };
 
+  // Handle Beta Navigation
+  const handleBetaNavigation = () => {
+    toast({
+      title: "Beta Features",
+      description: "Opening Beta Extension Features"
+    });
+    // For now, just show a toast. Later this could navigate to a beta features page
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
@@ -87,28 +96,35 @@ const ExtensionStore: React.FC = () => {
           <TabsList className="h-12 bg-background/30">
             <TabsTrigger 
               value="all" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
             >
               All Extensions
             </TabsTrigger>
             <TabsTrigger 
               value="installed" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
             >
               Installed
             </TabsTrigger>
             <TabsTrigger 
               value="featured" 
-              className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+              className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
             >
               Featured
             </TabsTrigger>
             <TabsTrigger 
+              value="beta" 
+              onClick={handleBetaNavigation} 
+              className="text-base px-6 py-2.5 hover:bg-accent/50 transition-colors relative"
+            >
+              Beta
+              <Badge className="ml-1 bg-nexus-purple text-white absolute -top-1 -right-1 text-xs h-4">New</Badge>
+            </TabsTrigger>
+            <TabsTrigger 
               value="admin" 
               onClick={handleAdminNavigation} 
-              className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 data-[state=active]:bg-background"
+              className="text-base px-6 py-2.5 bg-nexus-purple/10 hover:bg-nexus-purple/20 transition-colors"
             >
-              <UserCog className="h-5 w-5 mr-2" />
               Admin
             </TabsTrigger>
           </TabsList>

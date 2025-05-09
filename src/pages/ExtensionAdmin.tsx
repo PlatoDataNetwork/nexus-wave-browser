@@ -112,6 +112,15 @@ const ExtensionAdmin: React.FC = () => {
     }
   };
 
+  // Handle Beta Navigation
+  const handleBetaNavigation = () => {
+    toast({
+      title: "Beta Features",
+      description: "Opening Beta Extension Features"
+    });
+    // This could navigate to a beta features page in the future
+  };
+
   const statsData = [
     { title: "Total Extensions", value: extensions.length, icon: Package },
     { title: "Installed", value: installedExtensions.length, icon: FileText },
@@ -163,27 +172,35 @@ const ExtensionAdmin: React.FC = () => {
             ))}
           </div>
           
-          {/* Unified control bar - matching ExtensionStore layout */}
+          {/* Unified control bar - matching ExtensionStore layout with hover effects */}
           <div className="flex items-center justify-between gap-4 mt-6 mb-8">
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="flex-shrink-0">
               <TabsList className="h-12 bg-background/30">
                 <TabsTrigger 
                   value="all" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
                 >
                   All Extensions
                 </TabsTrigger>
                 <TabsTrigger 
                   value="installed" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
                 >
                   Installed
                 </TabsTrigger>
                 <TabsTrigger 
                   value="featured" 
-                  className="text-base px-6 py-2.5 data-[state=active]:bg-background"
+                  className="text-base px-6 py-2.5 data-[state=active]:bg-background hover:bg-accent/50 transition-colors"
                 >
                   Featured
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="beta" 
+                  onClick={handleBetaNavigation} 
+                  className="text-base px-6 py-2.5 hover:bg-accent/50 transition-colors relative"
+                >
+                  Beta
+                  <Badge className="ml-1 bg-nexus-purple text-white absolute -top-1 -right-1 text-xs h-4">New</Badge>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
