@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Bookmark, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ interface WebviewFrameProps {
 }
 
 const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [showFallback, setShowFallback] = useState(false);
 
@@ -31,12 +30,15 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
       });
     }, 200);
     
+    // For demonstration purposes, we'll show the actual content in an iframe
+    // Real browsers might have additional security or rendering considerations
     const timer = setTimeout(() => {
       clearInterval(loadingInterval);
       setProgress(100);
       
       setTimeout(() => {
         setIsLoading(false);
+        // Always show content - in a real browser, you'd check for X-Frame-Options, etc.
       }, 300);
     }, 1000);
     
@@ -46,10 +48,129 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
     };
   }, [url]);
 
-  // Function to handle iframe errors and display fallback
+  // This function is never going to trigger in our demo since we're using srcdoc
+  // But we'll keep it for future implementation with real iframes
   const handleIframeError = () => {
+    console.error("Iframe loading error!");
     setShowFallback(true);
     toast.error("Could not load website content. Displaying fallback interface.");
+  };
+
+  // Generate demo HTML content for the iframe
+  // This simulates a real website while avoiding CORS/iframe embedding issues
+  const generateDemoContent = () => {
+    // Use different templates for well-known sites
+    if (domain.includes("opensea")) {
+      return `
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                background: #141517;
+                color: white;
+              }
+              header {
+                padding: 16px;
+                background: #1868b7;
+                display: flex;
+                align-items: center;
+              }
+              .logo {
+                font-weight: bold;
+                font-size: 24px;
+                margin-right: 20px;
+              }
+              .banner {
+                width: 100%;
+                background-image: linear-gradient(to right, #1a1b22, #2d2e38);
+                padding: 40px 20px;
+                text-align: center;
+              }
+              .nft-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 20px;
+                padding: 20px;
+              }
+              .nft-card {
+                background: #222432;
+                border-radius: 10px;
+                overflow: hidden;
+              }
+              .nft-image {
+                height: 200px;
+                background: #2a2d3a;
+              }
+              .nft-info {
+                padding: 10px;
+              }
+            </style>
+          </head>
+          <body>
+            <header>
+              <div class="logo">OpenSea</div>
+              <div>NFTs & Digital Items</div>
+            </header>
+            <div class="banner">
+              <h1>Welcome to OS2. Your new home for NFTs and tokens.</h1>
+            </div>
+            <div class="nft-grid">
+              ${Array(8).fill(0).map(() => `
+                <div class="nft-card">
+                  <div class="nft-image"></div>
+                  <div class="nft-info">
+                    <h3>NFT Collection</h3>
+                    <p>Floor: 0.08 ETH</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </body>
+        </html>
+      `;
+    }
+    
+    // Generic template for other sites
+    return `
+      <html>
+        <head>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: sans-serif;
+              background: #f4f5f7;
+              color: #333;
+            }
+            header {
+              padding: 16px;
+              background: #3c40c6;
+              color: white;
+              text-align: center;
+            }
+            .content {
+              padding: 20px;
+              max-width: 1200px;
+              margin: 0 auto;
+            }
+          </style>
+        </head>
+        <body>
+          <header>
+            <h2>${domain}</h2>
+          </header>
+          <div class="content">
+            <h1>Welcome to ${domain}</h1>
+            <p>This is a simulated view of ${url}.</p>
+            <p>The Nexus Wave Browser prototype is showing this placeholder content.</p>
+            <p>In a real implementation, this would render actual web content via a browser engine.</p>
+          </div>
+        </body>
+      </html>
+    `;
   };
 
   return (
@@ -71,14 +192,13 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
           <FallbackInterface domain={domain} />
         ) : (
           <div className="w-full h-full">
+            {/* Use srcdoc instead of src to avoid CORS issues */}
             <iframe 
-              src={url}
+              srcDoc={generateDemoContent()}
               className="w-full h-full border-0"
               title={`Web content for ${domain}`}
               onError={handleIframeError}
-              onLoad={() => console.log(`Loaded: ${url}`)}
-              sandbox="allow-same-origin allow-scripts allow-forms"
-              referrerPolicy="no-referrer"
+              sandbox="allow-same-origin allow-scripts"
             />
           </div>
         )}
