@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,8 @@ import {
   DollarSign,
   BadgeDollarSign,
   BadgeCheck,
-  Star
+  Star,
+  Heart
 } from "lucide-react";
 
 interface BetaExtensionProps {
@@ -163,6 +165,7 @@ const betaExtensions: BetaExtensionProps[] = [
 const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) => {
   const { toast } = useToast();
   const { name, description, icon: Icon, iconBg, category, estimatedRelease, rating } = extension;
+  const [isFavorite, setIsFavorite] = React.useState(false);
   
   const handleRequestAccess = () => {
     toast({
@@ -171,22 +174,32 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
     });
   };
 
+  const handleFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+  };
+
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700">
       <CardHeader className="p-4 pb-2">
-        <div className="flex items-start space-x-3">
-          <div className={`h-12 w-12 rounded-md flex items-center justify-center ${iconBg}`}>
-            <Icon className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center">
-              <h3 className="font-medium text-lg line-clamp-1">{name}</h3>
-              <Badge className="ml-2 bg-purple-500/20 text-purple-300 border-purple-500/50">
-                Beta
-              </Badge>
+        <div className="flex items-start justify-between">
+          <div className="flex items-start space-x-3">
+            <div className={`h-12 w-12 rounded-md flex items-center justify-center ${iconBg}`}>
+              <Icon className="h-6 w-6 text-white" />
             </div>
-            <div className="text-xs text-muted-foreground">Est. Release: {estimatedRelease}</div>
+            <div>
+              <h3 className="font-medium text-lg line-clamp-1">{name}</h3>
+              <div className="text-xs text-muted-foreground">Est. Release: {estimatedRelease}</div>
+            </div>
           </div>
+          <button
+            onClick={handleFavoriteClick}
+            className="text-muted-foreground hover:text-nexus-purple transition-colors"
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          >
+            <Heart 
+              className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
+            />
+          </button>
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-2">
@@ -194,9 +207,14 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
           {description}
         </p>
         <div className="flex items-center justify-between">
-          <Badge variant="outline" className="bg-secondary/50 text-foreground">
-            {category}
-          </Badge>
+          <div className="flex items-center space-x-2">
+            <Badge variant="outline" className="bg-secondary/50 text-foreground">
+              {category}
+            </Badge>
+            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/50">
+              Beta
+            </Badge>
+          </div>
           {rating && (
             <div className="flex items-center text-sm">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
@@ -207,9 +225,8 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <Button 
-          onClick={handleRequestAccess} 
-          variant="outline"
-          className="w-full border-purple-500/50 hover:bg-purple-500/20"
+          onClick={handleRequestAccess}
+          className="w-full bg-nexus-purple hover:bg-nexus-purple/90"
         >
           Request Early Access
         </Button>
