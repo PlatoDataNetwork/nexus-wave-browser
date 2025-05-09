@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -534,6 +533,8 @@ const WalletConnect: React.FC = () => {
                   <span className="text-left block">
                     Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
                     Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
+                  </span>
+                  <span className="text-left block mt-1">
                     More Wallets coming online soon.
                   </span>
                 </p>
