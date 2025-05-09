@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,10 @@ const BrowserFooter: React.FC<{
   
   const handleDocumentationClick = () => {
     navigate('/documentation');
+  };
+  
+  const handleHistoryClick = () => {
+    navigate('/history');
   };
   
   const handleExtensionStoreClick = () => {
@@ -118,8 +123,8 @@ const BrowserFooter: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-7"
-              onClick={() => handleActionClick("History")}
+              className={`h-7 ${location.pathname === '/history' ? 'bg-muted' : ''}`}
+              onClick={handleHistoryClick}
             >
               <History className="h-3 w-3 mr-1" />
               <span>History</span>
