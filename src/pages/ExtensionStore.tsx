@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { Badge } from "@/components/ui/badge";
 import { extensionsData } from "@/lib/extensionsData";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
@@ -77,7 +76,7 @@ const ExtensionStore: React.FC = () => {
     <div className="p-6 max-w-7xl mx-auto w-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+        <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
           Nexus Wave Extension Library
         </h1>
       </div>
@@ -118,7 +117,6 @@ const ExtensionStore: React.FC = () => {
               className="text-base px-6 py-2.5 hover:bg-accent/50 transition-colors relative"
             >
               Beta
-              <Badge className="ml-1 bg-nexus-purple text-white absolute -top-1 -right-1 text-xs h-4">New</Badge>
             </TabsTrigger>
             <TabsTrigger 
               value="admin" 

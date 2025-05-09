@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -200,7 +199,6 @@ const ExtensionAdmin: React.FC = () => {
                   className="text-base px-6 py-2.5 hover:bg-accent/50 transition-colors relative"
                 >
                   Beta
-                  <Badge className="ml-1 bg-nexus-purple text-white absolute -top-1 -right-1 text-xs h-4">New</Badge>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
