@@ -53,7 +53,7 @@ import {
   Activity,
   Heart,
   Dumbbell,
-  Running,
+  PersonStanding, // Replacing Running with PersonStanding
   Timer,
   Apple,
   Scale,
@@ -1150,7 +1150,7 @@ export const extensionsData: Extension[] = [
     enabled: false,
     featured: false,
     version: "3.2.7",
-    icon: Running,
+    icon: PersonStanding, // Changed from Running to PersonStanding
     iconBg: iconBackgrounds[6]
   },
   {
