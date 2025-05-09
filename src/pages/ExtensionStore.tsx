@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,6 +9,7 @@ import ExtensionList from "@/components/Extensions/ExtensionList";
 import BetaExtensions from "@/components/Extensions/BetaExtensions";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionAdmin from "@/pages/ExtensionAdmin";
+import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { Search } from "lucide-react";
 
 const ExtensionStore: React.FC = () => {
