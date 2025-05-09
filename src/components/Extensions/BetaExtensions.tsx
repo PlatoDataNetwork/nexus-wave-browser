@@ -177,8 +177,8 @@ const betaExtensions: BetaExtensionProps[] = [
 const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) => {
   const { toast } = useToast();
   const { name, description, icon: Icon, iconBg, category, estimatedRelease, rating } = extension;
-  const [isFavorite, setIsFavorite] = React.useState(false);
-  const [isInstalled, setIsInstalled] = React.useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
   
   const handleInstallClick = () => {
     setIsInstalled(!isInstalled);
