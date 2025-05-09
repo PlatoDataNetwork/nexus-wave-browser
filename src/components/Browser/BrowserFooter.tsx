@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -14,7 +14,9 @@ import {
 
 const BrowserFooter: React.FC<{ 
   onNavigate?: (url: string) => void,
-}> = ({ onNavigate }) => {
+  onToggleFooter?: () => void,
+  isVisible?: boolean
+}> = ({ onNavigate, onToggleFooter, isVisible = true }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -174,6 +176,25 @@ const BrowserFooter: React.FC<{
       </div>
       
       <div className="flex items-center gap-3">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-7 text-green-500"
+              onClick={onToggleFooter}
+            >
+              {isVisible ? 
+                <><EyeOff className="h-3 w-3 mr-1" /><span>Hide</span></> : 
+                <><Eye className="h-3 w-3 mr-1" /><span>Show</span></>
+              }
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isVisible ? 'Hide footer' : 'Show footer'}</p>
+          </TooltipContent>
+        </Tooltip>
+        
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   onNavigate 
 }) => {
   const navigate = useNavigate();
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
   
   // Create a navigation handler to use with the footer
   const handleNavigate = (url: string) => {
@@ -26,6 +27,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     }
   };
 
+  // Toggle footer visibility
+  const toggleFooter = () => {
+    setIsFooterVisible(prev => !prev);
+  };
+
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -34,7 +40,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       </ScrollArea>
       
-      {includeFooter && <BrowserFooter onNavigate={handleNavigate} />}
+      {includeFooter && isFooterVisible && <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />}
     </div>
   );
 };

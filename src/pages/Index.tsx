@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
@@ -24,6 +24,13 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     canGoBack,
     canGoForward
   } = useTabs(defaultUrl);
+  
+  const [isFooterVisible, setIsFooterVisible] = useState(true);
+
+  // Toggle footer visibility
+  const toggleFooter = () => {
+    setIsFooterVisible(prev => !prev);
+  };
 
   // Debug log to check what URL is being loaded initially
   console.log("Index component rendering with defaultUrl:", defaultUrl);
@@ -58,8 +65,8 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
       </div>
       
-      {/* Add the Browser Footer directly in the main layout */}
-      <BrowserFooter onNavigate={navigateToUrl} />
+      {/* Add the Browser Footer with toggle functionality */}
+      {isFooterVisible && <BrowserFooter onNavigate={navigateToUrl} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />}
       
       <CustomToaster position="bottom-right" />
     </div>
