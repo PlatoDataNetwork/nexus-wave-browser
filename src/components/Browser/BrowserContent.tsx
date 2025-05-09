@@ -50,7 +50,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     
     // For external URLs (with protocol), use the WebviewFrame
     if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
-      return <WebviewFrame url={currentUrl} />;
+      return (
+        <div className="h-full w-full">
+          <WebviewFrame url={currentUrl} />
+        </div>
+      );
     }
 
     // Default content rendering for home or unknown pages
@@ -88,7 +92,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
   return (
     <PageLayout includeFooter={true} onNavigate={onNavigate}>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 h-full w-full overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-muted-foreground">Loading...</p>
