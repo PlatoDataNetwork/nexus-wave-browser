@@ -529,7 +529,7 @@ const WalletConnect: React.FC = () => {
               {/* Wallet support text moved above the button */}
               <div className="mb-4">
                 <p className="text-xs text-muted-foreground text-center">
-                  Nexus Wave Supports the following wallets: Coinbase, Ledger, Trezor, Solflare, WalletConnect, Trust Wallet, Phantom, Uniswap, Zengo, Crypto.com and Exodus. More wallets coming online soon.
+                  Nexus Wave Supports the following wallets: Coinbase, Crypto.com, Exodus, Ledger, MetaMask, Phantom, Solflare, Trezor, Trust Wallet, Uniswap, WalletConnect, and ZenGo. More wallets coming online soon.
                 </p>
               </div>
               
