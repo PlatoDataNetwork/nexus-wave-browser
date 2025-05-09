@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
-import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock } from "lucide-react";
+import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock, X } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -103,6 +103,7 @@ const WalletConnect: React.FC = () => {
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isVisible, setIsVisible] = useState(true);
 
   // Form setup
   const form = useForm({
@@ -336,6 +337,12 @@ const WalletConnect: React.FC = () => {
     }
   };
 
+  const handleCloseCard = () => {
+    setIsVisible(false);
+    // Optional: Add any additional logic when closing the card (like animation, etc.)
+    toast.info("Nexus Wave Bridge closed");
+  };
+
   if (loading) {
     return (
       <Card className="nexus-glass animate-pulse-glow">
@@ -348,281 +355,296 @@ const WalletConnect: React.FC = () => {
     );
   }
 
+  if (!isVisible) {
+    return null; // Don't render anything if the card is closed
+  }
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <Card className="nexus-glass animate-pulse-glow w-[400px] h-[400px] aspect-square">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-center text-2xl font-medium">
-            Nexus Wave Bridge
-          </CardTitle>
-          <CardDescription className="text-center">
-            Connect you wallet and transport yourself with Nexus.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {connectionError && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Connection Error</AlertTitle>
-              <AlertDescription>
-                {connectionError}
-                <div className="mt-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mr-2"
-                    onClick={() => setIsRepairModalOpen(true)}
-                  >
-                    <RefreshCw className="mr-1 h-3 w-3" />
-                    Repair
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={reportIssue}
-                  >
-                    Report Issue
-                  </Button>
+      <div className="relative">
+        {/* X Close Button */}
+        <button
+          onClick={handleCloseCard}
+          className="absolute -top-4 -right-4 bg-[#e5007e] hover:bg-[#e5007e]/80 text-white rounded-full p-1 z-10 shadow-md"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        
+        <Card className="nexus-glass animate-pulse-glow w-[400px] h-[400px] aspect-square">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-center text-2xl font-medium">
+              Nexus Wave Bridge
+            </CardTitle>
+            <CardDescription className="text-center">
+              Connect you wallet and transport yourself with Nexus.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {connectionError && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Connection Error</AlertTitle>
+                <AlertDescription>
+                  {connectionError}
+                  <div className="mt-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mr-2"
+                      onClick={() => setIsRepairModalOpen(true)}
+                    >
+                      <RefreshCw className="mr-1 h-3 w-3" />
+                      Repair
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={reportIssue}
+                    >
+                      Report Issue
+                    </Button>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-4 flex flex-col h-[220px]">
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Status</span>
+                  <span className="text-sm font-medium flex items-center">
+                    <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-destructive'} mr-2`}></span>
+                    {isConnected ? 'Connected' : 'Disconnected'}
+                  </span>
                 </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="space-y-4 flex flex-col h-[220px]">
-            <div className="flex-1">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Status</span>
-                <span className="text-sm font-medium flex items-center">
-                  <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-destructive'} mr-2`}></span>
-                  {isConnected ? 'Connected' : 'Disconnected'}
-                </span>
-              </div>
-              
-              {/* Add timestamp below status line */}
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-sm text-muted-foreground">Timestamp</span>
-                <span className="text-sm font-medium flex items-center">
-                  <Clock className="h-3 w-3 mr-1" />
-                  {format(currentTime, "yyyy-MM-dd HH:mm:ss")}
-                </span>
-              </div>
-              
-              {isConnected && activeWallet && (
-                <div className="pt-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Wallet</span>
-                    <span className="text-sm font-medium flex items-center">
-                      <Avatar className="h-7 w-7 mr-2">
-                        <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
-                        <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      {getWalletName(activeWallet)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-sm text-muted-foreground">Address</span>
-                    <span className="text-sm font-medium flex items-center">
-                      {shortenAddress(walletAddress)}
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6 ml-1"
-                        onClick={copyAddress}
-                      >
-                        {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      </Button>
-                    </span>
-                  </div>
-
-                  <div className="mt-2 flex justify-end">
-                    <Sheet open={isDetailsSheetOpen} onOpenChange={setIsDetailsSheetOpen}>
-                      <SheetTrigger asChild>
-                        <Button variant="outline" size="sm" className="text-xs">
-                          Details
-                          <ExternalLink className="ml-1 h-3 w-3" />
+                
+                {/* Add timestamp below status line */}
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-sm text-muted-foreground">Timestamp</span>
+                  <span className="text-sm font-medium flex items-center">
+                    <Clock className="h-3 w-3 mr-1" />
+                    {format(currentTime, "yyyy-MM-dd HH:mm:ss")}
+                  </span>
+                </div>
+                
+                {isConnected && activeWallet && (
+                  <div className="pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Wallet</span>
+                      <span className="text-sm font-medium flex items-center">
+                        <Avatar className="h-7 w-7 mr-2">
+                          <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
+                          <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        {getWalletName(activeWallet)}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-sm text-muted-foreground">Address</span>
+                      <span className="text-sm font-medium flex items-center">
+                        {shortenAddress(walletAddress)}
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-6 w-6 ml-1"
+                          onClick={copyAddress}
+                        >
+                          {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                         </Button>
-                      </SheetTrigger>
-                      <SheetContent>
-                        <SheetHeader>
-                          <SheetTitle>Wallet Details</SheetTitle>
-                          <SheetDescription>
-                            View and manage your connected wallet.
-                          </SheetDescription>
-                        </SheetHeader>
-                        <div className="py-4 space-y-4">
-                          <div className="flex justify-center mb-4">
-                            <Avatar className="h-20 w-20">
-                              <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
-                              <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">Provider:</span>
-                              <span>{getWalletName(activeWallet!)}</span>
+                      </span>
+                    </div>
+
+                    <div className="mt-2 flex justify-end">
+                      <Sheet open={isDetailsSheetOpen} onOpenChange={setIsDetailsSheetOpen}>
+                        <SheetTrigger asChild>
+                          <Button variant="outline" size="sm" className="text-xs">
+                            Details
+                            <ExternalLink className="ml-1 h-3 w-3" />
+                          </Button>
+                        </SheetTrigger>
+                        <SheetContent>
+                          <SheetHeader>
+                            <SheetTitle>Wallet Details</SheetTitle>
+                            <SheetDescription>
+                              View and manage your connected wallet.
+                            </SheetDescription>
+                          </SheetHeader>
+                          <div className="py-4 space-y-4">
+                            <div className="flex justify-center mb-4">
+                              <Avatar className="h-20 w-20">
+                                <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
+                                <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
+                              </Avatar>
                             </div>
                             
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">Full Address:</span>
-                              <div className="flex items-center gap-1">
-                                <span className="text-sm break-all max-w-[180px]">
-                                  {walletAddress}
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">Provider:</span>
+                                <span>{getWalletName(activeWallet!)}</span>
+                              </div>
+                              
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">Full Address:</span>
+                                <div className="flex items-center gap-1">
+                                  <span className="text-sm break-all max-w-[180px]">
+                                    {walletAddress}
+                                  </span>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon" 
+                                    className="h-6 w-6"
+                                    onClick={copyAddress}
+                                  >
+                                    {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                                  </Button>
+                                </div>
+                              </div>
+                              
+                              <div className="flex justify-between items-center">
+                                <span className="font-medium">Connection Status:</span>
+                                <span className="flex items-center">
+                                  <span className="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
+                                  Active
                                 </span>
-                                <Button 
-                                  variant="ghost" 
-                                  size="icon" 
-                                  className="h-6 w-6"
-                                  onClick={copyAddress}
-                                >
-                                  {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                                </Button>
                               </div>
                             </div>
                             
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">Connection Status:</span>
-                              <span className="flex items-center">
-                                <span className="h-2 w-2 rounded-full bg-green-500 mr-2"></span>
-                                Active
-                              </span>
-                            </div>
+                            <Separator className="my-4" />
+                            
+                            <Alert>
+                              <AlertTitle>Troubleshooting</AlertTitle>
+                              <AlertDescription>
+                                If you're experiencing issues with your wallet connection, try repairing the connection or reconnecting.
+                              </AlertDescription>
+                            </Alert>
+                            
+                            <SheetFooter className="flex justify-between">
+                              <Button 
+                                variant="outline"
+                                onClick={handleRepairConnection}
+                                className="bg-secondary hover:bg-secondary/80"
+                              >
+                                <RefreshCw className="w-4 h-4 mr-2" />
+                                Repair
+                              </Button>
+                              <Button 
+                                onClick={handleDisconnect}
+                                className="bg-destructive hover:bg-destructive/90 text-white"
+                              >
+                                Disconnect Wallet
+                              </Button>
+                            </SheetFooter>
                           </div>
-                          
-                          <Separator className="my-4" />
-                          
-                          <Alert>
-                            <AlertTitle>Troubleshooting</AlertTitle>
-                            <AlertDescription>
-                              If you're experiencing issues with your wallet connection, try repairing the connection or reconnecting.
-                            </AlertDescription>
-                          </Alert>
-                          
-                          <SheetFooter className="flex justify-between">
-                            <Button 
-                              variant="outline"
-                              onClick={handleRepairConnection}
-                              className="bg-secondary hover:bg-secondary/80"
-                            >
-                              <RefreshCw className="w-4 h-4 mr-2" />
-                              Repair
-                            </Button>
-                            <Button 
-                              onClick={handleDisconnect}
-                              className="bg-destructive hover:bg-destructive/90 text-white"
-                            >
-                              Disconnect Wallet
-                            </Button>
-                          </SheetFooter>
-                        </div>
-                      </SheetContent>
-                    </Sheet>
+                        </SheetContent>
+                      </Sheet>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-            
-            <div className="mt-auto">
-              <Separator className="mb-4" />
-              
-              {/* Updated wallet support text to match Nexus Wave Bridge white color and made text size larger */}
-              <div className="mb-4">
-                <p className="text-sm text-justify px-2">
-                  <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
-                  <span className="text-left block">
-                    Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
-                    Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
-                  </span>
-                </p>
-              </div>
-              
-              {/* Added mt-8 to increase spacing between text and button */}
-              <div className="mt-8">
-                {isConnected ? (
-                  <Button 
-                    onClick={handleDisconnect}
-                    className="w-full bg-destructive hover:bg-destructive/90 text-white"
-                  >
-                    Disconnect Wallet
-                  </Button>
-                ) : (
-                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
-                      >
-                        Nexus Wave Bridge
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[850px]">
-                      <DialogHeader>
-                        <DialogTitle className="flex items-center">
-                          <NBLogo />
-                          <span className="ml-2">Nexus Wave Bridge</span>
-                        </DialogTitle>
-                        <DialogDescription>
-                          Choose a wallet provider to connect with Nexus.
-                        </DialogDescription>
-                      </DialogHeader>
-                      
-                      <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
-                          <FormField
-                            control={form.control}
-                            name="walletProvider"
-                            render={({ field }) => (
-                              <FormItem className="space-y-3">
-                                <FormLabel>Wallet Provider</FormLabel>
-                                <RadioGroup 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                  className="grid grid-cols-2 gap-3"
-                                >
-                                  {walletOptions.map(wallet => (
-                                    <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
-                                      <RadioGroupItem value={wallet.id} id={wallet.id} />
-                                      <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
-                                        <div className="flex items-center">
-                                          <Avatar className="h-14 w-14 mr-3">
-                                            <AvatarImage 
-                                              src={wallet.logoUrl} 
-                                              alt={wallet.name} 
-                                              className={`${wallet.circular ? 'rounded-full' : ''}`} 
-                                            />
-                                            <AvatarFallback>{wallet.icon}</AvatarFallback>
-                                          </Avatar>
-                                          <div>
-                                            <p className="font-medium">{wallet.name}</p>
-                                            <p className="text-xs text-muted-foreground">{wallet.description}</p>
-                                          </div>
-                                        </div>
-                                      </Label>
-                                    </div>
-                                  ))}
-                                </RadioGroup>
-                              </FormItem>
-                            )}
-                          />
-                          
-                          <div className="flex justify-end gap-3 pt-2">
-                            <DialogClose asChild>
-                              <Button variant="outline" type="button">Cancel</Button>
-                            </DialogClose>
-                            <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
-                              Connect
-                            </Button>
-                          </div>
-                        </form>
-                      </Form>
-                    </DialogContent>
-                  </Dialog>
                 )}
               </div>
+              
+              <div className="mt-auto">
+                <Separator className="mb-4" />
+                
+                {/* Updated wallet support text to match Nexus Wave Bridge white color and made text size larger */}
+                <div className="mb-4">
+                  <p className="text-sm text-justify px-2">
+                    <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
+                    <span className="text-left block">
+                      Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
+                      Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
+                    </span>
+                  </p>
+                </div>
+                
+                {/* Added mt-8 to increase spacing between text and button */}
+                <div className="mt-8">
+                  {isConnected ? (
+                    <Button 
+                      onClick={handleDisconnect}
+                      className="w-full bg-destructive hover:bg-destructive/90 text-white"
+                    >
+                      Disconnect Wallet
+                    </Button>
+                  ) : (
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button 
+                          className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
+                        >
+                          Nexus Wave Bridge
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[850px]">
+                        <DialogHeader>
+                          <DialogTitle className="flex items-center">
+                            <NBLogo />
+                            <span className="ml-2">Nexus Wave Bridge</span>
+                          </DialogTitle>
+                          <DialogDescription>
+                            Choose a wallet provider to connect with Nexus.
+                          </DialogDescription>
+                        </DialogHeader>
+                        
+                        <Form {...form}>
+                          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+                            <FormField
+                              control={form.control}
+                              name="walletProvider"
+                              render={({ field }) => (
+                                <FormItem className="space-y-3">
+                                  <FormLabel>Wallet Provider</FormLabel>
+                                  <RadioGroup 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                    className="grid grid-cols-2 gap-3"
+                                  >
+                                    {walletOptions.map(wallet => (
+                                      <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
+                                        <RadioGroupItem value={wallet.id} id={wallet.id} />
+                                        <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
+                                          <div className="flex items-center">
+                                            <Avatar className="h-14 w-14 mr-3">
+                                              <AvatarImage 
+                                                src={wallet.logoUrl} 
+                                                alt={wallet.name} 
+                                                className={`${wallet.circular ? 'rounded-full' : ''}`} 
+                                              />
+                                              <AvatarFallback>{wallet.icon}</AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                              <p className="font-medium">{wallet.name}</p>
+                                              <p className="text-xs text-muted-foreground">{wallet.description}</p>
+                                            </div>
+                                          </div>
+                                        </Label>
+                                      </div>
+                                    ))}
+                                  </RadioGroup>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <div className="flex justify-end gap-3 pt-2">
+                              <DialogClose asChild>
+                                <Button variant="outline" type="button">Cancel</Button>
+                              </DialogClose>
+                              <Button type="submit" className="bg-[#e5007e] hover:bg-[#e5007e]/90">
+                                Connect
+                              </Button>
+                            </div>
+                          </form>
+                        </Form>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
       
       {/* Repair Connection Modal */}
       <Dialog open={isRepairModalOpen} onOpenChange={setIsRepairModalOpen}>
