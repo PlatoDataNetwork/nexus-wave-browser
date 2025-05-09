@@ -428,7 +428,7 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
   };
 
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#1E1C2E] border border-[#433E56] ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
+    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#191823] border border-[#433E56] ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3">
@@ -456,7 +456,7 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
           {description}
         </p>
         <div className="flex items-center justify-between">
-          <Badge variant="outline" className="bg-[#2A263D] text-gray-300 border-[#433E56]">
+          <Badge variant="outline" className="bg-[#24212F] text-gray-300 border-[#433E56]">
             {category}
           </Badge>
           <div className="flex items-center text-sm text-gray-300">
@@ -468,7 +468,7 @@ const ExtensionCard: React.FC<{ extension: ConceptualExtensionProps }> = ({ exte
       <CardFooter className="p-4 pt-0">
         <Button 
           onClick={handleInstallClick}
-          className={`w-full ${isInstalled ? "bg-[#2A263D] hover:bg-[#2A263D]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
+          className={`w-full ${isInstalled ? "bg-[#24212F] hover:bg-[#24212F]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
           variant={isInstalled ? "outline" : "default"}
         >
           {isInstalled ? "Uninstall" : "Install Now"}
