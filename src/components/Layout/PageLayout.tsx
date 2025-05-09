@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -34,13 +33,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 h-full overflow-hidden">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-1 h-full w-full overflow-hidden">
         {children}
       </div>
       
       {includeFooter && isFooterVisible && (
-        <div className="mt-auto">
+        <div className="mt-auto w-full">
           <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />
         </div>
       )}
