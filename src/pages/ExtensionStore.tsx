@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -10,6 +9,8 @@ import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
 import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
+import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
+import Button from "@/components/ui/Button";
 
 const ExtensionStore: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ExtensionStore: React.FC = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [extensions, setExtensions] = useState(extensionsData);
+  const [categoryFilters, setCategoryFilters] = useState<string[]>([]);
   
   // Parse tab from URL on initial load
   useEffect(() => {
@@ -27,6 +29,12 @@ const ExtensionStore: React.FC = () => {
     const tab = params.get('tab');
     if (tab && ['all', 'installed', 'favorites', 'featured', 'beta', 'admin', 'smile'].includes(tab)) {
       setActiveTab(tab);
+    }
+    
+    // Get the category from URL if exists
+    const category = params.get('category');
+    if (category) {
+      setActiveCategory(category);
     }
   }, [location.search]);
   
@@ -92,10 +100,50 @@ const ExtensionStore: React.FC = () => {
   // Handle tab changes including URL updates
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    // Update URL with the tab parameter
+    
+    // Update URL with the tab and category parameters
     const searchParams = new URLSearchParams(location.search);
     searchParams.set('tab', tab);
+    
+    // Only include category if it's not "all"
+    if (activeCategory !== "all") {
+      searchParams.set('category', activeCategory);
+    } else {
+      searchParams.delete('category');
+    }
+    
     navigate(`${location.pathname}?${searchParams.toString()}`);
+  };
+  
+  // Handle category changes including URL updates
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    
+    // Update URL with the category parameter
+    const searchParams = new URLSearchParams(location.search);
+    
+    // Only include category if it's not "all"
+    if (category !== "all") {
+      searchParams.set('category', category);
+    } else {
+      searchParams.delete('category');
+    }
+    
+    // Keep the existing tab parameter
+    if (activeTab !== "all") {
+      searchParams.set('tab', activeTab);
+    }
+    
+    navigate(`${location.pathname}?${searchParams.toString()}`);
+  };
+
+  // Calculate extension counts by category for stats
+  const extensionCounts = {
+    available: extensions.length,
+    installed: extensions.filter(e => e.installed).length,
+    featured: extensions.filter(e => e.featured).length,
+    security: extensions.filter(e => e.category === "Privacy & Security").length,
+    ai: extensions.filter(e => e.category === "AI").length
   };
 
   return (
@@ -110,23 +158,23 @@ const ExtensionStore: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <div className="bg-[#2a1e48] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Available</div>
-            <div className="text-4xl font-bold">60</div>
+            <div className="text-4xl font-bold">{extensionCounts.available}</div>
           </div>
           <div className="bg-[#1e2a48] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Installed</div>
-            <div className="text-4xl font-bold">16</div>
+            <div className="text-4xl font-bold">{extensionCounts.installed}</div>
           </div>
           <div className="bg-[#3a1e38] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Featured</div>
-            <div className="text-4xl font-bold">16</div>
+            <div className="text-4xl font-bold">{extensionCounts.featured}</div>
           </div>
           <div className="bg-[#1e3a38] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">Security</div>
-            <div className="text-4xl font-bold">0</div>
+            <div className="text-4xl font-bold">{extensionCounts.security}</div>
           </div>
           <div className="bg-[#3a1e48] rounded-lg p-6">
             <div className="text-sm font-medium mb-2">AI</div>
-            <div className="text-4xl font-bold">20</div>
+            <div className="text-4xl font-bold">{extensionCounts.ai}</div>
           </div>
         </div>
         
@@ -136,6 +184,67 @@ const ExtensionStore: React.FC = () => {
           setActiveTab={handleTabChange}
         />
         
+        {/* Only show search and filtering when not on special tabs */}
+        {activeTab !== "smile" && activeTab !== "beta" && (
+          <div className="mt-6">
+            <ExtensionSearchBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={handleCategoryChange}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+            />
+            
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-2 mt-4">
+              <Button
+                variant={activeCategory === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => handleCategoryChange("all")}
+                className={activeCategory === "all" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}
+              >
+                All Categories
+              </Button>
+              
+              {categories
+                .filter(category => category !== "all")
+                .sort()
+                .map(category => (
+                  <Button
+                    key={category}
+                    variant={activeCategory === category ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleCategoryChange(category)}
+                    className={activeCategory === category ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}
+                  >
+                    {category}
+                  </Button>
+                ))
+              }
+            </div>
+          </div>
+        )}
+        
+        {/* Active category indicator */}
+        {activeTab !== "smile" && activeTab !== "beta" && activeCategory !== "all" && (
+          <div className="mt-4 flex items-center text-sm">
+            <span className="text-muted-foreground">Category:</span>
+            <span className="ml-2 bg-nexus-purple/20 text-nexus-purple px-2 py-1 rounded-md font-medium">
+              {activeCategory}
+            </span>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="ml-2 h-7 px-2 text-muted-foreground"
+              onClick={() => handleCategoryChange("all")}
+            >
+              Clear
+            </Button>
+          </div>
+        )}
+        
         {/* Extension Content based on active tab */}
         <div className="mt-6">
           {activeTab === "smile" ? (
@@ -143,12 +252,21 @@ const ExtensionStore: React.FC = () => {
           ) : activeTab === "beta" ? (
             <ConceptualExtensions />
           ) : (
-            <ExtensionList 
-              extensions={filteredExtensions} 
-              viewMode={viewMode} 
-              onInstall={handleInstall}
-              onToggleFavorite={handleToggleFavorite}
-            />
+            <>
+              {/* Results count */}
+              <p className="text-sm text-muted-foreground mb-4">
+                Showing {filteredExtensions.length} {filteredExtensions.length === 1 ? 'extension' : 'extensions'}
+                {activeCategory !== "all" ? ` in ${activeCategory}` : ""}
+                {searchQuery ? ` matching "${searchQuery}"` : ""}
+              </p>
+              
+              <ExtensionList 
+                extensions={filteredExtensions} 
+                viewMode={viewMode} 
+                onInstall={handleInstall}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            </>
           )}
         </div>
       </div>
