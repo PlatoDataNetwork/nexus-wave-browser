@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,7 @@ import {
   Bitcoin,
   DollarSign,
   BadgeDollarSign,
-  BadgeBitcoin,
+  BadgeCheck,
   Star
 } from "lucide-react";
 
@@ -126,7 +125,7 @@ const betaExtensions: BetaExtensionProps[] = [
   {
     name: "Blockchain Explorer",
     description: "Browse and analyze blockchain transactions, smart contracts, and token data with professional-grade tools",
-    icon: BadgeBitcoin,
+    icon: BadgeCheck,
     iconBg: "bg-gradient-to-br from-purple-500 to-purple-700",
     category: "Crypto",
     estimatedRelease: "July 2025",
