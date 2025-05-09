@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -7,7 +6,6 @@ import { betaExtensionsData } from "@/lib/betaExtensionsData";
 import ExtensionList from "@/components/Extensions/ExtensionList";
 import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
-import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
 import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +20,6 @@ const ExtensionStore: React.FC = () => {
   
   // Combine regular and beta extensions
   const [extensions, setExtensions] = useState([...extensionsData, ...betaExtensionsData]);
-  const [categoryFilters, setCategoryFilters] = useState<string[]>([]);
   
   // Parse tab from URL on initial load
   useEffect(() => {

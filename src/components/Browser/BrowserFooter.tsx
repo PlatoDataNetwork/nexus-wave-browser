@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
       onNavigate("/extension-store");
     } else {
       // Fall back to router navigation
-      navigate('/extension-store');
+      navigate('/extension-store?tab=all');
     }
     
     // Show a toast to confirm the action
@@ -91,7 +92,7 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
           </TooltipContent>
         </Tooltip>
 
-        {/* Shield security button - NEW */}
+        {/* Shield security button */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 

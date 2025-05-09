@@ -32,37 +32,37 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
         {/* Tabs */}
         <div className="flex space-x-2 bg-[#151515] rounded-lg overflow-hidden">
           <button 
-            className={`px-4 py-3 ${activeTab === 'all' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'all' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('all')}
           >
             All Extensions
           </button>
           <button 
-            className={`px-4 py-3 ${activeTab === 'installed' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'installed' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('installed')}
           >
             Installed
           </button>
           <button 
-            className={`px-4 py-3 ${activeTab === 'favorites' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'favorites' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('favorites')}
           >
             Favorites
           </button>
           <button 
-            className={`px-4 py-3 ${activeTab === 'featured' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'featured' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('featured')}
           >
             Featured
           </button>
           <button 
-            className={`px-4 py-3 ${activeTab === 'beta' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'beta' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('beta')}
           >
             Beta
           </button>
           <button 
-            className={`px-4 py-3 ${activeTab === 'admin' ? 'bg-nexus-purple text-white' : 'text-white'}`}
+            className={`px-4 py-3 ${activeTab === 'admin' ? 'bg-nexus-purple text-white' : 'text-white'} hover:bg-nexus-purple/80 transition-colors`}
             onClick={() => handleTabChange('admin')}
           >
             Admin
@@ -80,7 +80,7 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
                 type="search"
                 placeholder="Search extensions..."
                 className="w-full bg-[#151515] text-white pl-10 pr-4 py-3 rounded-lg"
-                value={searchQuery}
+                value={searchQuery || ""}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
@@ -88,7 +88,7 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
         )}
         
         {/* Filter Button */}
-        <button className="bg-[#151515] text-white px-4 py-3 rounded-lg flex items-center space-x-2">
+        <button className="bg-[#151515] text-white px-4 py-3 rounded-lg flex items-center space-x-2 hover:bg-[#252525] transition-colors">
           <Filter className="h-5 w-5" />
           <span>Filter</span>
         </button>
@@ -97,14 +97,14 @@ const ExtensionTabBar: React.FC<ExtensionTabBarProps> = ({
         {viewMode && setViewMode && (
           <div className="flex bg-[#151515] rounded-lg overflow-hidden">
             <button
-              className={`p-3 ${viewMode === 'grid' ? 'bg-nexus-purple' : 'bg-transparent'}`}
+              className={`p-3 ${viewMode === 'grid' ? 'bg-nexus-purple' : 'bg-transparent'} hover:bg-nexus-purple/80 transition-colors`}
               onClick={() => setViewMode('grid')}
               aria-label="Grid view"
             >
               <LayoutGrid className="h-5 w-5 text-white" />
             </button>
             <button
-              className={`p-3 ${viewMode === 'list' ? 'bg-nexus-purple' : 'bg-transparent'}`}
+              className={`p-3 ${viewMode === 'list' ? 'bg-nexus-purple' : 'bg-transparent'} hover:bg-nexus-purple/80 transition-colors`}
               onClick={() => setViewMode('list')}
               aria-label="List view"
             >
