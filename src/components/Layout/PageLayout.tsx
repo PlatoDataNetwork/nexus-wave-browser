@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -33,7 +35,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
       <ScrollArea className="flex-1">
         <div className="p-4">
           {children}
@@ -41,6 +43,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       </ScrollArea>
       
       {includeFooter && isFooterVisible && <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />}
+      
+      {/* Show footer button that appears when the footer is hidden */}
+      {includeFooter && !isFooterVisible && (
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white rounded-full p-2 shadow-lg"
+          onClick={toggleFooter}
+        >
+          <Eye className="h-4 w-4 mr-1" /> Show Footer
+        </Button>
+      )}
     </div>
   );
 };
