@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowLeft, MoreVertical, Settings, Star, FileText, Shield, Package } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { extensionsData } from "@/lib/extensionsData";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
@@ -151,49 +149,56 @@ const ExtensionAdmin: React.FC = () => {
           <ExtensionStats extensions={extensions} />
           
           {/* Tabs and search controls */}
-          <div className="mt-8">
+          <div className="mt-6">
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                <TabsList className="h-12 bg-gray-800/80 rounded-lg border border-gray-700">
+              <div className="flex items-center">
+                <TabsList className="h-10 bg-muted/30 rounded-lg border border-muted p-0.5 mr-3">
                   <TabsTrigger 
                     value="all" 
-                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                   >
                     All Extensions
                   </TabsTrigger>
                   <TabsTrigger 
                     value="installed" 
-                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                   >
                     Installed
                   </TabsTrigger>
                   <TabsTrigger 
+                    value="favorites" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Favorites
+                  </TabsTrigger>
+                  <TabsTrigger 
                     value="featured" 
-                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                   >
                     Featured
                   </TabsTrigger>
                   <TabsTrigger 
                     value="beta" 
-                    onClick={handleBetaNavigation} 
-                    className="text-base px-6 py-2.5 data-[state=active]:bg-gray-900 hover:bg-gray-700/80 transition-colors rounded-md"
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                   >
                     Beta
                   </TabsTrigger>
                 </TabsList>
                 
                 {/* Search bar moved to the same line as tabs */}
-                {activeTab !== "beta" && (
-                  <ExtensionSearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    categories={categories}
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                    viewMode={viewMode}
-                    setViewMode={setViewMode}
-                  />
-                )}
+                <div className="flex-1">
+                  {activeTab !== "beta" && (
+                    <ExtensionSearchBar
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      categories={categories}
+                      activeCategory={activeCategory}
+                      setActiveCategory={setActiveCategory}
+                      viewMode={viewMode}
+                      setViewMode={setViewMode}
+                    />
+                  )}
+                </div>
               </div>
               
               {/* Content based on active tab */}

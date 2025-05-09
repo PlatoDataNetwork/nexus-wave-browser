@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -89,58 +88,60 @@ const ExtensionStore: React.FC = () => {
             className="w-full"
           >
             <div className="flex flex-col gap-3">
-              <TabsList className="h-10 bg-muted/40 rounded-md border border-border w-full justify-start">
-                <TabsTrigger 
-                  value="all" 
-                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
-                >
-                  All
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="installed" 
-                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
-                >
-                  Installed
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="favorites" 
-                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
-                >
-                  Favorites
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="featured" 
-                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
-                >
-                  Featured
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="beta" 
-                  className="text-sm px-4 py-2 data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
-                >
-                  Beta
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="admin" 
-                  onClick={handleAdminNavigation} 
-                  className="text-sm px-4 py-2 bg-nexus-purple/10 hover:bg-nexus-purple/30 transition-colors rounded"
-                >
-                  Admin
-                </TabsTrigger>
-              </TabsList>
-              
-              {/* Search bar below tabs with full width */}
-              <div className="w-full">
+              <div className="flex items-center">
+                <TabsList className="h-10 bg-muted/30 rounded-lg border border-muted p-0.5 mr-3">
+                  <TabsTrigger 
+                    value="all" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    All Extensions
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="installed" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Installed
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="favorites" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Favorites
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="featured" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Featured
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="beta" 
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
+                  >
+                    Beta
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="admin" 
+                    onClick={handleAdminNavigation} 
+                    className="h-9 px-4 text-sm bg-nexus-purple/10 hover:bg-nexus-purple/30 transition-colors rounded"
+                  >
+                    Admin
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Move search to be in same row with tabs for consistency */}
                 {activeTab !== "beta" && (
-                  <ExtensionSearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    categories={categories}
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                    viewMode={viewMode}
-                    setViewMode={setViewMode}
-                  />
+                  <div className="flex-1">
+                    <ExtensionSearchBar
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      categories={categories}
+                      activeCategory={activeCategory}
+                      setActiveCategory={setActiveCategory}
+                      viewMode={viewMode}
+                      setViewMode={setViewMode}
+                    />
+                  </div>
                 )}
               </div>
             </div>

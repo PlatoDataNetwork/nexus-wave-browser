@@ -35,7 +35,7 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input 
           placeholder="Search extensions..." 
-          className="pl-10 h-9 text-sm"
+          className="pl-10 h-10 text-sm bg-muted/30 border-muted"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -43,7 +43,7 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="h-9 px-3 gap-1 text-sm">
+          <Button variant="outline" className="h-10 px-4 gap-1.5 text-sm">
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">Filter</span>
           </Button>
@@ -63,18 +63,18 @@ const ExtensionSearchBar: React.FC<ExtensionSearchBarProps> = ({
         </DropdownMenuContent>
       </DropdownMenu>
       
-      <div className="flex items-center rounded-md border border-input overflow-hidden">
+      <div className="flex items-center rounded-md border border-input h-10 overflow-hidden">
         <Button 
           variant={viewMode === "grid" ? "default" : "outline"}
           onClick={() => setViewMode("grid")} 
-          className={`h-9 rounded-none border-0 px-2 ${viewMode === "grid" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
+          className={`h-10 rounded-none border-0 px-4 ${viewMode === "grid" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
         >
           <Grid2x2 className="h-4 w-4" />
         </Button>
         <Button 
           variant={viewMode === "list" ? "default" : "outline"}
           onClick={() => setViewMode("list")} 
-          className={`h-9 rounded-none border-0 border-l border-input px-2 ${viewMode === "list" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
+          className={`h-10 rounded-none border-0 border-l border-input px-4 ${viewMode === "list" ? "bg-nexus-purple hover:bg-nexus-deep-purple" : "hover:bg-nexus-purple/20"}`}
         >
           <List className="h-4 w-4" />
         </Button>
