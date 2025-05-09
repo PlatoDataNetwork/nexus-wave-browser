@@ -10,7 +10,6 @@ import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
 import ExtensionStore from "./pages/ExtensionStore";
-import TokenPage from "./pages/TokenPage";
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
@@ -26,7 +25,6 @@ const App = () => (
           <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/token" element={<PageLayout><TokenPage /></PageLayout>} />
           {/* Always use the browser interface for the extension store */}
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
           {/* Legacy path, keep it for backward compatibility */}
