@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,6 @@ import { ArrowLeft, MoreVertical, Settings, Star, FileText, Shield, Package } fr
 import { extensionsData } from "@/lib/extensionsData";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
-import ExtensionStats from "@/components/Extensions/ExtensionStats";
 import BetaExtensions from "@/components/Extensions/BetaExtensions";
 
 const ExtensionAdmin: React.FC = () => {
@@ -145,8 +145,7 @@ const ExtensionAdmin: React.FC = () => {
             Nexus Wave Extension Library
           </h1>
           
-          {/* Stats Cards */}
-          <ExtensionStats extensions={extensions} />
+          {/* Stats Cards have been removed */}
           
           {/* Tabs and search controls */}
           <div className="mt-6">
