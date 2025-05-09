@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,6 +9,7 @@ import ConceptualExtensions from "@/components/Extensions/ConceptualExtensions";
 import SmileAnimation from "@/components/Extensions/SmileAnimation";
 import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -157,67 +159,69 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <div className="w-full pb-16">
-      {/* Header section */}
-      <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
-        Nexus Wave Extension Library
-      </h1>
-      
-      {/* Stats Cards - Ensure we pass ALL extensions to the stats component */}
-      <ExtensionStats extensions={allExtensions} />
-      
-      {/* Tab & Category navigation */}
-      <ExtensionTabBar 
-        activeTab={activeTab}
-        setActiveTab={handleTabChange}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-      />
+    <ScrollArea className="w-full h-full">
+      <div className="w-full pb-16 px-4">
+        {/* Header section */}
+        <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
+          Nexus Wave Extension Library
+        </h1>
+        
+        {/* Stats Cards - Ensure we pass ALL extensions to the stats component */}
+        <ExtensionStats extensions={allExtensions} />
+        
+        {/* Tab & Category navigation */}
+        <ExtensionTabBar 
+          activeTab={activeTab}
+          setActiveTab={handleTabChange}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+        />
 
-      {/* Category filter dropdown */}
-      <div className="flex items-center mt-4 mb-6">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Filter className="h-4 w-4" />
-              <span>Filter by Category{activeCategory ? `: ${activeCategory}` : ''}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56 max-h-[300px] overflow-y-auto">
-            {activeCategory && (
-              <DropdownMenuItem onClick={() => handleCategoryChange("")}>
-                Clear Filter
-              </DropdownMenuItem>
-            )}
-            {categories.map((category) => (
-              <DropdownMenuItem 
-                key={category} 
-                onClick={() => handleCategoryChange(category)}
-                className={activeCategory === category ? "bg-accent" : ""}
-              >
-                {category}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Category filter dropdown */}
+        <div className="flex items-center mt-4 mb-6">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Filter className="h-4 w-4" />
+                <span>Filter by Category{activeCategory ? `: ${activeCategory}` : ''}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56 max-h-[300px] overflow-y-auto">
+              {activeCategory && (
+                <DropdownMenuItem onClick={() => handleCategoryChange("")}>
+                  Clear Filter
+                </DropdownMenuItem>
+              )}
+              {categories.map((category) => (
+                <DropdownMenuItem 
+                  key={category} 
+                  onClick={() => handleCategoryChange(category)}
+                  className={activeCategory === category ? "bg-accent" : ""}
+                >
+                  {category}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        
+        {/* Extension Content based on active tab */}
+        <div className="mt-6">
+          {activeTab === "smile" ? (
+            <SmileAnimation />
+          ) : (
+            <ExtensionList 
+              extensions={filteredExtensions} 
+              viewMode={viewMode} 
+              onInstall={handleInstall}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          )}
+        </div>
       </div>
-      
-      {/* Extension Content based on active tab */}
-      <div className="mt-6">
-        {activeTab === "smile" ? (
-          <SmileAnimation />
-        ) : (
-          <ExtensionList 
-            extensions={filteredExtensions} 
-            viewMode={viewMode} 
-            onInstall={handleInstall}
-            onToggleFavorite={handleToggleFavorite}
-          />
-        )}
-      </div>
-    </div>
+    </ScrollArea>
   );
 };
 

@@ -10,6 +10,7 @@ import HistoryPage from "@/pages/History";
 import PageLayout from "@/components/Layout/PageLayout";
 import WebviewFrame from "./WebviewFrame";
 import { toast } from "@/components/ui/sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -43,7 +44,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
     // First check for internal routes (without protocol)
     if (currentUrl === '/history' || currentUrl.includes('history')) {
-      return <HistoryPage />;
+      return (
+        <ScrollArea className="h-full w-full">
+          <HistoryPage />
+        </ScrollArea>
+      );
     }
     
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
@@ -51,7 +56,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     }
     
     if (currentUrl === '/settings-docs' || currentUrl.includes('/settings-docs')) {
-      return <SettingsDocumentation />;
+      return (
+        <ScrollArea className="h-full w-full">
+          <SettingsDocumentation />
+        </ScrollArea>
+      );
     }
     
     // For external URLs (with protocol) or any other URL, use the WebviewFrame
