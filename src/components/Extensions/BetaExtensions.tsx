@@ -201,7 +201,7 @@ const BetaCard: React.FC<{ extension: BetaExtensionProps }> = ({ extension }) =>
   const formattedDescription = description.endsWith('.') ? description : description + '.';
 
   return (
-    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#101019] ${isFavorite ? 'border-nexus-purple/40 bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
+    <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#101019] border border-nexus-light-purple/50 ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <CardHeader className="p-4 pb-2">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3">
