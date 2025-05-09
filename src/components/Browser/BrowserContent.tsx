@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -128,11 +127,9 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
-        <ScrollArea className="absolute inset-0 h-full">
-          <div className="bg-background">
-            <ExtensionStore />
-          </div>
-        </ScrollArea>
+        <div className="absolute inset-0 h-full overflow-auto">
+          <ExtensionStore />
+        </div>
       )}
     </div>
   );
