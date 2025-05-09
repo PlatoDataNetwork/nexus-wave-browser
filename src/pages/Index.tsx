@@ -37,7 +37,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
       </div>
       
       {/* Browser interface */}
-      <div className="flex-1 flex flex-col overflow-hidden relative">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <BrowserHeader
           tabs={tabs}
           currentUrl={currentUrl}
@@ -58,11 +58,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
         
         {/* Nexus Wave Bridge overlay - centered in the browser */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="pointer-events-auto">
-            <WalletConnect />
-          </div>
-        </div>
+        <WalletConnect />
       </div>
       
       <CustomToaster position="bottom-right" />
