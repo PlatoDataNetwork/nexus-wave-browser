@@ -17,7 +17,7 @@ const ExtensionNavBar: React.FC<ExtensionNavBarProps> = ({
     { id: "favorites", label: "Favorites" },
     { id: "featured", label: "Featured" },
     { id: "beta", label: "Beta" },
-    { id: "admin", label: "Admin" },
+    { id: "smile", label: "Smile" },
   ];
 
   return (
