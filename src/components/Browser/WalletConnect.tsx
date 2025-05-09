@@ -233,12 +233,15 @@ const WalletConnect: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        // Store wallet_name in the metadata field as a workaround
         setIsConnected(true);
         setActiveWallet(data.wallet_provider as WalletProvider);
         setWalletAddress(data.wallet_address);
         // Extract wallet_name from metadata if it exists, otherwise use default
-        setWalletName(data.metadata?.wallet_name || "My Wallet");
+        if (data.metadata && typeof data.metadata === 'object' && data.metadata.wallet_name) {
+          setWalletName(data.metadata.wallet_name);
+        } else {
+          setWalletName("My Wallet");
+        }
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
@@ -437,13 +440,15 @@ const WalletConnect: React.FC = () => {
 
   if (loading) {
     return (
-      <Card className="nexus-glass animate-pulse-glow">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center h-40">
-            <span className="text-muted-foreground">Loading wallet...</span>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <Card className="nexus-glass animate-pulse-glow w-[350px]">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-center h-40">
+              <span className="text-muted-foreground">Loading wallet...</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
@@ -463,13 +468,13 @@ const WalletConnect: React.FC = () => {
           <X className="h-5 w-5" />
         </button>
         
-        <Card className="nexus-glass animate-pulse-glow w-[400px] h-[400px] aspect-square">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-center text-2xl font-medium">
+        <Card className="nexus-glass animate-pulse-glow w-[350px] h-auto max-h-[400px]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-center text-xl font-medium">
               Nexus Wave Bridge
             </CardTitle>
-            <CardDescription className="text-center">
-              Connect you wallet and transport yourself with Nexus.
+            <CardDescription className="text-center text-sm">
+              Connect your wallet and transport yourself with Nexus.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -558,7 +563,7 @@ const WalletConnect: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Wallet</span>
                       <span className="text-sm font-medium flex items-center">
-                        <Avatar className="h-7 w-7 mr-2">
+                        <Avatar className="h-5 w-5 mr-2">
                           <AvatarImage src={getWalletLogo(activeWallet)} alt={getWalletName(activeWallet)} className="p-0" />
                           <AvatarFallback>{activeWallet.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
@@ -576,7 +581,7 @@ const WalletConnect: React.FC = () => {
                           className="h-6 w-6 ml-1"
                           onClick={copyAddress}
                         >
-                          {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                          {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                         </Button>
                       </span>
                     </div>
@@ -598,7 +603,7 @@ const WalletConnect: React.FC = () => {
                           </SheetHeader>
                           <div className="py-4 space-y-4">
                             <div className="flex justify-center mb-4">
-                              <Avatar className="h-20 w-20">
+                              <Avatar className="h-16 w-16">
                                 <AvatarImage src={getWalletLogo(activeWallet!)} alt={getWalletName(activeWallet!)} className="p-0" />
                                 <AvatarFallback>{activeWallet!.charAt(0).toUpperCase()}</AvatarFallback>
                               </Avatar>
@@ -703,21 +708,30 @@ const WalletConnect: React.FC = () => {
               </div>
               
               <div className="mt-auto">
-                <Separator className="mb-4" />
+                <Separator className="mb-3" />
                 
-                {/* Updated wallet support text to match Nexus Wave Bridge white color and made text size larger */}
-                <div className="mb-4">
-                  <p className="text-sm text-justify px-2">
-                    <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
-                    <span className="text-left block">
-                      Coinbase, Crypto.com, Exodus, Kraken, Ledger, MetaMask, 
-                      Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
-                    </span>
+                {/* Updated wallet support text with smaller text and icons */}
+                <div className="mb-3">
+                  <p className="text-xs text-center">
+                    <span className="block text-sm text-white mb-2">Supported Wallets:</span>
                   </p>
+                  {/* Centralized wallet icons grid */}
+                  <div className="grid grid-cols-5 gap-2 justify-center">
+                    {walletOptions.map(wallet => (
+                      <div key={wallet.id} className="flex flex-col items-center">
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage src={wallet.logoUrl} alt={wallet.name} />
+                          <AvatarFallback>{wallet.icon}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-[9px] mt-1 text-center overflow-hidden text-ellipsis w-full whitespace-nowrap">
+                          {wallet.name.split(' ')[0]}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 
-                {/* Added mt-8 to increase spacing between text and button */}
-                <div className="mt-8">
+                <div className="mt-4">
                   {isConnected ? (
                     <Button 
                       onClick={handleDisconnect}
@@ -729,7 +743,7 @@ const WalletConnect: React.FC = () => {
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                       <DialogTrigger asChild>
                         <Button 
-                          className="w-full py-6 text-lg bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
+                          className="w-full py-4 text-base bg-[#e5007e] hover:bg-[#e5007e]/90 text-white"
                         >
                           Nexus Wave Bridge
                         </Button>
@@ -775,7 +789,7 @@ const WalletConnect: React.FC = () => {
                                         <RadioGroupItem value={wallet.id} id={wallet.id} />
                                         <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
                                           <div className="flex items-center">
-                                            <Avatar className="h-10 w-10 mr-2">
+                                            <Avatar className="h-8 w-8 mr-2">
                                               <AvatarImage 
                                                 src={wallet.logoUrl} 
                                                 alt={wallet.name} 
