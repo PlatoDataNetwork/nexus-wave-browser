@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Card, 
@@ -83,8 +82,8 @@ const zengoLogoUrl = "/lovable-uploads/ba144354-b855-4059-9368-df5d3ccd0d92.png"
 // Atomic Wallet logo URL - updated with the newly uploaded image
 const atomicWalletLogoUrl = "/lovable-uploads/127a38a8-38dc-4895-83ec-7dea24d35525.png";
 
-// Binance Wallet logo URL (placeholder - will need to be uploaded)
-const binanceWalletLogoUrl = "https://play-lh.googleusercontent.com/kjiRCe9E-,kUzpNP5gH0p7nkOKGjkdNUwNbZyxqgaFUV7MyBUw-N_nTQhPFRhYu944s=w240-h480-rw";
+// Binance Wallet logo URL - updated with the newly uploaded image
+const binanceWalletLogoUrl = "/lovable-uploads/73f65900-61e9-4142-b508-85561d2e931d.png";
 
 // Kraken Wallet logo URL (placeholder - will need to be uploaded)
 const krakenWalletLogoUrl = "https://play-lh.googleusercontent.com/KgGNbQEGhJkWPG-cNK7zKFCpqFz6aYMcXb90N2jMRKl8tA4OGWuZeYZGn5W9VJIM93g=w240-h480-rw";
@@ -122,6 +121,20 @@ const shortenAddress = (address: string): string => {
     ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
     : address;
 };
+
+// Type definition for the wallet connection data from Supabase
+// Adding the wallet_name field that was missing
+interface WalletConnection {
+  created_at: string;
+  id: string;
+  is_connected: boolean;
+  last_connected: string;
+  metadata: any; // Using any for Json type
+  user_id: string;
+  wallet_address: string;
+  wallet_provider: string;
+  wallet_name?: string; // Added this field that was missing
+}
 
 const WalletConnect: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -205,10 +218,12 @@ const WalletConnect: React.FC = () => {
       if (error) throw error;
 
       if (data) {
+        // Cast data to the interface with wallet_name field
+        const walletData = data as WalletConnection;
         setIsConnected(true);
-        setActiveWallet(data.wallet_provider as WalletProvider);
-        setWalletAddress(data.wallet_address);
-        setWalletName(data.wallet_name || "My Wallet"); // Use stored name or default
+        setActiveWallet(walletData.wallet_provider as WalletProvider);
+        setWalletAddress(walletData.wallet_address);
+        setWalletName(walletData.wallet_name || "My Wallet"); // Use stored name or default
       }
     } catch (error) {
       console.error("Error fetching wallet connection:", error);
@@ -259,7 +274,7 @@ const WalletConnect: React.FC = () => {
       const name = customName || `${getWalletName(provider)}`;
       setWalletName(name);
 
-      // Store wallet connection in Supabase
+      // Store wallet connection in Supabase with wallet_name field
       const { error } = await supabase
         .from('wallet_connections')
         .upsert({
@@ -336,7 +351,9 @@ const WalletConnect: React.FC = () => {
       // Update wallet name in Supabase
       const { error } = await supabase
         .from('wallet_connections')
-        .update({ wallet_name: walletName })
+        .update({ 
+          wallet_name: walletName 
+        })
         .eq('user_id', user.id)
         .eq('wallet_provider', activeWallet);
 
