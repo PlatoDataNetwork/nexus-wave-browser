@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -11,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
-import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle } from "lucide-react";
+import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock } from "lucide-react";
 import { 
   Dialog,
   DialogContent,
@@ -44,6 +43,7 @@ import {
 } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
 
 // Define wallet types
 type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger';
@@ -102,6 +102,7 @@ const WalletConnect: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   // Form setup
   const form = useForm({
@@ -109,6 +110,15 @@ const WalletConnect: React.FC = () => {
       walletProvider: 'metamask' as WalletProvider
     }
   });
+
+  // Update current time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, []);
 
   // Check for user session and wallet connections on component mount
   useEffect(() => {
@@ -385,6 +395,15 @@ const WalletConnect: React.FC = () => {
                 <span className="text-sm font-medium flex items-center">
                   <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-destructive'} mr-2`}></span>
                   {isConnected ? 'Connected' : 'Disconnected'}
+                </span>
+              </div>
+              
+              {/* Add timestamp below status line */}
+              <div className="flex items-center justify-between mt-1">
+                <span className="text-sm text-muted-foreground">Timestamp</span>
+                <span className="text-sm font-medium flex items-center">
+                  <Clock className="h-3 w-3 mr-1" />
+                  {format(currentTime, "yyyy-MM-dd HH:mm:ss")}
                 </span>
               </div>
               
