@@ -184,21 +184,6 @@ const ExtensionStore: React.FC = () => {
           setActiveTab={handleTabChange}
         />
         
-        {/* Only show search when not on special tabs */}
-        {activeTab !== "smile" && activeTab !== "beta" && (
-          <div className="mt-6">
-            <ExtensionSearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              categories={categories}
-              activeCategory={activeCategory}
-              setActiveCategory={handleCategoryChange}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-            />
-          </div>
-        )}
-        
         {/* Extension Content based on active tab */}
         <div className="mt-6">
           {activeTab === "smile" ? (
