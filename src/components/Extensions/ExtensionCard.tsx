@@ -40,11 +40,7 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
             <div>
               <div className="flex items-center">
                 <h3 className="font-medium text-lg line-clamp-1 text-white">{name}</h3>
-                {isBeta && (
-                  <Badge variant="outline" className="ml-2 bg-yellow-500/20 text-yellow-400 border-yellow-600">
-                    BETA
-                  </Badge>
-                )}
+                {/* Beta badge removed */}
               </div>
               <div className="text-xs text-gray-400">
                 {isBeta ? `Est. Release: ${estimatedRelease}` : `v${version}`}
