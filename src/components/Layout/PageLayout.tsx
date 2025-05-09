@@ -35,11 +35,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   return (
     <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1 h-[calc(100vh-180px)]">
-        <div className="p-4 pb-16">
-          {children}
-        </div>
-      </ScrollArea>
+      <div className="flex-1 h-full overflow-hidden">
+        {children}
+      </div>
       
       {includeFooter && isFooterVisible && (
         <div className="mt-auto">

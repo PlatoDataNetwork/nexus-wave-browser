@@ -51,7 +51,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     // For external URLs (with protocol), use the WebviewFrame
     if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
       return (
-        <div className="h-full w-full">
+        <div className="h-full w-full flex-1 overflow-hidden">
           <WebviewFrame url={currentUrl} />
         </div>
       );

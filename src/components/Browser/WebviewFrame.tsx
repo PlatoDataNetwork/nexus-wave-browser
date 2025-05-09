@@ -58,7 +58,138 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
   // This simulates a real website while avoiding CORS/iframe embedding issues
   const generateDemoContent = () => {
     // Use different templates for well-known sites
-    if (domain.includes("opensea")) {
+    if (domain.includes("magiceden")) {
+      return `
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                background: #0c0e14;
+                color: white;
+              }
+              header {
+                padding: 16px;
+                background: #9c2cf9;
+                display: flex;
+                align-items: center;
+              }
+              .logo {
+                font-weight: bold;
+                font-size: 24px;
+                margin-right: 20px;
+              }
+              .banner {
+                width: 100%;
+                height: 300px;
+                background-image: linear-gradient(to right, #9c2cf9, #c17afa);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+              }
+              .nft-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 16px;
+                padding: 20px;
+                max-width: 1200px;
+                margin: 0 auto;
+              }
+              .nft-card {
+                background: #181b25;
+                border-radius: 12px;
+                overflow: hidden;
+                transition: transform 0.2s;
+              }
+              .nft-card:hover {
+                transform: translateY(-5px);
+              }
+              .nft-image {
+                height: 200px;
+                background-size: cover;
+                background-position: center;
+              }
+              .nft-info {
+                padding: 12px;
+              }
+              .tag {
+                display: inline-block;
+                background: #2c2f3b;
+                color: #9c2cf9;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                margin-right: 6px;
+              }
+              .price {
+                font-weight: bold;
+                color: #9c2cf9;
+                margin-top: 8px;
+                font-size: 18px;
+              }
+              .search-bar {
+                width: 100%;
+                max-width: 600px;
+                margin: 20px auto;
+                display: flex;
+                padding: 0 20px;
+              }
+              .search-input {
+                flex: 1;
+                padding: 12px 16px;
+                border-radius: 8px;
+                border: none;
+                background: #181b25;
+                color: white;
+                font-size: 16px;
+              }
+              .search-button {
+                margin-left: 10px;
+                background: #9c2cf9;
+                color: white;
+                border: none;
+                padding: 0 20px;
+                border-radius: 8px;
+                cursor: pointer;
+              }
+            </style>
+          </head>
+          <body>
+            <header>
+              <div class="logo">Magic Eden</div>
+              <div>NFT Marketplace</div>
+            </header>
+            <div class="banner">
+              <h1>Discover, Collect, and Sell NFTs</h1>
+              <p>The leading cross-chain NFT platform for the next million users</p>
+            </div>
+            <div class="search-bar">
+              <input class="search-input" placeholder="Search collections, NFTs, or users...">
+              <button class="search-button">Search</button>
+            </div>
+            <div class="nft-grid">
+              ${Array(12).fill(0).map((_, i) => `
+                <div class="nft-card">
+                  <div class="nft-image" style="background: ${['#9c2cf9', '#c17afa', '#7a56ff', '#5a5df9'][i % 4]}"></div>
+                  <div class="nft-info">
+                    <div>
+                      <span class="tag">Solana</span>
+                      <span class="tag">Verified</span>
+                    </div>
+                    <h3>${['Cosmic Creatures', 'Magic Monkeys', 'Pixel Warriors', 'Cyber Punks', 'Digital Dreamers', 'Meta Knights'][i % 6]} #${1000 + i}</h3>
+                    <div class="price">${(0.5 + i * 0.25).toFixed(2)} SOL</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </body>
+        </html>
+      `;
+    } else if (domain.includes("opensea")) {
       return `
         <html>
           <head>
@@ -323,6 +454,401 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
           </body>
         </html>
       `;
+    } else if (domain.includes("aave")) {
+      return `
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: system-ui, sans-serif;
+                background: #070b15;
+                color: white;
+              }
+              header {
+                padding: 16px 20px;
+                background: #13182c;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              }
+              .logo {
+                font-weight: bold;
+                font-size: 22px;
+                color: #b6baff;
+                display: flex;
+                align-items: center;
+              }
+              .logo-circle {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #b6baff, #9498f7);
+                margin-right: 10px;
+              }
+              .nav {
+                display: flex;
+                gap: 24px;
+                color: rgba(255,255,255,0.7);
+              }
+              .banner {
+                background: linear-gradient(135deg, #13182c, #1c2042);
+                padding: 40px 20px 70px;
+                position: relative;
+              }
+              .stats-row {
+                display: flex;
+                justify-content: space-between;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+                position: relative;
+                z-index: 2;
+              }
+              .stat-card {
+                margin-top: -50px;
+                background: #0c1122;
+                border-radius: 10px;
+                padding: 24px;
+                width: calc(33% - 16px);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                border: 1px solid rgba(255,255,255,0.05);
+                text-align: center;
+              }
+              .stat-value {
+                font-size: 32px;
+                font-weight: bold;
+                color: #b6baff;
+                margin: 16px 0 8px;
+              }
+              .stat-title {
+                opacity: 0.7;
+                margin-bottom: 8px;
+              }
+              .content {
+                padding: 40px 20px;
+                max-width: 1200px;
+                margin: 0 auto;
+              }
+              .table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-top: 30px;
+              }
+              .table th {
+                text-align: left;
+                padding: 16px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                color: rgba(255,255,255,0.7);
+                font-weight: 500;
+              }
+              .table td {
+                padding: 16px;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+              }
+              .token-col {
+                display: flex;
+                align-items: center;
+              }
+              .token-icon {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: #2a3052;
+                margin-right: 12px;
+              }
+              .positive {
+                color: #5ac4be;
+              }
+              .button {
+                background: #1c2042;
+                color: #b6baff;
+                border: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                cursor: pointer;
+              }
+            </style>
+          </head>
+          <body>
+            <header>
+              <div class="logo">
+                <div class="logo-circle"></div>
+                Aave
+              </div>
+              <div class="nav">
+                <div>Markets</div>
+                <div>Dashboard</div>
+                <div>Governance</div>
+                <div>Stake</div>
+              </div>
+            </header>
+            
+            <section class="banner">
+              <div class="stats-row">
+                <div class="stat-card">
+                  <div class="stat-title">Total Market Size</div>
+                  <div class="stat-value">$5.77B</div>
+                  <div>Across all networks</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-title">Total Value Locked</div>
+                  <div class="stat-value">$3.42B</div>
+                  <div>Across all networks</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-title">AAVE Price</div>
+                  <div class="stat-value">$104.29</div>
+                  <div class="positive">+2.34%</div>
+                </div>
+              </div>
+            </section>
+            
+            <section class="content">
+              <h2>Ethereum Markets</h2>
+              
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Asset</th>
+                    <th>Total Supplied</th>
+                    <th>Supply APY</th>
+                    <th>Total Borrowed</th>
+                    <th>Borrow APY</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${[
+                    {token: 'ETH', supply: '$921.4M', supplyApy: '1.26%', borrow: '$512.2M', borrowApy: '2.52%'},
+                    {token: 'USDC', supply: '$768.7M', supplyApy: '3.45%', borrow: '$402.8M', borrowApy: '4.90%'},
+                    {token: 'WBTC', supply: '$432.3M', supplyApy: '0.87%', borrow: '$176.5M', borrowApy: '1.95%'},
+                    {token: 'DAI', supply: '$397.6M', supplyApy: '3.21%', borrow: '$183.4M', borrowApy: '4.67%'},
+                    {token: 'LINK', supply: '$156.2M', supplyApy: '0.91%', borrow: '$42.7M', borrowApy: '2.81%'}
+                  ].map(item => `
+                    <tr>
+                      <td>
+                        <div class="token-col">
+                          <div class="token-icon"></div>
+                          ${item.token}
+                        </div>
+                      </td>
+                      <td>${item.supply}</td>
+                      <td class="positive">${item.supplyApy}</td>
+                      <td>${item.borrow}</td>
+                      <td>${item.borrowApy}</td>
+                      <td><button class="button">Supply</button></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </section>
+          </body>
+        </html>
+      `;
+    } else if (domain.includes("gist") && domain.includes("alekbot")) {
+      return `
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+                background: #0d1117;
+                color: #c9d1d9;
+              }
+              header {
+                padding: 16px;
+                background: #161b22;
+                border-bottom: 1px solid #30363d;
+                display: flex;
+                align-items: center;
+              }
+              .logo {
+                font-weight: bold;
+                font-size: 20px;
+                margin-right: 20px;
+              }
+              .header-nav {
+                display: flex;
+                gap: 16px;
+              }
+              .header-item {
+                color: #8b949e;
+                cursor: pointer;
+              }
+              .content-wrapper {
+                max-width: 1012px;
+                margin: 0 auto;
+                padding: 24px;
+              }
+              .gist-header {
+                margin-bottom: 16px;
+                border-bottom: 1px solid #30363d;
+                padding-bottom: 16px;
+              }
+              .gist-title {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: 8px;
+              }
+              .gist-meta {
+                font-size: 14px;
+                color: #8b949e;
+              }
+              .username {
+                font-weight: 600;
+                color: #58a6ff;
+              }
+              .file-header {
+                background: #161b22;
+                padding: 8px 16px;
+                border: 1px solid #30363d;
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+                display: flex;
+                justify-content: space-between;
+              }
+              .file-name {
+                font-family: monospace;
+                font-size: 14px;
+              }
+              .file-actions {
+                color: #8b949e;
+                font-size: 12px;
+              }
+              pre {
+                border: 1px solid #30363d;
+                border-top: none;
+                margin: 0;
+                padding: 16px;
+                overflow-x: auto;
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+                background: #0d1117;
+                font-family: monospace;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #c9d1d9;
+              }
+              .alek-bot {
+                color: #58a6ff;
+                font-weight: bold;
+              }
+              .function {
+                color: #d2a8ff;
+              }
+              .keyword {
+                color: #ff7b72;
+              }
+              .string {
+                color: #a5d6ff;
+              }
+              .comment {
+                color: #8b949e;
+                font-style: italic;
+              }
+              .button-row {
+                margin-top: 16px;
+                display: flex;
+                gap: 8px;
+              }
+              .button {
+                background: #238636;
+                color: #ffffff;
+                border: 1px solid rgba(240,246,252,0.1);
+                border-radius: 6px;
+                padding: 5px 16px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+              }
+            </style>
+          </head>
+          <body>
+            <header>
+              <div class="logo">GitHub Gist</div>
+              <div class="header-nav">
+                <div class="header-item">All gists</div>
+                <div class="header-item">Back to GitHub</div>
+              </div>
+            </header>
+            
+            <div class="content-wrapper">
+              <div class="gist-header">
+                <div class="gist-title">Alek Bot: Conversation Management System</div>
+                <div class="gist-meta">
+                  Created by <span class="username">AlekBot</span> on May 5, 2025 • <span>5 files</span>
+                </div>
+              </div>
+              
+              <div>
+                <div class="file-header">
+                  <div class="file-name">alek_bot.js</div>
+                  <div class="file-actions">Raw | Copy</div>
+                </div>
+                <pre><span class="comment">/**
+ * Alek Bot - Web3 Browser Assistant
+ * Enhanced AI capabilities for Nexus Wave Browser
+ */</span>
+
+<span class="keyword">class</span> <span class="alek-bot">AlekBot</span> {
+  <span class="function">constructor</span>() {
+    <span class="keyword">this</span>.name = <span class="string">"Alek"</span>;
+    <span class="keyword">this</span>.version = <span class="string">"3.5.2"</span>;
+    <span class="keyword">this</span>.capabilities = [
+      <span class="string">"blockchain_data_analysis"</span>,
+      <span class="string">"web3_wallet_integration"</span>,
+      <span class="string">"defi_protocol_scanning"</span>,
+      <span class="string">"nft_metadata_extraction"</span>,
+      <span class="string">"smart_contract_verification"</span>
+    ];
+    <span class="keyword">this</span>.initAssistant();
+  }
+
+  <span class="function">async</span> <span class="function">initAssistant</span>() {
+    <span class="keyword">await</span> <span class="keyword">this</span>.loadWeb3Models();
+    <span class="keyword">await</span> <span class="keyword">this</span>.connectBlockchainNodes();
+    console.log(<span class="string">"Alek Bot initialized and ready to assist!"</span>);
+  }
+  
+  <span class="function">async</span> <span class="function">analyzeSmartContract</span>(contractAddress) {
+    <span class="comment">// Security analysis logic</span>
+    <span class="keyword">const</span> vulnerabilities = <span class="keyword">await</span> <span class="keyword">this</span>.scanForVulnerabilities(contractAddress);
+    <span class="keyword">return</span> {
+      securityScore: <span class="keyword">this</span>.calculateSecurityScore(vulnerabilities),
+      issues: vulnerabilities,
+      recommendation: <span class="keyword">this</span>.generateSecurityRecommendation(vulnerabilities)
+    };
+  }
+  
+  <span class="function">provideBrowserAssistance</span>() {
+    <span class="keyword">return</span> {
+      activeHelp: <span class="keyword">true</span>,
+      enhancedPrivacy: <span class="keyword">true</span>,
+      web3Integration: <span class="keyword">this</span>.web3IntegrationStatus,
+      currentChain: <span class="keyword">this</span>.detectedBlockchain
+    };
+  }
+}
+
+<span class="keyword">const</span> aleksAssistant = <span class="keyword">new</span> <span class="alek-bot">AlekBot</span>();
+<span class="keyword">export</span> <span class="keyword">default</span> aleksAssistant;</pre>
+              </div>
+              
+              <div class="button-row">
+                <button class="button">Star</button>
+                <button class="button">Fork</button>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
     }
     
     // Generic template for other sites
@@ -336,6 +862,9 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
               font-family: sans-serif;
               background: #f4f5f7;
               color: #333;
+              height: 100vh;
+              width: 100vw;
+              overflow: hidden;
             }
             header {
               padding: 16px;
@@ -347,6 +876,8 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
               padding: 40px 20px;
               max-width: 1200px;
               margin: 0 auto;
+              height: calc(100vh - 180px);
+              overflow-y: auto;
             }
             .hero {
               background: linear-gradient(45deg, #3c40c6, #5352ed);
