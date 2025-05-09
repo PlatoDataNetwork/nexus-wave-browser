@@ -14,6 +14,7 @@ export type Bookmark = {
   title: string;
   url: string;
   icon?: React.ElementType;
+  color?: string; // Add color property to the Bookmark type
 };
 
 export type DApp = {

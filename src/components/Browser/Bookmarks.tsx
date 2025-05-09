@@ -10,12 +10,13 @@ interface BookmarksProps {
   onNavigate: (url: string) => void;
 }
 
-// Extend the Bookmark type to include color
+// Enhanced bookmark type that always includes color
 interface EnhancedBookmark {
   id: string;
   title: string;
   url: string;
-  color?: string;
+  color: string;
+  icon?: React.ElementType;
 }
 
 const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
@@ -138,7 +139,6 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
       >
         {alphabetizedBookmarks.map((bookmark) => {
           const initial = bookmark.title.charAt(0).toUpperCase();
-          const bgColor = bookmark.color || getColorFromName(bookmark.title);
           
           return (
             <Button
@@ -150,7 +150,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
             >
               <div 
                 className="flex items-center justify-center h-6 w-6 rounded-full text-white font-medium text-xs"
-                style={{ backgroundColor: bgColor }}
+                style={{ backgroundColor: bookmark.color }}
               >
                 {initial}
               </div>
