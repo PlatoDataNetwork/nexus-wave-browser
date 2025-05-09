@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
-import BrowserFooter from "@/components/Browser/BrowserFooter";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
-import { Button } from "@/components/ui/button";
+import PageLayout from "@/components/Layout/PageLayout";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -26,13 +25,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     canGoForward
   } = useTabs(defaultUrl);
   
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
-
-  // Toggle footer visibility
-  const toggleFooter = () => {
-    setIsFooterVisible(prev => !prev);
-  };
-
   // Debug log to check what URL is being loaded initially
   console.log("Index component rendering with defaultUrl:", defaultUrl);
   console.log("Current URL in tabs system:", currentUrl);
@@ -60,25 +52,13 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           canGoForward={canGoForward()}
         />
         
-        <BrowserContent 
-          currentUrl={currentUrl} 
-          onNavigate={navigateToUrl}
-        />
+        <PageLayout includeFooter={true} onNavigate={navigateToUrl}>
+          <BrowserContent 
+            currentUrl={currentUrl} 
+            onNavigate={navigateToUrl}
+          />
+        </PageLayout>
       </div>
-      
-      {/* Add the Browser Footer with toggle functionality */}
-      {isFooterVisible && <BrowserFooter onNavigate={navigateToUrl} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />}
-      
-      {/* Show footer button that appears when the footer is hidden */}
-      {!isFooterVisible && (
-        <Button 
-          size="sm"
-          className="fixed bottom-4 right-4 bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 rounded-md shadow-lg z-50"
-          onClick={toggleFooter}
-        >
-          Show Footer
-        </Button>
-      )}
       
       <CustomToaster position="bottom-right" />
     </div>

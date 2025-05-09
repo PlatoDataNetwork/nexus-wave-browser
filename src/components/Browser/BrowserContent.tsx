@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { initialTabs, bookmarks, popularDApps, DApp } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import WalletConnect from "./WalletConnect";
 import ExtensionStore from "@/pages/ExtensionStore";
-import PageLayout from "@/components/Layout/PageLayout";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -130,9 +128,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       {/* Extension Store - shown when URL is /extension-store */}
       {isExtensionStore && (
         <div className="flex-1 h-full overflow-hidden">
-          <PageLayout includeFooter={true} onNavigate={onNavigate}>
-            <ExtensionStore />
-          </PageLayout>
+          <ExtensionStore />
         </div>
       )}
     </div>
