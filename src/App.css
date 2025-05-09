@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,18 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Enhanced glow effect for cards */
+.animate-pulse-glow {
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(123, 99, 221, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(123, 99, 221, 0.7);
+  }
 }
