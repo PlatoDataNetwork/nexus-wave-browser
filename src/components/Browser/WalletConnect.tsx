@@ -97,21 +97,21 @@ const NBLogo = () => (
 
 // Wallet options - alphabetized
 const walletOptions = [
-  { id: 'atomic', name: 'Atomic Wallet', icon: '⚛️', description: 'Connect to your Atomic Wallet', logoUrl: atomicWalletLogoUrl },
-  { id: 'binance', name: 'Binance Wallet', icon: '🔶', description: 'Connect to your Binance Wallet', logoUrl: binanceWalletLogoUrl },
-  { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
-  { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: cryptoComLogoUrl },
-  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: exodusLogoUrl },
-  { id: 'kraken', name: 'Kraken Wallet', icon: '🐙', description: 'Connect to your Kraken wallet', logoUrl: krakenWalletLogoUrl },
-  { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: ledgerLogoUrl },
-  { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
-  { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: phantomLogoUrl },
-  { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to your Solflare wallet for Solana', logoUrl: solflareLogoUrl },
-  { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to your Trezor hardware wallet', logoUrl: trezorLogoUrl },
-  { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: trustWalletLogoUrl },
-  { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: uniswapLogoUrl },
-  { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', description: 'Connect with WalletConnect protocol', logoUrl: walletConnectLogoUrl },
-  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: zengoLogoUrl },
+  { id: 'atomic', name: 'Atomic Wallet', icon: '⚛️', description: 'Connect to Atomic', logoUrl: atomicWalletLogoUrl },
+  { id: 'binance', name: 'Binance Wallet', icon: '🔶', description: 'Connect to Binance', logoUrl: binanceWalletLogoUrl },
+  { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to Coinbase', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
+  { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to Crypto.com', logoUrl: cryptoComLogoUrl },
+  { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to Exodus', logoUrl: exodusLogoUrl },
+  { id: 'kraken', name: 'Kraken Wallet', icon: '🐙', description: 'Connect to Kraken', logoUrl: krakenWalletLogoUrl },
+  { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to Ledger', logoUrl: ledgerLogoUrl },
+  { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to MetaMask', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
+  { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to Phantom', logoUrl: phantomLogoUrl },
+  { id: 'solflare', name: 'Solflare', icon: '🌞', description: 'Connect to Solflare', logoUrl: solflareLogoUrl },
+  { id: 'trezor', name: 'Trezor', icon: '🛡️', description: 'Connect to Trezor', logoUrl: trezorLogoUrl },
+  { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to Trust', logoUrl: trustWalletLogoUrl },
+  { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to Uniswap', logoUrl: uniswapLogoUrl },
+  { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', description: 'Connect to WalletConnect', logoUrl: walletConnectLogoUrl },
+  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to ZenGo', logoUrl: zengoLogoUrl },
 ];
 
 // Shortened address helper
