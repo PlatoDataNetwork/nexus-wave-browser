@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -8,6 +9,7 @@ import ExtensionSearchBar from "@/components/Extensions/ExtensionSearchBar";
 import ExtensionList from "@/components/Extensions/ExtensionList";
 import BetaExtensions from "@/components/Extensions/BetaExtensions";
 import PageLayout from "@/components/Layout/PageLayout";
+import ExtensionAdmin from "@/pages/ExtensionAdmin";
 
 const ExtensionStore: React.FC = () => {
   const navigate = useNavigate();
@@ -59,15 +61,6 @@ const ExtensionStore: React.FC = () => {
     }
   };
 
-  // Handle Admin Navigation
-  const handleAdminNavigation = () => {
-    toast({
-      title: "Navigating to Admin",
-      description: "Opening Extension Admin Console"
-    });
-    navigate("/extension-admin");
-  };
-
   return (
     <PageLayout>
       <div className="p-6 max-w-7xl mx-auto w-full">
@@ -76,16 +69,18 @@ const ExtensionStore: React.FC = () => {
           <h1 className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
             Nexus Wave Extension Library
           </h1>
-          <h1 
-            className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent cursor-pointer"
-            onClick={handleAdminNavigation}
-          >
-            Admin Console
-          </h1>
+          {activeTab !== "admin" && (
+            <h1 
+              className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 via-nexus-purple to-nexus-light-purple bg-clip-text text-transparent cursor-pointer"
+              onClick={() => setActiveTab("admin")}
+            >
+              Admin Console
+            </h1>
+          )}
         </div>
 
-        {/* Stats Cards */}
-        <ExtensionStats extensions={extensions} />
+        {/* Stats Cards - Only show when not in admin tab */}
+        {activeTab !== "admin" && <ExtensionStats extensions={extensions} />}
         
         {/* Tabs and search controls */}
         <div className="mt-6">
@@ -130,15 +125,14 @@ const ExtensionStore: React.FC = () => {
                   </TabsTrigger>
                   <TabsTrigger 
                     value="admin" 
-                    onClick={handleAdminNavigation} 
-                    className="h-9 px-4 text-sm bg-nexus-purple/10 hover:bg-nexus-purple/30 transition-colors rounded"
+                    className="h-9 px-4 text-sm data-[state=active]:bg-nexus-purple data-[state=active]:text-white hover:bg-nexus-purple/20 transition-colors rounded"
                   >
                     Admin
                   </TabsTrigger>
                 </TabsList>
 
                 {/* Move search to be in same row with tabs for consistency */}
-                {activeTab !== "beta" && (
+                {activeTab !== "beta" && activeTab !== "admin" && (
                   <div className="flex-1">
                     <ExtensionSearchBar
                       searchQuery={searchQuery}
@@ -189,6 +183,13 @@ const ExtensionStore: React.FC = () => {
 
             <TabsContent value="beta" className="mt-6 p-0">
               <BetaExtensions />
+            </TabsContent>
+
+            {/* Admin content included directly in the ExtensionStore page */}
+            <TabsContent value="admin" className="mt-6 p-0">
+              <div className="inline-block w-full">
+                <ExtensionAdmin />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

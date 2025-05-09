@@ -25,7 +25,8 @@ const App = () => (
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-          <Route path="/extension-admin" element={<PageLayout includeFooter={true}><ExtensionAdmin /></PageLayout>} />
+          {/* Admin page is now embedded in extension-store */}
+          {/* <Route path="/extension-admin" element={<PageLayout includeFooter={true}><ExtensionAdmin /></PageLayout>} /> */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout><NotFound /></PageLayout>} />
         </Routes>
