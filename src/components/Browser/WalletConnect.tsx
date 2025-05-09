@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Card, 
@@ -527,9 +526,9 @@ const WalletConnect: React.FC = () => {
             <div className="mt-auto">
               <Separator className="mb-4" />
               
-              {/* Wallet support text with updated font size to match status line */}
+              {/* Wallet support text with justified alignment */}
               <div className="mb-4">
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-sm text-muted-foreground text-justify px-2">
                   Nexus Wave currently supports the following wallets:
                   Crypto.com, Exodus, Ledger, MetaMask, Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect, ZenGo, and Coinbase.
                   More Wallets coming online soon.
