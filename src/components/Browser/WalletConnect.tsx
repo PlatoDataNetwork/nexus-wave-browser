@@ -708,11 +708,11 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onClose }) => {
               <div className="mt-auto">
                 <Separator className="mb-4" />
                 
-                {/* Updated wallet support text to match Nexus Wave Bridge white color and made text size larger */}
+                {/* Updated wallet support text with better spacing and consistent font size */}
                 <div className="mb-4">
                   <p className="text-sm text-justify px-2">
-                    <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
-                    <span className="text-left block">
+                    <span className="block text-sm text-white font-medium mb-2">Nexus Wave Supports the Following Wallets:</span>
+                    <span className="text-left block mt-1">
                       Coinbase, Crypto.com, Exodus, Kraken, Ledger, MetaMask, 
                       Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
                     </span>
