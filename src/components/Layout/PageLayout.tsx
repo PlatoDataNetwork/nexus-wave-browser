@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 interface PageLayoutProps {
   children: React.ReactNode;
