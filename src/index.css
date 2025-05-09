@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -116,5 +117,36 @@
     100% {
       transform: scale(2.5);
     }
+  }
+
+  @keyframes blink {
+    0%, 100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(0.1);
+    }
+  }
+
+  /* Rainbow gradient animation */
+  .rainbow-gradient {
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 1800% 1800%;
+    animation: rainbow 6s linear infinite;
+  }
+
+  @keyframes rainbow { 
+    0% { background-position: 0% 82% }
+    50% { background-position: 100% 19% }
+    100% { background-position: 0% 82% }
+  }
+
+  .countdown-animation {
+    animation: pulse 1s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(1.2); opacity: 0.8; }
   }
 }
