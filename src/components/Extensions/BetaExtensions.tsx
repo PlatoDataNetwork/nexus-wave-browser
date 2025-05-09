@@ -1,11 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import ExtensionTabBar from "./ExtensionTabBar";
 import { 
   AlertTriangle, 
   Brain, 
@@ -253,10 +251,7 @@ const BetaExtensions: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Add the tab navigation component */}
-      <ExtensionTabBar 
-        activeTab={activeTab} 
-        setActiveTab={handleTabChange}
-      />
+      
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {betaExtensions.map((extension, index) => (
