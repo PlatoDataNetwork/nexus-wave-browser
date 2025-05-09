@@ -30,20 +30,26 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       </ScrollArea>
       
-      {/* Toggle button for footer visibility */}
-      <div className="flex justify-center">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={toggleFooter}
-          className="h-6 my-1 rounded-full bg-muted/50 hover:bg-muted"
-        >
-          {footerVisible ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
-        </Button>
-      </div>
-      
       {/* Only show footer if visible */}
-      {footerVisible && <BrowserFooter onNavigate={onNavigate} />}
+      {footerVisible && <BrowserFooter 
+        onNavigate={onNavigate}
+        toggleFooter={toggleFooter}
+        isFooterVisible={footerVisible}
+      />}
+      
+      {/* If footer is not visible, show toggle button */}
+      {!footerVisible && (
+        <div className="flex justify-center py-1">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={toggleFooter}
+            className="h-6 rounded-full text-green-500 bg-muted/50 hover:bg-muted"
+          >
+            <ChevronUp className="h-4 w-4 text-green-500" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

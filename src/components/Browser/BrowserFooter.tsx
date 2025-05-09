@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -12,7 +12,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNavigate }) => {
+const BrowserFooter: React.FC<{ 
+  onNavigate?: (url: string) => void,
+  toggleFooter?: () => void,
+  isFooterVisible?: boolean
+}> = ({ onNavigate, toggleFooter, isFooterVisible = true }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -169,6 +173,28 @@ const BrowserFooter: React.FC<{ onNavigate?: (url: string) => void }> = ({ onNav
           </TooltipTrigger>
           <TooltipContent>Browser settings</TooltipContent>
         </Tooltip>
+        
+        {/* Toggle Footer Button */}
+        {toggleFooter && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-7 text-green-500"
+                onClick={toggleFooter}
+              >
+                {isFooterVisible ? 
+                  <ChevronDown className="h-3 w-3 mr-1 text-green-500" /> : 
+                  <ChevronUp className="h-3 w-3 mr-1 text-green-500" />}
+                <span>Toggle Footer</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isFooterVisible ? "Hide footer" : "Show footer"}</p>
+            </TooltipContent>
+          </Tooltip>
+        )}
       </div>
       
       <div className="flex items-center gap-3">
