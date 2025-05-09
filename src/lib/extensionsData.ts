@@ -1,3 +1,4 @@
+
 import { 
   Shield, 
   Lock, 
@@ -1375,7 +1376,7 @@ export const extensionsData: Extension[] = [
     id: 130,
     name: "CryptoInsights",
     description: "AI-powered crypto market intelligence with sentiment analysis, news aggregation, and predictive trend forecasting.",
-    category: "News & Intelligence",
+    category: "Gen AI",  // Changed from "News & Intelligence" to "Gen AI"
     rating: 4.9,
     users: 1345789,
     installed: false,
@@ -1403,7 +1404,7 @@ export const extensionsData: Extension[] = [
     id: 132,
     name: "OnchainAnalyst",
     description: "Advanced on-chain data analysis with whale movement tracking, liquidity flow visualization, and smart money indicators.",
-    category: "News & Intelligence",
+    category: "Gen AI",  // Changed from "News & Intelligence" to "Gen AI"
     rating: 4.8,
     users: 987654,
     installed: false,
@@ -1441,4 +1442,34 @@ export const extensionsData: Extension[] = [
     icon: TrendingUp,
     iconBg: iconBackgrounds[8]
   },
+  
+  // Gen AI category - New category (replacing "AI" category)
+  {
+    id: 135,
+    name: "ContentCreator",
+    description: "Generate blog posts, articles, and social media content with customizable styles, tones, and target audiences.",
+    category: "Gen AI",
+    rating: 5.0,
+    users: 2345678,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "3.0.1",
+    icon: Pencil,
+    iconBg: iconBackgrounds[0]
+  },
+  {
+    id: 136,
+    name: "VoiceAssistant",
+    description: "Advanced voice assistant with natural language understanding for complex commands and conversational interactions.",
+    category: "Gen AI",
+    rating: 4.9,
+    users: 1987654,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "2.5.3",
+    icon: MessageSquare,
+    iconBg: iconBackgrounds[0]
+  }
 ];
