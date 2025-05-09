@@ -47,7 +47,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 
 // Define wallet types
-type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger';
+type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger' | 'atomic' | 'binance';
 
 // Official WalletConnect logo URL
 const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24ea5.png";
@@ -79,6 +79,12 @@ const uniswapLogoUrl = "/lovable-uploads/c9c107c4-4a2f-4dac-b874-1dcaf9912e8a.pn
 // ZenGo logo URL from the newly uploaded image
 const zengoLogoUrl = "/lovable-uploads/ba144354-b855-4059-9368-df5d3ccd0d92.png";
 
+// Atomic Wallet logo URL (placeholder - will need to be uploaded)
+const atomicWalletLogoUrl = "https://play-lh.googleusercontent.com/UXYJiEter-aQQEKnoXON7pxm-9-t0YE4y_VF0Ujef7eTJzXo1zWcJBsJLRxE5ON3Krs=w240-h480-rw";
+
+// Binance Wallet logo URL (placeholder - will need to be uploaded)
+const binanceWalletLogoUrl = "https://play-lh.googleusercontent.com/kjiRCe9E-,kUzpNP5gH0p7nkOKGjkdNUwNbZyxqgaFUV7MyBUw-N_nTQhPFRhYu944s=w240-h480-rw";
+
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
   <div className="w-10 h-10 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
@@ -88,6 +94,8 @@ const NBLogo = () => (
 
 // Wallet options - alphabetized
 const walletOptions = [
+  { id: 'atomic', name: 'Atomic Wallet', icon: '⚛️', description: 'Connect to your Atomic Wallet', logoUrl: atomicWalletLogoUrl },
+  { id: 'binance', name: 'Binance Wallet', icon: '🔶', description: 'Connect to your Binance Wallet', logoUrl: binanceWalletLogoUrl },
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: cryptoComLogoUrl },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: exodusLogoUrl },
