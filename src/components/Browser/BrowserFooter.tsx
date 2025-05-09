@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,11 @@ const BrowserFooter: React.FC<{
   };
 
   const handleSettingsClick = () => {
-    navigate('/settings');
+    if (onNavigate) {
+      onNavigate('/settings-docs');
+    } else {
+      navigate('/settings-docs');
+    }
   };
   
   const handleHomeClick = () => {
@@ -37,7 +42,11 @@ const BrowserFooter: React.FC<{
   };
   
   const handleDocumentationClick = () => {
-    navigate('/documentation');
+    if (onNavigate) {
+      onNavigate('/settings-docs?tab=documentation');
+    } else {
+      navigate('/settings-docs?tab=documentation');
+    }
   };
   
   const handleHistoryClick = () => {
@@ -47,7 +56,6 @@ const BrowserFooter: React.FC<{
   const handleExtensionStoreClick = () => {
     console.log("Extension store clicked, navigating");
     
-    // Fix the navigation to extension store
     if (onNavigate) {
       onNavigate("/extension-store");
     } else {
@@ -63,7 +71,7 @@ const BrowserFooter: React.FC<{
   // Improved check for extension store page
   const isExtensionStoreActive = 
     location.pathname === '/extension-store' || 
-    (location.pathname === '/' && currentUrl?.includes('extension-store'));
+    location.pathname === '/' && location.search.includes('extension-store');
   
   // Add a debug log to help troubleshoot
   console.log("Current path:", location.pathname);
@@ -149,7 +157,7 @@ const BrowserFooter: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-7 ${location.pathname === '/documentation' ? 'bg-muted' : ''}`}
+              className={`h-7 ${location.pathname === '/settings-docs' && location.search.includes('documentation') ? 'bg-muted' : ''}`}
               onClick={handleDocumentationClick}
             >
               <FileText className="h-3 w-3 mr-1" />
@@ -164,7 +172,7 @@ const BrowserFooter: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`h-7 ${location.pathname === '/settings' ? 'bg-muted' : ''}`}
+              className={`h-7 ${location.pathname === '/settings-docs' && !location.search.includes('documentation') ? 'bg-muted' : ''}`}
               onClick={handleSettingsClick}
             >
               <Settings className="h-3 w-3 mr-1" />

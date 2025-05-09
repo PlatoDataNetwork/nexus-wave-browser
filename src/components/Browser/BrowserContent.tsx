@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ExternalLink } from "lucide-react";
-import Settings from "@/pages/Settings";
-import Documentation from "@/pages/Documentation";
+import SettingsDocumentation from "@/pages/SettingsDocumentation";
 import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
 import PageLayout from "@/components/Layout/PageLayout";
@@ -45,12 +44,8 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
     }
     
-    if (currentUrl === '/documentation') {
-      return <PageLayout includeFooter={true} onNavigate={onNavigate}><Documentation /></PageLayout>;
-    }
-    
-    if (currentUrl === '/settings') {
-      return <PageLayout includeFooter={true} onNavigate={onNavigate}><Settings /></PageLayout>;
+    if (currentUrl === '/settings-docs' || currentUrl.includes('/settings-docs')) {
+      return <PageLayout includeFooter={true} onNavigate={onNavigate}><SettingsDocumentation /></PageLayout>;
     }
     
     // Parse the URL for other routes that might include protocol
@@ -58,14 +53,12 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       const url = new URL(currentUrl, window.location.origin);
       
       // Check for special internal URLs with protocol
-      if (url.pathname === '/documentation') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><Documentation /></PageLayout>;
-      } else if (url.pathname === '/settings') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><Settings /></PageLayout>;
+      if (url.pathname === '/history') {
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
+      } else if (url.pathname === '/settings-docs') {
+        return <PageLayout includeFooter={true} onNavigate={onNavigate}><SettingsDocumentation /></PageLayout>;
       } else if (url.pathname === '/extension-store') {
         return <PageLayout includeFooter={true} onNavigate={onNavigate}><ExtensionStore /></PageLayout>;
-      } else if (url.pathname === '/history') {
-        return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
       }
     } catch (error) {
       console.error("Invalid URL:", currentUrl);

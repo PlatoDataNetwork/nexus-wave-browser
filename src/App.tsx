@@ -6,8 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Settings from "./pages/Settings";
-import Documentation from "./pages/Documentation";
+import SettingsDocumentation from "./pages/SettingsDocumentation";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
 import ExtensionStore from "./pages/ExtensionStore";
 import HistoryPage from "./pages/History";
@@ -24,8 +23,7 @@ const App = () => (
         <Routes>
           {/* Use Index component for all browser-like routes */}
           <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
-          <Route path="/settings" element={<Index defaultUrl="/settings" />} />
-          <Route path="/documentation" element={<Index defaultUrl="/documentation" />} />
+          <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
           <Route path="/history" element={<Index defaultUrl="/history" />} />
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
           
