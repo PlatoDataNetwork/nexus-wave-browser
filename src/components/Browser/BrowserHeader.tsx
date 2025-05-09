@@ -3,7 +3,7 @@ import React from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
-import BrowserFooter from "./BrowserFooter";
+// Removed BrowserFooter import since it might contain the shield icon
 import { Tab } from "@/lib/dummyData";
 
 interface BrowserHeaderProps {
@@ -53,6 +53,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
         />
       </div>
       <Bookmarks onNavigate={onNavigate} />
+      {/* Removed BrowserFooter component which might contain the shield icon */}
     </div>
   );
 };
