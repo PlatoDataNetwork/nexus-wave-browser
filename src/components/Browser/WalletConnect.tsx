@@ -76,6 +76,9 @@ const solflareLogoUrl = "/lovable-uploads/1ff21ad8-71e2-430b-8c47-26727da1dbb2.p
 // Uniswap logo URL from the newly uploaded image
 const uniswapLogoUrl = "/lovable-uploads/c9c107c4-4a2f-4dac-b874-1dcaf9912e8a.png";
 
+// ZenGo logo URL from the newly uploaded image
+const zengoLogoUrl = "/lovable-uploads/ba144354-b855-4059-9368-df5d3ccd0d92.png";
+
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
   <div className="w-10 h-10 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
@@ -96,7 +99,7 @@ const walletOptions = [
   { id: 'trust', name: 'Trust Wallet', icon: '🛡️', description: 'Connect to your Trust Wallet', logoUrl: trustWalletLogoUrl },
   { id: 'uniswap', name: 'Uniswap Wallet', icon: '🦄', description: 'Connect to your Uniswap wallet', logoUrl: uniswapLogoUrl },
   { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', description: 'Connect with WalletConnect protocol', logoUrl: walletConnectLogoUrl },
-  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: 'https://play-lh.googleusercontent.com/Mf45WzShFQN7Ep3JVvHvZ_ZmDfPej_OoE-QwRn3urG8h3ZcAuRGLY9BZ-iUaGm6Q7g=w240-h480-rw' },
+  { id: 'zengo', name: 'ZenGo', icon: '🔒', description: 'Connect to your keyless ZenGo wallet', logoUrl: zengoLogoUrl },
 ];
 
 // Shortened address helper
