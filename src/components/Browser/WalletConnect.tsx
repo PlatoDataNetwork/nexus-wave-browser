@@ -47,7 +47,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 
 // Define wallet types
-type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger' | 'atomic' | 'binance';
+type WalletProvider = 'metamask' | 'coinbase' | 'solflare' | 'walletconnect' | 'uniswap' | 'crypto.com' | 'zengo' | 'exodus' | 'trust' | 'phantom' | 'trezor' | 'ledger' | 'atomic' | 'binance' | 'kraken';
 
 // Official WalletConnect logo URL
 const walletConnectLogoUrl = "/lovable-uploads/52a30577-037b-46af-a085-bcd610e24ea5.png";
@@ -85,6 +85,9 @@ const atomicWalletLogoUrl = "https://play-lh.googleusercontent.com/UXYJiEter-aQQ
 // Binance Wallet logo URL (placeholder - will need to be uploaded)
 const binanceWalletLogoUrl = "https://play-lh.googleusercontent.com/kjiRCe9E-,kUzpNP5gH0p7nkOKGjkdNUwNbZyxqgaFUV7MyBUw-N_nTQhPFRhYu944s=w240-h480-rw";
 
+// Kraken Wallet logo URL (placeholder - will need to be uploaded)
+const krakenWalletLogoUrl = "https://play-lh.googleusercontent.com/KgGNbQEGhJkWPG-cNK7zKFCpqFz6aYMcXb90N2jMRKl8tA4OGWuZeYZGn5W9VJIM93g=w240-h480-rw";
+
 // Custom NB Logo component for Nexus Wave Bridge
 const NBLogo = () => (
   <div className="w-10 h-10 rounded-full bg-[#e5007e] flex items-center justify-center text-white font-bold">
@@ -99,6 +102,7 @@ const walletOptions = [
   { id: 'coinbase', name: 'Coinbase Wallet', icon: '🔷', description: 'Connect to your Coinbase wallet', logoUrl: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0=w240-h480-rw', circular: true },
   { id: 'crypto.com', name: 'Crypto.com', icon: '🔵', description: 'Connect to your Crypto.com DeFi wallet', logoUrl: cryptoComLogoUrl },
   { id: 'exodus', name: 'Exodus', icon: '🧿', description: 'Connect to your Exodus wallet', logoUrl: exodusLogoUrl },
+  { id: 'kraken', name: 'Kraken Wallet', icon: '🐙', description: 'Connect to your Kraken wallet', logoUrl: krakenWalletLogoUrl },
   { id: 'ledger', name: 'Ledger', icon: '🔐', description: 'Connect to your Ledger hardware wallet', logoUrl: ledgerLogoUrl },
   { id: 'metamask', name: 'MetaMask', icon: '🦊', description: 'Connect to your MetaMask wallet', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg' },
   { id: 'phantom', name: 'Phantom', icon: '👻', description: 'Connect to your Phantom Solana wallet', logoUrl: phantomLogoUrl },
@@ -579,7 +583,7 @@ const WalletConnect: React.FC = () => {
                   <p className="text-sm text-justify px-2">
                     <span className="block text-base text-white">Nexus Wave Supports the Following Wallets:</span>
                     <span className="text-left block">
-                      Coinbase, Crypto.com, Exodus, Ledger, MetaMask, 
+                      Coinbase, Crypto.com, Exodus, Kraken, Ledger, MetaMask, 
                       Phantom, Solflare, Trezo, Trust Wallet, Uniswap, Wallet Connect and ZenGo.
                     </span>
                   </p>
@@ -625,14 +629,14 @@ const WalletConnect: React.FC = () => {
                                   <RadioGroup 
                                     onValueChange={field.onChange} 
                                     defaultValue={field.value}
-                                    className="grid grid-cols-2 gap-3"
+                                    className="grid grid-cols-3 gap-3"
                                   >
                                     {walletOptions.map(wallet => (
                                       <div key={wallet.id} className="flex items-center space-x-2 border p-3 rounded-md hover:bg-accent">
                                         <RadioGroupItem value={wallet.id} id={wallet.id} />
                                         <Label htmlFor={wallet.id} className="flex-1 cursor-pointer">
                                           <div className="flex items-center">
-                                            <Avatar className="h-14 w-14 mr-3">
+                                            <Avatar className="h-10 w-10 mr-2">
                                               <AvatarImage 
                                                 src={wallet.logoUrl} 
                                                 alt={wallet.name} 
@@ -641,8 +645,8 @@ const WalletConnect: React.FC = () => {
                                               <AvatarFallback>{wallet.icon}</AvatarFallback>
                                             </Avatar>
                                             <div>
-                                              <p className="font-medium">{wallet.name}</p>
-                                              <p className="text-xs text-muted-foreground">{wallet.description}</p>
+                                              <p className="font-medium text-sm">{wallet.name}</p>
+                                              <p className="text-xs text-muted-foreground hidden sm:block">{wallet.description}</p>
                                             </div>
                                           </div>
                                         </Label>
