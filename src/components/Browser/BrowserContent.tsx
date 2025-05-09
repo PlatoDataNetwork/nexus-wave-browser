@@ -52,7 +52,11 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     }
     
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
-      return <ExtensionStore />;
+      return (
+        <ScrollArea className="h-full w-full">
+          <ExtensionStore />
+        </ScrollArea>
+      );
     }
     
     if (currentUrl === '/settings-docs' || currentUrl.includes('/settings-docs')) {
