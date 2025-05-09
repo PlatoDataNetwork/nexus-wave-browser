@@ -14,7 +14,7 @@ interface DAppSectionProps {
 const DAppSection: React.FC<DAppSectionProps> = ({ onNavigate }) => {
   const [visibleDApps, setVisibleDApps] = React.useState(popularDApps);
 
-  const handleClose = (id: number, e: React.MouseEvent) => {
+  const handleClose = (id: string | number, e: React.MouseEvent) => {
     e.stopPropagation();
     setVisibleDApps(visibleDApps.filter(dapp => dapp.id !== id));
     toast.info("DApp removed from view");
