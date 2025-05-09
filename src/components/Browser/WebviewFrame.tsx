@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Bookmark, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -905,3 +906,65 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
               border-radius: 10px;
               padding: 20px;
               box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+          </style>
+        </head>
+        <body>
+          <header>
+            <h1>${domain}</h1>
+          </header>
+          <div class="hero">
+            <h2>Welcome to ${domain}</h2>
+            <p>This is a simulated view of the website.</p>
+          </div>
+          <div class="content">
+            <p>The actual website content would appear here. Since this is a simulation, we're showing a placeholder layout.</p>
+            <div class="cards">
+              <div class="card">
+                <h3>Feature 1</h3>
+                <p>Description of a key feature or section from the website.</p>
+              </div>
+              <div class="card">
+                <h3>Feature 2</h3>
+                <p>Description of another important aspect of the site.</p>
+              </div>
+              <div class="card">
+                <h3>Feature 3</h3>
+                <p>More details about what this site offers.</p>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+  };
+
+  // Render content for the URL
+  return (
+    <div className="flex flex-col h-full relative">
+      {isLoading && (
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-40 flex flex-col items-center justify-center">
+          <div className="flex items-center space-x-2 mb-4">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <span className="text-lg font-medium">Loading {domain}...</span>
+          </div>
+          <Progress className="w-[80%] max-w-md" value={progress} />
+        </div>
+      )}
+
+      {!isLoading && (
+        <div className="flex-1 w-full h-full">
+          <iframe
+            title={`Web content for ${url}`}
+            className="w-full h-full"
+            srcDoc={generateDemoContent()}
+            sandbox="allow-same-origin"
+            onError={handleIframeError}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default WebviewFrame;
