@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
@@ -11,6 +11,8 @@ interface IndexProps {
 }
 
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) => {
+  const [showWalletConnect, setShowWalletConnect] = useState(true);
+  
   const { 
     tabs, 
     currentUrl, 
@@ -58,7 +60,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         />
         
         {/* Nexus Wave Bridge overlay - centered in the browser */}
-        <WalletConnect />
+        {showWalletConnect && <WalletConnect />}
       </div>
       
       <CustomToaster position="bottom-right" />
