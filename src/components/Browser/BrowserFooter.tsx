@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield, Eye, EyeOff } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -181,17 +180,14 @@ const BrowserFooter: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              className="h-7 text-green-500"
+              className="h-7 bg-green-500 hover:bg-green-600 text-white"
               onClick={onToggleFooter}
             >
-              {isVisible ? 
-                <><EyeOff className="h-3 w-3 mr-1" /><span>Hide</span></> : 
-                <><Eye className="h-3 w-3 mr-1" /><span>Show</span></>
-              }
+              Hide Me
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{isVisible ? 'Hide footer' : 'Show footer'}</p>
+            <p>Hide footer</p>
           </TooltipContent>
         </Tooltip>
         
