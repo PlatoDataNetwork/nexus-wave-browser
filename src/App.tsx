@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +9,7 @@ import Settings from "./pages/Settings";
 import Documentation from "./pages/Documentation";
 import ExtensionAdmin from "./pages/ExtensionAdmin";
 import ExtensionStore from "./pages/ExtensionStore";
-import HistoryPage from "./pages/History"; // Updated import to match renamed component
+import HistoryPage from "./pages/History";
 import PageLayout from "./components/Layout/PageLayout";
 
 const queryClient = new QueryClient();
@@ -26,7 +25,8 @@ const App = () => (
           <Route path="/settings" element={<PageLayout><Settings /></PageLayout>} />
           <Route path="/settings-docs" element={<PageLayout><Documentation /></PageLayout>} />
           <Route path="/documentation" element={<PageLayout><Documentation /></PageLayout>} />
-          <Route path="/history" element={<PageLayout includeFooter={true}><HistoryPage /></PageLayout>} />
+          {/* Update the history route to use the browser UI with header */}
+          <Route path="/history" element={<Index defaultUrl="/history" />} />
           {/* Always use the browser interface for the extension store */}
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
           {/* Legacy path, keep it for backward compatibility */}
