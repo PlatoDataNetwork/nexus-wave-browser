@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
+import { Star, Heart } from "lucide-react";
 import ExtensionNavBar from "./ExtensionNavBar";
 import { 
   AlertTriangle, 
@@ -20,9 +19,7 @@ import {
   Bitcoin,
   DollarSign,
   BadgeDollarSign,
-  BadgeCheck,
-  Star,
-  Heart
+  BadgeCheck
 } from "lucide-react";
 
 interface BetaExtensionProps {
