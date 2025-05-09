@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -9,6 +10,7 @@ import Settings from "@/pages/Settings";
 import Documentation from "@/pages/Documentation";
 import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
+import PageLayout from "@/components/Layout/PageLayout";
 
 interface BrowserContentProps {
   currentUrl: string;
@@ -31,34 +33,29 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
   // Render appropriate content based on URL path
   const renderContent = () => {
-    const url = new URL(window.location.href);
-    console.log("Rendering content for URL:", url.toString());
-
     // Log the current URL for debugging
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 
-    // Parse the URL
+    // Check for relative URLs first
+    if (currentUrl === '/history') {
+      return <PageLayout includeFooter={true} onNavigate={onNavigate}><HistoryPage /></PageLayout>;
+    }
+    
+    // Parse the URL for other routes
     try {
-      new URL(currentUrl);
+      const url = new URL(currentUrl, window.location.origin);
+      
+      // Check for special internal URLs
+      if (url.pathname === '/documentation') {
+        return <Documentation />;
+      } else if (url.pathname === '/settings') {
+        return <Settings />;
+      } else if (url.pathname === '/extension-store') {
+        return <ExtensionStore />;
+      }
     } catch (error) {
       console.error("Invalid URL:", currentUrl);
-      return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <h2 className="text-lg font-semibold mb-2">Invalid URL</h2>
-          <p className="text-muted-foreground">Please enter a valid URL.</p>
-        </div>
-      );
-    }
-
-    // Check for special internal URLs
-    if (url.pathname === '/documentation') {
-      return <Documentation />;
-    } else if (url.pathname === '/settings') {
-      return <Settings />;
-    } else if (url.pathname === '/extension-store') {
-      return <ExtensionStore />;
-    } else if (url.pathname === '/history') {
-      return <HistoryPage />;
+      // Continue with default rendering for invalid URLs
     }
 
     // Default content rendering
