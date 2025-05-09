@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,7 +7,7 @@ import BetaExtensions from "@/components/Extensions/BetaExtensions";
 import PageLayout from "@/components/Layout/PageLayout";
 import ExtensionAdmin from "@/pages/ExtensionAdmin";
 import BrowserFooter from "@/components/Browser/BrowserFooter";
-import ExtensionTabBar from "@/components/Extensions/ExtensionTabBar";
+import ExtensionNavBar from "@/components/Extensions/ExtensionNavBar";
 import ExtensionStats from "@/components/Extensions/ExtensionStats";
 
 const ExtensionStore: React.FC = () => {
@@ -126,14 +125,10 @@ const ExtensionStore: React.FC = () => {
           </div>
         </div>
         
-        {/* Tabs and search controls - Using the ExtensionTabBar component */}
-        <ExtensionTabBar 
+        {/* New navigation bar */}
+        <ExtensionNavBar
           activeTab={activeTab}
           setActiveTab={handleTabChange}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          viewMode={viewMode}
-          setViewMode={setViewMode}
         />
         
         {/* Extension Content based on active tab */}
