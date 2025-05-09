@@ -56,8 +56,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           currentUrl={currentUrl} 
           onNavigate={navigateToUrl}
         />
-        
-        <BrowserFooter onNavigate={navigateToUrl} />
       </div>
       
       <CustomToaster position="bottom-right" />

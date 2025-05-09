@@ -147,63 +147,58 @@ const ExtensionStore: React.FC = () => {
   };
 
   return (
-    <PageLayout includeFooter={false}>
-      <div className="p-6 max-w-7xl mx-auto w-full bg-black text-white">
-        {/* Header section */}
-        <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
-          Nexus Wave Extension Library
-        </h1>
-        
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <div className="bg-[#2a1e48] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">Available</div>
-            <div className="text-4xl font-bold">{extensionCounts.available}</div>
-          </div>
-          <div className="bg-[#1e2a48] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">Installed</div>
-            <div className="text-4xl font-bold">{extensionCounts.installed}</div>
-          </div>
-          <div className="bg-[#3a1e38] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">Crypto / Web3</div>
-            <div className="text-4xl font-bold">{extensionCounts.cryptoWeb3}</div>
-          </div>
-          <div className="bg-[#1e3a38] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">Security</div>
-            <div className="text-4xl font-bold">{extensionCounts.security}</div>
-          </div>
-          <div className="bg-[#3a1e48] rounded-lg p-6">
-            <div className="text-sm font-medium mb-2">AI</div>
-            <div className="text-4xl font-bold">{extensionCounts.ai}</div>
-          </div>
+    <div className="p-6 max-w-7xl mx-auto w-full bg-black text-white">
+      {/* Header section */}
+      <h1 className="text-3xl md:text-4xl font-bold text-nexus-purple mb-8">
+        Nexus Wave Extension Library
+      </h1>
+      
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="bg-[#2a1e48] rounded-lg p-6">
+          <div className="text-sm font-medium mb-2">Available</div>
+          <div className="text-4xl font-bold">{extensionCounts.available}</div>
         </div>
-        
-        {/* New navigation bar */}
-        <ExtensionNavBar
-          activeTab={activeTab}
-          setActiveTab={handleTabChange}
-        />
-        
-        {/* Extension Content based on active tab */}
-        <div className="mt-6">
-          {activeTab === "smile" ? (
-            <SmileAnimation />
-          ) : activeTab === "beta" ? (
-            <ConceptualExtensions />
-          ) : (
-            <ExtensionList 
-              extensions={filteredExtensions} 
-              viewMode={viewMode} 
-              onInstall={handleInstall}
-              onToggleFavorite={handleToggleFavorite}
-            />
-          )}
+        <div className="bg-[#1e2a48] rounded-lg p-6">
+          <div className="text-sm font-medium mb-2">Installed</div>
+          <div className="text-4xl font-bold">{extensionCounts.installed}</div>
+        </div>
+        <div className="bg-[#3a1e38] rounded-lg p-6">
+          <div className="text-sm font-medium mb-2">Crypto / Web3</div>
+          <div className="text-4xl font-bold">{extensionCounts.cryptoWeb3}</div>
+        </div>
+        <div className="bg-[#1e3a38] rounded-lg p-6">
+          <div className="text-sm font-medium mb-2">Security</div>
+          <div className="text-4xl font-bold">{extensionCounts.security}</div>
+        </div>
+        <div className="bg-[#3a1e48] rounded-lg p-6">
+          <div className="text-sm font-medium mb-2">AI</div>
+          <div className="text-4xl font-bold">{extensionCounts.ai}</div>
         </div>
       </div>
       
-      {/* Footer */}
-      <BrowserFooter />
-    </PageLayout>
+      {/* New navigation bar */}
+      <ExtensionNavBar
+        activeTab={activeTab}
+        setActiveTab={handleTabChange}
+      />
+      
+      {/* Extension Content based on active tab */}
+      <div className="mt-6">
+        {activeTab === "smile" ? (
+          <SmileAnimation />
+        ) : activeTab === "beta" ? (
+          <ConceptualExtensions />
+        ) : (
+          <ExtensionList 
+            extensions={filteredExtensions} 
+            viewMode={viewMode} 
+            onInstall={handleInstall}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
