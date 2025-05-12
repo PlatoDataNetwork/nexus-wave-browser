@@ -9,12 +9,12 @@ interface SearchSuggestionsProps {
 }
 
 const DEFAULT_SUGGESTIONS = [
-  "What is Blockchain technology?",
-  "Explain Bitcoin versus Ethereum",
-  "How does web3 change the internet?",
-  "What are the best crypto projects to invest in?",
-  "Explain Decentralized Finance (DeFi)",
-  "What are NFTs and how do they work?"
+  "What is the market size for Web3 browsers?",
+  "Compare Nexus Wave to other blockchain browsers",
+  "How does Nexus Bridge secure crypto transactions?",
+  "Web3 browser growth projections 2025-2030",
+  "Explain Nexus Wave's competitive advantages",
+  "How will Nexus Wave monetize its user base?"
 ];
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({ 
