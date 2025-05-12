@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PageLayout from "./components/Layout/PageLayout";
 import Search from "./pages/Search";
-import InvestorHomepage from "./pages/InvestorHomepage";
 
 const queryClient = new QueryClient();
 
@@ -19,11 +18,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Investor Homepage */}
-          <Route path="/" element={<InvestorHomepage />} />
-          
-          {/* Browser Routes */}
-          <Route path="/browser" element={<Index defaultUrl="https://Platodata.io" />} />
+          {/* Use Index component for all browser-like routes */}
+          <Route path="/" element={<Index defaultUrl="https://Platodata.io" />} />
           <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
           <Route path="/history" element={<Index defaultUrl="/history" />} />
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
