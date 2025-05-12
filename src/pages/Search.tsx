@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Search as SearchIcon, Globe, Image, Play, FileText, Clock, Shield } from "lucide-react";
+import { Loader2, Search as SearchIcon, Globe, Image, Play, FileText, Clock, Shield, Zap } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
 interface SearchResult {
@@ -13,7 +13,7 @@ interface SearchResult {
   title: string;
   url: string;
   description: string;
-  type: "web" | "image" | "video" | "news";
+  type: "web" | "image" | "video" | "news" | "nexus";
   imageUrl?: string;
 }
 
@@ -130,6 +130,34 @@ const Search: React.FC = () => {
         }
       );
     }
+    
+    if (activeTab === "nexus" || activeTab === "all") {
+      mockResults.push(
+        {
+          id: "8",
+          title: `${query} in the Nexus Ecosystem`,
+          url: `https://nexus.wave/ecosystem/${query.toLowerCase().replace(/\s+/g, '-')}`,
+          description: `Explore how ${query} integrates with the Nexus ecosystem. Find dApps, tools, and resources specifically designed for ${query}.`,
+          type: "nexus",
+          imageUrl: `https://picsum.photos/seed/${query}5/400/200`
+        },
+        {
+          id: "9",
+          title: `${query} - Nexus Chain Analysis`,
+          url: `https://nexus.wave/analytics/${query.toLowerCase().replace(/\s+/g, '-')}`,
+          description: `Deep dive into ${query}'s on-chain metrics, transaction volume, and network activity on the Nexus blockchain.`,
+          type: "nexus",
+          imageUrl: `https://picsum.photos/seed/${query}6/400/200`
+        },
+        {
+          id: "10",
+          title: `${query} - Trending on Nexus Wave`,
+          url: `https://nexus.wave/trending/${query.toLowerCase().replace(/\s+/g, '-')}`,
+          description: `See why ${query} is trending in the Nexus community. Latest discussions, innovations, and developments.`,
+          type: "nexus"
+        }
+      );
+    }
 
     setResults(mockResults);
   };
@@ -204,6 +232,31 @@ const Search: React.FC = () => {
           </Card>
         );
       
+      case "nexus":
+        return (
+          <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
+            <CardContent className="p-4">
+              <div className="flex gap-4">
+                {result.imageUrl && (
+                  <div className="flex-shrink-0">
+                    <img src={result.imageUrl} alt={result.title} className="w-20 h-20 object-cover rounded-md" />
+                  </div>
+                )}
+                <div>
+                  <div className="mb-1 text-xs text-muted-foreground flex items-center">
+                    {result.url}
+                    <span className="ml-2 px-1.5 py-0.5 bg-nexus-purple/20 text-nexus-purple rounded text-[10px] font-medium">
+                      NEXUS
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  <p className="text-sm text-muted-foreground">{result.description}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      
       default:
         return null;
     }
@@ -242,6 +295,9 @@ const Search: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                 <FileText className="h-4 w-4 mr-1" /> News
+              </TabsTrigger>
+              <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                <Zap className="h-4 w-4 mr-1" /> Nexus Search
               </TabsTrigger>
             </TabsList>
           </Tabs>
