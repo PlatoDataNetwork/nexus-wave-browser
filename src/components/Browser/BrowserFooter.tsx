@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Chrome, Settings, Bookmark, FileText, History, Shield } from "lucide-react";
+import { Chrome, Settings, Bookmark, FileText, History, Shield, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -67,10 +68,29 @@ const BrowserFooter: React.FC<{
     });
   };
 
+  const handleSearchClick = () => {
+    console.log("Search clicked, navigating");
+    
+    if (onNavigate) {
+      onNavigate("/search");
+    } else {
+      navigate('/search');
+    }
+    
+    toast({
+      title: "Opening Nexus Search",
+      description: "Loading the privacy-focused Nexus Search engine"
+    });
+  };
+
   // Improved check for extension store page
   const isExtensionStoreActive = 
     location.pathname === '/extension-store' || 
     location.pathname === '/' && location.search.includes('extension-store');
+  
+  const isSearchActive = 
+    location.pathname === '/search' || 
+    location.pathname === '/' && location.search.includes('search');
   
   // Add a debug log to help troubleshoot
   console.log("Current path:", location.pathname);
@@ -117,6 +137,24 @@ const BrowserFooter: React.FC<{
           </TooltipTrigger>
           <TooltipContent>
             <p>Extension security status</p>
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Search button - NEW */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`h-7 ${isSearchActive ? 'bg-muted' : ''}`}
+              onClick={handleSearchClick}
+            >
+              <Search className="h-3 w-3 mr-1" />
+              <span>Search</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Open Nexus Search</p>
           </TooltipContent>
         </Tooltip>
 

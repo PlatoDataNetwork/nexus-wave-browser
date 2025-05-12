@@ -7,6 +7,7 @@ import { ExternalLink } from "lucide-react";
 import SettingsDocumentation from "@/pages/SettingsDocumentation";
 import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
+import Search from "@/pages/Search";
 import PageLayout from "@/components/Layout/PageLayout";
 import WebviewFrame from "./WebviewFrame";
 import { toast } from "@/components/ui/sonner";
@@ -63,6 +64,14 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       return (
         <ScrollArea className="h-full w-full">
           <SettingsDocumentation />
+        </ScrollArea>
+      );
+    }
+
+    if (currentUrl === '/search' || currentUrl.includes('/search')) {
+      return (
+        <ScrollArea className="h-full w-full">
+          <Search />
         </ScrollArea>
       );
     }

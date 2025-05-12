@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PageLayout from "./components/Layout/PageLayout";
+import Search from "./pages/Search";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
           <Route path="/history" element={<Index defaultUrl="/history" />} />
           <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+          <Route path="/search" element={<Index defaultUrl="/search" />} />
           
           {/* Fallback route */}
           <Route path="*" element={<NotFound />} />
