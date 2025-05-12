@@ -1,11 +1,25 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Search as SearchIcon, Globe, Image, Play, FileText, Clock, Shield, Zap } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Loader2, 
+  Search as SearchIcon, 
+  Globe, 
+  Image, 
+  Play, 
+  FileText, 
+  Clock, 
+  Shield, 
+  Zap,
+  Send,
+  MessageCircle,
+  Plus,
+  ArrowRight
+} from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
 interface SearchResult {
@@ -17,12 +31,32 @@ interface SearchResult {
   imageUrl?: string;
 }
 
+interface ConversationMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+  sources?: {
+    title: string;
+    url: string;
+  }[];
+}
+
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
   const [searchEngine, setSearchEngine] = useState("platodata");
+  const [conversationMode, setConversationMode] = useState(false);
+  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll to bottom when messages update
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     // Initialize search query from URL parameters if they exist
@@ -54,6 +88,66 @@ const Search: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleConversationSearch = () => {
+    if (!currentMessage.trim()) return;
+    
+    // Add user message to the conversation
+    const userMessage: ConversationMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      content: currentMessage,
+      timestamp: new Date()
+    };
+    
+    setMessages([...messages, userMessage]);
+    setCurrentMessage("");
+    setIsLoading(true);
+    
+    // Simulate AI processing time
+    setTimeout(() => {
+      // Mock AI response based on user query
+      const aiResponse = generateAIResponse(currentMessage);
+      setMessages(prev => [...prev, aiResponse]);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const generateAIResponse = (query: string): ConversationMessage => {
+    // This is a mock function to generate AI responses
+    // In a real app, this would call an API to get responses from a language model
+    
+    const responses = [
+      `Based on my search, ${query} is a topic with several interesting aspects. Let me break it down for you.`,
+      `I found some information about ${query}. According to recent sources, there have been significant developments in this area.`,
+      `${query} is trending right now. Here's what I found from reliable sources across the web.`,
+      `Looking at the most recent information about ${query}, I can see several key points worth noting.`
+    ];
+    
+    // Sample sources
+    const sources = [
+      {
+        title: `${query} - Official Documentation`,
+        url: `https://docs.${query.toLowerCase().replace(/\s+/g, '')}.com`
+      },
+      {
+        title: `Latest Research on ${query}`,
+        url: `https://research.nexus.wave/${query.toLowerCase().replace(/\s+/g, '-')}`
+      },
+      {
+        title: `${query} Analysis`,
+        url: `https://analysis.crypto.com/${query.toLowerCase().replace(/\s+/g, '-')}`
+      }
+    ];
+    
+    return {
+      id: Date.now().toString(),
+      role: "assistant",
+      content: responses[Math.floor(Math.random() * responses.length)],
+      timestamp: new Date(),
+      sources: sources.slice(0, Math.floor(Math.random() * 3) + 1) // Random number of sources (1-3)
+    };
   };
 
   const mockSearchResults = async (query: string) => {
@@ -171,7 +265,11 @@ const Search: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleSearch();
+    if (conversationMode) {
+      handleConversationSearch();
+    } else {
+      handleSearch();
+    }
   };
 
   const renderSearchResult = (result: SearchResult) => {
@@ -262,101 +360,236 @@ const Search: React.FC = () => {
     }
   };
 
+  const renderConversation = () => (
+    <div className="flex flex-col h-full">
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-4 pb-4">
+          {messages.length === 0 ? (
+            <div className="text-center py-10">
+              <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-8 w-8 text-nexus-purple" />
+              </div>
+              <h2 className="text-xl font-medium mb-2">Ask me anything</h2>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions.
+              </p>
+              
+              <div className="mt-6 flex flex-col gap-2 max-w-md mx-auto">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center justify-between"
+                  onClick={() => setCurrentMessage("What is Blockchain technology?")}
+                >
+                  <span>What is Blockchain technology?</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center justify-between"
+                  onClick={() => setCurrentMessage("Explain Bitcoin versus Ethereum")}
+                >
+                  <span>Explain Bitcoin versus Ethereum</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center justify-between"
+                  onClick={() => setCurrentMessage("How does web3 change the internet?")}
+                >
+                  <span>How does web3 change the internet?</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ) : (
+            messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-3/4 rounded-lg p-4 ${
+                    message.role === "user"
+                      ? "bg-nexus-purple text-white"
+                      : "bg-secondary border border-border"
+                  }`}
+                >
+                  <p>{message.content}</p>
+                  
+                  {message.sources && message.sources.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <p className="text-xs font-medium mb-1">Sources:</p>
+                      <ul className="space-y-1">
+                        {message.sources.map((source, index) => (
+                          <li key={index} className="text-xs">
+                            <a href={source.url} className="text-nexus-purple underline hover:text-nexus-deep-purple">
+                              {source.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+      </ScrollArea>
+      
+      <div className="p-4 border-t border-border">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <Textarea
+            placeholder="Ask me anything..."
+            value={currentMessage}
+            onChange={(e) => setCurrentMessage(e.target.value)}
+            className="flex-1 min-h-12 resize-none"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleConversationSearch();
+              }
+            }}
+          />
+          <Button type="submit" className="h-full bg-nexus-purple hover:bg-nexus-deep-purple">
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          </Button>
+        </form>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b border-border nexus-gradient-bg">
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <div className="flex-1 relative">
-            <Input
-              type="search"
-              placeholder="Search the web securely..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 pl-10 bg-background"
-            />
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          </div>
-          <Button type="submit" className="bg-nexus-purple hover:bg-nexus-deep-purple">
-            Search
+        <div className="flex gap-2 mb-4">
+          <Button 
+            variant={conversationMode ? "outline" : "default"} 
+            className={`${conversationMode ? "" : "bg-nexus-purple hover:bg-nexus-deep-purple"}`}
+            onClick={() => setConversationMode(false)}
+          >
+            <SearchIcon className="h-4 w-4 mr-1" /> Traditional Search
           </Button>
-        </form>
-
-        <div className="flex justify-between mt-4">
-          <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="bg-secondary/50">
-              <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                <Globe className="h-4 w-4 mr-1" /> Web
-              </TabsTrigger>
-              <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                <Image className="h-4 w-4 mr-1" /> Images
-              </TabsTrigger>
-              <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                <Play className="h-4 w-4 mr-1" /> Videos
-              </TabsTrigger>
-              <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                <FileText className="h-4 w-4 mr-1" /> News
-              </TabsTrigger>
-              <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                <Zap className="h-4 w-4 mr-1" /> Nexus Search
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              <span className="text-xs">Past 24h</span>
-            </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-1">
-              <Shield className="h-4 w-4 text-green-500" />
-              <span className="text-xs">Safe Search On</span>
-            </Button>
-          </div>
+          <Button 
+            variant={conversationMode ? "default" : "outline"} 
+            className={`${conversationMode ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}`}
+            onClick={() => setConversationMode(true)}
+          >
+            <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
+          </Button>
         </div>
+
+        {!conversationMode && (
+          <>
+            <form onSubmit={handleSubmit} className="flex gap-2">
+              <div className="flex-1 relative">
+                <Input
+                  type="search"
+                  placeholder="Search the web securely..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-10 pl-10 bg-background"
+                />
+                <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              </div>
+              <Button type="submit" className="bg-nexus-purple hover:bg-nexus-deep-purple">
+                Search
+              </Button>
+            </form>
+
+            <div className="flex justify-between mt-4">
+              <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="w-full">
+                <TabsList className="bg-secondary/50">
+                  <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                    <Globe className="h-4 w-4 mr-1" /> Web
+                  </TabsTrigger>
+                  <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                    <Image className="h-4 w-4 mr-1" /> Images
+                  </TabsTrigger>
+                  <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                    <Play className="h-4 w-4 mr-1" /> Videos
+                  </TabsTrigger>
+                  <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                    <FileText className="h-4 w-4 mr-1" /> News
+                  </TabsTrigger>
+                  <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                    <Zap className="h-4 w-4 mr-1" /> Nexus Search
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  <span className="text-xs">Past 24h</span>
+                </Button>
+                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                  <Shield className="h-4 w-4 text-green-500" />
+                  <span className="text-xs">Safe Search On</span>
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="p-4">
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center h-40">
-              <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-              <p className="text-muted-foreground">Searching securely...</p>
-            </div>
-          ) : searchQuery && results.length > 0 ? (
-            <div>
-              <p className="text-sm text-muted-foreground mb-4">
-                About {Math.floor(Math.random() * 10000).toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-              </p>
-              {results.map(renderSearchResult)}
-            </div>
-          ) : searchQuery ? (
-            <div className="text-center py-10">
-              <h2 className="text-xl font-medium mb-2">No results found</h2>
-              <p className="text-muted-foreground">Try different keywords or search terms</p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-16">
-              <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
-                <SearchIcon className="h-12 w-12 text-nexus-purple" />
+      {conversationMode ? (
+        renderConversation()
+      ) : (
+        <ScrollArea className="flex-1">
+          <div className="p-4">
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center h-40">
+                <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                <p className="text-muted-foreground">Searching securely...</p>
               </div>
-              <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
-              <p className="text-muted-foreground text-center max-w-md mb-6">
-                Search the web with enhanced privacy and security. Your searches are never tracked or stored.
-              </p>
-              <div className="flex gap-4 mt-4">
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  <span>Privacy Features</span>
-                </Button>
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  <span>Search Engines</span>
-                </Button>
+            ) : searchQuery && results.length > 0 ? (
+              <div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  About {Math.floor(Math.random() * 10000).toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                </p>
+                {results.map(renderSearchResult)}
               </div>
-            </div>
-          )}
-        </div>
-      </ScrollArea>
+            ) : searchQuery ? (
+              <div className="text-center py-10">
+                <h2 className="text-xl font-medium mb-2">No results found</h2>
+                <p className="text-muted-foreground">Try different keywords or search terms</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16">
+                <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
+                  <SearchIcon className="h-12 w-12 text-nexus-purple" />
+                </div>
+                <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
+                <p className="text-muted-foreground text-center max-w-md mb-6">
+                  Search the web with enhanced privacy and security. Your searches are never tracked or stored.
+                </p>
+                <div className="flex gap-4 mt-4">
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <span>Privacy Features</span>
+                  </Button>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Globe className="h-4 w-4" />
+                    <span>Search Engines</span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-2"
+                    onClick={() => setConversationMode(true)}
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    <span>Try AI Chat</span>
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      )}
     </div>
   );
 };
