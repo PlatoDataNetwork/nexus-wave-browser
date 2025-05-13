@@ -105,6 +105,22 @@ const iconBackgrounds = [
 ];
 
 export const extensionsData: Extension[] = [
+  // New DefiX Extension
+  {
+    id: 140,
+    name: "DefiX",
+    description: "A decentralized gateway to access any web3 app with seamless integration and enhanced security features.",
+    category: "Web3 & Crypto",
+    rating: 4.8,
+    users: 987654,
+    installed: false,
+    enabled: false,
+    featured: true,
+    version: "1.0.0",
+    icon: Globe,
+    iconBg: iconBackgrounds[3]
+  },
+  
   // Privacy & Security
   {
     id: 1,
