@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -50,8 +51,9 @@ import {
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
+
+// Removed duplicate import of useNavigate
 
 interface BrowserHeaderProps {
   tabs: Tab[];
