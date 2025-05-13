@@ -71,6 +71,7 @@ export default {
 					'space-black': '#121212',
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
+					'header-blue': '#1A1F2C',
 					// Light mode optimized colors
 					'light-bg': '#f8fafc',
 					'light-card': '#ffffff',

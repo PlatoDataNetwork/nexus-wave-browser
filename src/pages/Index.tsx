@@ -51,7 +51,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue dark:bg-nexus-space-black">
       {/* Main browser header with title and time - Using header-bar class for consistency */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-space-black border-b border-border">
+      <div className="flex items-center justify-between px-4 py-2 bg-nexus-header-blue border-b border-border">
         <div className="flex items-center gap-2">
           <div className="text-sm text-white">
             Nexus Wave Browser - Web3 V2.1

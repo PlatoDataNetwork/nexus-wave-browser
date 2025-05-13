@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,7 +37,7 @@
     --radius: 0.5rem;
 
     /* Keeping header, tab bar, browser bar, and bookmarks styling consistent in light mode */
-    --sidebar-background: 240 25% 8%;
+    --sidebar-background: 230 25% 14%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 260 60% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -113,25 +114,25 @@
 
   /* Updated browser header/tab styling to be consistent in both modes */
   .browser-tab {
-    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-secondary/30 text-foreground;
+    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-nexus-header-blue text-white;
   }
 
   .browser-tab.active {
-    @apply border-nexus-purple bg-secondary/50;
+    @apply border-nexus-purple bg-nexus-header-blue/90;
   }
 
   .address-bar {
-    @apply flex items-center px-3 py-2 bg-muted rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all;
+    @apply flex items-center px-3 py-2 bg-nexus-header-blue rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all text-white;
   }
 
   /* Keep header elements consistent in both modes */
   .header-bar {
-    @apply bg-nexus-space-black border-b border-border text-foreground;
+    @apply bg-nexus-header-blue border-b border-border text-white;
   }
 
   /* Keep bookmark bar styling consistent */
   .bookmarks-bar {
-    @apply border-b border-border bg-secondary/20;
+    @apply border-b border-border bg-nexus-header-blue text-white;
   }
 
   /* Custom scrollbar */
