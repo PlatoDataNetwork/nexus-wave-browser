@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/Browser/BrowserHeader";
-import { Shield, Puzzle, Search } from "lucide-react";
+import { Search, Globe, Coins, LineChart } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -44,17 +44,18 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation */}
+        {/* Main Navigation - Updated menu items */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             <li>
-              <Link to="/">
+              <Link to="/search">
                 <Button
-                  variant={isActive('/') ? "secondary" : "ghost"}
+                  variant={isActive('/search') ? "secondary" : "ghost"}
                   size="sm"
                   className="text-white"
                 >
-                  <span className="hidden sm:inline">Home</span>
+                  <Search className="mr-1 h-4 w-4" />
+                  <span className="hidden sm:inline">Search</span>
                 </Button>
               </Link>
             </li>
@@ -65,32 +66,32 @@ const Header: React.FC = () => {
                   size="sm"
                   className="text-white"
                 >
-                  <Search className="mr-1 h-4 w-4" />
+                  <Globe className="mr-1 h-4 w-4" />
                   <span className="hidden sm:inline">Browser</span>
                 </Button>
               </Link>
             </li>
             <li>
-              <Link to="/extension-store">
+              <Link to="/token">
                 <Button
-                  variant={isActive('/extension-store') ? "secondary" : "ghost"}
+                  variant={isActive('/token') ? "secondary" : "ghost"}
                   size="sm"
                   className="text-white"
                 >
-                  <Puzzle className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Extensions</span>
+                  <Coins className="mr-1 h-4 w-4" />
+                  <span className="hidden sm:inline">Token</span>
                 </Button>
               </Link>
             </li>
             <li>
-              <Link to="/settings">
+              <Link to="/staking">
                 <Button
-                  variant={isActive('/settings') ? "secondary" : "ghost"}
+                  variant={isActive('/staking') ? "secondary" : "ghost"}
                   size="sm"
                   className="text-white"
                 >
-                  <Shield className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Settings</span>
+                  <LineChart className="mr-1 h-4 w-4" />
+                  <span className="hidden sm:inline">Staking</span>
                 </Button>
               </Link>
             </li>
