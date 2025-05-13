@@ -1,11 +1,9 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
 import { Tab } from "@/lib/dummyData";
-import { Link } from "react-router-dom";
-import { Clock, Calendar } from "lucide-react";
 
 interface BrowserHeaderProps {
   tabs: Tab[];
@@ -34,31 +32,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   canGoBack,
   canGoForward
 }) => {
-  // State for current time and date
-  const [currentTime, setCurrentTime] = useState(new Date());
-  
-  // Update time every second
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  
-  // Format time as HH:MM:SS
-  const formattedTime = currentTime.toLocaleTimeString();
-  
-  // Format date as Day, Month DD, YYYY
-  const formattedDate = currentTime.toLocaleDateString(undefined, {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
-
   // Ensure navigation handler properly handles URLs
   const handleNavigate = (url: string) => {
     console.log(`BrowserHeader: Navigation requested to ${url}`);
