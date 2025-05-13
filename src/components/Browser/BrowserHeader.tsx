@@ -77,27 +77,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
   return (
     <div className="flex flex-col">
-      {/* Logo and DateTime Bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-dark-blue border-b border-border">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 hover:text-nexus-purple transition-colors">
-          <div className="text-lg font-bold bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-            Nexus Wave
-          </div>
-        </Link>
-        
-        {/* Date and Time */}
-        <div className="flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4 text-nexus-purple" />
-            <span className="font-mono">{formattedTime}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Calendar className="h-4 w-4 text-nexus-purple" />
-            <span>{formattedDate}</span>
-          </div>
-        </div>
-      </div>
+      {/* Logo and DateTime Bar are now removed from here since they're moved to the title bar */}
       
       <TabBar
         tabs={tabs}
