@@ -18,16 +18,16 @@ const CallToAction: React.FC = () => {
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link to="/app">
-            <Button variant="macos" size="lg" className="rounded-lg">
+            <Button variant="macos" size="macos-lg" className="rounded-lg shadow-lg">
               <Download className="mr-2 h-5 w-5" />
               Download for MacOS
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10 rounded-lg">
+          <Button size="macos-lg" variant="macos-light" className="rounded-lg">
             <Globe className="mr-2 h-5 w-5" />
             Try Web Version
           </Button>
-          <Button size="lg" variant="link" className="text-nexus-light-purple">
+          <Button size="macos-lg" variant="link" className="text-nexus-light-purple">
             Learn More <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </div>

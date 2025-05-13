@@ -19,14 +19,21 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm active:translate-y-[0.5px]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // New macOS style button
+        // Enhanced macOS style button with improved gradients and shadows
         macos: "bg-gradient-to-b from-[#8E81DB] to-[#7B63DD] text-white shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all border border-[#9B87F5]/20",
+        // New flat macOS style button - minimalist design inspired by modern macOS
+        "macos-flat": "bg-nexus-purple text-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all",
+        // New light macOS style button for secondary actions
+        "macos-light": "bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-[1px] hover:bg-white/15 active:translate-y-0 active:shadow-sm transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        // New macOS style sizes
+        "macos-sm": "h-8 px-4 py-1.5 text-sm rounded-lg",
+        "macos-lg": "h-12 px-6 py-3 text-base rounded-lg",
       },
     },
     defaultVariants: {
