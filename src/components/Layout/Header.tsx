@@ -43,7 +43,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation - Updated menu items */}
+        {/* Main Navigation - Updated menu items with Downloads removed */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             <li>
@@ -91,18 +91,6 @@ const Header: React.FC = () => {
                 >
                   <LineChart className="mr-1 h-4 w-4" />
                   <span className="hidden sm:inline">Staking</span>
-                </Button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/downloads">
-                <Button
-                  variant={isActive('/downloads') ? "secondary" : "ghost"}
-                  size="sm"
-                  className="text-white"
-                >
-                  <Download className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Downloads</span>
                 </Button>
               </Link>
             </li>
