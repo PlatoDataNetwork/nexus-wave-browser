@@ -1,9 +1,11 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
 import { Tab } from "@/lib/dummyData";
+import { Link } from "react-router-dom";
+import { Clock, Calendar } from "lucide-react";
 
 interface BrowserHeaderProps {
   tabs: Tab[];
@@ -32,6 +34,31 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   canGoBack,
   canGoForward
 }) => {
+  // State for current time and date
+  const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+  
+  // Format time as HH:MM:SS
+  const formattedTime = currentTime.toLocaleTimeString();
+  
+  // Format date as Day, Month DD, YYYY
+  const formattedDate = currentTime.toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
   // Ensure navigation handler properly handles URLs
   const handleNavigate = (url: string) => {
     console.log(`BrowserHeader: Navigation requested to ${url}`);
@@ -50,6 +77,28 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
   return (
     <div className="flex flex-col">
+      {/* Logo and DateTime Bar */}
+      <div className="flex items-center justify-between px-4 py-2 bg-nexus-dark-blue border-b border-border">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 hover:text-nexus-purple transition-colors">
+          <div className="text-lg font-bold bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+            Nexus Wave
+          </div>
+        </Link>
+        
+        {/* Date and Time */}
+        <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-1">
+            <Clock className="h-4 w-4 text-nexus-purple" />
+            <span className="font-mono">{formattedTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Calendar className="h-4 w-4 text-nexus-purple" />
+            <span>{formattedDate}</span>
+          </div>
+        </div>
+      </div>
+      
       <TabBar
         tabs={tabs}
         onAddTab={onAddTab}
