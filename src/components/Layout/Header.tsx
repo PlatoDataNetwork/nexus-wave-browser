@@ -2,10 +2,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart } from "lucide-react";
+import { Search, Globe, Coins, LineChart, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
+  
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
@@ -97,23 +101,50 @@ const Header: React.FC = () => {
           </ul>
         </nav>
         
-        {/* Right side actions - ThemeToggle removed */}
+        {/* Right side actions */}
         <div className="flex items-center gap-2">
-          <Link to="/profile">
-            <Button
-              variant={isActive('/profile') ? "secondary" : "ghost"}
-              size="sm"
-              className="text-white"
-            >
-              Signup
-            </Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/profile">
+                <Avatar className="h-8 w-8 border border-white/20">
+                  {user.user_metadata.avatar_url ? (
+                    <AvatarImage src={user.user_metadata.avatar_url} alt={user.email || "User"} />
+                  ) : (
+                    <AvatarFallback className="bg-nexus-purple text-white text-xs">
+                      {user.email ? user.email.substring(0, 2).toUpperCase() : "U"}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </Link>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-white"
+                onClick={() => signOut()}
+              >
+                <LogOut className="mr-1 h-4 w-4" />
+                <span className="hidden sm:inline">Logout</span>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth">
+                <Button
+                  variant={isActive('/auth') ? "secondary" : "ghost"}
+                  size="sm"
+                  className="text-white"
+                >
+                  Signup
+                </Button>
+              </Link>
 
-          <Link to="/app">
-            <Button variant="macos" size="sm">
-              Download
-            </Button>
-          </Link>
+              <Link to="/app">
+                <Button variant="macos" size="sm">
+                  Download
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
