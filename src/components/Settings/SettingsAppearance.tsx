@@ -4,10 +4,12 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const SettingsAppearance: React.FC = () => {
   const [theme, setTheme] = useState("system");
   const [showBookmarksBar, setShowBookmarksBar] = useState(true);
+  const [bookmarksBarDisplay, setBookmarksBarDisplay] = useState<"visible" | "minimized" | "hidden">("visible");
   const [showHomeButton, setShowHomeButton] = useState(false);
 
   return (
@@ -62,6 +64,30 @@ const SettingsAppearance: React.FC = () => {
                 onCheckedChange={setShowBookmarksBar}
               />
             </div>
+            
+            {showBookmarksBar && (
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm">Bookmarks bar display</p>
+                  <p className="text-xs text-muted-foreground">
+                    Choose how the bookmarks bar appears
+                  </p>
+                </div>
+                <Select 
+                  value={bookmarksBarDisplay}
+                  onValueChange={(value) => setBookmarksBarDisplay(value as "visible" | "minimized" | "hidden")}
+                >
+                  <SelectTrigger className="w-36">
+                    <SelectValue placeholder="Select display mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="visible">Full (Default)</SelectItem>
+                    <SelectItem value="minimized">Minimized</SelectItem>
+                    <SelectItem value="hidden">Hidden</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             
             <div className="flex justify-between items-center">
               <div>

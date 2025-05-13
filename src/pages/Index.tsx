@@ -12,6 +12,7 @@ interface IndexProps {
 
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(true);
+  const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
   
   const { 
     tabs, 
@@ -35,11 +36,29 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     setShowWalletConnect(false);
   };
 
+  const toggleBookmarksBarState = () => {
+    setBookmarksBarState(current => {
+      // Cycle through states: visible -> minimized -> hidden -> visible
+      switch (current) {
+        case "visible": return "minimized";
+        case "minimized": return "hidden";
+        case "hidden": return "visible";
+        default: return "visible";
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar - would be handled by the native window in a real app */}
-      <div className="flex items-center justify-center h-8 bg-card border-b border-border nexus-gradient-bg">
-        <h1 className="text-xs font-medium">Nexus Wave Browser - Web3 V2.1</h1>
+      <div className="flex items-center h-8 bg-card border-b border-border nexus-gradient-bg">
+        <div className="flex-1 text-left pl-4">
+          <span className="text-xs">Nexus Wave</span>
+        </div>
+        <div className="flex-1 text-center">
+          <h1 className="text-xs">Nexus Wave Browser - Web3 V2.1</h1>
+        </div>
+        <div className="flex-1 text-right pr-4"></div>
       </div>
       
       {/* Browser interface */}
@@ -56,6 +75,8 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           onRefresh={refreshPage}
           canGoBack={canGoBack()}
           canGoForward={canGoForward()}
+          bookmarksBarState={bookmarksBarState}
+          onToggleBookmarksBar={toggleBookmarksBarState}
         />
         
         <BrowserContent 

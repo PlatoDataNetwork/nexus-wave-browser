@@ -5,7 +5,13 @@ import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
 import { Tab } from "@/lib/dummyData";
 import { Link } from "react-router-dom";
-import { Clock, Calendar } from "lucide-react";
+import { Clock, Calendar, Maximize2, Minimize2, BookmarkX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface BrowserHeaderProps {
   tabs: Tab[];
@@ -19,6 +25,8 @@ interface BrowserHeaderProps {
   onRefresh: () => void;
   canGoBack: boolean;
   canGoForward: boolean;
+  bookmarksBarState?: "visible" | "minimized" | "hidden";
+  onToggleBookmarksBar?: () => void;
 }
 
 const BrowserHeader: React.FC<BrowserHeaderProps> = ({
@@ -32,7 +40,9 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   onGoForward,
   onRefresh,
   canGoBack,
-  canGoForward
+  canGoForward,
+  bookmarksBarState = "visible",
+  onToggleBookmarksBar
 }) => {
   // State for current time and date
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -73,6 +83,26 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
     
     // Pass the formatted URL to the navigation handler
     onNavigate(formattedUrl);
+  };
+
+  // Get the appropriate icon for the bookmarks bar toggle button
+  const getBookmarksBarIcon = () => {
+    switch (bookmarksBarState) {
+      case "visible": return <Minimize2 className="h-4 w-4" />;
+      case "minimized": return <BookmarkX className="h-4 w-4" />;
+      case "hidden": return <Maximize2 className="h-4 w-4" />;
+      default: return <Minimize2 className="h-4 w-4" />;
+    }
+  };
+
+  // Get the tooltip text for the bookmarks bar toggle button
+  const getBookmarksBarTooltip = () => {
+    switch (bookmarksBarState) {
+      case "visible": return "Minimize bookmarks";
+      case "minimized": return "Hide bookmarks";
+      case "hidden": return "Show bookmarks";
+      default: return "Bookmarks options";
+    }
   };
 
   return (
@@ -116,7 +146,40 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
           canGoForward={canGoForward}
         />
       </div>
-      <Bookmarks onNavigate={handleNavigate} />
+      
+      {/* Bookmarks bar with toggle button */}
+      {bookmarksBarState !== "hidden" && (
+        <div className="relative">
+          {/* Bookmarks toggle button */}
+          {onToggleBookmarksBar && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 z-10 h-5 w-5 rounded-full bg-muted/80 hover:bg-muted"
+                  onClick={onToggleBookmarksBar}
+                >
+                  {getBookmarksBarIcon()}
+                  <span className="sr-only">{getBookmarksBarTooltip()}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{getBookmarksBarTooltip()}</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          
+          {/* Show full or minimized bookmarks based on state */}
+          {bookmarksBarState === "visible" ? (
+            <Bookmarks onNavigate={handleNavigate} />
+          ) : (
+            <div className="flex items-center px-4 py-1 border-b border-border bg-secondary/20">
+              <span className="text-xs text-muted-foreground">Bookmarks minimized</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

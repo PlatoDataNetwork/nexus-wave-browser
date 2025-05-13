@@ -8,6 +8,7 @@ import { topProtocols } from "@/lib/protocolData";
 
 interface BookmarksProps {
   onNavigate: (url: string) => void;
+  onToggle?: () => void;
 }
 
 // Enhanced bookmark type that always includes color
@@ -19,7 +20,7 @@ interface EnhancedBookmark {
   icon?: React.ElementType;
 }
 
-const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate }) => {
+const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (direction: "left" | "right") => {
