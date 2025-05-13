@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart } from "lucide-react";
+import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -94,10 +94,22 @@ const Header: React.FC = () => {
                 </Button>
               </Link>
             </li>
+            <li>
+              <Link to="/downloads">
+                <Button
+                  variant={isActive('/downloads') ? "secondary" : "ghost"}
+                  size="sm"
+                  className="text-white"
+                >
+                  <Download className="mr-1 h-4 w-4" />
+                  <span className="hidden sm:inline">Downloads</span>
+                </Button>
+              </Link>
+            </li>
           </ul>
         </nav>
         
-        {/* Right side actions - ThemeToggle removed */}
+        {/* Right side actions */}
         <div className="flex items-center gap-2">
           <Link to="/profile">
             <Button
@@ -109,7 +121,7 @@ const Header: React.FC = () => {
             </Button>
           </Link>
 
-          <Link to="/app">
+          <Link to="/downloads">
             <Button variant="macos" size="sm">
               Download
             </Button>

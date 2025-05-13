@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Downloads from "./pages/Downloads";
 import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
@@ -37,6 +38,7 @@ const App = () => (
                 <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
                 <Route path="/search" element={<Index defaultUrl="/search" />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/downloads" element={<Downloads />} />
                 
                 {/* Fallback route */}
                 <Route path="*" element={<NotFound />} />
