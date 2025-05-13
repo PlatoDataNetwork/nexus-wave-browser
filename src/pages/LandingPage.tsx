@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -55,7 +54,8 @@ const LandingPage: React.FC = () => {
                     The First Real Web3 Browser for MacOS
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    Experience Web3 The Way It Was Meant To Be
+                    <span className="block">Search. Browse. Earn.</span>
+                    <span className="block">Web3. The Way It Was Meant To Be.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
                     Step into the future with Nexus Wave, a truly immersive Web3 browser built
