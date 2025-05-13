@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, SettingsIcon, Shield, Download } from "lucide-react";
+import { ChevronDown, SettingsIcon, Shield, Download, ExternalLink } from "lucide-react";
 
 interface ExtensionItemProps {
   name: string;
@@ -32,6 +32,14 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
       title: "Extension Settings",
       description: `Opening settings for ${name}`,
     });
+  };
+  
+  // Function to determine the correct URL based on extension name
+  const getExtensionUrl = () => {
+    if (name === "GasSaver") {
+      return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
+    }
+    return "javascript:void(0)";
   };
   
   return (
@@ -58,6 +66,12 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
             <DropdownMenuItem>
               <Shield className="mr-2 h-4 w-4" />
               Extension permissions
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <ExternalLink className="mr-2 h-4 w-4" />
+              <a href={getExtensionUrl()} target="_blank" rel="noopener noreferrer">
+                Access extension
+              </a>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive">
               Remove extension

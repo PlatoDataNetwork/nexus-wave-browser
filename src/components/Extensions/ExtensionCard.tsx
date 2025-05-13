@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Heart } from "lucide-react";
+import { Star, Heart, ExternalLink } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 
 interface ExtensionCardProps {
@@ -29,6 +29,14 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
   
   const isFavorite = featured;
 
+  // Function to determine the correct URL based on extension name
+  const getExtensionUrl = () => {
+    if (name === "GasSaver") {
+      return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
+    }
+    return "javascript:void(0)";
+  };
+
   return (
     <Card className={`overflow-hidden transition-all hover:shadow-md bg-[#191823] border border-[#433E56] ${isFavorite ? 'border-nexus-purple bg-gradient-to-br from-nexus-purple/5 to-transparent' : ''}`}>
       <div className="p-4 pb-2">
@@ -40,7 +48,6 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
             <div>
               <div className="flex items-center">
                 <h3 className="font-medium text-lg line-clamp-1 text-white">{name}</h3>
-                {/* Beta badge removed */}
               </div>
               <div className="text-xs text-gray-400">
                 {isBeta ? `Est. Release: ${estimatedRelease}` : `v${version}`}
@@ -75,13 +82,19 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button 
-          onClick={onInstall}
-          className={`w-full ${installed ? "bg-[#24212F] hover:bg-[#24212F]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
-          variant={installed ? "outline" : "default"}
+        <a 
+          href={getExtensionUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full"
         >
-          {installed ? "Uninstall" : "Install Now"}
-        </Button>
+          <Button 
+            className={`w-full ${installed ? "bg-[#24212F] hover:bg-[#24212F]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
+            variant={installed ? "outline" : "default"}
+          >
+            Access Now <ExternalLink className="ml-1 h-4 w-4" />
+          </Button>
+        </a>
       </CardFooter>
     </Card>
   );

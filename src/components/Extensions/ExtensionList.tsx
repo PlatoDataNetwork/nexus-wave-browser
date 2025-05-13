@@ -3,7 +3,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Package, Heart } from "lucide-react";
+import { Star, Package, Heart, ExternalLink } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 
@@ -20,6 +20,14 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
   onInstall, 
   onToggleFavorite 
 }) => {
+  // Function to determine the correct URL based on extension name
+  const getExtensionUrl = (name: string) => {
+    if (name === "GasSaver") {
+      return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
+    }
+    return "javascript:void(0)";
+  };
+
   if (extensions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-10 bg-muted/20 rounded-lg border border-dashed">
@@ -94,13 +102,18 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
                       className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
                     />
                   </button>
-                  <Button 
-                    variant={extension.installed ? "outline" : "default"}
-                    onClick={() => onInstall(extension.id)}
-                    className={`${extension.installed ? "border-nexus-purple text-nexus-purple hover:bg-nexus-purple/10" : "bg-nexus-purple hover:bg-nexus-purple/90"} min-w-[110px]`}
+                  <a 
+                    href={getExtensionUrl(extension.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    {extension.installed ? "Uninstall" : "Install Now"}
-                  </Button>
+                    <Button 
+                      variant={extension.installed ? "outline" : "default"}
+                      className={`${extension.installed ? "border-nexus-purple text-nexus-purple hover:bg-nexus-purple/10" : "bg-nexus-purple hover:bg-nexus-purple/90"} min-w-[110px]`}
+                    >
+                      Access Now <ExternalLink className="ml-1 h-4 w-4" />
+                    </Button>
+                  </a>
                 </div>
               </Card>
             );
