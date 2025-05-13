@@ -138,20 +138,20 @@ const AddressBar: React.FC<AddressBarProps> = ({
       
       <div className="flex-1 mx-2">
         <form onSubmit={handleSubmit} className="w-full">
-          <div className="address-bar flex items-center px-3 py-1.5 rounded-md bg-background border border-input hover:border-muted-foreground/50 focus-within:border-nexus-purple focus-within:ring-1 focus-within:ring-nexus-purple">
+          <div className="address-bar">
             <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              className="bg-transparent flex-1 outline-none text-sm"
+              className="bg-transparent flex-1 outline-none text-sm text-white"
               placeholder="Search or enter address"
             />
             <Button 
               type="submit" 
               variant="ghost" 
               size="icon" 
-              className="h-6 w-6 text-muted-foreground hover:text-foreground"
+              className="h-6 w-6 text-white/70 hover:text-white"
             >
               <Search className="h-4 w-4" />
             </Button>
