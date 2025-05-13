@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import BrowserHeader, { DateTime, UserMenu, SettingsButton } from "@/components/Browser/BrowserHeader";
+import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle } from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
@@ -49,9 +48,9 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
   };
 
   return (
-    <div className="flex flex-col h-screen bg-nexus-dark-blue">
+    <div className="flex flex-col h-screen bg-nexus-dark-blue dark:bg-nexus-space-black">
       {/* Main browser header with title and time */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-space-black border-b border-border">
+      <div className="flex items-center justify-between px-4 py-2 bg-nexus-space-black dark:border-border border-b border-border">
         <div className="flex items-center gap-2">
           <div className="text-sm text-white">
             Nexus Wave Browser - Web3 V2.1
@@ -62,6 +61,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         
         <div className="flex items-center gap-4">
           <DateTime />
+          <ThemeToggle />
           <SettingsButton />
           <UserMenu />
         </div>

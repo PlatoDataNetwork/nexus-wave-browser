@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -26,7 +25,9 @@ import {
   Download,
   Puzzle,
   Trash,
-  HelpCircle
+  HelpCircle,
+  Sun,
+  Moon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,6 +50,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/hooks/useTheme";
 
 interface BrowserHeaderProps {
   tabs: Tab[];
@@ -104,6 +106,34 @@ export const DateTime: React.FC = () => {
         <span>{formattedDate}</span>
       </div>
     </div>
+  );
+};
+
+// Create a ThemeToggle component
+export const ThemeToggle: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
+          onClick={toggleTheme}
+        >
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5 text-nexus-purple" />
+          ) : (
+            <Moon className="h-5 w-5 text-nexus-purple" />
+          )}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Switch to {theme === "dark" ? "light" : "dark"} mode</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

@@ -4,6 +4,49 @@
 
 @layer base {
   :root {
+    /* Light mode variables */
+    --background: 240 25% 98%;
+    --foreground: 240 10% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+
+    --primary: 260 60% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 260 30% 90%;
+    --secondary-foreground: 240 10% 10%;
+
+    --muted: 240 20% 92%;
+    --muted-foreground: 215 20.2% 35.1%;
+
+    --accent: 260 30% 88%;
+    --accent-foreground: 240 10% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 15% 85%;
+    --input: 240 15% 85%;
+    --ring: 260 60% 65%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 240 25% 98%;
+    --sidebar-foreground: 240 10% 10%;
+    --sidebar-primary: 260 60% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 15% 90%;
+    --sidebar-accent-foreground: 240 10% 10%;
+    --sidebar-border: 240 15% 85%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode variables */
     --background: 240 25% 8%;
     --foreground: 210 40% 98%;
 
@@ -51,7 +94,7 @@
   }
 
   body {
-    @apply bg-nexus-space-black text-foreground;
+    @apply bg-background text-foreground;
     /* Removed overflow: hidden to allow scrolling */
   }
 }
