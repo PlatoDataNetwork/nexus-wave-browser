@@ -73,7 +73,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         
         {/* Centered title text */}
         <div className="flex-grow text-center">
-          <h1 className="text-xs font-bold text-white">
+          <h1 className="text-xs text-white">
             Nexus Wave Browser - Web3 V2.1
           </h1>
         </div>
