@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -242,4 +243,30 @@
   .macos-maximize {
     @apply bg-green-500 hover:bg-green-600;
   }
+  
+  /* Better slide fitting classes */
+  .slide-content {
+    @apply max-h-full overflow-y-auto p-4;
+  }
+  
+  .slide-card {
+    @apply h-auto max-h-[calc(100%-1rem)] overflow-hidden;
+  }
+  
+  .browser-frame {
+    @apply border border-gray-700/30 rounded-lg overflow-hidden shadow-lg;
+  }
+  
+  .compact-ui {
+    @apply text-sm leading-tight;
+  }
+  
+  .compact-card {
+    @apply p-2 space-y-1;
+  }
+  
+  .compact-heading {
+    @apply text-base mb-1;
+  }
 }
+
