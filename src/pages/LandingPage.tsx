@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -14,7 +15,6 @@ import BrowserPreview from "@/components/Marketing/BrowserPreview";
 import FeatureShowcase from "@/components/Marketing/FeatureShowcase";
 import TestimonialSlider from "@/components/Marketing/TestimonialSlider";
 import CallToAction from "@/components/Marketing/CallToAction";
-import HeaderNavMenu from "@/components/Layout/HeaderNavMenu";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const LandingPage: React.FC = () => {
@@ -35,11 +35,8 @@ const LandingPage: React.FC = () => {
   return (
     <MotionConfig>
       <div className="bg-nexus-space-black min-h-screen">
-        {/* Header Navigation */}
-        <HeaderNavMenu />
-
-        {/* Hero Section - Add padding-top to account for fixed header */}
-        <section className="relative py-20 pt-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Hero Section */}
+        <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
           <div className="absolute inset-0 z-0 bg-nexus-dark-blue opacity-50" />
           <div className="absolute inset-0 z-0">
             <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-nexus-purple/20 via-transparent to-transparent" />
@@ -69,17 +66,7 @@ const LandingPage: React.FC = () => {
                         Try Browser Now <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10"
-                      onClick={() => {
-                        const featuresSection = document.querySelector("#features");
-                        if (featuresSection) {
-                          featuresSection.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                    >
+                    <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
                       View Features
                     </Button>
                   </div>
@@ -103,7 +90,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* Features Overview */}
-        <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
@@ -151,7 +138,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* Web3 Connectivity */}
-        <section id="web3-connectivity" className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="h-full w-full bg-gradient-to-b from-nexus-dark-blue to-nexus-space-black" />
           </div>
@@ -267,7 +254,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* Security Features */}
-        <section id="security-features" className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
@@ -324,7 +311,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* AI Integration */}
-        <section id="ai-integration" className="py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
@@ -413,7 +400,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* Cross-Device Experience */}
-        <section id="cross-device" className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
@@ -465,7 +452,7 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* Testimonials */}
-        <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8">
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <TestimonialSlider />
           </div>
