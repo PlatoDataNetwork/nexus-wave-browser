@@ -105,13 +105,13 @@ const Header: React.FC = () => {
               size="sm"
               className="text-white"
             >
-              Profile
+              Signup
             </Button>
           </Link>
 
           <Link to="/app">
             <Button variant="macos" size="sm">
-              Launch App
+              Download
             </Button>
           </Link>
         </div>
