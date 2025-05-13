@@ -45,7 +45,7 @@ const Downloads: React.FC = () => {
                   className="flex items-center justify-center"
                 >
                   <img 
-                    src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
+                    src="/lovable-uploads/e0dc38fd-aecf-45f5-94f1-ac3f7bacc533.png" 
                     alt="Download on the Mac App Store" 
                     className="h-12 w-auto"
                   />
