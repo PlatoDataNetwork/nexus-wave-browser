@@ -38,8 +38,16 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
   
   // Function to determine the correct URL based on extension name
   const getExtensionUrl = () => {
+    if (!name) {
+      console.error("ExtensionItem: Extension name is undefined");
+      return "javascript:void(0)";
+    }
+    
     if (name === "GasSaver") {
       return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
+    }
+    if (name === "DefiX") {
+      return "https://defix-extension-demo.lovable.app/dashboard";
     }
     return "javascript:void(0)";
   };
@@ -62,6 +70,7 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
     });
     
     // Navigate to /app with the URL as a parameter
+    console.log(`SettingsExtensions: Navigating to ${url}`);
     navigate(`/app?url=${encodeURIComponent(url)}`);
   };
   
@@ -110,6 +119,7 @@ const SettingsExtensions: React.FC = () => {
     { id: 2, name: "MetaMask", description: "Ethereum wallet and dApp browser", enabled: true },
     { id: 3, name: "Web3 Inspector", description: "Inspect blockchain transactions", enabled: false },
     { id: 4, name: "GasSaver", description: "Ethereum gas price optimizer", enabled: true },
+    { id: 5, name: "DefiX", description: "A decentralized gateway to access any web3 app", enabled: true },
   ]);
   
   const [allowIncognito, setAllowIncognito] = useState(true);

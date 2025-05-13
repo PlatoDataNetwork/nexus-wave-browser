@@ -42,11 +42,22 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
 
   // Helper function to determine if a URL is external
   const isExternalUrl = (url: string) => {
+    if (!url) return false; // Guard against undefined URLs
     return url.startsWith('http://') || url.startsWith('https://');
   };
 
   // Render appropriate content based on URL path
   const renderContent = () => {
+    // Guard against undefined URLs
+    if (!currentUrl) {
+      console.error("BrowserContent: Current URL is undefined");
+      return (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-muted-foreground">Invalid URL. Please navigate to a valid page.</p>
+        </div>
+      );
+    }
+    
     // Log the current URL for debugging
     console.log(`[BrowserContent] Rendering content for: ${currentUrl}`);
 

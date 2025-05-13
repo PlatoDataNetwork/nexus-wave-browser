@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -13,8 +14,8 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
   const [progress, setProgress] = useState(0);
   const [loadError, setLoadError] = useState(false);
 
-  // Extract domain for display purposes
-  const domain = url.replace(/^https?:\/\//, "").split("/")[0];
+  // Extract domain for display purposes - with null check
+  const domain = url ? url.replace(/^https?:\/\//, "").split("/")[0] : "unknown";
 
   // Handle iframe load events
   useEffect(() => {
@@ -22,6 +23,13 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
     setIsLoading(true);
     setProgress(0);
     setLoadError(false);
+    
+    // Guard clause for undefined URLs
+    if (!url) {
+      console.error("WebviewFrame: URL is undefined");
+      setLoadError(true);
+      return;
+    }
     
     console.log(`Loading URL in WebviewFrame: ${url}`);
     toast.info(`Loading web content for: ${domain}`);
@@ -70,7 +78,9 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
   };
 
   // Function to ensure URL has proper protocol
-  const getProperUrl = (urlString: string) => {
+  const getProperUrl = (urlString: string | undefined) => {
+    if (!urlString) return "about:blank"; // Fallback for undefined URLs
+    
     if (urlString.startsWith('/')) {
       // Internal URL, keep as is
       return urlString;
@@ -114,7 +124,7 @@ const WebviewFrame: React.FC<WebviewFrameProps> = ({ url }) => {
           </div>
         ) : (
           <iframe
-            title={`Web content for ${url}`}
+            title={`Web content for ${url || 'empty URL'}`}
             className="w-full h-full"
             src={getProperUrl(url)}
             onLoad={handleIframeLoad}

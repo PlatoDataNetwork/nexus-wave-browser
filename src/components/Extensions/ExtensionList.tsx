@@ -29,14 +29,31 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
 
   // Function to determine the correct URL based on extension name
   const getExtensionUrl = (name: string) => {
+    if (!name) {
+      console.error("ExtensionList: Extension name is undefined");
+      return "javascript:void(0)";
+    }
+    
     if (name === "GasSaver") {
       return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
+    }
+    if (name === "DefiX") {
+      return "https://defix-extension-demo.lovable.app/dashboard";
     }
     return "javascript:void(0)";
   };
 
   // Handle the extension access button click
   const handleExtensionAccess = (name: string) => {
+    if (!name) {
+      console.error("ExtensionList: Cannot access extension with undefined name");
+      toast({
+        title: "Error",
+        description: "Cannot access extension due to missing name",
+      });
+      return;
+    }
+    
     const url = getExtensionUrl(name);
     
     // Skip navigation for javascript:void(0)
@@ -55,9 +72,11 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
     
     // If onNavigate prop exists, use it to navigate in the integrated browser
     if (onNavigate) {
+      console.log(`ExtensionList: Navigating to ${url} using onNavigate`);
       onNavigate(url);
     } else {
       // Fallback to navigate to /app with the URL as a parameter
+      console.log(`ExtensionList: Navigating to /app?url=${encodeURIComponent(url)} using navigate`);
       navigate(`/app?url=${encodeURIComponent(url)}`);
     }
   };
@@ -108,16 +127,16 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
                   </div>
                   <div className="ml-4 flex-1 min-w-0">
                     <div className="flex items-center gap-3">
-                      <h3 className="font-medium text-lg truncate">{extension.name}</h3>
+                      <h3 className="font-medium text-lg truncate">{extension.name || "Unnamed Extension"}</h3>
                       {extension.isBeta && (
                         <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/30">Beta</Badge>
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-1">
-                      {extension.description}
+                      {extension.description || "No description available"}
                     </p>
                     <div className="flex items-center gap-4 mt-1.5">
-                      <Badge variant="outline" className="bg-secondary/50 text-foreground">{extension.category}</Badge>
+                      <Badge variant="outline" className="bg-secondary/50 text-foreground">{extension.category || "Uncategorized"}</Badge>
                       {extension.rating && (
                         <div className="flex items-center text-sm">
                           <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
