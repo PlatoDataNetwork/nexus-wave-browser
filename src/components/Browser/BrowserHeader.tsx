@@ -26,7 +26,6 @@ import {
   Puzzle,
   Trash,
   HelpCircle,
-  Sun,
   Moon,
   Home
 } from "lucide-react";
@@ -111,9 +110,9 @@ export const DateTime: React.FC = () => {
   );
 };
 
-// Create a ThemeToggle component
+// Create a ThemeToggle component - now just a display element
 export const ThemeToggle: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   
   return (
     <Tooltip>
@@ -122,18 +121,13 @@ export const ThemeToggle: React.FC = () => {
           variant="ghost" 
           size="icon" 
           className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
-          onClick={toggleTheme}
         >
-          {theme === "light" ? (
-            <Moon className="h-5 w-5 text-nexus-purple" />
-          ) : (
-            <Sun className="h-5 w-5 text-nexus-purple" />
-          )}
-          <span className="sr-only">Toggle theme</span>
+          <Moon className="h-5 w-5 text-nexus-purple" />
+          <span className="sr-only">Dark Mode</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Switch to {theme === "light" ? "dark" : "light"} mode</p>
+        <p>Dark Mode</p>
       </TooltipContent>
     </Tooltip>
   );

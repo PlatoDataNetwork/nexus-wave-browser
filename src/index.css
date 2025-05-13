@@ -1,59 +1,10 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Light mode variables - optimized for white background and better readability */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
-
-    --primary: 260 60% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 10% 10%;
-
-    --muted: 240 20% 92%;
-    --muted-foreground: 240 10% 40%;
-
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 10% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 260 60% 65%;
-
-    --radius: 0.5rem;
-
-    /* Keeping header sections dark in both themes */
-    --sidebar-background: 230 25% 14%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 260 60% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 15% 20%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-    
-    /* Header color that remains the same in both themes */
-    --header-background: 240 25% 8%;
-    --header-foreground: 0 0% 100%;
-    --header-border: 240 15% 20%;
-  }
-
-  .dark {
-    /* Dark mode variables */
+    /* Dark mode variables only - Light mode variables removed */
     --background: 240 25% 8%;
     --foreground: 210 40% 98%;
 
@@ -82,10 +33,22 @@
     --input: 240 15% 20%;
     --ring: 260 60% 65%;
 
-    /* Header color that remains the same in both themes */
+    --radius: 0.5rem;
+
+    /* Header color that remains dark */
     --header-background: 240 25% 8%;
     --header-foreground: 0 0% 100%;
     --header-border: 240 15% 20%;
+    
+    /* Sidebar variables */
+    --sidebar-background: 230 25% 14%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 260 60% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 15% 15%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 15% 20%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -118,7 +81,7 @@
     letter-spacing: -0.028em;
   }
   
-  /* Theme transition for smoother theme switching */
+  /* Theme transition for smoother UI changes */
   .theme-transition,
   .theme-transition * {
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;

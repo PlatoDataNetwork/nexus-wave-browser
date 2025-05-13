@@ -1,67 +1,31 @@
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "light" | "dark";
+import React, { createContext, useContext } from "react";
 
 interface ThemeContextProps {
-  theme: Theme;
+  theme: "dark";
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    // Check if running in a browser environment
-    if (typeof window === 'undefined') return "dark";
-    
-    // Check for saved theme preference in localStorage
-    const savedTheme = localStorage.getItem("nexus-theme");
-    
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-    
-    // Check for system preference
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    
-    // Default to light theme
-    return "light";
-  });
+  // Always set dark theme
+  const theme = "dark";
   
-  // Add a class to enable CSS transitions for theme changes
-  useEffect(() => {
-    document.documentElement.classList.add('theme-transition');
-    
-    const transitionTimeout = setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
-    }, 500); // Match this with your CSS transition duration
-    
-    return () => clearTimeout(transitionTimeout);
-  }, []);
-
-  // Apply theme changes
-  useEffect(() => {
+  // Apply dark theme
+  React.useEffect(() => {
     if (typeof document === 'undefined') return;
     
-    // Update localStorage when theme changes
-    localStorage.setItem("nexus-theme", theme);
-    
-    // Update document classes for theme switching
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    // Always ensure dark mode is applied
+    document.documentElement.classList.add("dark");
     
     // Debug log
-    console.log("Theme changed to:", theme);
-  }, [theme]);
+    console.log("Theme enforced as: dark");
+  }, []);
 
+  // Toggle function is a no-op now (for API compatibility)
   const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
+    console.log("Theme toggle attempted, but only dark theme is available");
   };
 
   return (

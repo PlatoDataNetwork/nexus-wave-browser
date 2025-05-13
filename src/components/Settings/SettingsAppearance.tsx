@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const SettingsAppearance: React.FC = () => {
-  const [theme, setTheme] = useState("system");
+  // Remove theme state since we only have dark mode now
   const [showBookmarksBar, setShowBookmarksBar] = useState(true);
   const [bookmarksBarDisplay, setBookmarksBarDisplay] = useState<"visible" | "minimized" | "hidden">("visible");
   const [showHomeButton, setShowHomeButton] = useState(false);
@@ -24,20 +24,12 @@ const SettingsAppearance: React.FC = () => {
       <div className="space-y-4">
         <div>
           <h3 className="text-md font-medium mb-2">Theme</h3>
-          <RadioGroup value={theme} onValueChange={setTheme}>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="light" id="theme-light" />
-              <Label htmlFor="theme-light">Light</Label>
+          <div className="flex items-center space-x-2 mb-2">
+            <div className="p-2 rounded bg-muted">
+              <span>Dark Theme</span>
             </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="dark" id="theme-dark" />
-              <Label htmlFor="theme-dark">Dark</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="system" id="theme-system" />
-              <Label htmlFor="theme-system">Use system theme</Label>
-            </div>
-          </RadioGroup>
+            <span className="text-sm text-muted-foreground">(Default)</span>
+          </div>
         </div>
 
         <Separator />

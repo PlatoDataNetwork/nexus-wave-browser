@@ -2,7 +2,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/Browser/BrowserHeader";
 import { Search, Globe, Coins, LineChart } from "lucide-react";
 
 const Header: React.FC = () => {
@@ -98,9 +97,8 @@ const Header: React.FC = () => {
           </ul>
         </nav>
         
-        {/* Right side actions */}
+        {/* Right side actions - ThemeToggle removed */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <Link to="/profile">
             <Button
               variant={isActive('/profile') ? "secondary" : "ghost"}
