@@ -85,8 +85,8 @@ const Downloads: React.FC = () => {
                   className="flex items-center justify-center"
                 >
                   <img 
-                    src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
-                    alt="Get it from Microsoft Store" 
+                    src="/lovable-uploads/5fe79665-4517-4163-90ff-8ee3ba56dd23.png" 
+                    alt="Get it on Google Play" 
                     className="h-12 w-auto"
                   />
                 </a>
