@@ -36,7 +36,7 @@
 
     --radius: 0.5rem;
 
-    /* Keeping header, tab bar, browser bar, and bookmarks styling consistent in light mode */
+    /* Keeping header styling consistent with dark mode - unchanged for light mode */
     --sidebar-background: 230 25% 14%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 260 60% 65%;
@@ -112,7 +112,7 @@
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
 
-  /* Updated browser header/tab styling to use the new dark color */
+  /* Browser header/tab styling consistent in both light and dark modes */
   .browser-tab {
     @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-nexus-header-blue text-white;
   }
@@ -125,12 +125,12 @@
     @apply flex items-center px-3 py-2 bg-nexus-header-blue rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all text-white;
   }
 
-  /* Keep header elements consistent in both modes with new dark color */
+  /* Header elements consistent in both light and dark modes */
   .header-bar {
     @apply bg-nexus-header-blue border-b border-border text-white;
   }
 
-  /* Keep bookmark bar styling consistent */
+  /* Bookmark bar styling consistent in both modes */
   .bookmarks-bar {
     @apply border-b border-border bg-nexus-header-blue text-white;
   }
@@ -206,7 +206,7 @@
     to { transform: scale(1.2); opacity: 0.8; }
   }
 
-  /* Optimized light mode card styles */
+  /* Optimized light mode card styles - but keeping header sections dark */
   .light-card {
     @apply bg-white shadow-sm hover:shadow-md border border-gray-100 transition-shadow;
   }

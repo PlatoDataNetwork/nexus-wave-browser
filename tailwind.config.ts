@@ -71,7 +71,7 @@ export default {
 					'space-black': '#121212',
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
-					'header-blue': '#0A0B12', /* Updated to match the dark blue-black from the image */
+					'header-blue': '#0A0B12', /* Dark blue-black for headers in both themes */
 					// Light mode optimized colors
 					'light-bg': '#f8fafc',
 					'light-card': '#ffffff',
