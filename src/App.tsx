@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import PageLayout from "./components/Layout/PageLayout";
 import Search from "./pages/Search";
 import LandingPage from "./pages/LandingPage";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/history" element={<Index defaultUrl="/history" />} />
             <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
             <Route path="/search" element={<Index defaultUrl="/search" />} />
+            <Route path="/profile" element={<Profile />} />
             
             {/* Fallback route */}
             <Route path="*" element={<NotFound />} />

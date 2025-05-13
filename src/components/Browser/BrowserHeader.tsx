@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -114,6 +113,9 @@ export const UserMenu: React.FC = () => {
   
   const handleMenuAction = (action: string) => {
     switch(action) {
+      case "profile":
+        navigate("/profile");
+        break;
       case "settings":
         navigate("/settings");
         break;
