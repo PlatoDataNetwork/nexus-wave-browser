@@ -10,7 +10,7 @@ const CallToAction: React.FC = () => {
       <div className="relative z-10">
         <h2 className="text-2xl md:text-4xl font-bold mb-6 tracking-tight">
           <span className="block">Search. Browse. Earn.</span>
-          <span className="block">Web3 The Way It Was Meant To Be.</span>
+          <span className="block">The Way Web3 was Meant to Be.</span>
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
           Step into the future with Nexus Wave, a truly immersive Web3 browser built
