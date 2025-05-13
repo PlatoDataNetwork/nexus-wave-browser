@@ -36,6 +36,23 @@ const App = () => (
               <Route path="/search" element={<Index defaultUrl="/search" />} />
               <Route path="/profile" element={<Profile />} />
               
+              {/* Additional routes for footer links (placeholder pages) */}
+              <Route path="/features" element={<LandingPage />} />
+              <Route path="/pricing" element={<LandingPage />} />
+              <Route path="/community" element={<LandingPage />} />
+              <Route path="/about" element={<LandingPage />} />
+              <Route path="/blog" element={<LandingPage />} />
+              <Route path="/careers" element={<LandingPage />} />
+              <Route path="/privacy" element={<LandingPage />} />
+              <Route path="/terms" element={<LandingPage />} />
+              <Route path="/cookies" element={<LandingPage />} />
+              <Route path="/security" element={<LandingPage />} />
+              <Route path="/docs" element={<LandingPage />} />
+              <Route path="/tutorials" element={<LandingPage />} />
+              <Route path="/api" element={<LandingPage />} />
+              <Route path="/changelog" element={<LandingPage />} />
+              <Route path="/roadmap" element={<LandingPage />} />
+              
               {/* Fallback route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
