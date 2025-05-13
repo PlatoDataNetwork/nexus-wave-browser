@@ -8,6 +8,16 @@ import { Shield, Torus, Puzzle, Home, Search } from "lucide-react";
 const Header: React.FC = () => {
   const location = useLocation();
   const isAppRoute = location.pathname.startsWith('/app');
+  const isSearchRoute = location.pathname.startsWith('/search');
+  const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
+  const isHistoryRoute = location.pathname.startsWith('/history');
+  
+  // Don't display header on app routes that have their own browser chrome
+  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
+  
+  if (shouldHideHeader) {
+    return null;
+  }
   
   // Determine if the current path is active
   const isActive = (path: string) => {
@@ -97,13 +107,11 @@ const Header: React.FC = () => {
             </Button>
           </Link>
 
-          {!isAppRoute && (
-            <Link to="/app">
-              <Button variant="macos" size="sm">
-                Launch App
-              </Button>
-            </Link>
-          )}
+          <Link to="/app">
+            <Button variant="macos" size="sm">
+              Launch App
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
