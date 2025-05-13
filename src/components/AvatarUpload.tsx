@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { v4 as uuidv4 } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
 
 interface AvatarUploadProps {
   url: string | null;

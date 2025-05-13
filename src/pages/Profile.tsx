@@ -13,6 +13,7 @@ import { toast } from "@/components/ui/sonner";
 import PageLayout from "@/components/Layout/PageLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import AvatarUpload from "@/components/AvatarUpload";
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile: React.FC = () => {
   const { user, loading, session, updateProfile } = useAuth();
