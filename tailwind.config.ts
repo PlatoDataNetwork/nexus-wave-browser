@@ -88,6 +88,7 @@ export default {
 				},
 				nexus: {
 					'dark-blue': '#1A1F2C',
+					'header-blue': '#1a223a', /* Added explicit header blue color */
 					'purple': '#7B63DD',
 					'light-purple': '#9b87f5',
 					'deep-purple': '#6E59A5',

@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,25 +35,25 @@
 
     --radius: 0.5rem;
 
-    /* Header styling remains dark in both modes */
-    --header-background: 240 25% 8%;
+    /* Header styling matched to dark blue/purple in both modes */
+    --header-background: 230 25% 14%; /* Updated to match the dark blue/purple */
     --header-foreground: 240 4.8% 95.9%;
     --header-border: 240 15% 20%;
     
     /* Tab styling remains dark in both modes */
-    --tab-bg: 240 25% 8%; 
+    --tab-bg: 230 25% 14%; /* Updated to match header */
     --tab-text: 240 4.8% 95.9%;
     --tab-active: 260 60% 65%;
     --tab-inactive: 240 15% 20%;
     --tab-border: 240 15% 20%;
     
     /* Bookmarks styling */
-    --bookmark-bg: 240 25% 8%;
+    --bookmark-bg: 230 25% 14%; /* Updated to match header */
     --bookmark-text: 240 4.8% 95.9%;
     --bookmark-border: 240 15% 20%;
 
     /* Address bar styling */
-    --address-bg: 240 25% 10%;
+    --address-bg: 230 25% 16%; /* Slightly lighter than header */
     --address-text: 240 4.8% 95.9%;
     --address-border: 240 15% 20%;
     --address-icon: 260 60% 65%;
