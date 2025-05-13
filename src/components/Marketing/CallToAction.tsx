@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Globe } from "lucide-react";
@@ -7,8 +8,9 @@ const CallToAction: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto text-center">
       <div className="relative z-10">
-        <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-          Web3. The Way It Was Meant To Be.
+        <h2 className="text-2xl md:text-4xl font-bold mb-6 tracking-tight">
+          <span className="block">Search. Browse. Earn.</span>
+          <span className="block">Web3 The Way It Was Meant To Be.</span>
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
           Join thousands of early adopters who are already trading, creating, and building 
