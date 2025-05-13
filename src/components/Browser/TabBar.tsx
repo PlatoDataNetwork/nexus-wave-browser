@@ -32,7 +32,7 @@ const TabBar: React.FC<TabBarProps> = ({
             onClick={() => onActivateTab(tab.id)}
           >
             <div className="flex items-center space-x-2 max-w-[200px]">
-              <span className="truncate text-foreground">{tab.title}</span>
+              <span className="truncate text-white">{tab.title}</span>
             </div>
             <Button
               variant="ghost"
@@ -43,7 +43,7 @@ const TabBar: React.FC<TabBarProps> = ({
                 onCloseTab(tab.id);
               }}
             >
-              <X className="w-3 h-3" />
+              <X className="w-3 h-3 text-white" />
             </Button>
           </div>
         ))}
@@ -54,7 +54,7 @@ const TabBar: React.FC<TabBarProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className="min-w-[40px] h-8 mx-2 text-header-foreground"
+              className="min-w-[40px] h-8 mx-2 text-white"
               onClick={onAddTab}
             >
               <Plus className="w-4 h-4" />

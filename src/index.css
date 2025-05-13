@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,30 +38,31 @@
 
     /* Header styling matched to dark blue/purple in both modes */
     --header-background: 230 25% 14%; /* Updated to match the dark blue/purple */
-    --header-foreground: 240 4.8% 95.9%;
+    --header-foreground: 0 0% 100%; /* Pure white for text */
     --header-border: 240 15% 20%;
     
     /* Tab styling remains dark in both modes */
     --tab-bg: 230 25% 14%; /* Updated to match header */
-    --tab-text: 240 4.8% 95.9%;
+    --tab-text: 0 0% 100%; /* Pure white for text */
     --tab-active: 260 60% 65%;
     --tab-inactive: 240 15% 20%;
     --tab-border: 240 15% 20%;
     
     /* Bookmarks styling */
     --bookmark-bg: 230 25% 14%; /* Updated to match header */
-    --bookmark-text: 240 4.8% 95.9%;
+    --bookmark-text: 0 0% 100%; /* Pure white for text */
     --bookmark-border: 240 15% 20%;
 
     /* Address bar styling */
     --address-bg: 230 25% 16%; /* Slightly lighter than header */
-    --address-text: 240 4.8% 95.9%;
+    --address-text: 0 0% 100%; /* Pure white for text */
     --address-border: 240 15% 20%;
     --address-icon: 260 60% 65%;
   }
 
   .dark {
     /* Dark mode variables */
+    /* ... keep existing code (dark mode variables) */
     --background: 240 25% 8%;
     --foreground: 210 40% 98%;
 
@@ -93,29 +95,30 @@
     
     /* Header styling remains consistent in both modes */
     --header-background: 240 25% 8%;
-    --header-foreground: 240 4.8% 95.9%;
+    --header-foreground: 0 0% 100%; /* Pure white for text */
     --header-border: 240 15% 20%;
     
     /* Tab styling remains consistent in both modes */
     --tab-bg: 240 25% 8%;
-    --tab-text: 240 4.8% 95.9%;
+    --tab-text: 0 0% 100%; /* Pure white for text */
     --tab-active: 260 60% 65%;
     --tab-inactive: 240 15% 20%;
     --tab-border: 240 15% 20%;
     
     /* Bookmarks styling */
     --bookmark-bg: 240 25% 8%;
-    --bookmark-text: 240 4.8% 95.9%;
+    --bookmark-text: 0 0% 100%; /* Pure white for text */
     --bookmark-border: 240 15% 20%;
     
     /* Address bar styling */
     --address-bg: 240 25% 10%;
-    --address-text: 240 4.8% 95.9%;
+    --address-text: 0 0% 100%; /* Pure white for text */
     --address-border: 240 15% 20%;
     --address-icon: 260 60% 65%;
   }
 }
 
+/* ... keep existing code (the rest of the styles) */
 @layer base {
   * {
     @apply border-border;
