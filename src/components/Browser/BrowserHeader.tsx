@@ -96,7 +96,7 @@ export const DateTime: React.FC = () => {
   });
 
   return (
-    <div className="flex items-center gap-4 text-sm">
+    <div className="flex items-center gap-4 text-sm text-white">
       <div className="flex items-center gap-1">
         <Clock className="h-4 w-4 text-nexus-purple" />
         <span className="font-mono">{formattedTime}</span>

@@ -73,7 +73,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
   }, [currentUrl]);
 
   return (
-    <div className="flex items-center space-x-2 px-2 py-2">
+    <div className="flex items-center space-x-2 px-2 py-2 bg-nexus-header-blue">
       <div className="flex items-center space-x-1">
         <TooltipProvider>
           <Tooltip>
@@ -86,7 +86,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 disabled={!canGoBack}
                 aria-label="Go back"
               >
-                <ArrowLeft className={`h-4 w-4 ${!canGoBack ? 'opacity-50' : ''}`} />
+                <ArrowLeft className={`h-4 w-4 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -106,7 +106,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 disabled={!canGoForward}
                 aria-label="Go forward"
               >
-                <ArrowRight className={`h-4 w-4 ${!canGoForward ? 'opacity-50' : ''}`} />
+                <ArrowRight className={`h-4 w-4 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -126,7 +126,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 aria-label="Refresh page"
                 disabled={isLoading}
               >
-                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 text-white ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>

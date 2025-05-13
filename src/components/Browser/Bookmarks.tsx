@@ -120,7 +120,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
   const alphabetizedBookmarks = getAlphabetizedBookmarks();
 
   return (
-    <div className="relative flex items-center bg-nexus-space-black border-b border-border">
+    <div className="relative flex items-center bg-nexus-header-blue border-b border-border">
       {/* Left scroll button */}
       <Button
         variant="ghost"
@@ -155,7 +155,7 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
               >
                 {initial}
               </div>
-              <span className="text-xs text-foreground">{bookmark.title}</span>
+              <span className="text-xs text-white">{bookmark.title}</span>
             </Button>
           );
         })}
