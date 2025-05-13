@@ -8,10 +8,45 @@ import BrowserPreview from "@/components/Marketing/BrowserPreview";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Shield, Globe, Wallet, Layers, Lock, Zap } from "lucide-react";
+import { FeatureProps } from "@/components/Marketing/FeatureShowcase";
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  // Define browser features
+  const browserFeatures: FeatureProps[] = [
+    {
+      icon: Globe,
+      title: "Web3 Integration",
+      description: "Seamlessly navigate between Web2 and Web3 with built-in wallet and dApp support."
+    },
+    {
+      icon: Shield,
+      title: "Enhanced Privacy",
+      description: "Advanced tracking protection and secure browsing with integrated VPN capabilities."
+    },
+    {
+      icon: Wallet,
+      title: "Built-in Crypto Wallet",
+      description: "Manage your digital assets directly in your browser with multi-chain support."
+    },
+    {
+      icon: Layers,
+      title: "Protocol Support",
+      description: "Native support for IPFS, ENS, and other decentralized protocols."
+    },
+    {
+      icon: Lock,
+      title: "End-to-End Encryption",
+      description: "Your data stays private with encrypted sync across all your devices."
+    },
+    {
+      icon: Zap,
+      title: "Lightning Fast Performance",
+      description: "Optimized rendering engine provides the fastest browsing experience."
+    }
+  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black text-gray-900 dark:text-white">
@@ -59,7 +94,7 @@ const LandingPage: React.FC = () => {
               </p>
             </div>
             
-            <FeatureShowcase />
+            <FeatureShowcase features={browserFeatures} />
           </div>
         </section>
 

@@ -1,19 +1,52 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, Shield, Globe, Wallet, Layers, Lock, Zap } from "lucide-react";
 
-interface FeatureProps {
+export interface FeatureProps {
   icon: LucideIcon;
   title: string;
   description: string;
 }
 
+const DEFAULT_FEATURES: FeatureProps[] = [
+  {
+    icon: Globe,
+    title: "Web3 Integration",
+    description: "Seamlessly navigate between Web2 and Web3 with built-in wallet and dApp support."
+  },
+  {
+    icon: Shield,
+    title: "Enhanced Privacy",
+    description: "Advanced tracking protection and secure browsing with integrated VPN capabilities."
+  },
+  {
+    icon: Wallet,
+    title: "Built-in Crypto Wallet",
+    description: "Manage your digital assets directly in your browser with multi-chain support."
+  },
+  {
+    icon: Layers,
+    title: "Protocol Support",
+    description: "Native support for IPFS, ENS, and other decentralized protocols."
+  },
+  {
+    icon: Lock,
+    title: "End-to-End Encryption",
+    description: "Your data stays private with encrypted sync across all your devices."
+  },
+  {
+    icon: Zap,
+    title: "Lightning Fast Performance",
+    description: "Optimized rendering engine provides the fastest browsing experience."
+  }
+];
+
 const FeatureShowcase: React.FC<{
-  features: FeatureProps[];
+  features?: FeatureProps[];
   title?: string;
   subtitle?: string;
-}> = ({ features, title, subtitle }) => {
+}> = ({ features = DEFAULT_FEATURES, title, subtitle }) => {
   return (
     <div className="w-full">
       {(title || subtitle) && (
