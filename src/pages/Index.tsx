@@ -50,15 +50,9 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
 
   return (
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
-      {/* Title bar - would be handled by the native window in a real app */}
+      {/* Title bar - removing duplicate header text since it's now in BrowserHeader */}
       <div className="flex items-center h-8 bg-card border-b border-border nexus-gradient-bg">
-        <div className="flex-1 text-left pl-4">
-          <span className="text-xs">Nexus Wave</span>
-        </div>
-        <div className="flex-1 text-center">
-          <h1 className="text-xs">Nexus Wave Browser - Web3 V2.1</h1>
-        </div>
-        <div className="flex-1 text-right pr-4"></div>
+        <div className="flex-1"></div>
       </div>
       
       {/* Browser interface */}

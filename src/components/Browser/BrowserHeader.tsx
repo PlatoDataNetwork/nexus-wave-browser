@@ -109,14 +109,17 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
     <div className="flex flex-col">
       {/* Logo and DateTime Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-nexus-dark-blue border-b border-border">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 hover:text-nexus-purple transition-colors">
-          <div className="text-lg font-bold bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-            Nexus Wave
+        {/* Title on left */}
+        <div className="flex items-center gap-2">
+          <div className="text-sm text-nexus-purple">
+            Nexus Wave Browser - Web3 V2.1
           </div>
-        </Link>
+        </div>
         
-        {/* Date and Time */}
+        {/* Empty middle section for balance */}
+        <div className="flex-1"></div>
+        
+        {/* Date and Time on right */}
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1">
             <Clock className="h-4 w-4 text-nexus-purple" />
