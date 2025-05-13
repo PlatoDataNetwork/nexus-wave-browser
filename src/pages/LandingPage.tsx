@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
-import { Link } from "react-router-dom";
 import { 
   ArrowRight, Shield, Rocket, Book, 
   Wallet, Database, Lock, Globe, 
@@ -61,11 +59,9 @@ const LandingPage: React.FC = () => {
                     private browsing experience designed for the decentralized future.
                   </p>
                   <div className="flex flex-wrap gap-4">
-                    <Link to="/app">
-                      <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-                        Try Browser Now <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
+                    <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
+                      Download Now <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
                     <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
                       View Features
                     </Button>
