@@ -1,9 +1,9 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Apple, Download } from "lucide-react";
 import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const Downloads: React.FC = () => {
   return (
@@ -33,10 +33,13 @@ const Downloads: React.FC = () => {
               </div>
               
               <div className="flex flex-col gap-3">
-                <Button variant="macos" size="lg" className="w-full">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download for macOS
-                </Button>
+                <AspectRatio ratio={13/3} className="w-full overflow-hidden rounded-lg">
+                  <img 
+                    src="/lovable-uploads/aae1d781-d63b-4fa3-9b41-0a760d977a72.png" 
+                    alt="Download for macOS" 
+                    className="w-full h-full object-cover"
+                  />
+                </AspectRatio>
                 
                 <a 
                   href="#" 
@@ -73,10 +76,13 @@ const Downloads: React.FC = () => {
               </div>
               
               <div className="flex flex-col gap-3">
-                <Button variant="macos" size="lg" className="w-full bg-[#0078D7] hover:bg-[#0063B1]">
-                  <Download className="mr-2 h-4 w-4" />
-                  Download for Windows
-                </Button>
+                <AspectRatio ratio={13/3} className="w-full overflow-hidden rounded-lg">
+                  <img 
+                    src="/lovable-uploads/404bd8cc-211d-4725-a971-535eea7f17fe.png" 
+                    alt="Download for Windows" 
+                    className="w-full h-full object-cover"
+                  />
+                </AspectRatio>
                 
                 <a 
                   href="#" 
