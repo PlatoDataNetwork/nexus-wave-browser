@@ -12,6 +12,9 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
+    // Check if running in a browser environment
+    if (typeof window === 'undefined') return "dark";
+    
     // Check for saved theme preference in localStorage
     const savedTheme = localStorage.getItem("nexus-theme");
     
@@ -39,7 +42,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => clearTimeout(transitionTimeout);
   }, []);
 
+  // Apply theme changes
   useEffect(() => {
+    if (typeof document === 'undefined') return;
+    
     // Update localStorage when theme changes
     localStorage.setItem("nexus-theme", theme);
     
@@ -49,6 +55,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     } else {
       document.documentElement.classList.remove("dark");
     }
+    
+    // Debug log
+    console.log("Theme changed to:", theme);
   }, [theme]);
 
   const toggleTheme = () => {

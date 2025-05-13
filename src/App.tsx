@@ -20,8 +20,6 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <BrowserRouter>
           <div className="min-h-screen">
             <Header />
@@ -43,6 +41,8 @@ const App = () => (
             </Routes>
           </div>
         </BrowserRouter>
+        <Toaster />
+        <Sonner />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
