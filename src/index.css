@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -44,6 +45,11 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 15% 20%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Header color that remains the same in both themes */
+    --header-background: 240 25% 8%;
+    --header-foreground: 0 0% 100%;
+    --header-border: 240 15% 20%;
   }
 
   .dark {
@@ -78,14 +84,10 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 240 25% 8%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 260 60% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 15% 20%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Header color that remains the same in both themes */
+    --header-background: 240 25% 8%;
+    --header-foreground: 0 0% 100%;
+    --header-border: 240 15% 20%;
   }
 }
 
@@ -111,7 +113,7 @@
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
 
-  /* Browser header/tab styling consistent in both light and dark modes using the darker header color */
+  /* Browser header/tab styling consistent in both light and dark modes */
   .browser-tab {
     @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-nexus-header-blue text-white;
   }
@@ -124,14 +126,14 @@
     @apply flex items-center px-3 py-2 bg-nexus-header-blue rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all text-white;
   }
 
-  /* Header elements consistent in both light and dark modes */
+  /* Header bar styling - consistent in both light and dark modes */
   .header-bar {
     @apply bg-nexus-header-blue border-b border-border text-white;
   }
 
-  /* Bookmark bar styling consistent in both modes */
+  /* Bookmarks bar styling - consistent in both modes */
   .bookmarks-bar {
-    @apply border-b border-border bg-nexus-header-blue text-white;
+    @apply bg-nexus-header-blue border-b border-border text-white;
   }
 
   /* Custom scrollbar */
@@ -203,22 +205,5 @@
   @keyframes pulse {
     from { transform: scale(1); opacity: 1; }
     to { transform: scale(1.2); opacity: 0.8; }
-  }
-
-  /* Optimized light mode card styles - but keeping header sections dark */
-  .light-card {
-    @apply bg-white shadow-sm hover:shadow-md border border-gray-100 transition-shadow;
-  }
-  
-  /* Light mode specific glass effect */
-  .light-glass {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(123, 99, 221, 0.15);
-  }
-  
-  /* Optimized light mode button hover state */
-  .light-button-hover {
-    @apply hover:bg-primary/90 hover:shadow-md transition-all;
   }
 }

@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -62,6 +63,11 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+                header: {
+                    DEFAULT: 'hsl(var(--header-background))',
+                    foreground: 'hsl(var(--header-foreground))',
+                    border: 'hsl(var(--header-border))'
+                },
 				nexus: {
 					'dark-blue': '#1A1F2C',
 					'purple': '#7B63DD',
@@ -70,8 +76,8 @@ export default {
 					'space-black': '#121212',
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
-					'header-blue': '#0F0F17', /* Updated darker blue-black for headers in both themes */
-					// Light mode optimized colors
+					'header-blue': '#0F0F17', /* Used for headers in both themes */
+					// Light mode optimized colors (but headers still use dark color)
 					'light-bg': '#f8fafc',
 					'light-card': '#ffffff',
 					'light-accent': '#f3f1fe',
