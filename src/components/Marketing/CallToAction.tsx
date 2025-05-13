@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Download, Github } from "lucide-react";
+import { ArrowRight, Download, Github, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CallToAction: React.FC = () => {
@@ -9,22 +9,23 @@ const CallToAction: React.FC = () => {
     <div className="max-w-5xl mx-auto text-center">
       <div className="relative z-10">
         <h2 className="text-3xl md:text-5xl font-bold mb-6">
-          Ready to Experience the Future of Web Browsing?
+          Experience Web3 The Way It Was Meant To Be
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
-          Join thousands of early adopters who are already enjoying a seamless, secure, and
-          decentralized browsing experience with Nexus Wave.
+          Join thousands of early adopters who are already trading, creating, and building 
+          in the decentralized web with Plato's seamless MacOS integration.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link to="/app">
             <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-              Try Browser Now
+              <Download className="mr-2 h-5 w-5" />
+              Download for MacOS
             </Button>
           </Link>
           <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
-            <Github className="mr-2 h-5 w-5" />
-            View On Github
+            <Globe className="mr-2 h-5 w-5" />
+            Try Web Version
           </Button>
           <Button size="lg" variant="link" className="text-nexus-light-purple">
             Learn More <ArrowRight className="ml-1 h-4 w-4" />
@@ -33,18 +34,18 @@ const CallToAction: React.FC = () => {
         
         <div className="mt-12 flex items-center justify-center space-x-8">
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-nexus-purple mb-2">50K+</span>
+            <span className="text-3xl font-bold text-nexus-purple mb-2">100K+</span>
             <span className="text-sm text-gray-400">Active Users</span>
           </div>
           <div className="h-10 border-l border-gray-700" />
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-nexus-purple mb-2">120+</span>
-            <span className="text-sm text-gray-400">Supported dApps</span>
+            <span className="text-3xl font-bold text-nexus-purple mb-2">5,000+</span>
+            <span className="text-sm text-gray-400">dApps Supported</span>
           </div>
           <div className="h-10 border-l border-gray-700" />
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-nexus-purple mb-2">10M+</span>
-            <span className="text-sm text-gray-400">Transactions Secured</span>
+            <span className="text-3xl font-bold text-nexus-purple mb-2">15+</span>
+            <span className="text-sm text-gray-400">Blockchain Networks</span>
           </div>
         </div>
       </div>

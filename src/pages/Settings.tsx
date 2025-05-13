@@ -25,7 +25,7 @@ const Settings: React.FC = () => {
         <div className="w-64 border-r border-border bg-card">
           <div className="p-4">
             <div className="flex items-center mb-4">
-              <SettingsIcon className="h-5 w-5 mr-2 text-muted-foreground" />
+              <SettingsIcon className="h-5 w-5 mr-2 text-nexus-purple" />
               <h2 className="font-medium">Settings</h2>
             </div>
             <div className="relative mb-4">
@@ -48,56 +48,56 @@ const Settings: React.FC = () => {
               <TabsList className="flex flex-col items-start justify-start h-auto gap-1 bg-transparent p-0">
                 <TabsTrigger
                   value="appearance"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Appearance</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="shields"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Shields & Privacy</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="privacy"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
-                  <span>Privacy and security</span>
+                  <span>Privacy and Security</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="extensions"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Extensions</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="autofill"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Autofill</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="search"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
-                  <span>Search engine</span>
+                  <span>Search Engine</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="web3"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Web3</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="advanced"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
                 >
                   <span>Advanced</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
@@ -112,27 +112,35 @@ const Settings: React.FC = () => {
           <ScrollArea className="h-full">
             <Tabs value={activeTab} className="w-full">
               <TabsContent value="appearance" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Appearance</h2>
                 <SettingsAppearance />
               </TabsContent>
               <TabsContent value="shields" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Shields & Privacy</h2>
                 <SettingsShields />
               </TabsContent>
               <TabsContent value="privacy" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Privacy and Security</h2>
                 <SettingsPrivacySecurity />
               </TabsContent>
               <TabsContent value="extensions" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Extensions</h2>
                 <SettingsExtensions />
               </TabsContent>
               <TabsContent value="autofill" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Autofill</h2>
                 <SettingsAutofill />
               </TabsContent>
               <TabsContent value="search" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Search Engine</h2>
                 <SettingsSearch />
               </TabsContent>
               <TabsContent value="web3" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Web3 Settings</h2>
                 <SettingsWeb3 />
               </TabsContent>
               <TabsContent value="advanced" className="p-6 space-y-6 mt-0">
+                <h2 className="text-2xl font-bold mb-6">Advanced Settings</h2>
                 <SettingsAdvanced />
               </TabsContent>
             </Tabs>

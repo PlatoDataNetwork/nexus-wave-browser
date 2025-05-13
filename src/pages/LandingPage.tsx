@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { 
   ArrowRight, Shield, Rocket, Book, 
   Wallet, Database, Lock, Globe, 
-  Layers, Zap, Smartphone, RefreshCw 
+  Layers, Zap, Smartphone, RefreshCw,
+  Code, Maximize2, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,23 +52,23 @@ const LandingPage: React.FC = () => {
                   transition={{ duration: 0.5 }}
                 >
                   <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                    Next Generation Web3 Browser
+                    The First Real Web3 Browser for MacOS
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    Experience The Future Of Browsing
+                    Experience Web3 The Way It Was Meant To Be
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Nexus Wave Browser seamlessly integrates Web3 functionality into a secure, 
-                    private browsing experience designed for the decentralized future.
+                    Step into the future with Plato, a truly immersive Web3 browser built
+                    exclusively for MacOS with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <Link to="/app">
                       <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-                        Try Browser Now <ArrowRight className="ml-2 h-4 w-4" />
+                        Download for MacOS <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                     <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
-                      View Features
+                      Watch Demo
                     </Button>
                   </div>
                 </motion.div>
@@ -94,50 +95,51 @@ const LandingPage: React.FC = () => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                Powerful Features
+                Crafted for MacOS
               </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">The Most Innovative Browser</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">The Complete Web3 Experience</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Designed from the ground up to redefine how you interact with both traditional and decentralized web.
+                Instantly connect with thousands of decentralized applications, access real-time intelligence,
+                and explore the Web3 ecosystem—all through one sleek, unified interface.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard 
-                icon={<Shield className="h-8 w-8 text-nexus-purple" />}
-                title="Enhanced Privacy"
-                description="Built-in privacy features block trackers, fingerprinting, and unwanted ads while maintaining full browsing speed."
+                icon={<Globe className="h-8 w-8 text-nexus-purple" />}
+                title="Seamless dApp Access"
+                description="Connect instantly to thousands of decentralized applications without additional plugins or configurations."
               />
               <FeatureCard 
                 icon={<Wallet className="h-8 w-8 text-nexus-purple" />}
-                title="Web3 Integration"
-                description="Connect to dApps and manage your crypto assets seamlessly within your browser environment."
+                title="Unified Wallet Integration"
+                description="Connect and manage multiple crypto wallets in one secure, intuitive interface."
               />
               <FeatureCard 
                 icon={<Zap className="h-8 w-8 text-nexus-purple" />}
-                title="Lightning Fast"
-                description="Engineered for performance with optimized rendering and resource management."
+                title="Blazing-Fast Performance"
+                description="Optimized specifically for MacOS with native performance that outpaces traditional browsers."
               />
               <FeatureCard 
-                icon={<Database className="h-8 w-8 text-nexus-purple" />}
-                title="Decentralized Apps"
-                description="Access and interact with the growing ecosystem of decentralized applications."
-              />
-              <FeatureCard 
-                icon={<Lock className="h-8 w-8 text-nexus-purple" />}
+                icon={<Shield className="h-8 w-8 text-nexus-purple" />}
                 title="Enhanced Security"
-                description="Advanced security protocols protect your data and digital assets from threats."
+                description="Built-in protection against common Web3 threats, phishing attempts, and malicious smart contracts."
               />
               <FeatureCard 
-                icon={<RefreshCw className="h-8 w-8 text-nexus-purple" />}
-                title="Sync Across Devices"
-                description="Your browsing experience, bookmarks, and Web3 identities follow you across all your devices."
+                icon={<Layers className="h-8 w-8 text-nexus-purple" />}
+                title="Multi-Chain Support"
+                description="Seamlessly interact with all major blockchains and Layer 2 solutions in one browser."
+              />
+              <FeatureCard 
+                icon={<Code className="h-8 w-8 text-nexus-purple" />}
+                title="Developer Tools"
+                description="Comprehensive suite of developer tools optimized for blockchain and Web3 development."
               />
             </div>
           </div>
         </section>
 
-        {/* Web3 Connectivity */}
+        {/* MacOS Integration Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
           <div className="absolute inset-0 z-0">
             <div className="h-full w-full bg-gradient-to-b from-nexus-dark-blue to-nexus-space-black" />
@@ -153,48 +155,54 @@ const LandingPage: React.FC = () => {
                 className="order-2 lg:order-1"
               >
                 <div className="nexus-glass rounded-2xl p-6 shadow-lg">
-                  <Tabs defaultValue="wallets" className="w-full">
+                  <Tabs defaultValue="performance" className="w-full">
                     <TabsList className="grid w-full grid-cols-3 bg-nexus-card-dark rounded-lg p-1">
-                      <TabsTrigger value="wallets">Wallets</TabsTrigger>
-                      <TabsTrigger value="dapps">dApps</TabsTrigger>
-                      <TabsTrigger value="protocols">Protocols</TabsTrigger>
+                      <TabsTrigger value="performance">Performance</TabsTrigger>
+                      <TabsTrigger value="design">Design</TabsTrigger>
+                      <TabsTrigger value="security">Security</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="wallets" className="mt-4 space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {["MetaMask", "Coinbase Wallet", "Trust Wallet", "Nexus Wallet"].map((wallet, i) => (
-                          <div key={i} className="bg-nexus-card-dark p-4 rounded-lg flex items-center gap-3 hover:bg-nexus-purple/10 transition-all cursor-pointer">
-                            <div className="h-10 w-10 rounded-full bg-nexus-purple/20 flex items-center justify-center">
-                              <Wallet className="h-5 w-5 text-nexus-purple" />
-                            </div>
-                            <span>{wallet}</span>
-                          </div>
-                        ))}
+                    <TabsContent value="performance" className="mt-4 space-y-4">
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Native Performance</h4>
+                        <p className="text-gray-400">Built specifically for Apple Silicon with optimized rendering and resource management.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">M-Series Optimized</h4>
+                        <p className="text-gray-400">Takes full advantage of Apple's M-series processors for lightning-fast transactions and dApp interactions.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Memory Efficient</h4>
+                        <p className="text-gray-400">Intelligent memory management keeps your Mac running smoothly even with multiple dApps open.</p>
                       </div>
                     </TabsContent>
                     
-                    <TabsContent value="dapps" className="mt-4 space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {["Uniswap", "Aave", "The Graph", "Lens Protocol"].map((dapp, i) => (
-                          <div key={i} className="bg-nexus-card-dark p-4 rounded-lg flex items-center gap-3 hover:bg-nexus-purple/10 transition-all cursor-pointer">
-                            <div className="h-10 w-10 rounded-full bg-nexus-purple/20 flex items-center justify-center">
-                              <Globe className="h-5 w-5 text-nexus-purple" />
-                            </div>
-                            <span>{dapp}</span>
-                          </div>
-                        ))}
+                    <TabsContent value="design" className="mt-4 space-y-4">
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">MacOS Native UI</h4>
+                        <p className="text-gray-400">Follows Apple's Human Interface Guidelines for a truly native MacOS experience.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">System Integration</h4>
+                        <p className="text-gray-400">Seamless integration with MacOS notifications, shortcuts, and system services.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Dark Mode Support</h4>
+                        <p className="text-gray-400">Full support for MacOS dark mode with custom themes that match your system preferences.</p>
                       </div>
                     </TabsContent>
                     
-                    <TabsContent value="protocols" className="mt-4 space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {["Ethereum", "Solana", "Polkadot", "Cosmos"].map((protocol, i) => (
-                          <div key={i} className="bg-nexus-card-dark p-4 rounded-lg flex items-center gap-3 hover:bg-nexus-purple/10 transition-all cursor-pointer">
-                            <div className="h-10 w-10 rounded-full bg-nexus-purple/20 flex items-center justify-center">
-                              <Layers className="h-5 w-5 text-nexus-purple" />
-                            </div>
-                            <span>{protocol}</span>
-                          </div>
-                        ))}
+                    <TabsContent value="security" className="mt-4 space-y-4">
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Sandboxed Architecture</h4>
+                        <p className="text-gray-400">Leverages MacOS sandboxing for enhanced security between dApps and your system.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Apple Keychain Integration</h4>
+                        <p className="text-gray-400">Securely store sensitive wallet information using Apple's encrypted keychain technology.</p>
+                      </div>
+                      <div className="bg-nexus-card-dark p-4 rounded-lg">
+                        <h4 className="font-medium text-lg mb-2">Privacy Controls</h4>
+                        <p className="text-gray-400">Granular privacy controls aligned with MacOS standards to protect your digital identity.</p>
                       </div>
                     </TabsContent>
                   </Tabs>
@@ -209,12 +217,13 @@ const LandingPage: React.FC = () => {
                 className="order-1 lg:order-2"
               >
                 <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                  Web3 First
+                  Built for MacOS
                 </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Seamless Blockchain Integration</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave Browser is built from the ground up with Web3 in mind. Connect to your favorite wallets, 
-                  interact with dApps, and manage your digital assets all from within a secure, intuitive interface.
+                  Plato isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
+                  MacOS has to offer, from Apple Silicon performance to system-level integration that makes your 
+                  Web3 experience truly seamless.
                 </p>
                 
                 <div className="space-y-5">
@@ -223,8 +232,8 @@ const LandingPage: React.FC = () => {
                       <ArrowRight className="h-3 w-3 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-lg">Multi-Wallet Support</h4>
-                      <p className="text-gray-400">Connect and manage multiple wallets across different blockchains</p>
+                      <h4 className="font-medium text-lg">Designed for Apple Silicon</h4>
+                      <p className="text-gray-400">Optimized specifically for M1 and M2 chips for unmatched performance.</p>
                     </div>
                   </div>
                   
@@ -233,8 +242,8 @@ const LandingPage: React.FC = () => {
                       <ArrowRight className="h-3 w-3 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-lg">One-Click dApp Access</h4>
-                      <p className="text-gray-400">Instantly connect to decentralized applications without additional plugins</p>
+                      <h4 className="font-medium text-lg">Continuity Features</h4>
+                      <p className="text-gray-400">Handoff support between your Mac, iPhone, and iPad for a seamless Web3 experience.</p>
                     </div>
                   </div>
                   
@@ -243,8 +252,8 @@ const LandingPage: React.FC = () => {
                       <ArrowRight className="h-3 w-3 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-lg">Cross-Chain Compatibility</h4>
-                      <p className="text-gray-400">Support for all major blockchains and Layer 2 solutions</p>
+                      <h4 className="font-medium text-lg">Keyboard Shortcuts</h4>
+                      <p className="text-gray-400">Extensive keyboard shortcut support that follows MacOS conventions.</p>
                     </div>
                   </div>
                 </div>
@@ -253,59 +262,110 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Security Features */}
+        {/* Web3 Capabilities */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                Enterprise-Grade Security
+                Complete Web3 Suite
               </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">Protection At Every Layer</h2>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Your data and digital assets deserve the highest level of protection. Nexus Wave goes beyond
-                standard security to provide a truly private browsing experience.
+                Whether you're trading, creating, or building, Plato empowers you with next-gen UI/UX,
+                blazing-fast performance, and seamless integration across the decentralized web.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Anti-Phishing Protection",
-                  description: "Real-time detection of malicious websites and phishing attempts targeting Web3 users."
-                },
-                {
-                  title: "Secure Transaction Verification",
-                  description: "Double-check transactions before signing to prevent theft and scams."
-                },
-                {
-                  title: "Tracker Blocking",
-                  description: "Comprehensive protection against trackers, fingerprinting, and data collection."
-                },
-                {
-                  title: "Private Browsing Mode",
-                  description: "Enhanced privacy mode that leaves no trace of your browsing activity."
-                },
-                {
-                  title: "Smart Contract Analysis",
-                  description: "Detect potentially harmful smart contracts before interacting with them."
-                },
-                {
-                  title: "VPN Integration",
-                  description: "Built-in support for VPN connections to further enhance your privacy."
-                }
-              ].map((feature, i) => (
-                <Card key={i} className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-nexus-purple" />
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+                <CardHeader>
+                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
+                    <Wallet className="h-6 w-6 text-nexus-purple" />
+                  </div>
+                  <CardTitle>Multi-Wallet Dashboard</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-400">
+                    Monitor and manage all your wallets in one place with real-time portfolio tracking, gas optimization, and transaction history.
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Advanced transaction analysis</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Cross-chain portfolio view</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Gas fee optimization</span>
+                    </li>
+                  </ul>
+                </CardFooter>
+              </Card>
+
+              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+                <CardHeader>
+                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
+                    <Globe className="h-6 w-6 text-nexus-purple" />
+                  </div>
+                  <CardTitle>dApp Connection Hub</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-400">
+                    Discover and connect to thousands of dApps across various blockchains with our curated directory, featuring security ratings and community reviews.
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>One-click dApp connections</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Security verification system</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Personalized recommendations</span>
+                    </li>
+                  </ul>
+                </CardFooter>
+              </Card>
+
+              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+                <CardHeader>
+                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-nexus-purple" />
+                  </div>
+                  <CardTitle>Security Guardian</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-400">
+                    Advanced protection against scams, phishing, and malicious smart contracts with real-time threat detection and risk assessment for all Web3 interactions.
+                  </CardDescription>
+                </CardContent>
+                <CardFooter>
+                  <ul className="space-y-1 text-xs text-gray-400">
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Smart contract analysis</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Phishing protection</span>
+                    </li>
+                    <li className="flex items-center gap-1">
+                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <span>Transaction simulation</span>
+                    </li>
+                  </ul>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         </section>
@@ -316,12 +376,12 @@ const LandingPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                  AI-Powered
+                  Real-Time Intelligence
                 </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Intelligent Browsing Assistant</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Web3 AI Assistant</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Our built-in AI assistant helps you navigate both Web2 and Web3, providing context, explanations,
-                  and insights as you browse.
+                  Plato comes with a built-in AI assistant that provides context, explanations, and insights
+                  to help you navigate Web3 with confidence.
                 </p>
                 
                 <div className="space-y-6">
@@ -330,8 +390,8 @@ const LandingPage: React.FC = () => {
                       <Book className="h-6 w-6 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-xl mb-2">Decode Crypto Concepts</h4>
-                      <p className="text-gray-400">Get instant explanations of complex crypto and blockchain terminology while browsing.</p>
+                      <h4 className="font-medium text-xl mb-2">Blockchain Education</h4>
+                      <p className="text-gray-400">Get instant explanations of complex crypto concepts and blockchain terminology as you browse.</p>
                     </div>
                   </div>
                   
@@ -340,24 +400,24 @@ const LandingPage: React.FC = () => {
                       <Shield className="h-6 w-6 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-xl mb-2">Smart Security Alerts</h4>
-                      <p className="text-gray-400">Receive intelligent warnings about potential security risks before connecting your wallet.</p>
+                      <h4 className="font-medium text-xl mb-2">Transaction Analysis</h4>
+                      <p className="text-gray-400">AI-powered transaction analysis helps you understand the risks and implications before confirming.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
                     <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <Smartphone className="h-6 w-6 text-nexus-purple" />
+                      <Maximize2 className="h-6 w-6 text-nexus-purple" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-xl mb-2">Natural Language Search</h4>
-                      <p className="text-gray-400">Ask questions in plain language and get intelligent, contextual responses from across the web.</p>
+                      <h4 className="font-medium text-xl mb-2">Market Insights</h4>
+                      <p className="text-gray-400">Get contextual information about tokens, protocols, and market trends as you browse.</p>
                     </div>
                   </div>
                 </div>
                 
                 <Button size="lg" className="mt-8 bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-                  Explore AI Features
+                  See AI Features in Action
                 </Button>
               </div>
               
@@ -365,24 +425,24 @@ const LandingPage: React.FC = () => {
                 <div className="bg-nexus-card-dark rounded-xl p-5 max-h-[500px] overflow-hidden">
                   <div className="flex flex-col space-y-4">
                     <div className="self-end max-w-[80%] bg-nexus-purple text-white p-3 rounded-lg">
-                      What is the difference between Layer 1 and Layer 2 blockchains?
+                      What's the difference between ERC-20 and ERC-721 tokens?
                     </div>
                     
                     <div className="self-start max-w-[80%] bg-secondary border border-border p-3 rounded-lg">
-                      <p>Layer 1 blockchains are the base protocols like Ethereum, Bitcoin, and Solana that process and finalize transactions directly on their own blockchain.</p>
-                      <p className="mt-2">Layer 2 solutions are built on top of Layer 1 blockchains to improve scalability, speed, and transaction costs. They handle transactions off the main chain but derive their security from the Layer 1.</p>
-                      <p className="mt-2">Examples of Layer 2 solutions include Optimism, Arbitrum, and zkSync for Ethereum.</p>
+                      <p>ERC-20 and ERC-721 are both token standards on the Ethereum blockchain, but they serve different purposes:</p>
+                      <p className="mt-2"><strong>ERC-20:</strong> Fungible tokens where each token is identical to every other token. Used for cryptocurrencies, utility tokens, and governance tokens. Examples include USDC, DAI, and most DeFi tokens.</p>
+                      <p className="mt-2"><strong>ERC-721:</strong> Non-fungible tokens (NFTs) where each token has unique properties and metadata. Used for digital art, collectibles, and representing unique assets. Examples include CryptoPunks and Bored Ape Yacht Club.</p>
                       <div className="mt-3 pt-3 border-t border-gray-700">
-                        <p className="text-xs font-medium mb-1">Sources:</p>
+                        <p className="text-xs font-medium mb-1">Relevant projects in your browsing history:</p>
                         <ul className="space-y-1">
                           <li className="text-xs">
                             <a href="#" className="text-nexus-purple underline hover:text-nexus-deep-purple">
-                              Ethereum.org - Layer 2 Scaling
+                              Uniswap (uses ERC-20)
                             </a>
                           </li>
                           <li className="text-xs">
                             <a href="#" className="text-nexus-purple underline hover:text-nexus-deep-purple">
-                              Blockchain Fundamentals - Scaling Solutions
+                              OpenSea (uses ERC-721)
                             </a>
                           </li>
                         </ul>
@@ -390,7 +450,7 @@ const LandingPage: React.FC = () => {
                     </div>
                     
                     <div className="self-end max-w-[80%] bg-nexus-purple text-white p-3 rounded-lg">
-                      Which Layer 2 solutions have the highest TVL currently?
+                      Can you analyze this smart contract before I connect my wallet?
                     </div>
                   </div>
                 </div>
@@ -399,54 +459,118 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Cross-Device Experience */}
+        {/* Developer Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                Seamless Experience
-              </Badge>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">Everywhere You Are</h2>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Nexus Wave synchronizes your browsing experience across all your devices.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Desktop",
-                  description: "Available for Windows, macOS, and Linux with full feature parity across all platforms.",
-                  icon: <Layers />
-                },
-                {
-                  title: "Mobile",
-                  description: "Take your Web3 browsing experience on the go with our iOS and Android applications.",
-                  icon: <Smartphone />
-                },
-                {
-                  title: "Browser Extension",
-                  description: "Extend your existing browser with our powerful Web3 capabilities and security features.",
-                  icon: <Zap />
-                }
-              ].map((platform, i) => (
-                <Card key={i} className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
-                  <CardHeader>
-                    <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
-                      {React.cloneElement(platform.icon, { className: "h-6 w-6 text-nexus-purple" })}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <div className="nexus-glass rounded-2xl p-6 shadow-lg">
+                  <div className="bg-nexus-card-dark rounded-lg p-4 overflow-hidden font-mono text-sm">
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+                        <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                        <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                        <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                        <span>smart-contract.sol</span>
+                      </div>
+                      
+                      <div className="text-gray-300">
+                        <span className="text-blue-400">contract</span> <span className="text-green-400">PlatoDemo</span> {"{"}
+                      </div>
+                      <div className="text-gray-300 pl-4">
+                        <span className="text-blue-400">mapping</span>(<span className="text-purple-400">address</span> {"=>"} <span className="text-purple-400">uint256</span>) <span className="text-yellow-400">public</span> balances;
+                      </div>
+                      <div className="text-gray-300 pl-4">
+                        <span className="text-blue-400">event</span> <span className="text-green-400">Deposit</span>(<span className="text-purple-400">address</span> indexed from, <span className="text-purple-400">uint256</span> amount);
+                      </div>
+                      <div className="text-gray-300 pl-4">
+                        <span className="text-yellow-400">function</span> <span className="text-green-400">deposit</span>() <span className="text-yellow-400">public payable</span> {"{"}
+                      </div>
+                      <div className="text-gray-300 pl-8">
+                        balances[msg.sender] += msg.value;
+                      </div>
+                      <div className="text-gray-300 pl-8">
+                        <span className="text-yellow-400">emit</span> Deposit(msg.sender, msg.value);
+                      </div>
+                      <div className="text-gray-300 pl-4">{"}"}</div>
+                      <div className="text-gray-300">{"}"}</div>
+                      
+                      <div className="mt-4 border-t border-gray-700 pt-3">
+                        <div className="flex items-center">
+                          <div className="h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center mr-2">
+                            <Shield className="h-3 w-3 text-green-400" />
+                          </div>
+                          <span className="text-green-400 text-xs">No vulnerabilities detected</span>
+                        </div>
+                        
+                        <div className="flex items-center mt-2">
+                          <div className="h-5 w-5 rounded-full bg-blue-500/20 flex items-center justify-center mr-2">
+                            <Database className="h-3 w-3 text-blue-400" />
+                          </div>
+                          <span className="text-gray-400 text-xs">Gas estimate: ~34,500</span>
+                        </div>
+                      </div>
                     </div>
-                    <CardTitle>{platform.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400">{platform.description}</p>
-                  </CardContent>
-                  <CardFooter>
-                    <Button variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
-                      Learn More
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
+                  </div>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+              >
+                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+                  Developer Tools
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">Built by Developers, for Developers</h2>
+                <p className="text-lg text-gray-300 mb-8">
+                  Plato provides an exceptional development experience with specialized tools for Web3 developers,
+                  making it easier than ever to build, test, and deploy decentralized applications.
+                </p>
+                
+                <div className="space-y-5">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-lg">Smart Contract Inspector</h4>
+                      <p className="text-gray-400">Analyze and debug smart contracts with our built-in security scanner and gas optimizer.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-lg">Web3 DevTools</h4>
+                      <p className="text-gray-400">Exclusive developer tools for blockchain interactions, transaction simulation, and state inspection.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-lg">Local Development Environment</h4>
+                      <p className="text-gray-400">Test your dApps in a sandboxed environment with simulated blockchain conditions.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <Button size="lg" variant="outline" className="mt-8 border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
+                  Developer Documentation
+                </Button>
+              </motion.div>
             </div>
           </div>
         </section>

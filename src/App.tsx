@@ -10,6 +10,7 @@ import PageLayout from "./components/Layout/PageLayout";
 import Search from "./pages/Search";
 import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import { ThemeProvider } from "./hooks/useTheme";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               
               {/* Browser Application Routes */}
               <Route path="/app" element={<Index defaultUrl="https://Platodata.io" />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
               <Route path="/history" element={<Index defaultUrl="/history" />} />
               <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
