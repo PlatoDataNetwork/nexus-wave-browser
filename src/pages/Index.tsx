@@ -74,9 +74,8 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar with combined Nexus Wave logo and browser title */}
       <div className="flex items-center justify-between h-8 px-4 bg-card border-b border-border nexus-gradient-bg">
-        {/* Logo with Link to home */}
-        <Link to="/" className="flex items-center gap-2 hover:text-nexus-purple transition-colors">
-          <div className="w-5 h-5 rounded-full animate-pulse-glow bg-gradient-to-r from-nexus-purple to-nexus-light-purple" />
+        {/* Clickable title text */}
+        <Link to="/" className="hover:text-nexus-purple transition-colors">
           <h1 className="text-xs font-bold bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
             Nexus Wave Browser - Web3 V2.1
           </h1>
