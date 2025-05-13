@@ -27,8 +27,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return "dark";
     }
     
-    // Default to dark theme
-    return "dark";
+    // Default to light theme
+    return "light";
   });
   
   // Add a class to enable CSS transitions for theme changes

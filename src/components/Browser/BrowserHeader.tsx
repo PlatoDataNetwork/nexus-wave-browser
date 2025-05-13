@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -125,16 +124,16 @@ export const ThemeToggle: React.FC = () => {
           className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
           onClick={toggleTheme}
         >
-          {theme === "dark" ? (
-            <Sun className="h-5 w-5 text-nexus-purple" />
-          ) : (
+          {theme === "light" ? (
             <Moon className="h-5 w-5 text-nexus-purple" />
+          ) : (
+            <Sun className="h-5 w-5 text-nexus-purple" />
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>Switch to {theme === "dark" ? "light" : "dark"} mode</p>
+        <p>Switch to {theme === "light" ? "dark" : "light"} mode</p>
       </TooltipContent>
     </Tooltip>
   );
