@@ -26,12 +26,19 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     setIsLoading(true);
     console.log(`BrowserContent: Loading content for URL: ${currentUrl}`);
     
+    // Check for URL parameter in searchParams
+    const urlParam = searchParams.get('url');
+    if (urlParam) {
+      console.log(`BrowserContent: Found URL parameter: ${urlParam}`);
+      onNavigate(urlParam);
+    }
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500); // Simulate loading delay
 
     return () => clearTimeout(timer);
-  }, [currentUrl]);
+  }, [searchParams, onNavigate]);
 
   // Helper function to determine if a URL is external
   const isExternalUrl = (url: string) => {
@@ -55,7 +62,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
       return (
         <ScrollArea className="h-full w-full">
-          <ExtensionStore />
+          <ExtensionStore onNavigate={onNavigate} />
         </ScrollArea>
       );
     }

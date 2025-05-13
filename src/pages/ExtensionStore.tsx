@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -123,13 +122,22 @@ const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onNavigate }) => {
 
   // Handle navigation for extension links
   const handleExtensionNavigation = (url: string) => {
+    console.log("ExtensionStore: handleExtensionNavigation called with URL:", url);
+    
     if (onNavigate) {
       // Use the provided navigation function if available
+      console.log("ExtensionStore: Using provided onNavigate function");
       onNavigate(url);
     } else {
       // Fallback to navigating to /app with URL parameter
+      console.log("ExtensionStore: Using fallback navigation");
       navigate(`/app?url=${encodeURIComponent(url)}`);
     }
+    
+    toast({
+      title: "Opening Extension",
+      description: `Loading extension at ${url}`
+    });
   };
 
   // Handle tab changes including URL updates
@@ -179,7 +187,7 @@ const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onNavigate }) => {
         Nexus Wave Extension Library
       </h1>
       
-      {/* Stats Cards - Ensure we pass ALL extensions to the stats component */}
+      {/* Stats Cards */}
       <ExtensionStats extensions={allExtensions} />
       
       {/* Tab & Category navigation */}

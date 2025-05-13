@@ -45,13 +45,21 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
   };
   
   // Handle access extension click
-  const handleAccessExtension = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleAccessExtension = () => {
     const url = getExtensionUrl();
     
     if (url === "javascript:void(0)") {
+      toast({
+        title: "Extension not available",
+        description: `${name} is not currently available for access.`,
+      });
       return;
     }
+    
+    toast({
+      title: "Opening Extension",
+      description: `Loading ${name} in the browser...`,
+    });
     
     // Navigate to /app with the URL as a parameter
     navigate(`/app?url=${encodeURIComponent(url)}`);

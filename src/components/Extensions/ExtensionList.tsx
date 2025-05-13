@@ -7,6 +7,7 @@ import { Star, Package, Heart, ExternalLink } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ExtensionListProps {
   extensions: Extension[];
@@ -24,6 +25,7 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
   onNavigate
 }) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Function to determine the correct URL based on extension name
   const getExtensionUrl = (name: string) => {
@@ -39,8 +41,17 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
     
     // Skip navigation for javascript:void(0)
     if (url === "javascript:void(0)") {
+      toast({
+        title: "Extension not available",
+        description: `${name} is not currently available for access.`,
+      });
       return;
     }
+    
+    toast({
+      title: "Opening Extension",
+      description: `Loading ${name} in the browser...`,
+    });
     
     // If onNavigate prop exists, use it to navigate in the integrated browser
     if (onNavigate) {
