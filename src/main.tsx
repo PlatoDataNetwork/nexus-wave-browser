@@ -6,7 +6,7 @@ import './index.css'
 // Create a favicon link element
 const favicon = document.createElement('link');
 favicon.rel = 'icon';
-favicon.href = '/lovable-uploads/30b2fc91-16e6-4be5-a6ce-8ae23ecee8f4.png';
+favicon.href = '/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png';
 favicon.type = 'image/png';
 document.head.appendChild(favicon);
 

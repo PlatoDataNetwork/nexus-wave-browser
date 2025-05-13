@@ -33,7 +33,7 @@ const Header: React.FC = () => {
           <Link to="/" className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
               <img 
-                src="/lovable-uploads/30b2fc91-16e6-4be5-a6ce-8ae23ecee8f4.png" 
+                src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
                 alt="Nexus Wave Logo" 
                 className="h-full w-full object-cover"
               />
