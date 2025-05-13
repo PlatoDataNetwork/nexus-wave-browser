@@ -15,6 +15,7 @@ import Downloads from "./pages/Downloads";
 import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 
 const queryClient = new QueryClient();
 
@@ -24,25 +25,28 @@ const App = () => (
       <AuthProvider>
         <TooltipProvider>
           <BrowserRouter>
-            <div className="min-h-screen">
+            <div className="min-h-screen flex flex-col">
               <Header />
-              <Routes>
-                {/* Marketing Landing Page */}
-                <Route path="/" element={<LandingPage />} />
-                
-                {/* Browser Application Routes */}
-                <Route path="/app" element={<Index defaultUrl="https://platodata.io" />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
-                <Route path="/history" element={<Index defaultUrl="/history" />} />
-                <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-                <Route path="/search" element={<Index defaultUrl="/search" />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/downloads" element={<Downloads />} />
-                
-                {/* Fallback route */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="flex-grow">
+                <Routes>
+                  {/* Marketing Landing Page */}
+                  <Route path="/" element={<LandingPage />} />
+                  
+                  {/* Browser Application Routes */}
+                  <Route path="/app" element={<Index defaultUrl="https://platodata.io" />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
+                  <Route path="/history" element={<Index defaultUrl="/history" />} />
+                  <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+                  <Route path="/search" element={<Index defaultUrl="/search" />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/downloads" element={<Downloads />} />
+                  
+                  {/* Fallback route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+              <Footer />
             </div>
           </BrowserRouter>
           <Toaster />
