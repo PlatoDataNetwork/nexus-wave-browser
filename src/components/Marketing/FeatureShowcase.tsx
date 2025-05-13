@@ -47,6 +47,9 @@ const FeatureShowcase: React.FC<{
   title?: string;
   subtitle?: string;
 }> = ({ features = DEFAULT_FEATURES, title, subtitle }) => {
+  // Ensure features is always an array even if somehow it becomes undefined
+  const featuresToRender = features || DEFAULT_FEATURES;
+  
   return (
     <div className="w-full">
       {(title || subtitle) && (
@@ -57,7 +60,7 @@ const FeatureShowcase: React.FC<{
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {features.map((feature, index) => {
+        {featuresToRender.map((feature, index) => {
           const Icon = feature.icon;
           
           return (

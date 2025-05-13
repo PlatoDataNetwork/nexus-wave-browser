@@ -48,6 +48,9 @@ const TestimonialSlider: React.FC = () => {
     setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
   };
   
+  // Make sure testimonials is never undefined when we map through it
+  const testimonialsToShow = testimonials || [];
+  
   return (
     <div className="w-full">
       <div className="text-center mb-12">
@@ -63,7 +66,7 @@ const TestimonialSlider: React.FC = () => {
             className="flex transition-transform duration-500 ease-in-out" 
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            {testimonials.map((testimonial, index) => (
+            {testimonialsToShow.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-4">
                 <Card className="bg-nexus-card-dark border-nexus-purple/10 p-6">
                   <CardContent className="pt-6 px-4">
@@ -116,7 +119,7 @@ const TestimonialSlider: React.FC = () => {
       </div>
       
       <div className="flex justify-center mt-6 space-x-2">
-        {testimonials.map((_, index) => (
+        {testimonialsToShow.map((_, index) => (
           <button
             key={index}
             className={`h-2 rounded-full transition-all ${

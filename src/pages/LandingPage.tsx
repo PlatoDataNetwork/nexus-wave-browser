@@ -94,7 +94,11 @@ const LandingPage: React.FC = () => {
               </p>
             </div>
             
-            <FeatureShowcase features={browserFeatures} />
+            <FeatureShowcase 
+              features={browserFeatures} 
+              title="Key Features" 
+              subtitle="Explore the powerful capabilities of the Nexus Wave browser"
+            />
           </div>
         </section>
 
