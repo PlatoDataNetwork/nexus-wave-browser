@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -111,7 +110,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
       <div className="flex items-center justify-between px-4 py-2 bg-nexus-dark-blue border-b border-border">
         {/* Title on left */}
         <div className="flex items-center gap-2">
-          <div className="text-sm text-nexus-purple">
+          <div className="text-sm text-white">
             Nexus Wave Browser - Web3 V2.1
           </div>
         </div>
