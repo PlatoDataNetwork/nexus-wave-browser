@@ -20,7 +20,7 @@ const TabBar: React.FC<TabBarProps> = ({
   onActivateTab
 }) => {
   return (
-    <div className="flex items-center bg-nexus-space-black border-b border-border">
+    <div className="flex items-center bg-nexus-header-blue border-b border-border">
       <div className="flex-1 flex items-center overflow-x-auto scrollbar-none">
         {tabs.map((tab) => (
           <div

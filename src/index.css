@@ -103,16 +103,16 @@
 
 @layer components {
   .nexus-gradient-bg {
-    background: linear-gradient(135deg, #1A1F2C 0%, #252B3D 100%);
+    background: linear-gradient(135deg, #0A0B12 0%, #121824 100%);
   }
 
   .nexus-glass {
-    background: rgba(26, 31, 44, 0.8);
+    background: rgba(10, 11, 18, 0.8);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
 
-  /* Updated browser header/tab styling to be consistent in both modes */
+  /* Updated browser header/tab styling to use the new dark color */
   .browser-tab {
     @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-nexus-header-blue text-white;
   }
@@ -125,7 +125,7 @@
     @apply flex items-center px-3 py-2 bg-nexus-header-blue rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all text-white;
   }
 
-  /* Keep header elements consistent in both modes */
+  /* Keep header elements consistent in both modes with new dark color */
   .header-bar {
     @apply bg-nexus-header-blue border-b border-border text-white;
   }
