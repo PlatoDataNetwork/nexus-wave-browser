@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import BrowserHeader, { DateTime, UserMenu } from "@/components/Browser/BrowserHeader";
+import BrowserHeader, { DateTime, UserMenu, SettingsButton } from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
@@ -62,6 +62,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
         
         <div className="flex items-center gap-4">
           <DateTime />
+          <SettingsButton />
           <UserMenu />
         </div>
       </div>

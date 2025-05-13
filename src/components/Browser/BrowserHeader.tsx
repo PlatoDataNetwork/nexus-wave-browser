@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -153,7 +154,7 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">User</p>
-            <p className="text-xs text-muted-foreground">nexus@wave.io</p>
+            <p className="text-xs text-muted-foreground">zephyr@platodata.io</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -213,6 +214,34 @@ export const UserMenu: React.FC = () => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+};
+
+// Create a Settings button component
+export const SettingsButton: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleOpenSettings = () => {
+    navigate("/settings-docs");
+  };
+  
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
+          onClick={handleOpenSettings}
+        >
+          <Settings className="h-5 w-5 text-nexus-purple" />
+          <span className="sr-only">Settings</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Open Settings</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
