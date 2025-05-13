@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Github } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CallToAction: React.FC = () => {
   return (
@@ -16,10 +17,11 @@ const CallToAction: React.FC = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-            <Download className="mr-2 h-5 w-5" />
-            Download For Free
-          </Button>
+          <Link to="/app">
+            <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
+              Try Browser Now
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
             <Github className="mr-2 h-5 w-5" />
             View On Github
