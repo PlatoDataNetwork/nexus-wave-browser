@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import { ThemeProvider } from "./hooks/useTheme";
+import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
 
 const queryClient = new QueryClient();
@@ -19,31 +20,33 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
-      <TooltipProvider>
-        <BrowserRouter>
-          <div className="min-h-screen">
-            <Header />
-            <Routes>
-              {/* Marketing Landing Page */}
-              <Route path="/" element={<LandingPage />} />
-              
-              {/* Browser Application Routes */}
-              <Route path="/app" element={<Index defaultUrl="https://nexuswavedata.io" />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
-              <Route path="/history" element={<Index defaultUrl="/history" />} />
-              <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-              <Route path="/search" element={<Index defaultUrl="/search" />} />
-              <Route path="/profile" element={<Profile />} />
-              
-              {/* Fallback route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-        </BrowserRouter>
-        <Toaster />
-        <Sonner />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <BrowserRouter>
+            <div className="min-h-screen">
+              <Header />
+              <Routes>
+                {/* Marketing Landing Page */}
+                <Route path="/" element={<LandingPage />} />
+                
+                {/* Browser Application Routes */}
+                <Route path="/app" element={<Index defaultUrl="https://nexuswavedata.io" />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
+                <Route path="/history" element={<Index defaultUrl="/history" />} />
+                <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+                <Route path="/search" element={<Index defaultUrl="/search" />} />
+                <Route path="/profile" element={<Profile />} />
+                
+                {/* Fallback route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </AuthProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );
