@@ -3,7 +3,7 @@ import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
 import { Tab } from "@/lib/dummyData";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   Clock, 
   Calendar, 
@@ -27,7 +27,8 @@ import {
   Trash,
   HelpCircle,
   Sun,
-  Moon
+  Moon,
+  Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -132,6 +133,34 @@ export const ThemeToggle: React.FC = () => {
       </TooltipTrigger>
       <TooltipContent>
         <p>Switch to {theme === "dark" ? "light" : "dark"} mode</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
+
+// Create a HomeButton component
+export const HomeButton: React.FC = () => {
+  const navigate = useNavigate();
+  
+  const handleGoHome = () => {
+    navigate('/');
+  };
+  
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
+          onClick={handleGoHome}
+        >
+          <Home className="h-5 w-5 text-nexus-purple" />
+          <span className="sr-only">Go to Homepage</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Go to Homepage</p>
       </TooltipContent>
     </Tooltip>
   );
