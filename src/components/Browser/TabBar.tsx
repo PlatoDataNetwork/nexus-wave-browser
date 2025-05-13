@@ -32,11 +32,6 @@ const TabBar: React.FC<TabBarProps> = ({
             onClick={() => onActivateTab(tab.id)}
           >
             <div className="flex items-center space-x-2 max-w-[200px]">
-              {tab.icon ? (
-                <tab.icon className="w-4 h-4 text-muted-foreground" />
-              ) : (
-                <div className="w-4 h-4 rounded-full bg-nexus-purple/50" />
-              )}
               <span className="truncate text-foreground">{tab.title}</span>
             </div>
             <Button
