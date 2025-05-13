@@ -13,8 +13,8 @@ const CallToAction: React.FC = () => {
           <span className="block">Web3 The Way It Was Meant To Be.</span>
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Join thousands of early adopters who are already trading, creating, and building 
-          in the decentralized web with Nexus Wave's seamless MacOS integration.
+          Step into the future with Nexus Wave, a truly immersive Web3 browser built
+          for both MacOS & PC with seamless integration across the decentralized web.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
