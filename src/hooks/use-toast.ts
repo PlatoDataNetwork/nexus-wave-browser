@@ -1,11 +1,7 @@
-import * as React from "react"
 
-import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast"
+import { Toast, ToastActionElement, ToastProps } from "@/components/ui/toast"
 
-const TOAST_LIMIT = 1
+const TOAST_LIMIT = 5
 const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
@@ -13,6 +9,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  web3Event?: "transaction" | "connection" | "signature" | "general"
 }
 
 const actionTypes = {
@@ -25,7 +22,7 @@ const actionTypes = {
 let count = 0
 
 function genId() {
-  count = (count + 1) % Number.MAX_SAFE_INTEGER
+  count = (count + 1) % Number.MAX_VALUE
   return count.toString()
 }
 
@@ -186,6 +183,39 @@ function useToast() {
     toast,
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   }
+}
+
+// Enhanced web3 toast variants
+toast.web3 = (props: Toast) => {
+  return toast({
+    ...props,
+    web3Event: "general",
+    className: "web3-toast bg-nexus-header-blue border-nexus-purple"
+  })
+}
+
+toast.transaction = (props: Toast) => {
+  return toast({
+    ...props,
+    web3Event: "transaction",
+    className: "web3-toast bg-nexus-header-blue border-nexus-purple/50"
+  })
+}
+
+toast.connection = (props: Toast) => {
+  return toast({
+    ...props,
+    web3Event: "connection",
+    className: "web3-toast bg-nexus-header-blue border-nexus-purple/30"
+  })
+}
+
+toast.signature = (props: Toast) => {
+  return toast({
+    ...props,
+    web3Event: "signature",
+    className: "web3-toast bg-nexus-header-blue border-nexus-purple/70"
+  })
 }
 
 export { useToast, toast }
