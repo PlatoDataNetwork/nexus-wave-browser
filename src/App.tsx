@@ -12,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import { ThemeProvider } from "./hooks/useTheme";
+import Header from "./components/Layout/Header";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <div className="min-h-screen">
+            <Header />
             <Routes>
               {/* Marketing Landing Page */}
               <Route path="/" element={<LandingPage />} />
