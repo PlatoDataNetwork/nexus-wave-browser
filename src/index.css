@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,15 +36,28 @@
 
     --radius: 0.5rem;
 
-    /* Keeping header, tab bar, browser bar, and bookmarks styling consistent in light mode */
-    --sidebar-background: 240 25% 8%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 260 60% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 15% 20%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Header styling remains dark in both modes */
+    --header-background: 240 25% 8%;
+    --header-foreground: 240 4.8% 95.9%;
+    --header-border: 240 15% 20%;
+    
+    /* Tab styling remains dark in both modes */
+    --tab-bg: 240 25% 8%; 
+    --tab-text: 240 4.8% 95.9%;
+    --tab-active: 260 60% 65%;
+    --tab-inactive: 240 15% 20%;
+    --tab-border: 240 15% 20%;
+    
+    /* Bookmarks styling */
+    --bookmark-bg: 240 25% 8%;
+    --bookmark-text: 240 4.8% 95.9%;
+    --bookmark-border: 240 15% 20%;
+
+    /* Address bar styling */
+    --address-bg: 240 25% 10%;
+    --address-text: 240 4.8% 95.9%;
+    --address-border: 240 15% 20%;
+    --address-icon: 260 60% 65%;
   }
 
   .dark {
@@ -77,15 +91,29 @@
     --ring: 260 60% 65%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 240 25% 8%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 260 60% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 15% 20%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Header styling remains consistent in both modes */
+    --header-background: 240 25% 8%;
+    --header-foreground: 240 4.8% 95.9%;
+    --header-border: 240 15% 20%;
+    
+    /* Tab styling remains consistent in both modes */
+    --tab-bg: 240 25% 8%;
+    --tab-text: 240 4.8% 95.9%;
+    --tab-active: 260 60% 65%;
+    --tab-inactive: 240 15% 20%;
+    --tab-border: 240 15% 20%;
+    
+    /* Bookmarks styling */
+    --bookmark-bg: 240 25% 8%;
+    --bookmark-text: 240 4.8% 95.9%;
+    --bookmark-border: 240 15% 20%;
+    
+    /* Address bar styling */
+    --address-bg: 240 25% 10%;
+    --address-text: 240 4.8% 95.9%;
+    --address-border: 240 15% 20%;
+    --address-icon: 260 60% 65%;
   }
 }
 
@@ -113,25 +141,51 @@
 
   /* Updated browser header/tab styling to be consistent in both modes */
   .browser-tab {
-    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-secondary/30 text-foreground;
+    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer;
+    background-color: hsl(var(--tab-bg));
+    color: hsl(var(--tab-text));
+  }
+
+  .browser-tab::before {
+    content: "";
+    @apply absolute w-4 h-4 left-2 rounded-full opacity-70;
+    background-color: hsl(var(--tab-inactive));
   }
 
   .browser-tab.active {
-    @apply border-nexus-purple bg-secondary/50;
+    @apply border-nexus-purple;
+  }
+
+  .browser-tab.active::before {
+    background-color: hsl(var(--tab-active));
+    @apply opacity-100;
   }
 
   .address-bar {
-    @apply flex items-center px-3 py-2 bg-muted rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all;
+    @apply flex items-center px-3 py-2 rounded-md border transition-all;
+    background-color: hsl(var(--address-bg));
+    border-color: hsl(var(--address-border));
+    color: hsl(var(--address-text));
+  }
+  
+  .address-bar:focus-within {
+    @apply ring-1 ring-nexus-purple;
   }
 
   /* Keep header elements consistent in both modes */
   .header-bar {
-    @apply bg-nexus-space-black border-b border-border text-foreground;
+    background-color: hsl(var(--header-background));
+    border-color: hsl(var(--header-border));
+    color: hsl(var(--header-foreground));
+    @apply border-b;
   }
 
   /* Keep bookmark bar styling consistent */
   .bookmarks-bar {
-    @apply border-b border-border bg-secondary/20;
+    background-color: hsl(var(--bookmark-bg));
+    border-color: hsl(var(--bookmark-border));
+    color: hsl(var(--bookmark-text));
+    @apply border-b;
   }
 
   /* Custom scrollbar */
@@ -221,4 +275,19 @@
   .light-button-hover {
     @apply hover:bg-primary/90 hover:shadow-md transition-all;
   }
+  
+  /* Bookmark circle indicators */
+  .bookmark-circle {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-white font-medium;
+  }
+  
+  /* Color variations for bookmark circles */
+  .bookmark-circle-a { @apply bg-purple-500; }
+  .bookmark-circle-b { @apply bg-orange-500; }
+  .bookmark-circle-c { @apply bg-blue-500; }
+  .bookmark-circle-e { @apply bg-green-500; }
+  .bookmark-circle-p { @apply bg-red-500; }
+  .bookmark-circle-s { @apply bg-yellow-500; }
+  .bookmark-circle-l { @apply bg-indigo-500; }
+  .bookmark-circle-default { @apply bg-gray-500; }
 }
