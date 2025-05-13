@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/Browser/BrowserHeader";
-import { Shield, Torus, Puzzle, Home, Search } from "lucide-react";
+import { Shield, Torus, Puzzle, Apple, Search } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -50,7 +50,7 @@ const Header: React.FC = () => {
                   size="sm"
                   className="text-white"
                 >
-                  <Home className="mr-1 h-4 w-4" />
+                  <Apple className="mr-1 h-4 w-4" />
                   <span className="hidden sm:inline">Home</span>
                 </Button>
               </Link>
