@@ -10,7 +10,7 @@ interface IndexProps {
   defaultUrl?: string;
 }
 
-const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) => {
+const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(true);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
   
