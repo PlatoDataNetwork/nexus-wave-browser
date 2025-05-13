@@ -35,13 +35,14 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 210 40% 98%;
-    --sidebar-foreground: 240 10% 10%;
+    /* Keeping header, tab bar, browser bar, and bookmarks styling consistent in light mode */
+    --sidebar-background: 240 25% 8%;
+    --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 260 60% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 92%;
-    --sidebar-accent-foreground: 240 10% 10%;
-    --sidebar-border: 240 15% 85%;
+    --sidebar-accent: 240 15% 15%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 15% 20%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -110,8 +111,9 @@
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
 
+  /* Updated browser header/tab styling to be consistent in both modes */
   .browser-tab {
-    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer;
+    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-secondary/30 text-foreground;
   }
 
   .browser-tab.active {
@@ -120,6 +122,16 @@
 
   .address-bar {
     @apply flex items-center px-3 py-2 bg-muted rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all;
+  }
+
+  /* Keep header elements consistent in both modes */
+  .header-bar {
+    @apply bg-nexus-space-black border-b border-border text-foreground;
+  }
+
+  /* Keep bookmark bar styling consistent */
+  .bookmarks-bar {
+    @apply border-b border-border bg-secondary/20;
   }
 
   /* Custom scrollbar */

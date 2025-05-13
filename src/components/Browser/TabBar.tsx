@@ -20,7 +20,7 @@ const TabBar: React.FC<TabBarProps> = ({
   onActivateTab
 }) => {
   return (
-    <div className="flex items-center bg-secondary/30 border-b border-border">
+    <div className="flex items-center bg-nexus-space-black border-b border-border">
       <div className="flex-1 flex items-center overflow-x-auto scrollbar-none">
         {tabs.map((tab) => (
           <div
@@ -37,7 +37,7 @@ const TabBar: React.FC<TabBarProps> = ({
               ) : (
                 <div className="w-4 h-4 rounded-full bg-nexus-purple/50" />
               )}
-              <span className="truncate">{tab.title}</span>
+              <span className="truncate text-foreground">{tab.title}</span>
             </div>
             <Button
               variant="ghost"
@@ -59,7 +59,7 @@ const TabBar: React.FC<TabBarProps> = ({
             <Button
               variant="ghost"
               size="icon"
-              className="min-w-[40px] h-8 mx-2"
+              className="min-w-[40px] h-8 mx-2 text-foreground"
               onClick={onAddTab}
             >
               <Plus className="w-4 h-4" />
