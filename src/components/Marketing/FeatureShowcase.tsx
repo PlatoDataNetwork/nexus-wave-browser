@@ -1,55 +1,19 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon, Shield, Globe, Wallet, Layers, Lock, Zap } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
-export interface FeatureProps {
+interface FeatureProps {
   icon: LucideIcon;
   title: string;
   description: string;
 }
 
-const DEFAULT_FEATURES: FeatureProps[] = [
-  {
-    icon: Globe,
-    title: "Web3 Integration",
-    description: "Seamlessly navigate between Web2 and Web3 with built-in wallet and dApp support."
-  },
-  {
-    icon: Shield,
-    title: "Enhanced Privacy",
-    description: "Advanced tracking protection and secure browsing with integrated VPN capabilities."
-  },
-  {
-    icon: Wallet,
-    title: "Built-in Crypto Wallet",
-    description: "Manage your digital assets directly in your browser with multi-chain support."
-  },
-  {
-    icon: Layers,
-    title: "Protocol Support",
-    description: "Native support for IPFS, ENS, and other decentralized protocols."
-  },
-  {
-    icon: Lock,
-    title: "End-to-End Encryption",
-    description: "Your data stays private with encrypted sync across all your devices."
-  },
-  {
-    icon: Zap,
-    title: "Lightning Fast Performance",
-    description: "Optimized rendering engine provides the fastest browsing experience."
-  }
-];
-
 const FeatureShowcase: React.FC<{
-  features?: FeatureProps[];
+  features: FeatureProps[];
   title?: string;
   subtitle?: string;
-}> = ({ features = DEFAULT_FEATURES, title, subtitle }) => {
-  // Ensure features is always an array even if somehow it becomes undefined
-  const featuresToRender = features || DEFAULT_FEATURES;
-  
+}> = ({ features, title, subtitle }) => {
   return (
     <div className="w-full">
       {(title || subtitle) && (
@@ -60,7 +24,7 @@ const FeatureShowcase: React.FC<{
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuresToRender.map((feature, index) => {
+        {features.map((feature, index) => {
           const Icon = feature.icon;
           
           return (
