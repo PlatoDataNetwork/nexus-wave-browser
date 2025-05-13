@@ -63,32 +63,8 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				header: {
-					DEFAULT: 'hsl(var(--header-background))',
-					foreground: 'hsl(var(--header-foreground))',
-					border: 'hsl(var(--header-border))'
-				},
-				tab: {
-					bg: 'hsl(var(--tab-bg))',
-					text: 'hsl(var(--tab-text))',
-					active: 'hsl(var(--tab-active))',
-					inactive: 'hsl(var(--tab-inactive))',
-					border: 'hsl(var(--tab-border))'
-				},
-				bookmark: {
-					bg: 'hsl(var(--bookmark-bg))',
-					text: 'hsl(var(--bookmark-text))',
-					border: 'hsl(var(--bookmark-border))'
-				},
-				addressBar: {
-					bg: 'hsl(var(--address-bg))',
-					text: 'hsl(var(--address-text))',
-					border: 'hsl(var(--address-border))',
-					icon: 'hsl(var(--address-icon))'
-				},
 				nexus: {
 					'dark-blue': '#1A1F2C',
-					'header-blue': '#1a223a', /* Added explicit header blue color */
 					'purple': '#7B63DD',
 					'light-purple': '#9b87f5',
 					'deep-purple': '#6E59A5',

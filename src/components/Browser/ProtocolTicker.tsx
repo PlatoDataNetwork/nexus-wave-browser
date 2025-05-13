@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { topProtocols, Protocol } from "@/lib/protocolData";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -110,7 +111,7 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
               <div className="w-6 h-6 rounded-full flex items-center justify-center text-white bg-primary/80">
                 <Globe className="h-4 w-4" />
               </div>
-              <span className="text-xs text-white whitespace-nowrap">{protocol.name}</span>
+              <span className="text-xs whitespace-nowrap">{protocol.name}</span>
             </div>
           ))}
         </div>
