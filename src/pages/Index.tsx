@@ -64,17 +64,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     <div className="flex flex-col h-screen bg-nexus-dark-blue">
       {/* Title bar with combined Nexus Wave logo and browser title */}
       <div className="flex items-center justify-between h-8 px-4 bg-card border-b border-border nexus-gradient-bg">
-        {/* Clickable title text */}
-        <Link to="/" className="hover:text-nexus-purple transition-colors">
-          <h1 className="text-xs font-bold bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
-            Nexus Wave Browser - Web3 V2.1
-          </h1>
-        </Link>
-        
-        {/* Center space */}
-        <div className="flex-1"></div>
-        
-        {/* Date and Time */}
+        {/* Date and Time - Left Side */}
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1">
             <Clock className="h-3 w-3 text-nexus-purple" />
@@ -82,6 +72,25 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
           </div>
           <div className="flex items-center gap-1">
             <Calendar className="h-3 w-3 text-nexus-purple" />
+            <span>{formattedDate}</span>
+          </div>
+        </div>
+        
+        {/* Centered title text */}
+        <Link to="/" className="flex-grow text-center hover:text-nexus-purple transition-colors">
+          <h1 className="text-xs font-bold text-white">
+            Nexus Wave Browser - Web3 V2.1
+          </h1>
+        </Link>
+        
+        {/* Empty div to balance the layout */}
+        <div className="flex items-center gap-4 text-xs invisible">
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            <span className="font-mono">{formattedTime}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
             <span>{formattedDate}</span>
           </div>
         </div>
