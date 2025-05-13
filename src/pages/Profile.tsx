@@ -1,75 +1,99 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Edit2, UserRound, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
 import PageLayout from "@/components/Layout/PageLayout";
-import { useAuth } from "@/contexts/AuthContext";
-import AvatarUpload from "@/components/AvatarUpload";
-import { supabase } from "@/integrations/supabase/client";
+
+interface UserProfile {
+  id: string;
+  username: string | null;
+  avatar_url: string | null;
+  email: string | null;
+  created_at: string | null;
+}
 
 const Profile: React.FC = () => {
-  const { user, loading, session, updateProfile } = useAuth();
-  const navigate = useNavigate();
-  
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [username, setUsername] = useState("");
-  const [loadingProfile, setLoadingProfile] = useState(true);
 
   useEffect(() => {
-    // If there's no user after auth loading is done, redirect to login
-    if (!loading && !user) {
-      navigate("/auth");
-      return;
-    }
-
     const fetchProfile = async () => {
-      if (!user) return;
-      
       try {
+        setLoading(true);
+        
+        // Get current user
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          toast.error("Please sign in to view your profile");
+          return;
+        }
+
+        // Get user profile from the profiles table
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
-          .eq("id", user.id)
-          .single();
+          .eq("id", session.user.id)
+          .maybeSingle();
 
         if (error) {
-          throw error;
+          console.error("Error fetching profile:", error);
+          toast.error("Could not load profile data");
+          return;
         }
 
         if (data) {
-          setProfile(data);
+          setProfile({
+            id: data.id,
+            username: data.username,
+            avatar_url: data.avatar_url,
+            email: session.user.email,
+            created_at: session.user.created_at
+          });
           setUsername(data.username || "");
+        } else {
+          // Handle case where profile doesn't exist
+          setProfile({
+            id: session.user.id,
+            username: session.user.email?.split('@')[0] || null,
+            avatar_url: null,
+            email: session.user.email,
+            created_at: session.user.created_at
+          });
+          setUsername(session.user.email?.split('@')[0] || "");
         }
       } catch (error) {
-        console.error("Error fetching profile:", error);
-        toast.error("Failed to load profile data");
+        console.error("Profile fetch error:", error);
+        toast.error("Failed to load profile");
       } finally {
-        setLoadingProfile(false);
+        setLoading(false);
       }
     };
 
-    if (user) {
-      fetchProfile();
-    }
-  }, [user, loading, navigate]);
+    fetchProfile();
+  }, []);
 
   const handleUpdateProfile = async () => {
-    if (!user) return;
+    if (!profile) return;
     
     try {
-      const { error } = await updateProfile({ 
-        username,
-        updated_at: new Date().toISOString() 
-      });
+      const { error } = await supabase
+        .from("profiles")
+        .upsert({ 
+          id: profile.id, 
+          username: username,
+          updated_at: new Date().toISOString() 
+        });
 
       if (error) {
         throw error;
@@ -84,26 +108,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleAvatarUpload = async (url: string) => {
-    if (!user) return;
-    
-    try {
-      const { error } = await updateProfile({ 
-        avatar_url: url,
-        updated_at: new Date().toISOString() 
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      setProfile({ ...profile, avatar_url: url });
-    } catch (error) {
-      console.error("Error updating avatar:", error);
-      toast.error("Failed to update avatar");
-    }
-  };
-
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString(undefined, {
@@ -113,7 +117,7 @@ const Profile: React.FC = () => {
     });
   };
 
-  if (loading || loadingProfile) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
         <p>Loading profile...</p>
@@ -121,22 +125,21 @@ const Profile: React.FC = () => {
     );
   }
 
-  if (!user) {
-    return null; // This should never happen because of the redirect in useEffect
-  }
-
   return (
     <PageLayout>
       <ScrollArea className="h-full w-full">
         <div className="container mx-auto py-8 px-4">
           <Card className="max-w-2xl mx-auto shadow-lg">
-            <CardHeader className="flex flex-col items-center space-y-4">
-              <AvatarUpload 
-                url={profile?.avatar_url || null}
-                onUpload={handleAvatarUpload}
-                size="xl"
-                userId={user.id}
-              />
+            <CardHeader className="flex flex-col items-center space-y-2">
+              <Avatar className="h-24 w-24">
+                {profile?.avatar_url ? (
+                  <AvatarImage src={profile.avatar_url} alt={profile?.username || "User"} />
+                ) : (
+                  <AvatarFallback className="bg-nexus-purple text-white text-2xl">
+                    <UserRound className="h-12 w-12" />
+                  </AvatarFallback>
+                )}
+              </Avatar>
               <CardTitle className="text-2xl">My Profile</CardTitle>
               <CardDescription>
                 Manage your personal information and preferences
@@ -188,30 +191,18 @@ const Profile: React.FC = () => {
                         <div className="space-y-3">
                           <div className="grid grid-cols-3 gap-4">
                             <div className="font-medium text-muted-foreground">Username</div>
-                            <div className="col-span-2">{profile?.username || user.email?.split('@')[0] || "Not set"}</div>
+                            <div className="col-span-2">{profile?.username || "Not set"}</div>
                           </div>
                           
                           <div className="grid grid-cols-3 gap-4">
                             <div className="font-medium text-muted-foreground">Email</div>
-                            <div className="col-span-2">{user.email || "Not set"}</div>
+                            <div className="col-span-2">{profile?.email || "Not set"}</div>
                           </div>
                           
                           <div className="grid grid-cols-3 gap-4">
                             <div className="font-medium text-muted-foreground">Member Since</div>
-                            <div className="col-span-2">{formatDate(user.created_at)}</div>
+                            <div className="col-span-2">{formatDate(profile?.created_at)}</div>
                           </div>
-
-                          <div className="grid grid-cols-3 gap-4">
-                            <div className="font-medium text-muted-foreground">Last Sign In</div>
-                            <div className="col-span-2">{formatDate(user.last_sign_in_at)}</div>
-                          </div>
-                          
-                          {user.app_metadata?.provider && (
-                            <div className="grid grid-cols-3 gap-4">
-                              <div className="font-medium text-muted-foreground">Sign In Method</div>
-                              <div className="col-span-2 capitalize">{user.app_metadata.provider}</div>
-                            </div>
-                          )}
                         </div>
                       )}
                     </div>
