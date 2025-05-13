@@ -10,12 +10,4 @@ favicon.href = '/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png';
 favicon.type = 'image/png';
 document.head.appendChild(favicon);
 
-console.log("Main script executing, attempting to render App");
-const rootElement = document.getElementById("root");
-console.log("Root element found:", rootElement);
-
-if (rootElement) {
-  createRoot(rootElement).render(<App />);
-} else {
-  console.error("Could not find root element");
-}
+createRoot(document.getElementById("root")!).render(<App />);
