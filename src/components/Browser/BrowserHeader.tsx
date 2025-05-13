@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -28,21 +29,8 @@ interface BrowserHeaderProps {
   onToggleBookmarksBar?: () => void;
 }
 
-const BrowserHeader: React.FC<BrowserHeaderProps> = ({
-  tabs,
-  currentUrl,
-  onAddTab,
-  onCloseTab,
-  onActivateTab,
-  onNavigate,
-  onGoBack,
-  onGoForward,
-  onRefresh,
-  canGoBack,
-  canGoForward,
-  bookmarksBarState = "visible",
-  onToggleBookmarksBar
-}) => {
+// Create a DateTime component that can be used independently
+const DateTime: React.FC = () => {
   // State for current time and date
   const [currentTime, setCurrentTime] = useState(new Date());
   
@@ -68,6 +56,35 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
     year: 'numeric'
   });
 
+  return (
+    <div className="flex items-center gap-4 text-sm">
+      <div className="flex items-center gap-1">
+        <Clock className="h-4 w-4 text-nexus-purple" />
+        <span className="font-mono">{formattedTime}</span>
+      </div>
+      <div className="flex items-center gap-1">
+        <Calendar className="h-4 w-4 text-nexus-purple" />
+        <span>{formattedDate}</span>
+      </div>
+    </div>
+  );
+};
+
+const BrowserHeader: React.FC<BrowserHeaderProps> = ({
+  tabs,
+  currentUrl,
+  onAddTab,
+  onCloseTab,
+  onActivateTab,
+  onNavigate,
+  onGoBack,
+  onGoForward,
+  onRefresh,
+  canGoBack,
+  canGoForward,
+  bookmarksBarState = "visible",
+  onToggleBookmarksBar
+}) => {
   // Ensure navigation handler properly handles URLs
   const handleNavigate = (url: string) => {
     console.log(`BrowserHeader: Navigation requested to ${url}`);
@@ -106,31 +123,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
   return (
     <div className="flex flex-col">
-      {/* Logo and DateTime Bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-dark-blue border-b border-border">
-        {/* Title on left */}
-        <div className="flex items-center gap-2">
-          <div className="text-sm text-white">
-            Nexus Wave Browser - Web3 V2.1
-          </div>
-        </div>
-        
-        {/* Empty middle section for balance */}
-        <div className="flex-1"></div>
-        
-        {/* Date and Time on right */}
-        <div className="flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-1">
-            <Clock className="h-4 w-4 text-nexus-purple" />
-            <span className="font-mono">{formattedTime}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Calendar className="h-4 w-4 text-nexus-purple" />
-            <span>{formattedDate}</span>
-          </div>
-        </div>
-      </div>
-      
       <TabBar
         tabs={tabs}
         onAddTab={onAddTab}
@@ -185,5 +177,8 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
     </div>
   );
 };
+
+// Attach the DateTime component to the BrowserHeader for easy access
+BrowserHeader.DateTime = DateTime;
 
 export default BrowserHeader;
