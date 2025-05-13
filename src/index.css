@@ -1,47 +1,50 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 240 25% 8%;
-    --foreground: 210 40% 98%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
 
-    --card: 240 25% 10%;
-    --card-foreground: 210 40% 98%;
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
 
-    --popover: 240 25% 10%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 260 60% 65%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 260 30% 25%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 240 20% 15%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 260 30% 30%;
+    --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --primary: 183, 100%, 44%, 1;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 15% 20%;
-    --input: 240 15% 20%;
-    --ring: 260 60% 65%;
+    --ring: 216 34% 17%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 240 25% 8%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 260 60% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 15% 20%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Sidebar colors */
+    --sidebar-background: 224 71% 4%;
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-primary: 247, 100%, 77%;
+    --sidebar-primary-foreground: 222.2 47.4% 1.2%;
+    --sidebar-accent: 217, 33%, 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217, 33%, 17%;
+    --sidebar-ring: 216 34% 17%;
   }
 }
 
@@ -49,104 +52,28 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-nexus-space-black text-foreground;
-    /* Removed overflow: hidden to allow scrolling */
+    @apply bg-background text-foreground;
+  }
+  
+  /* Header highlighting */
+  ::selection {
+    background-color: rgba(123, 99, 221, 0.3);
   }
 }
 
 @layer components {
-  .nexus-gradient-bg {
-    background: linear-gradient(135deg, #1A1F2C 0%, #252B3D 100%);
-  }
-
+  /* Glass effect for navbar and UI elements */
   .nexus-glass {
-    background: rgba(26, 31, 44, 0.8);
-    backdrop-filter: blur(8px);
+    background: rgba(19, 19, 28, 0.7);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(123, 99, 221, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 
-  .browser-tab {
-    @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer;
-  }
-
-  .browser-tab.active {
-    @apply border-nexus-purple bg-secondary/50;
-  }
-
-  .address-bar {
-    @apply flex items-center px-3 py-2 bg-muted rounded-md border border-border focus-within:ring-1 focus-within:ring-nexus-purple transition-all;
-  }
-
-  /* Custom scrollbar */
-  .nexus-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .nexus-scrollbar::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-
-  .nexus-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-nexus-purple/50 rounded-full hover:bg-nexus-purple transition-colors;
-  }
-  
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
-
-  /* Custom animations */
-  @keyframes scale {
-    0% {
-      transform: scale(0);
-    }
-    50% {
-      transform: scale(1.5);
-    }
-    75% {
-      transform: scale(2);
-    }
-    100% {
-      transform: scale(2.5);
-    }
-  }
-
-  @keyframes blink {
-    0%, 100% {
-      transform: scaleY(1);
-    }
-    50% {
-      transform: scaleY(0.1);
-    }
-  }
-
-  /* Rainbow gradient animation */
-  .rainbow-gradient {
-    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
-    background-size: 1800% 1800%;
-    animation: rainbow 6s linear infinite;
-  }
-
-  @keyframes rainbow { 
-    0% { background-position: 0% 82% }
-    50% { background-position: 100% 19% }
-    100% { background-position: 0% 82% }
-  }
-
-  .countdown-animation {
-    animation: pulse 1s infinite alternate;
-  }
-
-  @keyframes pulse {
-    from { transform: scale(1); opacity: 1; }
-    to { transform: scale(1.2); opacity: 0.8; }
+  /* Smooth scroll behavior for the entire site */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for fixed header */
   }
 }
