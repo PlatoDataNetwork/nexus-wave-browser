@@ -8,10 +8,10 @@ const BrowserPreview: React.FC = () => {
       <div className="w-full h-full bg-nexus-dark-blue rounded-xl overflow-hidden flex flex-col">
         {/* Browser header - macOS style */}
         <div className="bg-nexus-card-navy border-b border-border p-2 flex items-center">
-          <div className="flex space-x-2 px-2">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
+          <div className="macos-window-controls">
+            <div className="macos-window-control macos-close" />
+            <div className="macos-window-control macos-minimize" />
+            <div className="macos-window-control macos-maximize" />
           </div>
           
           {/* Tab bar */}
@@ -33,7 +33,7 @@ const BrowserPreview: React.FC = () => {
             <div className="w-4 h-4 rounded-full bg-green-500/50 mr-2" />
             <span className="text-gray-400">app.uniswap.org</span>
             <div className="ml-auto flex items-center space-x-2">
-              <div className="bg-nexus-purple/20 text-nexus-purple text-xs px-2 py-0.5 rounded">Verified</div>
+              <div className="bg-nexus-purple/20 text-nexus-purple text-xs px-2 py-0.5 rounded-full">Verified</div>
               <div className="w-4 h-4 rounded-full bg-nexus-purple/20 flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-nexus-purple"></div>
               </div>
@@ -134,8 +134,8 @@ const BrowserPreview: React.FC = () => {
               </div>
               
               <div className="flex gap-2 mt-auto">
-                <div className="h-8 w-24 bg-nexus-purple rounded-md flex items-center justify-center text-white text-sm">Swap</div>
-                <div className="h-8 w-24 bg-nexus-card-dark border border-nexus-purple/30 rounded-md flex items-center justify-center text-sm">Connect</div>
+                <button className="macos-button h-8 text-sm rounded-lg flex items-center justify-center px-6">Swap</button>
+                <button className="h-8 px-6 rounded-lg bg-nexus-card-dark border border-nexus-purple/30 text-sm flex items-center justify-center">Connect</button>
               </div>
             </div>
           </div>

@@ -98,7 +98,27 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Use system fonts following Apple HIG */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     /* Removed overflow: hidden to allow scrolling */
+  }
+  
+  /* Focus states following Apple HIG */
+  :focus {
+    outline: none;
+    @apply ring-2 ring-primary ring-opacity-50;
+  }
+  
+  /* Headings with Apple-like typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+  }
+  
+  h1 {
+    font-weight: 700;
+    letter-spacing: -0.028em;
   }
 }
 
@@ -205,5 +225,53 @@
   @keyframes pulse {
     from { transform: scale(1); opacity: 1; }
     to { transform: scale(1.2); opacity: 0.8; }
+  }
+  
+  /* Apple HIG inspired components */
+  .macos-button {
+    @apply rounded-lg bg-gradient-to-b from-nexus-purple to-nexus-deep-purple text-white font-medium px-4 py-2 
+    shadow-sm transition-all duration-200 hover:translate-y-[-1px] hover:shadow-md active:translate-y-[0px];
+  }
+  
+  .macos-card {
+    @apply bg-white dark:bg-nexus-card-dark rounded-xl border border-gray-200 dark:border-gray-800 
+    shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  
+  .macos-input {
+    @apply rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-nexus-card-dark 
+    px-3 py-2 focus:border-nexus-purple focus:ring-2 focus:ring-nexus-purple focus:ring-opacity-30 transition-all;
+  }
+  
+  /* SF Symbols inspired icon containers */
+  .sf-icon-container {
+    @apply flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-nexus-card-dark;
+  }
+  
+  /* Toolbar styling inspired by macOS */
+  .macos-toolbar {
+    @apply flex items-center gap-2 p-2 bg-gray-100 dark:bg-nexus-card-dark 
+    border-b border-gray-200 dark:border-gray-800 rounded-t-lg;
+  }
+  
+  /* macOS window control buttons */
+  .macos-window-controls {
+    @apply flex items-center gap-1.5 ml-2;
+  }
+  
+  .macos-window-control {
+    @apply w-3 h-3 rounded-full;
+  }
+  
+  .macos-close {
+    @apply bg-red-500 hover:bg-red-600;
+  }
+  
+  .macos-minimize {
+    @apply bg-yellow-500 hover:bg-yellow-600;
+  }
+  
+  .macos-maximize {
+    @apply bg-green-500 hover:bg-green-600;
   }
 }

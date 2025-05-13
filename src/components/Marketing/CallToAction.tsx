@@ -1,29 +1,29 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Download, Github, Globe } from "lucide-react";
+import { ArrowRight, Download, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CallToAction: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto text-center">
       <div className="relative z-10">
-        <h2 className="text-3xl md:text-5xl font-bold mb-6">
+        <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
           Experience Web3 The Way It Was Meant To Be
         </h2>
-        <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
           Join thousands of early adopters who are already trading, creating, and building 
           in the decentralized web with Nexus Wave's seamless MacOS integration.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link to="/app">
-            <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
+            <Button variant="macos" size="lg" className="rounded-lg">
               <Download className="mr-2 h-5 w-5" />
               Download for MacOS
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
+          <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10 rounded-lg">
             <Globe className="mr-2 h-5 w-5" />
             Try Web Version
           </Button>
