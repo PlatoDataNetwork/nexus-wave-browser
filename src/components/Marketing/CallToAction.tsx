@@ -13,7 +13,7 @@ const CallToAction: React.FC = () => {
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
           Join thousands of early adopters who are already trading, creating, and building 
-          in the decentralized web with Plato's seamless MacOS integration.
+          in the decentralized web with Nexus Wave's seamless MacOS integration.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

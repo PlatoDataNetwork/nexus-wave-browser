@@ -58,7 +58,7 @@ const LandingPage: React.FC = () => {
                     Experience Web3 The Way It Was Meant To Be
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Step into the future with Plato, a truly immersive Web3 browser built
+                    Step into the future with Nexus Wave, a truly immersive Web3 browser built
                     exclusively for MacOS with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
@@ -221,7 +221,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
+                  Nexus Wave isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
                   MacOS has to offer, from Apple Silicon performance to system-level integration that makes your 
                   Web3 experience truly seamless.
                 </p>
@@ -271,7 +271,7 @@ const LandingPage: React.FC = () => {
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Whether you're trading, creating, or building, Plato empowers you with next-gen UI/UX,
+                Whether you're trading, creating, or building, Nexus Wave empowers you with next-gen UI/UX,
                 blazing-fast performance, and seamless integration across the decentralized web.
               </p>
             </div>
@@ -380,7 +380,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Web3 AI Assistant</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato comes with a built-in AI assistant that provides context, explanations, and insights
+                  Nexus Wave comes with a built-in AI assistant that provides context, explanations, and insights
                   to help you navigate Web3 with confidence.
                 </p>
                 
@@ -480,7 +480,7 @@ const LandingPage: React.FC = () => {
                       </div>
                       
                       <div className="text-gray-300">
-                        <span className="text-blue-400">contract</span> <span className="text-green-400">PlatoDemo</span> {"{"}
+                        <span className="text-blue-400">contract</span> <span className="text-green-400">NexusWaveDemo</span> {"{"}
                       </div>
                       <div className="text-gray-300 pl-4">
                         <span className="text-blue-400">mapping</span>(<span className="text-purple-400">address</span> {"=>"} <span className="text-purple-400">uint256</span>) <span className="text-yellow-400">public</span> balances;
@@ -531,7 +531,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Built by Developers, for Developers</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato provides an exceptional development experience with specialized tools for Web3 developers,
+                  Nexus Wave provides an exceptional development experience with specialized tools for Web3 developers,
                   making it easier than ever to build, test, and deploy decentralized applications.
                 </p>
                 

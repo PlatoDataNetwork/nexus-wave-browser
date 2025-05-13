@@ -28,7 +28,7 @@ const App = () => (
               <Route path="/" element={<LandingPage />} />
               
               {/* Browser Application Routes */}
-              <Route path="/app" element={<Index defaultUrl="https://Platodata.io" />} />
+              <Route path="/app" element={<Index defaultUrl="https://nexuswavedata.io" />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
               <Route path="/history" element={<Index defaultUrl="/history" />} />
