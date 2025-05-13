@@ -5,13 +5,50 @@ import AddressBar from "./AddressBar";
 import Bookmarks from "./Bookmarks";
 import { Tab } from "@/lib/dummyData";
 import { Link } from "react-router-dom";
-import { Clock, Calendar, Maximize2, Minimize2, BookmarkX } from "lucide-react";
+import { 
+  Clock, 
+  Calendar, 
+  Maximize2, 
+  Minimize2, 
+  BookmarkX,
+  UserRound,
+  Settings,
+  AppWindow,
+  EyeOff,
+  Torus,
+  Star,
+  Wallet,
+  Shield,
+  LayoutPanelLeft,
+  Key,
+  History,
+  Bookmark,
+  Download,
+  Puzzle,
+  Trash,
+  HelpCircle
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface BrowserHeaderProps {
   tabs: Tab[];
@@ -30,7 +67,7 @@ interface BrowserHeaderProps {
 }
 
 // Create a DateTime component that can be used independently
-const DateTime: React.FC = () => {
+export const DateTime: React.FC = () => {
   // State for current time and date
   const [currentTime, setCurrentTime] = useState(new Date());
   
@@ -67,6 +104,113 @@ const DateTime: React.FC = () => {
         <span>{formattedDate}</span>
       </div>
     </div>
+  );
+};
+
+// Create a UserMenu component
+export const UserMenu: React.FC = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleMenuAction = (action: string) => {
+    switch(action) {
+      case "settings":
+        navigate("/settings");
+        break;
+      case "history":
+        navigate("/history");
+        break;
+      case "extensions":
+        navigate("/extensions");
+        break;
+      default:
+        toast({
+          title: `Action: ${action}`,
+          description: "This feature is coming soon",
+        });
+    }
+  };
+  
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="rounded-full h-8 w-8 bg-nexus-purple/10 hover:bg-nexus-purple/20"
+        >
+          <UserRound className="h-5 w-5 text-nexus-purple" />
+          <span className="sr-only">User settings</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent 
+        className="w-56" 
+        align="end"
+        sideOffset={8}
+      >
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium">User</p>
+            <p className="text-xs text-muted-foreground">nexus@wave.io</p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => handleMenuAction("profile")}>
+            <UserRound className="mr-2 h-4 w-4" />
+            <span>My Profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("settings")}>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => handleMenuAction("new-window")}>
+            <AppWindow className="mr-2 h-4 w-4" />
+            <span>New Window</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("incognito")}>
+            <EyeOff className="mr-2 h-4 w-4" />
+            <span>New Incognito Window</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => handleMenuAction("web3")}>
+            <Torus className="mr-2 h-4 w-4" />
+            <span>Web3</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("bookmarks")}>
+            <Star className="mr-2 h-4 w-4" />
+            <span>Bookmarks</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("wallet")}>
+            <Wallet className="mr-2 h-4 w-4" />
+            <span>Wallet</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("shields")}>
+            <Shield className="mr-2 h-4 w-4" />
+            <span>Shields & Privacy</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleMenuAction("extensions")}>
+            <Puzzle className="mr-2 h-4 w-4" />
+            <span>Extensions</span>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleMenuAction("history")}>
+          <History className="mr-2 h-4 w-4" />
+          <span>History</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => handleMenuAction("help")}>
+          <HelpCircle className="mr-2 h-4 w-4" />
+          <span>Help & Feedback</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -177,8 +321,5 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
     </div>
   );
 };
-
-// Attach the DateTime component to the BrowserHeader for easy access
-BrowserHeader.DateTime = DateTime;
 
 export default BrowserHeader;
