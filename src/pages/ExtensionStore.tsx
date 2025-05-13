@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -17,7 +18,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 
-const ExtensionStore: React.FC = () => {
+interface ExtensionStoreProps {
+  onNavigate?: (url: string) => void;
+}
+
+const ExtensionStore: React.FC<ExtensionStoreProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
@@ -113,6 +118,17 @@ const ExtensionStore: React.FC = () => {
           ? `${extension.name} has been removed from your favorites` 
           : `${extension.name} has been added to your favorites`,
       });
+    }
+  };
+
+  // Handle navigation for extension links
+  const handleExtensionNavigation = (url: string) => {
+    if (onNavigate) {
+      // Use the provided navigation function if available
+      onNavigate(url);
+    } else {
+      // Fallback to navigating to /app with URL parameter
+      navigate(`/app?url=${encodeURIComponent(url)}`);
     }
   };
 
@@ -214,6 +230,7 @@ const ExtensionStore: React.FC = () => {
             viewMode={viewMode} 
             onInstall={handleInstall}
             onToggleFavorite={handleToggleFavorite}
+            onNavigate={handleExtensionNavigation}
           />
         )}
       </div>

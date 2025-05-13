@@ -6,26 +6,49 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Package, Heart, ExternalLink } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
 import ExtensionCard from "@/components/Extensions/ExtensionCard";
+import { useNavigate } from "react-router-dom";
 
 interface ExtensionListProps {
   extensions: Extension[];
   viewMode: "grid" | "list";
   onInstall: (id: number) => void;
   onToggleFavorite?: (id: number) => void;
+  onNavigate?: (url: string) => void;
 }
 
 const ExtensionList: React.FC<ExtensionListProps> = ({ 
   extensions, 
   viewMode, 
   onInstall, 
-  onToggleFavorite 
+  onToggleFavorite,
+  onNavigate
 }) => {
+  const navigate = useNavigate();
+
   // Function to determine the correct URL based on extension name
   const getExtensionUrl = (name: string) => {
     if (name === "GasSaver") {
       return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
     }
     return "javascript:void(0)";
+  };
+
+  // Handle the extension access button click
+  const handleExtensionAccess = (name: string) => {
+    const url = getExtensionUrl(name);
+    
+    // Skip navigation for javascript:void(0)
+    if (url === "javascript:void(0)") {
+      return;
+    }
+    
+    // If onNavigate prop exists, use it to navigate in the integrated browser
+    if (onNavigate) {
+      onNavigate(url);
+    } else {
+      // Fallback to navigate to /app with the URL as a parameter
+      navigate(`/app?url=${encodeURIComponent(url)}`);
+    }
   };
 
   if (extensions.length === 0) {
@@ -50,6 +73,7 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
               extension={extension}
               onInstall={() => onInstall(extension.id)}
               onToggleFavorite={() => onToggleFavorite && onToggleFavorite(extension.id)}
+              onNavigate={onNavigate}
             />
           ))}
         </div>
@@ -102,18 +126,13 @@ const ExtensionList: React.FC<ExtensionListProps> = ({
                       className={`h-5 w-5 ${isFavorite ? 'fill-nexus-purple text-nexus-purple' : ''}`} 
                     />
                   </button>
-                  <a 
-                    href={getExtensionUrl(extension.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Button 
+                    variant={extension.installed ? "outline" : "default"}
+                    className={`${extension.installed ? "border-nexus-purple text-nexus-purple hover:bg-nexus-purple/10" : "bg-nexus-purple hover:bg-nexus-purple/90"} min-w-[110px]`}
+                    onClick={() => handleExtensionAccess(extension.name)}
                   >
-                    <Button 
-                      variant={extension.installed ? "outline" : "default"}
-                      className={`${extension.installed ? "border-nexus-purple text-nexus-purple hover:bg-nexus-purple/10" : "bg-nexus-purple hover:bg-nexus-purple/90"} min-w-[110px]`}
-                    >
-                      Access Now <ExternalLink className="ml-1 h-4 w-4" />
-                    </Button>
-                  </a>
+                    Access Now <ExternalLink className="ml-1 h-4 w-4" />
+                  </Button>
                 </div>
               </Card>
             );

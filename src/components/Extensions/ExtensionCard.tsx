@@ -5,14 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Heart, ExternalLink } from "lucide-react";
 import { Extension } from "@/lib/extensionsData";
+import { useNavigate } from "react-router-dom";
 
 interface ExtensionCardProps {
   extension: Extension;
   onInstall: () => void;
   onToggleFavorite?: () => void;
+  onNavigate?: (url: string) => void;
 }
 
-const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onToggleFavorite }) => {
+const ExtensionCard: React.FC<ExtensionCardProps> = ({ 
+  extension, 
+  onInstall, 
+  onToggleFavorite,
+  onNavigate
+}) => {
   const { 
     name, 
     description, 
@@ -28,6 +35,7 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
   } = extension;
   
   const isFavorite = featured;
+  const navigate = useNavigate();
 
   // Function to determine the correct URL based on extension name
   const getExtensionUrl = () => {
@@ -35,6 +43,25 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
       return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
     }
     return "javascript:void(0)";
+  };
+
+  // Handle the button click to navigate to the extension URL
+  const handleExtensionAccess = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const url = getExtensionUrl();
+    
+    // Skip navigation for javascript:void(0)
+    if (url === "javascript:void(0)") {
+      return;
+    }
+    
+    // If onNavigate prop exists, use it to navigate in the integrated browser
+    if (onNavigate) {
+      onNavigate(url);
+    } else {
+      // Fallback to navigate to /app with the URL as a parameter
+      navigate(`/app?url=${encodeURIComponent(url)}`);
+    }
   };
 
   return (
@@ -82,19 +109,13 @@ const ExtensionCard: React.FC<ExtensionCardProps> = ({ extension, onInstall, onT
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <a 
-          href={getExtensionUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full"
+        <Button 
+          className={`w-full ${installed ? "bg-[#24212F] hover:bg-[#24212F]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
+          variant={installed ? "outline" : "default"}
+          onClick={handleExtensionAccess}
         >
-          <Button 
-            className={`w-full ${installed ? "bg-[#24212F] hover:bg-[#24212F]/80 text-gray-300 border border-[#433E56]" : "bg-[#9271FF] hover:bg-[#9271FF]/90 text-white"}`}
-            variant={installed ? "outline" : "default"}
-          >
-            Access Now <ExternalLink className="ml-1 h-4 w-4" />
-          </Button>
-        </a>
+          Access Now <ExternalLink className="ml-1 h-4 w-4" />
+        </Button>
       </CardFooter>
     </Card>
   );

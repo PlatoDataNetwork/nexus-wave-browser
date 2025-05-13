@@ -4,6 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
   onToggle 
 }) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleExtensionSettings = () => {
     toast({
@@ -40,6 +42,19 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
       return "https://gasless-nexus-wave-watch.lovable.app/dashboard";
     }
     return "javascript:void(0)";
+  };
+  
+  // Handle access extension click
+  const handleAccessExtension = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const url = getExtensionUrl();
+    
+    if (url === "javascript:void(0)") {
+      return;
+    }
+    
+    // Navigate to /app with the URL as a parameter
+    navigate(`/app?url=${encodeURIComponent(url)}`);
   };
   
   return (
@@ -67,11 +82,9 @@ const ExtensionItem: React.FC<ExtensionItemProps> = ({
               <Shield className="mr-2 h-4 w-4" />
               Extension permissions
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleAccessExtension}>
               <ExternalLink className="mr-2 h-4 w-4" />
-              <a href={getExtensionUrl()} target="_blank" rel="noopener noreferrer">
-                Access extension
-              </a>
+              Access extension
             </DropdownMenuItem>
             <DropdownMenuItem className="text-destructive">
               Remove extension
@@ -88,12 +101,14 @@ const SettingsExtensions: React.FC = () => {
     { id: 1, name: "Nexus Ad Blocker", description: "Block ads and trackers", enabled: true },
     { id: 2, name: "MetaMask", description: "Ethereum wallet and dApp browser", enabled: true },
     { id: 3, name: "Web3 Inspector", description: "Inspect blockchain transactions", enabled: false },
+    { id: 4, name: "GasSaver", description: "Ethereum gas price optimizer", enabled: true },
   ]);
   
   const [allowIncognito, setAllowIncognito] = useState(true);
   const [autoUpdate, setAutoUpdate] = useState(true);
   
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const toggleExtension = (id: number) => {
     setExtensions(extensions.map(ext => 
@@ -102,10 +117,8 @@ const SettingsExtensions: React.FC = () => {
   };
 
   const handleBrowseExtensions = () => {
-    toast({
-      title: "Extension Store",
-      description: "Opening Nexus Wave extension store",
-    });
+    // Navigate to the extension store
+    navigate('/extension-store');
   };
 
   return (
