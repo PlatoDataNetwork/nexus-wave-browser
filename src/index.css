@@ -36,7 +36,7 @@
 
     --radius: 0.5rem;
 
-    /* Keeping header styling consistent with dark mode - unchanged for light mode */
+    /* Keeping header sections dark in both themes */
     --sidebar-background: 230 25% 14%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 260 60% 65%;
@@ -112,7 +112,7 @@
     border: 1px solid rgba(123, 99, 221, 0.2);
   }
 
-  /* Browser header/tab styling consistent in both light and dark modes */
+  /* Browser header/tab styling consistent in both light and dark modes using the darker header color */
   .browser-tab {
     @apply relative flex items-center px-4 py-2 border-b-2 border-transparent transition-all cursor-pointer bg-nexus-header-blue text-white;
   }

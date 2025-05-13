@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -71,7 +70,7 @@ export default {
 					'space-black': '#121212',
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
-					'header-blue': '#0A0B12', /* Dark blue-black for headers in both themes */
+					'header-blue': '#0F0F17', /* Updated darker blue-black for headers in both themes */
 					// Light mode optimized colors
 					'light-bg': '#f8fafc',
 					'light-card': '#ffffff',
