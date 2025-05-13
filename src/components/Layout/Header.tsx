@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/Browser/BrowserHeader";
-import { Shield, Torus, Puzzle, Search } from "lucide-react";
+import { Shield, Puzzle, Search } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -31,9 +31,12 @@ const Header: React.FC = () => {
         {/* Logo and Brand */}
         <div className="mr-4 flex items-center">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-nexus-purple flex items-center justify-center">
-              <Torus className="h-5 w-5 text-white absolute opacity-50" />
-              <span className="text-xs font-bold text-white">NW</span>
+            <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/30b2fc91-16e6-4be5-a6ce-8ae23ecee8f4.png" 
+                alt="Nexus Wave Logo" 
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="hidden text-xl font-bold text-white sm:inline-block">
               Nexus Wave
