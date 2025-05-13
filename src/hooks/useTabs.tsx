@@ -7,7 +7,7 @@ interface TabHistory {
   [tabId: string]: string[];
 }
 
-export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
+export function useTabs(defaultUrl: string = "https://platodata.io") {
   const [tabs, setTabs] = useState<Tab[]>(() => {
     // Update initialTabs with the provided defaultUrl for the active tab
     return initialTabs.map(tab => {
@@ -23,7 +23,7 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
   });
   
   const [currentUrl, setCurrentUrl] = useState<string>(
-    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://nexus.wave/dashboard")
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://platodata.io")
   );
   
   // History management for each tab
@@ -53,8 +53,8 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
     const newTabId = `tab-${Date.now()}`;
     const newTab: Tab = {
       id: newTabId,
-      title: "Platodata.io",
-      url: "https://Platodata.io",
+      title: "platodata.io",
+      url: "https://platodata.io",
       isActive: false,
       icon: undefined
     };
@@ -70,7 +70,7 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
     // Initialize history for the new tab
     setTabHistory(prev => ({
       ...prev,
-      [newTabId]: ["https://Platodata.io"]
+      [newTabId]: ["https://platodata.io"]
     }));
     
     setHistoryPosition(prev => ({
@@ -78,7 +78,7 @@ export function useTabs(defaultUrl: string = "https://nexus.wave/dashboard") {
       [newTabId]: 0
     }));
     
-    setCurrentUrl("https://Platodata.io");
+    setCurrentUrl("https://platodata.io");
     toast.success("New tab opened");
   }, []);
 
