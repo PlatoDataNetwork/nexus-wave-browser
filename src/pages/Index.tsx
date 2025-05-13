@@ -27,10 +27,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
     canGoBack,
     canGoForward
   } = useTabs(defaultUrl);
-  
-  // Debug log to check what URL is being loaded initially
-  console.log("Index component rendering with defaultUrl:", defaultUrl);
-  console.log("Current URL in tabs system:", currentUrl);
 
   const handleCloseWalletConnect = () => {
     setShowWalletConnect(false);
@@ -50,7 +46,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://Platodata.io" }) =>
 
   return (
     <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
-      {/* Main browser header with title and time - Same dark color in both themes */}
+      {/* Main browser header with title and time - Always dark in both themes */}
       <div className="flex items-center justify-between px-4 py-2 bg-nexus-header-blue border-b border-border">
         <div className="flex items-center gap-2">
           <div className="text-sm text-white">

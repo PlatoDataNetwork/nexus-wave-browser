@@ -28,9 +28,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return "dark";
   });
   
-  // Added for smoother transitions between themes
+  // Add a class to enable CSS transitions for theme changes
   useEffect(() => {
-    // Add a class to enable CSS transitions for theme changes
     document.documentElement.classList.add('theme-transition');
     
     const transitionTimeout = setTimeout(() => {
@@ -44,7 +43,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Update localStorage when theme changes
     localStorage.setItem("nexus-theme", theme);
     
-    // Update document classes
+    // Update document classes for theme switching
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
     } else {

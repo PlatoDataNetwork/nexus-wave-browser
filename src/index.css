@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -82,8 +81,6 @@
     --input: 240 15% 20%;
     --ring: 260 60% 65%;
 
-    --radius: 0.5rem;
-
     /* Header color that remains the same in both themes */
     --header-background: 240 25% 8%;
     --header-foreground: 0 0% 100%;
@@ -100,7 +97,6 @@
     @apply bg-background text-foreground;
     /* Use system fonts following Apple HIG */
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-    /* Removed overflow: hidden to allow scrolling */
   }
   
   /* Focus states following Apple HIG */
@@ -119,6 +115,14 @@
   h1 {
     font-weight: 700;
     letter-spacing: -0.028em;
+  }
+  
+  /* Theme transition for smoother theme switching */
+  .theme-transition,
+  .theme-transition * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 350ms;
   }
 }
 
