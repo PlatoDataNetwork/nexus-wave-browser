@@ -20,11 +20,6 @@ const Settings: React.FC = () => {
 
   return (
     <PageLayout>
-      {/* Header */}
-      <div className="flex items-center justify-center h-8 bg-card border-b border-border">
-        <h1 className="text-xs font-medium">Nexus Wave Browser - Settings</h1>
-      </div>
-
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <div className="w-64 border-r border-border bg-card">
