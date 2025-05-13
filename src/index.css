@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    /* Light mode variables */
-    --background: 240 25% 98%;
+    /* Light mode variables - optimized for better contrast and readability */
+    --background: 210 40% 98%;
     --foreground: 240 10% 10%;
 
     --card: 0 0% 100%;
@@ -17,13 +17,13 @@
     --primary: 260 60% 65%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 260 30% 90%;
+    --secondary: 260 30% 94%;
     --secondary-foreground: 240 10% 10%;
 
     --muted: 240 20% 92%;
-    --muted-foreground: 215 20.2% 35.1%;
+    --muted-foreground: 240 10% 40%;
 
-    --accent: 260 30% 88%;
+    --accent: 260 30% 90%;
     --accent-foreground: 240 10% 10%;
 
     --destructive: 0 84.2% 60.2%;
@@ -35,11 +35,11 @@
 
     --radius: 0.5rem;
 
-    --sidebar-background: 240 25% 98%;
+    --sidebar-background: 210 40% 98%;
     --sidebar-foreground: 240 10% 10%;
     --sidebar-primary: 260 60% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 90%;
+    --sidebar-accent: 240 15% 92%;
     --sidebar-accent-foreground: 240 10% 10%;
     --sidebar-border: 240 15% 85%;
     --sidebar-ring: 217.2 91.2% 59.8%;
@@ -191,5 +191,22 @@
   @keyframes pulse {
     from { transform: scale(1); opacity: 1; }
     to { transform: scale(1.2); opacity: 0.8; }
+  }
+
+  /* Optimized light mode card styles */
+  .light-card {
+    @apply bg-white shadow-sm hover:shadow-md border border-gray-100 transition-shadow;
+  }
+  
+  /* Light mode specific glass effect */
+  .light-glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(123, 99, 221, 0.15);
+  }
+  
+  /* Optimized light mode button hover state */
+  .light-button-hover {
+    @apply hover:bg-primary/90 hover:shadow-md transition-all;
   }
 }

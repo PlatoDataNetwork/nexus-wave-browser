@@ -27,6 +27,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Default to dark theme
     return "dark";
   });
+  
+  // Added for smoother transitions between themes
+  useEffect(() => {
+    // Add a class to enable CSS transitions for theme changes
+    document.documentElement.classList.add('theme-transition');
+    
+    const transitionTimeout = setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition');
+    }, 500); // Match this with your CSS transition duration
+    
+    return () => clearTimeout(transitionTimeout);
+  }, []);
 
   useEffect(() => {
     // Update localStorage when theme changes

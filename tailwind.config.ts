@@ -70,7 +70,12 @@ export default {
 					'deep-purple': '#6E59A5',
 					'space-black': '#121212',
 					'card-dark': '#101019',
-					'card-navy': '#0d0d1a',  // Added new darker navy color
+					'card-navy': '#0d0d1a',
+					// Light mode optimized colors
+					'light-bg': '#f8fafc',
+					'light-card': '#ffffff',
+					'light-accent': '#f3f1fe',
+					'light-border': '#e9e9ef',
 				}
 			},
 			borderRadius: {
@@ -102,12 +107,22 @@ export default {
 					'50%': { 
 						boxShadow: '0 0 20px rgba(123, 99, 221, 0.8)' 
 					}
+				},
+				// Add smooth fade for theme transition
+				'theme-fade': {
+					'0%': { opacity: '0.8' },
+					'100%': { opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'pulse-glow': 'pulse-glow 2s infinite ease-in-out'
+				'pulse-glow': 'pulse-glow 2s infinite ease-in-out',
+				'theme-fade': 'theme-fade 0.3s ease-out'
+			},
+			// Add transition utilities for theme switching
+			transitionProperty: {
+				'theme': 'background-color, border-color, color, fill, stroke'
 			}
 		}
 	},
