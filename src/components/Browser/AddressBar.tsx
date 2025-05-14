@@ -14,7 +14,7 @@ import {
 import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/use-toast";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -59,7 +59,10 @@ const AddressBar: React.FC<AddressBarProps> = ({
     }
     
     console.log(`Address bar submitting URL: ${processedUrl}`);
-    toast.info(`Navigating to: ${processedUrl.replace(/^https?:\/\//, '')}`);
+    toast({ 
+      title: "Navigating",
+      description: `Navigating to: ${processedUrl.replace(/^https?:\/\//, '')}`
+    });
     
     // Use a callback to ensure the navigation happens correctly
     onNavigate(processedUrl);
@@ -175,10 +178,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit(e);
-              }}
             >
               <Search className="h-4 w-4" />
             </Button>

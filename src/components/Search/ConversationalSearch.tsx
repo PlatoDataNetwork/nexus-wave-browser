@@ -221,11 +221,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       
       <div className="p-4 border-t border-border">
         <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmit(e);
-          }} 
+          onSubmit={handleSubmit} 
           className="flex gap-2"
         >
           <Textarea

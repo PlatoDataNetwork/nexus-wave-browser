@@ -10,7 +10,7 @@ import HistoryPage from "@/pages/History";
 import Search from "@/pages/Search";
 import PageLayout from "@/components/Layout/PageLayout";
 import WebviewFrame from "./WebviewFrame";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/use-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BrowserContentProps {
