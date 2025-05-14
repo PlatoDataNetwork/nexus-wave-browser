@@ -6,6 +6,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, MessageCircle } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
+import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
+import { toast } from '@/components/ui/use-toast';
+import SearchProviderSelector from './SearchProviderSelector';
 
 interface ConversationMessage {
   id: string;
@@ -26,6 +29,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -33,7 +37,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!currentMessage.trim()) return;
     
@@ -54,13 +58,38 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setCurrentMessage("");
     setIsLoading(true);
     
-    // Simulate AI response time
-    setTimeout(() => {
-      // Generate mock AI response
-      const aiResponse = generateAIResponse(currentMessage);
+    try {
+      // Perform real search based on user query
+      let searchResults: SearchAPIResponse;
+      
+      if (searchProvider === "serper") {
+        searchResults = await searchWithSerper(currentMessage);
+      } else {
+        searchResults = await searchWithYou(currentMessage);
+      }
+      
+      // Generate AI response based on search results
+      const aiResponse = generateAIResponse(currentMessage, searchResults);
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Search error:", error);
+      toast({
+        title: "Search Error",
+        description: "Failed to fetch search results. Please try again later.",
+        variant: "destructive"
+      });
+      
+      // Add a fallback response
+      const fallbackResponse: ConversationMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "I'm sorry, but I encountered an issue while searching. Please try again later.",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, fallbackResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleSelectSuggestion = (suggestion: string) => {
@@ -71,42 +100,93 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     }, 100);
   };
 
-  const generateAIResponse = (query: string): ConversationMessage => {
-    // This is a mock function that would be replaced with actual API call
-    const responses = [
-      `Based on my search, ${query} is a topic with several interesting aspects. Let me break it down for you.`,
-      `I found some information about ${query}. According to recent sources, there have been significant developments in this area.`,
-      `${query} is trending right now. Here's what I found from reliable sources across the web.`,
-      `Looking at the most recent information about ${query}, I can see several key points worth noting.`
-    ];
+  const generateAIResponse = (query: string, searchResults: SearchAPIResponse): ConversationMessage => {
+    // Extract useful information from search results
+    const results = searchResults.results;
     
-    // Sample sources
-    const sources = [
-      {
-        title: `${query} - Official Documentation`,
-        url: `https://docs.${query.toLowerCase().replace(/\s+/g, '')}.com`
-      },
-      {
-        title: `Latest Research on ${query}`,
-        url: `https://research.nexus.wave/${query.toLowerCase().replace(/\s+/g, '-')}`
-      },
-      {
-        title: `${query} Analysis`,
-        url: `https://analysis.crypto.com/${query.toLowerCase().replace(/\s+/g, '-')}`
+    // Create a response based on the search results
+    let responseContent = "";
+    let sources: { title: string; url: string }[] = [];
+    
+    // If we have knowledge graph information, use it for a richer response
+    if (searchResults.knowledgeGraph) {
+      const kg = searchResults.knowledgeGraph;
+      responseContent = `${kg.title} is a ${kg.type}. ${kg.description || ''}\n\n`;
+      
+      if (kg.attributes) {
+        responseContent += "Here are some key facts:\n";
+        Object.entries(kg.attributes).forEach(([key, value]) => {
+          responseContent += `- ${key}: ${value}\n`;
+        });
+        responseContent += "\n";
       }
-    ];
+      
+      // Add source if available
+      if (kg.descriptionSource && kg.descriptionLink) {
+        sources.push({
+          title: `${kg.title} - ${kg.descriptionSource}`,
+          url: kg.descriptionLink
+        });
+      }
+    }
+    
+    // Add information from organic results
+    if (results.length > 0) {
+      if (!responseContent) {
+        responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
+      } else {
+        responseContent += "Additional information:\n\n";
+      }
+      
+      // Add top 3 results to the response
+      results.slice(0, 3).forEach((result, index) => {
+        responseContent += `${result.title}: ${result.description}\n\n`;
+        
+        // Add to sources
+        sources.push({
+          title: result.title,
+          url: result.url
+        });
+      });
+    } else {
+      // No results found
+      responseContent = `I searched for "${query}" but couldn't find relevant information. Could you try rephrasing your question?`;
+    }
+    
+    // Add related questions if available
+    if (searchResults.peopleAlsoAsk && searchResults.peopleAlsoAsk.length > 0) {
+      responseContent += "\nPeople also ask:\n";
+      searchResults.peopleAlsoAsk.slice(0, 2).forEach(item => {
+        responseContent += `- ${item.question}\n`;
+        sources.push({
+          title: item.title,
+          url: item.link
+        });
+      });
+    }
+    
+    // If we still don't have a good response, provide a fallback
+    if (!responseContent || responseContent.trim().length === 0) {
+      responseContent = `I searched for information about "${query}", but I don't have a comprehensive answer at this moment. You might want to try a different search term or be more specific.`;
+    }
     
     return {
       id: Date.now().toString(),
       role: "assistant",
-      content: responses[Math.floor(Math.random() * responses.length)],
+      content: responseContent.trim(),
       timestamp: new Date(),
-      sources: sources.slice(0, Math.floor(Math.random() * 3) + 1) // Random number of sources (1-3)
+      sources: sources.length > 0 ? sources : undefined
     };
   };
 
   return (
     <div className="flex flex-col h-full">
+      <div className="flex justify-end p-2 border-b border-border">
+        <SearchProviderSelector 
+          selectedProvider={searchProvider}
+          onSelectProvider={setSearchProvider}
+        />
+      </div>
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4 pb-4">
           {messages.length === 0 ? (

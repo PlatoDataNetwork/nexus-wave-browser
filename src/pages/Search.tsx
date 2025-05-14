@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,36 +22,22 @@ import {
   ArrowRight
 } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
-
-interface SearchResult {
-  id: string;
-  title: string;
-  url: string;
-  description: string;
-  type: "web" | "image" | "video" | "news" | "nexus";
-  imageUrl?: string;
-}
-
-interface ConversationMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-  sources?: {
-    title: string;
-    url: string;
-  }[];
-}
+import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem, KnowledgeGraphData } from "@/services/searchApi";
+import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
+import ConversationalSearch from "@/components/Search/ConversationalSearch";
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [results, setResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
-  const [searchEngine, setSearchEngine] = useState("platodata");
+  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
   const [conversationMode, setConversationMode] = useState(false);
-  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
+  const [knowledgeGraph, setKnowledgeGraph] = useState<KnowledgeGraphData | null>(null);
+  const [peopleAlsoAsk, setPeopleAlsoAsk] = useState<any[]>([]);
+  const [relatedSearches, setRelatedSearches] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Scroll to bottom when messages update
@@ -74,8 +61,25 @@ const Search: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // This is a mock search function - in a real app, this would call an API
-      await mockSearchResults(query);
+      let searchResults: SearchAPIResponse;
+      
+      if (searchProvider === "serper") {
+        // Convert activeTab to Serper API endpoint type
+        const serperType = activeTab === "web" ? "search" : 
+                         activeTab === "images" ? "images" : 
+                         activeTab === "videos" ? "videos" : 
+                         activeTab === "news" ? "news" : "search";
+        
+        searchResults = await searchWithSerper(query, serperType);
+      } else {
+        searchResults = await searchWithYou(query);
+      }
+      
+      // Update state with search results
+      setResults(searchResults.results || []);
+      setKnowledgeGraph(searchResults.knowledgeGraph || null);
+      setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
+      setRelatedSearches(searchResults.relatedSearches || []);
       
       // Update URL with search query for shareable links
       const url = new URL(window.location.href);
@@ -85,16 +89,20 @@ const Search: React.FC = () => {
     } catch (error) {
       console.error("Search error:", error);
       toast.error("Failed to fetch search results");
+      setResults([]);
+      setKnowledgeGraph(null);
+      setPeopleAlsoAsk([]);
+      setRelatedSearches([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleConversationSearch = () => {
+  const handleConversationSearch = async () => {
     if (!currentMessage.trim()) return;
     
     // Add user message to the conversation
-    const userMessage: ConversationMessage = {
+    const userMessage = {
       id: Date.now().toString(),
       role: "user",
       content: currentMessage,
@@ -105,155 +113,113 @@ const Search: React.FC = () => {
     setCurrentMessage("");
     setIsLoading(true);
     
-    // Simulate AI processing time
-    setTimeout(() => {
-      // Mock AI response based on user query
-      const aiResponse = generateAIResponse(currentMessage);
+    try {
+      // Perform search using selected provider
+      let searchResults: SearchAPIResponse;
+      
+      if (searchProvider === "serper") {
+        searchResults = await searchWithSerper(currentMessage);
+      } else {
+        searchResults = await searchWithYou(currentMessage);
+      }
+      
+      // Generate AI response
+      const aiResponse = generateAIResponse(currentMessage, searchResults);
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Search error:", error);
+      toast.error("Failed to fetch search results");
+      
+      // Add fallback response
+      const fallbackResponse = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "I'm sorry, but I encountered an issue while searching. Please try again later.",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, fallbackResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
-  const generateAIResponse = (query: string): ConversationMessage => {
-    // This is a mock function to generate AI responses
-    // In a real app, this would call an API to get responses from a language model
+  const generateAIResponse = (query: string, searchResults: SearchAPIResponse) => {
+    // Extract useful information from search results
+    const results = searchResults.results;
     
-    const responses = [
-      `Based on my search, ${query} is a topic with several interesting aspects. Let me break it down for you.`,
-      `I found some information about ${query}. According to recent sources, there have been significant developments in this area.`,
-      `${query} is trending right now. Here's what I found from reliable sources across the web.`,
-      `Looking at the most recent information about ${query}, I can see several key points worth noting.`
-    ];
+    // Create a response based on the search results
+    let responseContent = "";
+    let sources: { title: string; url: string }[] = [];
     
-    // Sample sources
-    const sources = [
-      {
-        title: `${query} - Official Documentation`,
-        url: `https://docs.${query.toLowerCase().replace(/\s+/g, '')}.com`
-      },
-      {
-        title: `Latest Research on ${query}`,
-        url: `https://research.nexus.wave/${query.toLowerCase().replace(/\s+/g, '-')}`
-      },
-      {
-        title: `${query} Analysis`,
-        url: `https://analysis.crypto.com/${query.toLowerCase().replace(/\s+/g, '-')}`
+    // If we have knowledge graph information, use it for a richer response
+    if (searchResults.knowledgeGraph) {
+      const kg = searchResults.knowledgeGraph;
+      responseContent = `${kg.title} is a ${kg.type}. ${kg.description || ''}\n\n`;
+      
+      if (kg.attributes) {
+        responseContent += "Here are some key facts:\n";
+        Object.entries(kg.attributes).forEach(([key, value]) => {
+          responseContent += `- ${key}: ${value}\n`;
+        });
+        responseContent += "\n";
       }
-    ];
+      
+      // Add source if available
+      if (kg.descriptionSource && kg.descriptionLink) {
+        sources.push({
+          title: `${kg.title} - ${kg.descriptionSource}`,
+          url: kg.descriptionLink
+        });
+      }
+    }
+    
+    // Add information from organic results
+    if (results.length > 0) {
+      if (!responseContent) {
+        responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
+      } else {
+        responseContent += "Additional information:\n\n";
+      }
+      
+      // Add top 3 results to the response
+      results.slice(0, 3).forEach((result, index) => {
+        responseContent += `${result.title}: ${result.description}\n\n`;
+        
+        // Add to sources
+        sources.push({
+          title: result.title,
+          url: result.url
+        });
+      });
+    } else {
+      // No results found
+      responseContent = `I searched for "${query}" but couldn't find relevant information. Could you try rephrasing your question?`;
+    }
+    
+    // Add related questions if available
+    if (searchResults.peopleAlsoAsk && searchResults.peopleAlsoAsk.length > 0) {
+      responseContent += "\nPeople also ask:\n";
+      searchResults.peopleAlsoAsk.slice(0, 2).forEach(item => {
+        responseContent += `- ${item.question}\n`;
+        sources.push({
+          title: item.title,
+          url: item.link
+        });
+      });
+    }
+    
+    // If we still don't have a good response, provide a fallback
+    if (!responseContent || responseContent.trim().length === 0) {
+      responseContent = `I searched for information about "${query}", but I don't have a comprehensive answer at this moment. You might want to try a different search term or be more specific.`;
+    }
     
     return {
       id: Date.now().toString(),
       role: "assistant",
-      content: responses[Math.floor(Math.random() * responses.length)],
+      content: responseContent.trim(),
       timestamp: new Date(),
-      sources: sources.slice(0, Math.floor(Math.random() * 3) + 1) // Random number of sources (1-3)
+      sources: sources.length > 0 ? sources : undefined
     };
-  };
-
-  const mockSearchResults = async (query: string) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // Generate mock results based on query and active tab
-    const mockResults: SearchResult[] = [];
-    
-    if (activeTab === "web" || activeTab === "all") {
-      mockResults.push(
-        {
-          id: "1",
-          title: `${query} - Official Website`,
-          url: `https://www.${query.toLowerCase().replace(/\s+/g, '')}.com`,
-          description: `Welcome to the official website of ${query}. Find all information about ${query} and related products.`,
-          type: "web"
-        },
-        {
-          id: "2",
-          title: `${query} - Wikipedia`,
-          url: `https://en.wikipedia.org/wiki/${query.replace(/\s+/g, '_')}`,
-          description: `${query} is a term that refers to multiple topics. This article provides an overview of the most common interpretations and uses.`,
-          type: "web"
-        },
-        {
-          id: "3",
-          title: `Latest News About ${query} - Crypto News`,
-          url: `https://news.crypto.com/topics/${query.toLowerCase().replace(/\s+/g, '-')}`,
-          description: `Get the latest updates and news about ${query} in the crypto space. Market trends, analysis, and expert opinions.`,
-          type: "web"
-        }
-      );
-    }
-    
-    if (activeTab === "news" || activeTab === "all") {
-      mockResults.push(
-        {
-          id: "4",
-          title: `Breaking: New Development in ${query}`,
-          url: `https://news.crypto.com/${query.toLowerCase().replace(/\s+/g, '-')}-breakthrough`,
-          description: `A recent breakthrough in ${query} technology is setting new standards in the blockchain industry.`,
-          type: "news",
-          imageUrl: `https://picsum.photos/seed/${query}1/400/200`
-        },
-        {
-          id: "5",
-          title: `${query} Price Analysis: Week in Review`,
-          url: `https://market.crypto.com/${query.toLowerCase().replace(/\s+/g, '-')}-analysis`,
-          description: `Our experts analyze the recent price movements of ${query} and provide insights on future trends.`,
-          type: "news",
-          imageUrl: `https://picsum.photos/seed/${query}2/400/200`
-        }
-      );
-    }
-    
-    if (activeTab === "videos" || activeTab === "all") {
-      mockResults.push(
-        {
-          id: "6",
-          title: `How ${query} Is Changing Blockchain - Tutorial`,
-          url: `https://video.crypto.com/watch?v=${Math.random().toString(36).substring(2, 10)}`,
-          description: `This comprehensive tutorial explains how ${query} is revolutionizing the way we think about blockchain technology.`,
-          type: "video",
-          imageUrl: `https://picsum.photos/seed/${query}3/400/200`
-        },
-        {
-          id: "7",
-          title: `${query} Explained in 5 Minutes`,
-          url: `https://video.crypto.com/watch?v=${Math.random().toString(36).substring(2, 10)}`,
-          description: `A quick but thorough explanation of ${query} for beginners. Learn the basics in just 5 minutes!`,
-          type: "video",
-          imageUrl: `https://picsum.photos/seed/${query}4/400/200`
-        }
-      );
-    }
-    
-    if (activeTab === "nexus" || activeTab === "all") {
-      mockResults.push(
-        {
-          id: "8",
-          title: `${query} in the Nexus Ecosystem`,
-          url: `https://nexus.wave/ecosystem/${query.toLowerCase().replace(/\s+/g, '-')}`,
-          description: `Explore how ${query} integrates with the Nexus ecosystem. Find dApps, tools, and resources specifically designed for ${query}.`,
-          type: "nexus",
-          imageUrl: `https://picsum.photos/seed/${query}5/400/200`
-        },
-        {
-          id: "9",
-          title: `${query} - Nexus Chain Analysis`,
-          url: `https://nexus.wave/analytics/${query.toLowerCase().replace(/\s+/g, '-')}`,
-          description: `Deep dive into ${query}'s on-chain metrics, transaction volume, and network activity on the Nexus blockchain.`,
-          type: "nexus",
-          imageUrl: `https://picsum.photos/seed/${query}6/400/200`
-        },
-        {
-          id: "10",
-          title: `${query} - Trending on Nexus Wave`,
-          url: `https://nexus.wave/trending/${query.toLowerCase().replace(/\s+/g, '-')}`,
-          description: `See why ${query} is trending in the Nexus community. Latest discussions, innovations, and developments.`,
-          type: "nexus"
-        }
-      );
-    }
-
-    setResults(mockResults);
   };
 
   const handleTabChange = (tab: string) => {
@@ -272,15 +238,33 @@ const Search: React.FC = () => {
     }
   };
 
-  const renderSearchResult = (result: SearchResult) => {
+  const renderSearchResult = (result: SearchResultItem) => {
     switch (result.type) {
       case "web":
         return (
           <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
             <CardContent className="p-4">
               <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-              <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+              <a href={result.url} target="_blank" rel="noopener noreferrer">
+                <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+              </a>
               <p className="text-sm text-muted-foreground">{result.description}</p>
+              
+              {result.sitelinks && result.sitelinks.length > 0 && (
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {result.sitelinks.map((link, index) => (
+                    <a 
+                      key={index}
+                      href={link.link}
+                      target="_blank"
+                      rel="noopener noreferrer" 
+                      className="text-xs text-nexus-purple hover:underline"
+                    >
+                      {link.title}
+                    </a>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         );
@@ -297,7 +281,9 @@ const Search: React.FC = () => {
                 )}
                 <div>
                   <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-                  <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  </a>
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                 </div>
               </div>
@@ -322,7 +308,31 @@ const Search: React.FC = () => {
                 )}
                 <div>
                   <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-                  <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  </a>
+                  <p className="text-sm text-muted-foreground">{result.description}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      
+      case "image":
+        return (
+          <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
+            <CardContent className="p-4">
+              <div className="flex gap-4">
+                {result.imageUrl && (
+                  <div className="flex-shrink-0">
+                    <img src={result.imageUrl} alt={result.title} className="w-32 h-32 object-cover rounded-md" />
+                  </div>
+                )}
+                <div>
+                  <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  </a>
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                 </div>
               </div>
@@ -347,7 +357,9 @@ const Search: React.FC = () => {
                       NEXUS
                     </span>
                   </div>
-                  <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                  </a>
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                 </div>
               </div>
@@ -416,15 +428,15 @@ const Search: React.FC = () => {
                       : "bg-secondary border border-border"
                   }`}
                 >
-                  <p>{message.content}</p>
+                  <p className="whitespace-pre-wrap">{message.content}</p>
                   
                   {message.sources && message.sources.length > 0 && (
                     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                       <p className="text-xs font-medium mb-1">Sources:</p>
                       <ul className="space-y-1">
-                        {message.sources.map((source, index) => (
+                        {message.sources.map((source: any, index: number) => (
                           <li key={index} className="text-xs">
-                            <a href={source.url} className="text-nexus-purple underline hover:text-nexus-deep-purple">
+                            <a href={source.url} className="text-nexus-purple underline hover:text-nexus-deep-purple" target="_blank" rel="noopener noreferrer">
                               {source.title}
                             </a>
                           </li>
@@ -454,13 +466,129 @@ const Search: React.FC = () => {
               }
             }}
           />
-          <Button type="submit" className="h-full bg-nexus-purple hover:bg-nexus-deep-purple">
+          <Button type="submit" className="h-full bg-nexus-purple hover:bg-nexus-deep-purple" disabled={isLoading}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </form>
       </div>
     </div>
   );
+
+  // Render Knowledge Graph component
+  const renderKnowledgeGraph = () => {
+    if (!knowledgeGraph) return null;
+    
+    return (
+      <Card className="mb-5 overflow-hidden">
+        <CardContent className="p-0">
+          <div className="flex flex-col md:flex-row gap-4 p-4">
+            {knowledgeGraph.imageUrl && (
+              <div className="flex-shrink-0">
+                <img 
+                  src={knowledgeGraph.imageUrl} 
+                  alt={knowledgeGraph.title}
+                  className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md"
+                />
+              </div>
+            )}
+            <div className="flex-grow">
+              <h2 className="text-xl font-bold">{knowledgeGraph.title}</h2>
+              <div className="text-sm text-muted-foreground mb-2">{knowledgeGraph.type}</div>
+              {knowledgeGraph.description && (
+                <p className="mb-3">{knowledgeGraph.description}</p>
+              )}
+              {knowledgeGraph.website && (
+                <a 
+                  href={knowledgeGraph.website} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-nexus-purple hover:underline text-sm mb-3 block"
+                >
+                  {knowledgeGraph.website}
+                </a>
+              )}
+              {knowledgeGraph.attributes && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-3">
+                  {Object.entries(knowledgeGraph.attributes).map(([key, value]) => (
+                    <div key={key} className="text-sm">
+                      <span className="font-medium">{key}:</span> {value}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  // Render People Also Ask section
+  const renderPeopleAlsoAsk = () => {
+    if (!peopleAlsoAsk || peopleAlsoAsk.length === 0) return null;
+    
+    return (
+      <Card className="mb-5">
+        <CardContent className="p-4">
+          <h3 className="text-lg font-medium mb-3">People Also Ask</h3>
+          <div className="space-y-3">
+            {peopleAlsoAsk.map((item, index) => (
+              <div key={index} className="border-b border-border pb-3 last:border-0 last:pb-0">
+                <Button 
+                  variant="link" 
+                  className="p-0 h-auto text-left font-medium text-nexus-purple hover:text-nexus-deep-purple"
+                  onClick={() => {
+                    setSearchQuery(item.question);
+                    handleSearch(item.question);
+                  }}
+                >
+                  {item.question}
+                </Button>
+                <p className="text-sm mt-1">{item.snippet.split('\n')[0]}</p>
+                <a 
+                  href={item.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-xs text-muted-foreground hover:underline mt-1 block"
+                >
+                  {item.title}
+                </a>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  // Render Related Searches
+  const renderRelatedSearches = () => {
+    if (!relatedSearches || relatedSearches.length === 0) return null;
+    
+    return (
+      <Card className="mb-5">
+        <CardContent className="p-4">
+          <h3 className="text-lg font-medium mb-3">Related Searches</h3>
+          <div className="flex flex-wrap gap-2">
+            {relatedSearches.map((query, index) => (
+              <Button 
+                key={index} 
+                variant="outline" 
+                size="sm"
+                className="text-sm"
+                onClick={() => {
+                  setSearchQuery(query);
+                  handleSearch(query);
+                }}
+              >
+                {query}
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -480,6 +608,13 @@ const Search: React.FC = () => {
           >
             <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
           </Button>
+          
+          <div className="ml-auto">
+            <SearchProviderSelector
+              selectedProvider={searchProvider}
+              onSelectProvider={setSearchProvider}
+            />
+          </div>
         </div>
 
         {!conversationMode && (
@@ -495,13 +630,13 @@ const Search: React.FC = () => {
                 />
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
-              <Button type="submit" className="bg-nexus-purple hover:bg-nexus-deep-purple">
-                Search
+              <Button type="submit" className="bg-nexus-purple hover:bg-nexus-deep-purple" disabled={isLoading}>
+                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
               </Button>
             </form>
 
             <div className="flex justify-between mt-4">
-              <Tabs defaultValue={activeTab} onValueChange={handleTabChange} className="w-full">
+              <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
                 <TabsList className="bg-secondary/50">
                   <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                     <Globe className="h-4 w-4 mr-1" /> Web
@@ -537,7 +672,7 @@ const Search: React.FC = () => {
       </div>
 
       {conversationMode ? (
-        renderConversation()
+        <ConversationalSearch />
       ) : (
         <ScrollArea className="flex-1">
           <div className="p-4">
@@ -551,7 +686,24 @@ const Search: React.FC = () => {
                 <p className="text-sm text-muted-foreground mb-4">
                   About {Math.floor(Math.random() * 10000).toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
                 </p>
-                {results.map(renderSearchResult)}
+                
+                {/* Knowledge Graph */}
+                {renderKnowledgeGraph()}
+                
+                {/* Main Results */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                  <div className="lg:col-span-2">
+                    {results.map(renderSearchResult)}
+                  </div>
+                  
+                  <div className="space-y-5">
+                    {/* People Also Ask */}
+                    {renderPeopleAlsoAsk()}
+                    
+                    {/* Related Searches */}
+                    {renderRelatedSearches()}
+                  </div>
+                </div>
               </div>
             ) : searchQuery ? (
               <div className="text-center py-10">
