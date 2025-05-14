@@ -55,6 +55,17 @@ export interface SerperSearchResponse {
     googleUrl: string;
     position: number;
   }[];
+  // Add videos type for video search
+  videos?: {
+    title: string;
+    link: string;
+    snippet: string;
+    position: number;
+    imageUrl?: string;
+    date?: string;
+    source?: string;
+    duration?: string;
+  }[];
 }
 
 // Types for You.com API responses
@@ -87,6 +98,7 @@ export interface SearchResultItem {
   thumbnailWidth?: number;
   thumbnailHeight?: number;
   source?: string;
+  duration?: string;
 }
 
 export interface KnowledgeGraphData {
@@ -122,10 +134,20 @@ const YOU_API_KEY = "b4a7675d-d49a-4a31-a3ce-2dbf61cb935e<__>1P6A8vETU8N2v5f4IL9
 const getApiKeys = async (): Promise<{ serperKey: string; youKey: string }> => {
   // If Supabase is available, try to get keys from there
   try {
+    // Check if user is authenticated first to avoid the UUID error
+    const authResponse = await supabase.auth.getUser();
+    if (!authResponse.data.user?.id) {
+      // If no authenticated user, return sample keys
+      return {
+        serperKey: SERPER_API_KEY,
+        youKey: YOU_API_KEY
+      };
+    }
+    
     const { data: keys, error } = await supabase
       .from("search_api_keys")
       .select("provider, api_key")
-      .eq("user_id", (await supabase.auth.getUser()).data.user?.id);
+      .eq("user_id", authResponse.data.user.id);
 
     if (error) {
       throw error;
@@ -212,6 +234,18 @@ export const searchWithSerper = async (
         source: image.source,
         position: image.position
       }));
+    } else if (type === "videos" && data.videos) {
+      // Map video search results
+      results = data.videos.map((video, index) => ({
+        id: `serper-vid-${index}`,
+        title: video.title,
+        url: video.link,
+        description: video.snippet,
+        type: "video",
+        imageUrl: video.imageUrl,
+        source: video.source,
+        duration: video.duration
+      }));
     } else {
       // Map regular search results
       results = data.organic.map((item) => ({
@@ -219,9 +253,7 @@ export const searchWithSerper = async (
         title: item.title,
         url: item.link,
         description: item.snippet,
-        type: type === "images" ? "image" : 
-              type === "videos" ? "video" : 
-              type === "news" ? "news" : "web",
+        type: type === "news" ? "news" : "web",
         imageUrl: item.imageUrl,
         sitelinks: item.sitelinks,
         position: item.position

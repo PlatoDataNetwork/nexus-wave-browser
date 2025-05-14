@@ -7,7 +7,7 @@ import { Loader2, Send, MessageCircle, Shield } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import SearchProviderSelector from './SearchProviderSelector';
 
 interface ConversationMessage {
