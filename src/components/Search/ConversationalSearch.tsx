@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -243,14 +242,9 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             }}
           />
           <Button 
-            type="button" 
+            type="submit" 
             className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
             disabled={isLoading}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleSubmit();
-            }}
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>

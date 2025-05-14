@@ -177,7 +177,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
               className="h-6 w-6 text-white/70 hover:text-white"
               onClick={(e) => {
                 e.preventDefault();
-                e.stopPropagation();
                 handleSubmit(e);
               }}
             >
@@ -192,6 +191,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           variant="outline" 
           size="sm" 
           className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/80 text-white border-none h-9 px-4"
+          type="button"
         >
           Buy $NWF3
         </Button>
@@ -200,6 +200,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           variant="outline" 
           size="sm" 
           className="bg-[#4c5fd7] hover:bg-[#4c5fd7]/80 text-white border-none h-9 px-4"
+          type="button"
         >
           NWF3 Staking
         </Button>
@@ -208,6 +209,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           variant="outline" 
           size="sm" 
           className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
+          type="button"
         >
           NWF3 Rewards
         </Button>
@@ -218,6 +220,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
               variant="secondary" 
               size="sm" 
               className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white h-9 px-4"
+              type="button"
             >
               Nexus Bridge
             </Button>

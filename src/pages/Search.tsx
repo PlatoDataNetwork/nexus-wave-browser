@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -634,11 +635,7 @@ const Search: React.FC = () => {
         {!conversationMode && (
           <>
             <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSubmit(e);
-              }}
+              onSubmit={handleSubmit}
               className="flex gap-2"
             >
               <div className="flex-1 relative">
@@ -652,14 +649,9 @@ const Search: React.FC = () => {
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
               <Button 
-                type="button" 
+                type="submit" 
                 className="bg-nexus-purple hover:bg-nexus-deep-purple" 
                 disabled={isLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleSearch();
-                }}
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
               </Button>
@@ -687,11 +679,21 @@ const Search: React.FC = () => {
               </Tabs>
 
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="flex items-center gap-1"
+                  type="button"
+                >
                   <Clock className="h-4 w-4" />
                   <span className="text-xs">Past 24h</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="flex items-center gap-1"
+                  type="button"
+                >
                   <Shield className="h-4 w-4 text-green-500" />
                   <span className="text-xs">Safe Search On</span>
                 </Button>
@@ -750,18 +752,31 @@ const Search: React.FC = () => {
                   Search the web with enhanced privacy and security. Your searches are never tracked or stored.
                 </p>
                 <div className="flex gap-4 mt-4">
-                  <Button variant="outline" className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-2"
+                    type="button"
+                  >
                     <Shield className="h-4 w-4" />
                     <span>Privacy Features</span>
                   </Button>
-                  <Button variant="outline" className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    className="flex items-center gap-2"
+                    type="button"
+                  >
                     <Globe className="h-4 w-4" />
                     <span>Search Engines</span>
                   </Button>
                   <Button 
                     variant="outline" 
                     className="flex items-center gap-2"
-                    onClick={() => setConversationMode(true)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setConversationMode(true);
+                    }}
+                    type="button"
                   >
                     <MessageCircle className="h-4 w-4" />
                     <span>Try AI Chat</span>
