@@ -39,8 +39,8 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
-      e.preventDefault();  // Prevent the default form submission behavior
-      e.stopPropagation(); // Stop event propagation
+      e.preventDefault();
+      e.stopPropagation();
     }
     
     if (!currentMessage.trim()) return;
@@ -53,12 +53,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       timestamp: new Date()
     };
     
-    setMessages([...messages, userMessage]);
+    setMessages(prevMessages => [...prevMessages, userMessage]);
     
     if (onSearch) {
       onSearch(currentMessage);
     }
     
+    const messageToSearch = currentMessage;
     setCurrentMessage("");
     setIsLoading(true);
     
@@ -67,13 +68,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       let searchResults: SearchAPIResponse;
       
       if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(currentMessage);
+        searchResults = await searchWithSerper(messageToSearch);
       } else {
-        searchResults = await searchWithYou(currentMessage);
+        searchResults = await searchWithYou(messageToSearch);
       }
       
       // Generate AI response based on search results
-      const aiResponse = generateAIResponse(currentMessage, searchResults);
+      const aiResponse = generateAIResponse(messageToSearch, searchResults);
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
       console.error("Search error:", error);

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 
 interface AddressBarProps {
@@ -39,6 +38,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +49,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
     
     // Check if this is an internal route
     if (processedUrl === 'search' || processedUrl === '/search') {
-      navigate('/search');
+      navigate('/search', { replace: false });
       return;
     }
     
@@ -60,12 +60,14 @@ const AddressBar: React.FC<AddressBarProps> = ({
     console.log(`Address bar submitting URL: ${processedUrl}`);
     toast.info(`Navigating to: ${processedUrl.replace(/^https?:\/\//, '')}`);
     
-    // Give a small delay for React state updates to process correctly
-    setTimeout(() => onNavigate(processedUrl), 50);
+    // Use a callback to ensure the navigation happens correctly
+    onNavigate(processedUrl);
     simulateLoading();
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onRefresh();
     simulateLoading();
   };

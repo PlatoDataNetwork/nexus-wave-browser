@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,7 @@ import { toast } from "@/components/ui/sonner";
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem, KnowledgeGraphData } from "@/services/searchApi";
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,6 +39,8 @@ const Search: React.FC = () => {
   const [peopleAlsoAsk, setPeopleAlsoAsk] = useState<any[]>([]);
   const [relatedSearches, setRelatedSearches] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -81,7 +83,7 @@ const Search: React.FC = () => {
       setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
       setRelatedSearches(searchResults.relatedSearches || []);
       
-      // Update URL with search query for shareable links
+      // Update URL with search query for shareable links without page refresh
       const url = new URL(window.location.href);
       url.searchParams.set('q', query);
       window.history.pushState({}, '', url.toString());
@@ -230,8 +232,8 @@ const Search: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission
-    e.stopPropagation(); // Stop event propagation
+    e.preventDefault(); 
+    e.stopPropagation();
     
     if (conversationMode) {
       handleConversationSearch();
@@ -599,7 +601,11 @@ const Search: React.FC = () => {
           <Button 
             variant={conversationMode ? "outline" : "default"} 
             className={`${conversationMode ? "" : "bg-nexus-purple hover:bg-nexus-deep-purple"}`}
-            onClick={() => setConversationMode(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setConversationMode(false);
+            }}
             type="button"
           >
             <SearchIcon className="h-4 w-4 mr-1" /> Traditional Search
@@ -607,7 +613,11 @@ const Search: React.FC = () => {
           <Button 
             variant={conversationMode ? "default" : "outline"} 
             className={`${conversationMode ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}`}
-            onClick={() => setConversationMode(true)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setConversationMode(true);
+            }}
             type="button"
           >
             <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
