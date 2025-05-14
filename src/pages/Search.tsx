@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
 import { 
   Loader2, 
   Search as SearchIcon, 
@@ -15,54 +13,33 @@ import {
   Clock, 
   Shield, 
   Zap,
-  Send,
   MessageCircle,
-  Plus,
-  ArrowRight
 } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
-import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem, KnowledgeGraphData } from "@/services/searchApi";
+import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
-import { useNavigate, useLocation } from "react-router-dom";
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationItem, 
-  PaginationLink, 
-  PaginationNext, 
-  PaginationPrevious 
-} from "@/components/ui/pagination";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ImageResults from "@/components/Search/ImageResults";
+
+// Import components
+import { Card, CardContent } from "@/components/ui/card";
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
+  const [imageResults, setImageResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
   const [conversationMode, setConversationMode] = useState(false);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [knowledgeGraph, setKnowledgeGraph] = useState<KnowledgeGraphData | null>(null);
+  const [knowledgeGraph, setKnowledgeGraph] = useState<any | null>(null);
   const [peopleAlsoAsk, setPeopleAlsoAsk] = useState<any[]>([]);
   const [relatedSearches, setRelatedSearches] = useState<string[]>([]);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  const location = useLocation();
   
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const resultsPerPage = 5;
-
   // Safe mode search
   const [safeSearch, setSafeSearch] = useState(true);
   
-  // Scroll to bottom when messages update
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
   useEffect(() => {
     // Initialize search query from URL parameters if they exist
     const urlParams = new URLSearchParams(window.location.search);
@@ -81,53 +58,45 @@ const Search: React.FC = () => {
     try {
       let searchResults: SearchAPIResponse;
       
-      if (searchProvider === "serper") {
-        // Convert activeTab to Serper API endpoint type
+      // Handle different search types based on active tab
+      if (activeTab === "images") {
+        // Image search - request 200 images
+        if (searchProvider === "serper") {
+          searchResults = await searchWithSerper(query, "images", safeSearch, 200);
+          setImageResults(searchResults.results || []);
+        } else {
+          searchResults = await searchWithYou(query, safeSearch, 200);
+          setImageResults(searchResults.results || []);
+        }
+      } else {
+        // Web search (and other types) - request 100 results
         const serperType = activeTab === "web" ? "search" : 
-                         activeTab === "images" ? "images" : 
                          activeTab === "videos" ? "videos" : 
                          activeTab === "news" ? "news" : "search";
         
-        // Pass safe search parameter
-        searchResults = await searchWithSerper(query, serperType, safeSearch);
-      } else {
-        // Pass safe search parameter
-        searchResults = await searchWithYou(query, safeSearch);
+        if (searchProvider === "serper") {
+          searchResults = await searchWithSerper(query, serperType, safeSearch, 100);
+        } else {
+          searchResults = await searchWithYou(query, safeSearch, 100);
+        }
+        
+        // Update state with search results
+        setResults(searchResults.results || []);
+        setKnowledgeGraph(searchResults.knowledgeGraph || null);
+        setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
+        setRelatedSearches(searchResults.relatedSearches || []);
       }
-      
-      // Update state with search results
-      setResults(searchResults.results || []);
-      setKnowledgeGraph(searchResults.knowledgeGraph || null);
-      setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
-      setRelatedSearches(searchResults.relatedSearches || []);
-      
-      // Calculate total pages for pagination
-      const total = searchResults.results ? Math.ceil(searchResults.results.length / resultsPerPage) : 1;
-      setTotalPages(total);
-      setCurrentPage(1); // Reset to first page on new search
-      
-      // Update URL with search query for shareable links without page refresh
-      // const url = new URL(window.location.href);
-      // url.searchParams.set('q', query);
-      // window.history.pushState({}, '', url.toString());
-      
     } catch (error) {
       console.error("Search error:", error);
       toast.error("Failed to fetch search results");
       setResults([]);
+      setImageResults([]);
       setKnowledgeGraph(null);
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Get paginated results
-  const getPaginatedResults = () => {
-    const startIndex = (currentPage - 1) * resultsPerPage;
-    const endIndex = startIndex + resultsPerPage;
-    return results.slice(startIndex, endIndex);
   };
 
   // Toggle safe search
@@ -137,185 +106,6 @@ const Search: React.FC = () => {
     if (searchQuery.trim()) {
       handleSearch();
     }
-  };
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Scroll to top of results
-    document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // Render pagination controls
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    return (
-      <Pagination className="my-6">
-        <PaginationContent>
-          {currentPage > 1 && (
-            <PaginationItem>
-              <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
-            </PaginationItem>
-          )}
-          
-          {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-            // Logic to show 5 pages maximum with current page in the middle when possible
-            let pageNum;
-            if (totalPages <= 5) {
-              pageNum = i + 1;
-            } else if (currentPage <= 3) {
-              pageNum = i + 1;
-            } else if (currentPage >= totalPages - 2) {
-              pageNum = totalPages - 4 + i;
-            } else {
-              pageNum = currentPage - 2 + i;
-            }
-
-            return (
-              <PaginationItem key={i}>
-                <PaginationLink 
-                  isActive={pageNum === currentPage}
-                  onClick={() => handlePageChange(pageNum)}
-                >
-                  {pageNum}
-                </PaginationLink>
-              </PaginationItem>
-            );
-          })}
-          
-          {currentPage < totalPages && (
-            <PaginationItem>
-              <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-            </PaginationItem>
-          )}
-        </PaginationContent>
-      </Pagination>
-    );
-  };
-
-  const handleConversationSearch = async () => {
-    if (!currentMessage.trim()) return;
-    
-    // Add user message to the conversation
-    const userMessage = {
-      id: Date.now().toString(),
-      role: "user",
-      content: currentMessage,
-      timestamp: new Date()
-    };
-    
-    setMessages([...messages, userMessage]);
-    setCurrentMessage("");
-    setIsLoading(true);
-    
-    try {
-      // Perform search using selected provider
-      let searchResults: SearchAPIResponse;
-      
-      if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(currentMessage);
-      } else {
-        searchResults = await searchWithYou(currentMessage);
-      }
-      
-      // Generate AI response
-      const aiResponse = generateAIResponse(currentMessage, searchResults);
-      setMessages(prev => [...prev, aiResponse]);
-    } catch (error) {
-      console.error("Search error:", error);
-      toast.error("Failed to fetch search results");
-      
-      // Add fallback response
-      const fallbackResponse = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: "I'm sorry, but I encountered an issue while searching. Please try again later.",
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, fallbackResponse]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const generateAIResponse = (query: string, searchResults: SearchAPIResponse) => {
-    // Extract useful information from search results
-    const results = searchResults.results;
-    
-    // Create a response based on the search results
-    let responseContent = "";
-    let sources: { title: string; url: string }[] = [];
-    
-    // If we have knowledge graph information, use it for a richer response
-    if (searchResults.knowledgeGraph) {
-      const kg = searchResults.knowledgeGraph;
-      responseContent = `${kg.title} is a ${kg.type}. ${kg.description || ''}\n\n`;
-      
-      if (kg.attributes) {
-        responseContent += "Here are some key facts:\n";
-        Object.entries(kg.attributes).forEach(([key, value]) => {
-          responseContent += `- ${key}: ${value}\n`;
-        });
-        responseContent += "\n";
-      }
-      
-      // Add source if available
-      if (kg.descriptionSource && kg.descriptionLink) {
-        sources.push({
-          title: `${kg.title} - ${kg.descriptionSource}`,
-          url: kg.descriptionLink
-        });
-      }
-    }
-    
-    // Add information from organic results
-    if (results.length > 0) {
-      if (!responseContent) {
-        responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
-      } else {
-        responseContent += "Additional information:\n\n";
-      }
-      
-      // Add top 3 results to the response
-      results.slice(0, 3).forEach((result, index) => {
-        responseContent += `${result.title}: ${result.description}\n\n`;
-        
-        // Add to sources
-        sources.push({
-          title: result.title,
-          url: result.url
-        });
-      });
-    } else {
-      // No results found
-      responseContent = `I searched for "${query}" but couldn't find relevant information. Could you try rephrasing your question?`;
-    }
-    
-    // Add related questions if available
-    if (searchResults.peopleAlsoAsk && searchResults.peopleAlsoAsk.length > 0) {
-      responseContent += "\nPeople also ask:\n";
-      searchResults.peopleAlsoAsk.slice(0, 2).forEach(item => {
-        responseContent += `- ${item.question}\n`;
-        sources.push({
-          title: item.title,
-          url: item.link
-        });
-      });
-    }
-    
-    // If we still don't have a good response, provide a fallback
-    if (!responseContent || responseContent.trim().length === 0) {
-      responseContent = `I searched for information about "${query}", but I don't have a comprehensive answer at this moment. You might want to try a different search term or be more specific.`;
-    }
-    
-    return {
-      id: Date.now().toString(),
-      role: "assistant",
-      content: responseContent.trim(),
-      timestamp: new Date(),
-      sources: sources.length > 0 ? sources : undefined
-    };
   };
 
   const handleTabChange = (tab: string) => {
@@ -330,7 +120,7 @@ const Search: React.FC = () => {
     e.stopPropagation();
     
     if (conversationMode) {
-      handleConversationSearch();
+      // Handle conversation mode
     } else {
       handleSearch();
     }
@@ -416,28 +206,6 @@ const Search: React.FC = () => {
           </Card>
         );
       
-      case "image":
-        return (
-          <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
-            <CardContent className="p-4">
-              <div className="flex gap-4">
-                {result.imageUrl && (
-                  <div className="flex-shrink-0">
-                    <img src={result.imageUrl} alt={result.title} className="w-32 h-32 object-cover rounded-md" />
-                  </div>
-                )}
-                <div>
-                  <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-                  <a href={result.url} target="_blank" rel="noopener noreferrer">
-                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
-                  </a>
-                  <p className="text-sm text-muted-foreground">{result.description}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      
       case "nexus":
         return (
           <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
@@ -469,108 +237,6 @@ const Search: React.FC = () => {
         return null;
     }
   };
-
-  const renderConversation = () => (
-    <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4 pb-4">
-          {messages.length === 0 ? (
-            <div className="text-center py-10">
-              <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-8 w-8 text-nexus-purple" />
-              </div>
-              <h2 className="text-xl font-medium mb-2">Ask me anything</h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions.
-              </p>
-              
-              <div className="mt-6 flex flex-col gap-2 max-w-md mx-auto">
-                <Button 
-                  variant="outline" 
-                  className="flex items-center justify-between"
-                  onClick={() => setCurrentMessage("What is Blockchain technology?")}
-                >
-                  <span>What is Blockchain technology?</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center justify-between"
-                  onClick={() => setCurrentMessage("Explain Bitcoin versus Ethereum")}
-                >
-                  <span>Explain Bitcoin versus Ethereum</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center justify-between"
-                  onClick={() => setCurrentMessage("How does web3 change the internet?")}
-                >
-                  <span>How does web3 change the internet?</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ) : (
-            messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-3/4 rounded-lg p-4 ${
-                    message.role === "user"
-                      ? "bg-nexus-purple text-white"
-                      : "bg-secondary border border-border"
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap">{message.content}</p>
-                  
-                  {message.sources && message.sources.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <p className="text-xs font-medium mb-1">Sources:</p>
-                      <ul className="space-y-1">
-                        {message.sources.map((source: any, index: number) => (
-                          <li key={index} className="text-xs">
-                            <a href={source.url} className="text-nexus-purple underline hover:text-nexus-deep-purple" target="_blank" rel="noopener noreferrer">
-                              {source.title}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-      </ScrollArea>
-      
-      <div className="p-4 border-t border-border">
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <Textarea
-            placeholder="Ask me anything..."
-            value={currentMessage}
-            onChange={(e) => setCurrentMessage(e.target.value)}
-            className="flex-1 min-h-12 resize-none"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleConversationSearch();
-              }
-            }}
-          />
-          <Button type="submit" className="h-full bg-nexus-purple hover:bg-nexus-deep-purple" disabled={isLoading}>
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
 
   // Render Knowledge Graph component
   const renderKnowledgeGraph = () => {
@@ -695,11 +361,7 @@ const Search: React.FC = () => {
           <Button 
             variant={conversationMode ? "outline" : "default"} 
             className={`${conversationMode ? "" : "bg-nexus-purple hover:bg-nexus-deep-purple"}`}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setConversationMode(false);
-            }}
+            onClick={() => setConversationMode(false)}
             type="button"
           >
             <SearchIcon className="h-4 w-4 mr-1" /> Traditional Search
@@ -707,11 +369,7 @@ const Search: React.FC = () => {
           <Button 
             variant={conversationMode ? "default" : "outline"} 
             className={`${conversationMode ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}`}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setConversationMode(true);
-            }}
+            onClick={() => setConversationMode(true)}
             type="button"
           >
             <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
@@ -801,86 +459,136 @@ const Search: React.FC = () => {
         <ConversationalSearch />
       ) : (
         <ScrollArea className="flex-1">
-          <div className="p-4 pb-10">
-            {isLoading ? (
-              <div className="flex flex-col items-center justify-center h-40">
-                <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                <p className="text-muted-foreground">Searching securely...</p>
-              </div>
-            ) : searchQuery && results.length > 0 ? (
-              <div id="search-results">
-                <p className="text-sm text-muted-foreground mb-4">
-                  About {Math.floor(Math.random() * 10000).toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                </p>
-                
-                {/* Knowledge Graph */}
-                {renderKnowledgeGraph()}
-                
-                {/* Main Results */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                  <div className="lg:col-span-2">
-                    {getPaginatedResults().map(renderSearchResult)}
-                    
-                    {/* Pagination */}
-                    {renderPagination()}
-                  </div>
+          <div className="p-4 pb-20">
+            <TabsContent value="images" className="mt-0">
+              <ImageResults 
+                isLoading={isLoading} 
+                results={imageResults} 
+                searchQuery={searchQuery}
+              />
+            </TabsContent>
+            
+            <TabsContent value="web" className="mt-0">
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center h-40">
+                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                  <p className="text-muted-foreground">Searching securely...</p>
+                </div>
+              ) : searchQuery && results.length > 0 ? (
+                <div id="search-results">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    About {results.length.toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                  </p>
                   
-                  <div className="space-y-5">
-                    {/* People Also Ask */}
-                    {renderPeopleAlsoAsk()}
+                  {/* Knowledge Graph */}
+                  {renderKnowledgeGraph()}
+                  
+                  {/* Main Results */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div className="lg:col-span-2">
+                      {results.map(renderSearchResult)}
+                    </div>
                     
-                    {/* Related Searches */}
-                    {renderRelatedSearches()}
+                    <div className="space-y-5">
+                      {/* People Also Ask */}
+                      {renderPeopleAlsoAsk()}
+                      
+                      {/* Related Searches */}
+                      {renderRelatedSearches()}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : searchQuery ? (
-              <div className="text-center py-10">
-                <h2 className="text-xl font-medium mb-2">No results found</h2>
-                <p className="text-muted-foreground">Try different keywords or search terms</p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
-                  <SearchIcon className="h-12 w-12 text-nexus-purple" />
+              ) : searchQuery ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-medium mb-2">No results found</h2>
+                  <p className="text-muted-foreground">Try different keywords or search terms</p>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
-                <p className="text-muted-foreground text-center max-w-md mb-6">
-                  Search the web with enhanced privacy and security. Your searches are never tracked or stored.
-                </p>
-                <div className="flex gap-4 mt-4">
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center gap-2"
-                    type="button"
-                  >
-                    <Shield className="h-4 w-4" />
-                    <span>Privacy Features</span>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center gap-2"
-                    type="button"
-                  >
-                    <Globe className="h-4 w-4" />
-                    <span>Search Engines</span>
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex items-center gap-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setConversationMode(true);
-                    }}
-                    type="button"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    <span>Try AI Chat</span>
-                  </Button>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
+                    <SearchIcon className="h-12 w-12 text-nexus-purple" />
+                  </div>
+                  <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
+                  <p className="text-muted-foreground text-center max-w-md mb-6">
+                    Search the web with enhanced privacy and security. Your searches are never tracked or stored.
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
+            </TabsContent>
+            
+            <TabsContent value="videos" className="mt-0">
+              {/* Render video search results similar to web results */}
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center h-40">
+                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                  <p className="text-muted-foreground">Searching videos...</p>
+                </div>
+              ) : searchQuery && results.length > 0 ? (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    About {results.length.toLocaleString()} video results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                  </p>
+                  {results.map(renderSearchResult)}
+                </div>
+              ) : searchQuery ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-medium mb-2">No video results found</h2>
+                  <p className="text-muted-foreground">Try different keywords or search terms</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <h2 className="text-xl font-medium mb-2">Search for videos</h2>
+                  <p className="text-muted-foreground">Enter a search term to find videos</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="news" className="mt-0">
+              {/* Render news search results similar to web results */}
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center h-40">
+                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                  <p className="text-muted-foreground">Searching news...</p>
+                </div>
+              ) : searchQuery && results.length > 0 ? (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    About {results.length.toLocaleString()} news results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                  </p>
+                  {results.map(renderSearchResult)}
+                </div>
+              ) : searchQuery ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-medium mb-2">No news results found</h2>
+                  <p className="text-muted-foreground">Try different keywords or search terms</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <h2 className="text-xl font-medium mb-2">Search for latest news</h2>
+                  <p className="text-muted-foreground">Enter a search term to find news articles</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="nexus" className="mt-0">
+              {/* Render nexus search results similar to web results */}
+              {isLoading ? (
+                <div className="flex flex-col items-center justify-center h-40">
+                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                  <p className="text-muted-foreground">Searching Nexus resources...</p>
+                </div>
+              ) : searchQuery ? (
+                <div className="text-center py-10">
+                  <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
+                  <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16">
+                  <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
+                  <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
+                </div>
+              )}
+            </TabsContent>
           </div>
         </ScrollArea>
       )}

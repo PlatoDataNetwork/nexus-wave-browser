@@ -1,4 +1,3 @@
-
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -41,6 +40,21 @@ export interface SerperSearchResponse {
   relatedSearches?: {
     query: string;
   }[];
+  // Add images type for image search
+  images?: {
+    title: string;
+    imageUrl: string;
+    imageWidth: number;
+    imageHeight: number;
+    thumbnailUrl: string;
+    thumbnailWidth: number;
+    thumbnailHeight: number;
+    source: string;
+    domain: string;
+    link: string;
+    googleUrl: string;
+    position: number;
+  }[];
 }
 
 // Types for You.com API responses
@@ -67,6 +81,12 @@ export interface SearchResultItem {
   sitelinks?: Array<{ title: string; link: string }>;
   snippets?: string[];
   position?: number;
+  imageWidth?: number;
+  imageHeight?: number;
+  thumbnailUrl?: string;
+  thumbnailWidth?: number;
+  thumbnailHeight?: number;
+  source?: string;
 }
 
 export interface KnowledgeGraphData {
@@ -128,11 +148,12 @@ const getApiKeys = async (): Promise<{ serperKey: string; youKey: string }> => {
   }
 };
 
-// Search using Serper API
+// Search using Serper API with result count parameter
 export const searchWithSerper = async (
   query: string, 
   type: "search" | "images" | "videos" | "news" = "search",
-  safeSearch: boolean = true
+  safeSearch: boolean = true,
+  resultCount: number = type === "images" ? 200 : 100
 ): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "serper" };
@@ -151,7 +172,8 @@ export const searchWithSerper = async (
       gl: "us",
       hl: "en",
       autocorrect: true,
-      safe: safeSearch // Add safe search parameter
+      safe: safeSearch,
+      num: resultCount // Add number of results parameter
     });
 
     const requestOptions = {
@@ -170,19 +192,41 @@ export const searchWithSerper = async (
 
     const data: SerperSearchResponse = await response.json();
     
-    // Map the response to our common format
-    const results: SearchResultItem[] = data.organic.map((item) => ({
-      id: `serper-${item.position}`,
-      title: item.title,
-      url: item.link,
-      description: item.snippet,
-      type: type === "images" ? "image" : 
-            type === "videos" ? "video" : 
-            type === "news" ? "news" : "web",
-      imageUrl: item.imageUrl,
-      sitelinks: item.sitelinks,
-      position: item.position
-    }));
+    // Handle different response formats based on search type
+    let results: SearchResultItem[] = [];
+    
+    if (type === "images" && data.images) {
+      // Map image search results
+      results = data.images.map((image) => ({
+        id: `serper-img-${image.position}`,
+        title: image.title,
+        url: image.link,
+        description: image.title,
+        type: "image",
+        imageUrl: image.imageUrl,
+        thumbnailUrl: image.thumbnailUrl,
+        imageWidth: image.imageWidth,
+        imageHeight: image.imageHeight,
+        thumbnailWidth: image.thumbnailWidth,
+        thumbnailHeight: image.thumbnailHeight,
+        source: image.source,
+        position: image.position
+      }));
+    } else {
+      // Map regular search results
+      results = data.organic.map((item) => ({
+        id: `serper-${item.position}`,
+        title: item.title,
+        url: item.link,
+        description: item.snippet,
+        type: type === "images" ? "image" : 
+              type === "videos" ? "video" : 
+              type === "news" ? "news" : "web",
+        imageUrl: item.imageUrl,
+        sitelinks: item.sitelinks,
+        position: item.position
+      }));
+    }
 
     const mappedResponse: SearchAPIResponse = {
       results,
@@ -211,10 +255,11 @@ export const searchWithSerper = async (
   }
 };
 
-// Search using You.com API
+// Search using You.com API with result count parameter
 export const searchWithYou = async (
   query: string,
-  safeSearch: boolean = true
+  safeSearch: boolean = true,
+  resultCount: number = 100
 ): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "you" };

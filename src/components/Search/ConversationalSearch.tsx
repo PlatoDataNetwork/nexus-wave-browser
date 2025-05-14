@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,13 +65,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setIsLoading(true);
     
     try {
-      // Perform real search based on user query with safe search
+      // Perform real search based on user query with safe search and appropriate result counts
       let searchResults: SearchAPIResponse;
       
       if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch);
+        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch, 100);
       } else {
-        searchResults = await searchWithYou(messageToSearch, safeSearch);
+        searchResults = await searchWithYou(messageToSearch, safeSearch, 100);
       }
       
       // Generate AI response based on search results
