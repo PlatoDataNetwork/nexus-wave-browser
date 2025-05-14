@@ -4,8 +4,18 @@ import { Link } from "react-router-dom";
 import { Github, Twitter, Mail } from "lucide-react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { useLocation } from "react-router-dom";
 
 const Footer: React.FC = () => {
+  // Check if we're on the search page to hide footer
+  const location = useLocation();
+  const isSearchPage = location.pathname === "/search";
+  
+  // If we're on the search page, don't render the footer
+  if (isSearchPage) {
+    return null;
+  }
+  
   return (
     <footer className="bg-gradient-to-tr from-nexus-header-blue to-nexus-card-dark text-white py-8 px-6">
       <div className="container mx-auto">

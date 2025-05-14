@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -18,7 +18,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   onNavigate 
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isFooterVisible, setIsFooterVisible] = useState(true);
+  const isSearchPage = location.pathname === "/search";
   
   // Create a navigation handler to use with the footer
   const handleNavigate = (url: string) => {
@@ -42,14 +44,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     setIsFooterVisible(prev => !prev);
   };
 
+  // Add a specific class for search page to ensure proper scrolling
+  const containerClassName = `flex flex-col ${isSearchPage ? 'h-screen overflow-hidden' : 'h-full'} w-full`;
+  const contentClassName = `flex-1 ${isSearchPage ? 'overflow-auto pb-14' : 'h-full'} w-full`;
+
   return (
-    <div className="flex flex-col h-full w-full">
-      <div className="flex-1 h-full w-full overflow-hidden">
+    <div className={containerClassName}>
+      <div className={contentClassName}>
         {children}
       </div>
       
       {includeFooter && isFooterVisible && (
-        <div className="mt-auto w-full">
+        <div className={`${isSearchPage ? 'fixed bottom-0 left-0 right-0' : 'mt-auto'} w-full z-10`}>
           <BrowserFooter onNavigate={handleNavigate} onToggleFooter={toggleFooter} isVisible={isFooterVisible} />
         </div>
       )}
