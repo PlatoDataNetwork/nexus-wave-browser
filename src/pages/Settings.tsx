@@ -13,10 +13,28 @@ import SettingsWeb3 from "@/components/Settings/SettingsWeb3";
 import SettingsExtensions from "@/components/Settings/SettingsExtensions";
 import SettingsShields from "@/components/Settings/SettingsShields";
 import PageLayout from "@/components/Layout/PageLayout";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Settings: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  // Extract active tab from URL or use default
+  const getTabFromUrl = () => {
+    const params = new URLSearchParams(location.search);
+    return params.get('tab') || "appearance";
+  };
+
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [activeTab, setActiveTab] = React.useState("appearance");
+  const [activeTab, setActiveTab] = React.useState(getTabFromUrl);
+
+  // Update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/settings?tab=${value}`, { replace: true });
+  };
 
   return (
     <PageLayout>
@@ -41,7 +59,7 @@ const Settings: React.FC = () => {
             <Tabs 
               defaultValue={activeTab} 
               value={activeTab}
-              onValueChange={setActiveTab}
+              onValueChange={handleTabChange}
               orientation="vertical" 
               className="w-full"
             >

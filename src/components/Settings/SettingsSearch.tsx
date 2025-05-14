@@ -9,8 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Plus, Check, Eye, EyeOff } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 const SettingsSearch: React.FC = () => {
+  const { user } = useAuth();
+  
   const [defaultSearchEngine, setDefaultSearchEngine] = useState("platodata");
   const [searchSuggestions, setSearchSuggestions] = useState(true);
   const [contextualSearch, setContextualSearch] = useState(false);
@@ -30,29 +33,30 @@ const SettingsSearch: React.FC = () => {
   useEffect(() => {
     const fetchApiKeys = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          return;
+        }
         
-        if (user) {
-          const { data, error } = await supabase
-            .from("search_api_keys")
-            .select("provider, api_key")
-            .eq("user_id", user.id);
+        const { data, error } = await supabase
+          .from("search_api_keys")
+          .select("*")
+          .eq("user_id", user.id);
+        
+        if (error) {
+          console.error("Error fetching API keys:", error);
+          return;
+        }
+        
+        if (data && data.length > 0) {
+          const serperKeyObj = data.find(k => k.provider === "serper");
+          const youKeyObj = data.find(k => k.provider === "you");
           
-          if (error) {
-            throw error;
+          if (serperKeyObj) {
+            setSerperApiKey(serperKeyObj.api_key);
           }
           
-          if (data) {
-            const serperKeyObj = data.find(k => k.provider === "serper");
-            const youKeyObj = data.find(k => k.provider === "you");
-            
-            if (serperKeyObj) {
-              setSerperApiKey(serperKeyObj.api_key);
-            }
-            
-            if (youKeyObj) {
-              setYouApiKey(youKeyObj.api_key);
-            }
+          if (youKeyObj) {
+            setYouApiKey(youKeyObj.api_key);
           }
         }
       } catch (error) {
@@ -61,15 +65,13 @@ const SettingsSearch: React.FC = () => {
     };
     
     fetchApiKeys();
-  }, []);
+  }, [user]);
   
   // Save API keys to Supabase
   const saveApiKey = async (provider: "serper" | "you") => {
     setIsLoading(true);
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) {
         toast({
           title: "Authentication required",
@@ -91,11 +93,15 @@ const SettingsSearch: React.FC = () => {
       }
       
       // Check if key already exists
-      const { data: existingKeys } = await supabase
+      const { data: existingKeys, error: fetchError } = await supabase
         .from("search_api_keys")
         .select("id")
         .eq("user_id", user.id)
         .eq("provider", provider);
+      
+      if (fetchError) {
+        throw fetchError;
+      }
       
       let result;
       
@@ -126,11 +132,11 @@ const SettingsSearch: React.FC = () => {
         description: `Your ${provider === "serper" ? "Serper" : "You.com"} API key has been saved successfully`,
       });
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving API key:", error);
       toast({
         title: "Error saving API key",
-        description: "There was an error saving your API key. Please try again later.",
+        description: error.message || "There was an error saving your API key. Please try again later.",
         variant: "destructive"
       });
     } finally {
@@ -177,7 +183,7 @@ const SettingsSearch: React.FC = () => {
               </div>
               <Button 
                 onClick={() => saveApiKey("serper")} 
-                disabled={isLoading}
+                disabled={isLoading || !user}
                 className="bg-nexus-purple hover:bg-nexus-deep-purple"
               >
                 <Check className="h-4 w-4" />
@@ -215,7 +221,7 @@ const SettingsSearch: React.FC = () => {
               </div>
               <Button 
                 onClick={() => saveApiKey("you")} 
-                disabled={isLoading}
+                disabled={isLoading || !user}
                 className="bg-nexus-purple hover:bg-nexus-deep-purple"
               >
                 <Check className="h-4 w-4" />
@@ -228,6 +234,11 @@ const SettingsSearch: React.FC = () => {
                 you.com/api
               </a>
             </p>
+            {!user && (
+              <p className="text-xs text-amber-500 mt-2">
+                You need to sign in to save API keys.
+              </p>
+            )}
           </div>
           
           <div className="mb-4 space-y-2">
