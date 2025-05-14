@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,13 @@ const AddressBar: React.FC<AddressBarProps> = ({
     
     // Process URL to ensure it has a protocol if needed
     let processedUrl = inputValue.trim();
+    
+    // Check if this is an internal route
+    if (processedUrl === 'search' || processedUrl === '/search') {
+      navigate('/search');
+      return;
+    }
+    
     if (!processedUrl.startsWith('http://') && !processedUrl.startsWith('https://') && !processedUrl.startsWith('/')) {
       processedUrl = `https://${processedUrl}`;
     }
@@ -82,7 +90,10 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8" 
-                onClick={onGoBack}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onGoBack();
+                }}
                 disabled={!canGoBack}
                 aria-label="Go back"
               >
@@ -102,7 +113,10 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8" 
-                onClick={onGoForward}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onGoForward();
+                }}
                 disabled={!canGoForward}
                 aria-label="Go forward"
               >
@@ -122,7 +136,10 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8" 
-                onClick={handleRefresh}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleRefresh();
+                }}
                 aria-label="Refresh page"
                 disabled={isLoading}
               >
@@ -152,6 +169,10 @@ const AddressBar: React.FC<AddressBarProps> = ({
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit(e);
+              }}
             >
               <Search className="h-4 w-4" />
             </Button>

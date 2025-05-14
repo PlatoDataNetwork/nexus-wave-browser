@@ -38,7 +38,10 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   }, [messages]);
 
   const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+    if (e) {
+      e.preventDefault();  // Prevent the default form submission behavior
+    }
+    
     if (!currentMessage.trim()) return;
     
     // Add user message to conversation

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -230,7 +229,8 @@ const Search: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent default form submission
+    
     if (conversationMode) {
       handleConversationSearch();
     } else {
@@ -630,7 +630,15 @@ const Search: React.FC = () => {
                 />
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
-              <Button type="submit" className="bg-nexus-purple hover:bg-nexus-deep-purple" disabled={isLoading}>
+              <Button 
+                type="submit" 
+                className="bg-nexus-purple hover:bg-nexus-deep-purple" 
+                disabled={isLoading}
+                onClick={(e) => {
+                  e.preventDefault(); // Extra prevention of default behavior
+                  handleSearch();
+                }}
+              >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
               </Button>
             </form>
