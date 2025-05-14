@@ -40,6 +40,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();  // Prevent the default form submission behavior
+      e.stopPropagation(); // Stop event propagation
     }
     
     if (!currentMessage.trim()) return;
@@ -219,7 +220,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       </ScrollArea>
       
       <div className="p-4 border-t border-border">
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSubmit(e);
+          }} 
+          className="flex gap-2"
+        >
           <Textarea
             placeholder="Ask me anything..."
             value={currentMessage}
@@ -228,14 +236,20 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                e.stopPropagation();
                 handleSubmit();
               }
             }}
           />
           <Button 
-            type="submit" 
+            type="button" 
             className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
             disabled={isLoading}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit();
+            }}
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>

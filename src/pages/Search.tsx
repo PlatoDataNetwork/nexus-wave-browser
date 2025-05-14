@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -230,6 +231,7 @@ const Search: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
+    e.stopPropagation(); // Stop event propagation
     
     if (conversationMode) {
       handleConversationSearch();
@@ -598,6 +600,7 @@ const Search: React.FC = () => {
             variant={conversationMode ? "outline" : "default"} 
             className={`${conversationMode ? "" : "bg-nexus-purple hover:bg-nexus-deep-purple"}`}
             onClick={() => setConversationMode(false)}
+            type="button"
           >
             <SearchIcon className="h-4 w-4 mr-1" /> Traditional Search
           </Button>
@@ -605,6 +608,7 @@ const Search: React.FC = () => {
             variant={conversationMode ? "default" : "outline"} 
             className={`${conversationMode ? "bg-nexus-purple hover:bg-nexus-deep-purple" : ""}`}
             onClick={() => setConversationMode(true)}
+            type="button"
           >
             <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
           </Button>
@@ -619,7 +623,14 @@ const Search: React.FC = () => {
 
         {!conversationMode && (
           <>
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+              }}
+              className="flex gap-2"
+            >
               <div className="flex-1 relative">
                 <Input
                   type="search"
@@ -631,11 +642,12 @@ const Search: React.FC = () => {
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
               <Button 
-                type="submit" 
+                type="button" 
                 className="bg-nexus-purple hover:bg-nexus-deep-purple" 
                 disabled={isLoading}
                 onClick={(e) => {
-                  e.preventDefault(); // Extra prevention of default behavior
+                  e.preventDefault();
+                  e.stopPropagation();
                   handleSearch();
                 }}
               >

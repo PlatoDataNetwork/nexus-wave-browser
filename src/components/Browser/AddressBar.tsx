@@ -42,6 +42,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     
     // Process URL to ensure it has a protocol if needed
     let processedUrl = inputValue.trim();
@@ -92,10 +93,12 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 className="h-8 w-8" 
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   onGoBack();
                 }}
                 disabled={!canGoBack}
                 aria-label="Go back"
+                type="button"
               >
                 <ArrowLeft className={`h-4 w-4 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
               </Button>
@@ -115,10 +118,12 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 className="h-8 w-8" 
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   onGoForward();
                 }}
                 disabled={!canGoForward}
                 aria-label="Go forward"
+                type="button"
               >
                 <ArrowRight className={`h-4 w-4 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
               </Button>
@@ -138,10 +143,12 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 className="h-8 w-8" 
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   handleRefresh();
                 }}
                 aria-label="Refresh page"
                 disabled={isLoading}
+                type="button"
               >
                 <RefreshCw className={`h-4 w-4 text-white ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
@@ -165,12 +172,13 @@ const AddressBar: React.FC<AddressBarProps> = ({
               placeholder="Search or enter address"
             />
             <Button 
-              type="submit" 
+              type="button" 
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 handleSubmit(e);
               }}
             >
