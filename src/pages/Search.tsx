@@ -14,7 +14,7 @@ import {
   Zap,
   MessageCircle,
 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
@@ -87,7 +87,11 @@ const Search: React.FC = () => {
       }
     } catch (error) {
       console.error("Search error:", error);
-      toast.error("Failed to fetch search results");
+      toast({
+        title: "Error",
+        description: "Failed to fetch search results",
+        variant: "destructive"
+      });
       setResults([]);
       setImageResults([]);
       setKnowledgeGraph(null);
