@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,7 @@ import {
   Zap,
   MessageCircle,
 } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/use-toast";
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
@@ -250,14 +249,14 @@ const Search: React.FC = () => {
               <div className="flex-shrink-0">
                 <img 
                   src={knowledgeGraph.imageUrl} 
-                  alt={knowledgeGraph.title}
+                  alt={knowledgeGraph.title || 'Knowledge Graph'}
                   className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md"
                 />
               </div>
             )}
             <div className="flex-grow">
-              <h2 className="text-xl font-bold">{knowledgeGraph.title}</h2>
-              <div className="text-sm text-muted-foreground mb-2">{knowledgeGraph.type}</div>
+              <h2 className="text-xl font-bold">{knowledgeGraph.title || 'Information'}</h2>
+              <div className="text-sm text-muted-foreground mb-2">{knowledgeGraph.type || ''}</div>
               {knowledgeGraph.description && (
                 <p className="mb-3">{knowledgeGraph.description}</p>
               )}
@@ -275,7 +274,7 @@ const Search: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-3">
                   {Object.entries(knowledgeGraph.attributes).map(([key, value]) => (
                     <div key={key} className="text-sm">
-                      <span className="font-medium">{key}:</span> {value}
+                      <span className="font-medium">{key}:</span> {String(value)}
                     </div>
                   ))}
                 </div>
