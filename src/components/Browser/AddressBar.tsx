@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -170,11 +171,15 @@ const AddressBar: React.FC<AddressBarProps> = ({
               placeholder="Search or enter address"
             />
             <Button 
-              type="button" 
+              type="submit" 
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
-              onClick={handleSubmit}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+              }}
             >
               <Search className="h-4 w-4" />
             </Button>
