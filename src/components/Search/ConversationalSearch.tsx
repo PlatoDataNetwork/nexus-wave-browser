@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,7 +7,7 @@ import { Loader2, Send, MessageCircle } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import SearchProviderSelector from './SearchProviderSelector';
 
 interface ConversationMessage {
@@ -221,7 +222,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       
       <div className="p-4 border-t border-border">
         <form 
-          onSubmit={handleSubmit} 
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSubmit(e);
+          }} 
           className="flex gap-2"
         >
           <Textarea

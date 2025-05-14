@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
@@ -649,9 +648,13 @@ const Search: React.FC = () => {
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               </div>
               <Button 
-                type="submit" 
+                type="submit"
                 className="bg-nexus-purple hover:bg-nexus-deep-purple" 
                 disabled={isLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }}
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
               </Button>

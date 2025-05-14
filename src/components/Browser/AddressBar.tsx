@@ -14,7 +14,7 @@ import {
 import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface AddressBarProps {
   currentUrl: string;
@@ -178,6 +178,11 @@ const AddressBar: React.FC<AddressBarProps> = ({
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+              }}
             >
               <Search className="h-4 w-4" />
             </Button>
