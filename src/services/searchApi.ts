@@ -129,7 +129,11 @@ const getApiKeys = async (): Promise<{ serperKey: string; youKey: string }> => {
 };
 
 // Search using Serper API
-export const searchWithSerper = async (query: string, type: "search" | "images" | "videos" | "news" = "search"): Promise<SearchAPIResponse> => {
+export const searchWithSerper = async (
+  query: string, 
+  type: "search" | "images" | "videos" | "news" = "search",
+  safeSearch: boolean = true
+): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "serper" };
   }
@@ -146,7 +150,8 @@ export const searchWithSerper = async (query: string, type: "search" | "images" 
       q: query,
       gl: "us",
       hl: "en",
-      autocorrect: true
+      autocorrect: true,
+      safe: safeSearch // Add safe search parameter
     });
 
     const requestOptions = {
@@ -207,7 +212,10 @@ export const searchWithSerper = async (query: string, type: "search" | "images" 
 };
 
 // Search using You.com API
-export const searchWithYou = async (query: string): Promise<SearchAPIResponse> => {
+export const searchWithYou = async (
+  query: string,
+  safeSearch: boolean = true
+): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "you" };
   }
@@ -223,7 +231,9 @@ export const searchWithYou = async (query: string): Promise<SearchAPIResponse> =
       }
     };
 
-    const endpoint = `https://api.ydc-index.io/search?query=${encodeURIComponent(query)}`;
+    // Add safe search parameter to query URL if enabled
+    const safeSearchParam = safeSearch ? '&safesearch=on' : '';
+    const endpoint = `https://api.ydc-index.io/search?query=${encodeURIComponent(query)}${safeSearchParam}`;
     const response = await fetch(endpoint, options);
     
     if (!response.ok) {

@@ -25,6 +25,14 @@ import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem, K
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
 import { useNavigate, useLocation } from "react-router-dom";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination";
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +49,14 @@ const Search: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const resultsPerPage = 5;
+
+  // Safe mode search
+  const [safeSearch, setSafeSearch] = useState(true);
   
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -72,9 +88,11 @@ const Search: React.FC = () => {
                          activeTab === "videos" ? "videos" : 
                          activeTab === "news" ? "news" : "search";
         
-        searchResults = await searchWithSerper(query, serperType);
+        // Pass safe search parameter
+        searchResults = await searchWithSerper(query, serperType, safeSearch);
       } else {
-        searchResults = await searchWithYou(query);
+        // Pass safe search parameter
+        searchResults = await searchWithYou(query, safeSearch);
       }
       
       // Update state with search results
@@ -83,10 +101,15 @@ const Search: React.FC = () => {
       setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
       setRelatedSearches(searchResults.relatedSearches || []);
       
+      // Calculate total pages for pagination
+      const total = searchResults.results ? Math.ceil(searchResults.results.length / resultsPerPage) : 1;
+      setTotalPages(total);
+      setCurrentPage(1); // Reset to first page on new search
+      
       // Update URL with search query for shareable links without page refresh
-      // const url = new URL(window.location.href);
-      // url.searchParams.set('q', query);
-      // window.history.pushState({}, '', url.toString());
+      const url = new URL(window.location.href);
+      url.searchParams.set('q', query);
+      window.history.pushState({}, '', url.toString());
       
     } catch (error) {
       console.error("Search error:", error);
@@ -98,6 +121,77 @@ const Search: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Get paginated results
+  const getPaginatedResults = () => {
+    const startIndex = (currentPage - 1) * resultsPerPage;
+    const endIndex = startIndex + resultsPerPage;
+    return results.slice(startIndex, endIndex);
+  };
+
+  // Toggle safe search
+  const handleToggleSafeSearch = () => {
+    setSafeSearch(prev => !prev);
+    // If we already have a search query, update the results
+    if (searchQuery.trim()) {
+      handleSearch();
+    }
+  };
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of results
+    document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Render pagination controls
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    return (
+      <Pagination className="my-6">
+        <PaginationContent>
+          {currentPage > 1 && (
+            <PaginationItem>
+              <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+            </PaginationItem>
+          )}
+          
+          {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
+            // Logic to show 5 pages maximum with current page in the middle when possible
+            let pageNum;
+            if (totalPages <= 5) {
+              pageNum = i + 1;
+            } else if (currentPage <= 3) {
+              pageNum = i + 1;
+            } else if (currentPage >= totalPages - 2) {
+              pageNum = totalPages - 4 + i;
+            } else {
+              pageNum = currentPage - 2 + i;
+            }
+
+            return (
+              <PaginationItem key={i}>
+                <PaginationLink 
+                  isActive={pageNum === currentPage}
+                  onClick={() => handlePageChange(pageNum)}
+                >
+                  {pageNum}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
+          
+          {currentPage < totalPages && (
+            <PaginationItem>
+              <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+            </PaginationItem>
+          )}
+        </PaginationContent>
+      </Pagination>
+    );
   };
 
   const handleConversationSearch = async () => {
@@ -651,10 +745,6 @@ const Search: React.FC = () => {
                 type="submit"
                 className="bg-nexus-purple hover:bg-nexus-deep-purple" 
                 disabled={isLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSubmit(e);
-                }}
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
               </Button>
@@ -694,11 +784,12 @@ const Search: React.FC = () => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="flex items-center gap-1"
+                  className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
+                  onClick={handleToggleSafeSearch}
                   type="button"
                 >
-                  <Shield className="h-4 w-4 text-green-500" />
-                  <span className="text-xs">Safe Search On</span>
+                  <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
+                  <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
                 </Button>
               </div>
             </div>
@@ -710,14 +801,14 @@ const Search: React.FC = () => {
         <ConversationalSearch />
       ) : (
         <ScrollArea className="flex-1">
-          <div className="p-4">
+          <div className="p-4 pb-10">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-40">
                 <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
                 <p className="text-muted-foreground">Searching securely...</p>
               </div>
             ) : searchQuery && results.length > 0 ? (
-              <div>
+              <div id="search-results">
                 <p className="text-sm text-muted-foreground mb-4">
                   About {Math.floor(Math.random() * 10000).toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
                 </p>
@@ -728,7 +819,10 @@ const Search: React.FC = () => {
                 {/* Main Results */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                   <div className="lg:col-span-2">
-                    {results.map(renderSearchResult)}
+                    {getPaginatedResults().map(renderSearchResult)}
+                    
+                    {/* Pagination */}
+                    {renderPagination()}
                   </div>
                   
                   <div className="space-y-5">

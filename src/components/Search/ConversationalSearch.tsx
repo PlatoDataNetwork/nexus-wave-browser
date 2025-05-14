@@ -1,13 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import SearchProviderSelector from './SearchProviderSelector';
 
 interface ConversationMessage {
@@ -30,6 +29,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
+  const [safeSearch, setSafeSearch] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -64,13 +64,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setIsLoading(true);
     
     try {
-      // Perform real search based on user query
+      // Perform real search based on user query with safe search
       let searchResults: SearchAPIResponse;
       
       if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(messageToSearch);
+        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch);
       } else {
-        searchResults = await searchWithYou(messageToSearch);
+        searchResults = await searchWithYou(messageToSearch, safeSearch);
       }
       
       // Generate AI response based on search results
@@ -103,6 +103,15 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setTimeout(() => {
       handleSubmit();
     }, 100);
+  };
+
+  // Toggle safe search
+  const handleToggleSafeSearch = () => {
+    setSafeSearch(prev => !prev);
+    toast({
+      title: `Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`,
+      description: `Search results will ${!safeSearch ? 'filter' : 'include'} potentially sensitive content.`
+    });
   };
 
   const generateAIResponse = (query: string, searchResults: SearchAPIResponse): ConversationMessage => {
@@ -186,11 +195,22 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex justify-end p-2 border-b border-border">
+      <div className="flex justify-between p-2 border-b border-border">
         <SearchProviderSelector 
           selectedProvider={searchProvider}
           onSelectProvider={setSearchProvider}
         />
+        
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
+          onClick={handleToggleSafeSearch}
+          type="button"
+        >
+          <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
+          <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+        </Button>
       </div>
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4 pb-4">
