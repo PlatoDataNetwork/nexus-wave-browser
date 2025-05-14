@@ -412,7 +412,7 @@ const Search: React.FC = () => {
             </form>
 
             <div className="flex justify-between mt-4">
-              <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                 <TabsList className="bg-secondary/50">
                   <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                     <Globe className="h-4 w-4 mr-1" /> Web
@@ -430,6 +430,140 @@ const Search: React.FC = () => {
                     <Zap className="h-4 w-4 mr-1" /> Nexus Search
                   </TabsTrigger>
                 </TabsList>
+              
+                <ScrollArea className="flex-1">
+                  <div className="p-4 pb-20">
+                    <TabsContent value="images" className="mt-0">
+                      <ImageResults 
+                        isLoading={isLoading} 
+                        results={imageResults} 
+                        searchQuery={searchQuery}
+                      />
+                    </TabsContent>
+                    
+                    <TabsContent value="web" className="mt-0">
+                      {isLoading ? (
+                        <div className="flex flex-col items-center justify-center h-40">
+                          <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                          <p className="text-muted-foreground">Searching securely...</p>
+                        </div>
+                      ) : searchQuery && results.length > 0 ? (
+                        <div id="search-results">
+                          <p className="text-sm text-muted-foreground mb-4">
+                            About {results.length.toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                          </p>
+                          
+                          {/* Knowledge Graph */}
+                          {renderKnowledgeGraph()}
+                          
+                          {/* Main Results */}
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                            <div className="lg:col-span-2">
+                              {results.map(renderSearchResult)}
+                            </div>
+                            
+                            <div className="space-y-5">
+                              {/* People Also Ask */}
+                              {renderPeopleAlsoAsk()}
+                              
+                              {/* Related Searches */}
+                              {renderRelatedSearches()}
+                            </div>
+                          </div>
+                        </div>
+                      ) : searchQuery ? (
+                        <div className="text-center py-10">
+                          <h2 className="text-xl font-medium mb-2">No results found</h2>
+                          <p className="text-muted-foreground">Try different keywords or search terms</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-16">
+                          <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
+                            <SearchIcon className="h-12 w-12 text-nexus-purple" />
+                          </div>
+                          <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
+                          <p className="text-muted-foreground text-center max-w-md mb-6">
+                            Search the web with enhanced privacy and security. Your searches are never tracked or stored.
+                          </p>
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="videos" className="mt-0">
+                      {/* Render video search results similar to web results */}
+                      {isLoading ? (
+                        <div className="flex flex-col items-center justify-center h-40">
+                          <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                          <p className="text-muted-foreground">Searching videos...</p>
+                        </div>
+                      ) : searchQuery && results.length > 0 ? (
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            About {results.length.toLocaleString()} video results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                          </p>
+                          {results.map(renderSearchResult)}
+                        </div>
+                      ) : searchQuery ? (
+                        <div className="text-center py-10">
+                          <h2 className="text-xl font-medium mb-2">No video results found</h2>
+                          <p className="text-muted-foreground">Try different keywords or search terms</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-16">
+                          <h2 className="text-xl font-medium mb-2">Search for videos</h2>
+                          <p className="text-muted-foreground">Enter a search term to find videos</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="news" className="mt-0">
+                      {/* Render news search results similar to web results */}
+                      {isLoading ? (
+                        <div className="flex flex-col items-center justify-center h-40">
+                          <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                          <p className="text-muted-foreground">Searching news...</p>
+                        </div>
+                      ) : searchQuery && results.length > 0 ? (
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            About {results.length.toLocaleString()} news results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
+                          </p>
+                          {results.map(renderSearchResult)}
+                        </div>
+                      ) : searchQuery ? (
+                        <div className="text-center py-10">
+                          <h2 className="text-xl font-medium mb-2">No news results found</h2>
+                          <p className="text-muted-foreground">Try different keywords or search terms</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-16">
+                          <h2 className="text-xl font-medium mb-2">Search for latest news</h2>
+                          <p className="text-muted-foreground">Enter a search term to find news articles</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                    
+                    <TabsContent value="nexus" className="mt-0">
+                      {/* Render nexus search results similar to web results */}
+                      {isLoading ? (
+                        <div className="flex flex-col items-center justify-center h-40">
+                          <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
+                          <p className="text-muted-foreground">Searching Nexus resources...</p>
+                        </div>
+                      ) : searchQuery ? (
+                        <div className="text-center py-10">
+                          <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
+                          <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-16">
+                          <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
+                          <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </div>
+                </ScrollArea>
               </Tabs>
 
               <div className="flex items-center gap-2">
@@ -460,141 +594,7 @@ const Search: React.FC = () => {
 
       {conversationMode ? (
         <ConversationalSearch />
-      ) : (
-        <ScrollArea className="flex-1">
-          <div className="p-4 pb-20">
-            <TabsContent value="images" className="mt-0">
-              <ImageResults 
-                isLoading={isLoading} 
-                results={imageResults} 
-                searchQuery={searchQuery}
-              />
-            </TabsContent>
-            
-            <TabsContent value="web" className="mt-0">
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-40">
-                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                  <p className="text-muted-foreground">Searching securely...</p>
-                </div>
-              ) : searchQuery && results.length > 0 ? (
-                <div id="search-results">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    About {results.length.toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                  </p>
-                  
-                  {/* Knowledge Graph */}
-                  {renderKnowledgeGraph()}
-                  
-                  {/* Main Results */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    <div className="lg:col-span-2">
-                      {results.map(renderSearchResult)}
-                    </div>
-                    
-                    <div className="space-y-5">
-                      {/* People Also Ask */}
-                      {renderPeopleAlsoAsk()}
-                      
-                      {/* Related Searches */}
-                      {renderRelatedSearches()}
-                    </div>
-                  </div>
-                </div>
-              ) : searchQuery ? (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-medium mb-2">No results found</h2>
-                  <p className="text-muted-foreground">Try different keywords or search terms</p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
-                    <SearchIcon className="h-12 w-12 text-nexus-purple" />
-                  </div>
-                  <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
-                  <p className="text-muted-foreground text-center max-w-md mb-6">
-                    Search the web with enhanced privacy and security. Your searches are never tracked or stored.
-                  </p>
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="videos" className="mt-0">
-              {/* Render video search results similar to web results */}
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-40">
-                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                  <p className="text-muted-foreground">Searching videos...</p>
-                </div>
-              ) : searchQuery && results.length > 0 ? (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    About {results.length.toLocaleString()} video results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                  </p>
-                  {results.map(renderSearchResult)}
-                </div>
-              ) : searchQuery ? (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-medium mb-2">No video results found</h2>
-                  <p className="text-muted-foreground">Try different keywords or search terms</p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <h2 className="text-xl font-medium mb-2">Search for videos</h2>
-                  <p className="text-muted-foreground">Enter a search term to find videos</p>
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="news" className="mt-0">
-              {/* Render news search results similar to web results */}
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-40">
-                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                  <p className="text-muted-foreground">Searching news...</p>
-                </div>
-              ) : searchQuery && results.length > 0 ? (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    About {results.length.toLocaleString()} news results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                  </p>
-                  {results.map(renderSearchResult)}
-                </div>
-              ) : searchQuery ? (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-medium mb-2">No news results found</h2>
-                  <p className="text-muted-foreground">Try different keywords or search terms</p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <h2 className="text-xl font-medium mb-2">Search for latest news</h2>
-                  <p className="text-muted-foreground">Enter a search term to find news articles</p>
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="nexus" className="mt-0">
-              {/* Render nexus search results similar to web results */}
-              {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-40">
-                  <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                  <p className="text-muted-foreground">Searching Nexus resources...</p>
-                </div>
-              ) : searchQuery ? (
-                <div className="text-center py-10">
-                  <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
-                  <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
-                  <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
-                </div>
-              )}
-            </TabsContent>
-          </div>
-        </ScrollArea>
-      )}
+      ) : null}
     </div>
   );
 };
