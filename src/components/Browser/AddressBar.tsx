@@ -143,11 +143,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleRefresh();
-                }}
+                onClick={handleRefresh}
                 aria-label="Refresh page"
                 disabled={isLoading}
                 type="button"
@@ -178,11 +174,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
               variant="ghost" 
               size="icon" 
               className="h-6 w-6 text-white/70 hover:text-white"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSubmit(e);
-              }}
+              onClick={handleSubmit}
             >
               <Search className="h-4 w-4" />
             </Button>
