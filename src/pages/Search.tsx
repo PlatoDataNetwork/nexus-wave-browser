@@ -107,9 +107,9 @@ const Search: React.FC = () => {
       setCurrentPage(1); // Reset to first page on new search
       
       // Update URL with search query for shareable links without page refresh
-      const url = new URL(window.location.href);
-      url.searchParams.set('q', query);
-      window.history.pushState({}, '', url.toString());
+      // const url = new URL(window.location.href);
+      // url.searchParams.set('q', query);
+      // window.history.pushState({}, '', url.toString());
       
     } catch (error) {
       console.error("Search error:", error);
