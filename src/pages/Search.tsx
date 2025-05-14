@@ -84,9 +84,9 @@ const Search: React.FC = () => {
       setRelatedSearches(searchResults.relatedSearches || []);
       
       // Update URL with search query for shareable links without page refresh
-      const url = new URL(window.location.href);
-      url.searchParams.set('q', query);
-      window.history.pushState({}, '', url.toString());
+      // const url = new URL(window.location.href);
+      // url.searchParams.set('q', query);
+      // window.history.pushState({}, '', url.toString());
       
     } catch (error) {
       console.error("Search error:", error);
