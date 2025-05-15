@@ -721,10 +721,9 @@ const Search: React.FC = () => {
       {conversationMode ? (
         <ConversationalSearch 
           onSearch={(query) => {
-            // When AI assistant searches, update the URL parameter
-            const url = new URL(window.location.href);
-            url.searchParams.set('q', query);
-            window.history.pushState({}, '', url.toString());
+            // When AI assistant searches, don't update the URL parameter
+            console.log("AI assistant searching for:", query);
+            // No URL manipulation here
           }}
         />
       ) : null}

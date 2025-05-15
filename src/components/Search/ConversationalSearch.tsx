@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -110,7 +111,9 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     
     setMessages(prevMessages => [...prevMessages, userMessage]);
     
+    // Call onSearch without updating URL - just inform parent component
     if (onSearch) {
+      // Don't update URL, just call the callback
       onSearch(currentMessage);
     }
     
