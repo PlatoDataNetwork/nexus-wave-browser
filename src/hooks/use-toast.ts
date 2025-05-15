@@ -1,6 +1,5 @@
 
 import * as React from "react";
-import { createContext, useContext, useState, useCallback } from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { X } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -126,26 +125,26 @@ type ToasterToast = ToastProps & {
 
 type ToastContextType = {
   toasts: ToasterToast[];
-  toast: (props: Omit<ToasterToast, "id">) => void;
+  toast: (props: Omit<ToasterToast, "id">) => string;
   dismiss: (toastId?: string) => void;
 };
 
-const ToastContext = createContext<ToastContextType>({
+const ToastContext = React.createContext<ToastContextType>({
   toasts: [],
-  toast: () => {},
+  toast: () => "",
   dismiss: () => {},
 });
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = useState<ToasterToast[]>([]);
+  const [toasts, setToasts] = React.useState<ToasterToast[]>([]);
 
-  const toast = useCallback((props: Omit<ToasterToast, "id">) => {
+  const toast = React.useCallback((props: Omit<ToasterToast, "id">) => {
     const id = Math.random().toString(36).slice(2, 9);
     setToasts((prevToasts) => [...prevToasts, { id, ...props }]);
     return id;
   }, []);
 
-  const dismiss = useCallback((toastId?: string) => {
+  const dismiss = React.useCallback((toastId?: string) => {
     setToasts((prevToasts) =>
       toastId
         ? prevToasts.filter((toast) => toast.id !== toastId)
@@ -161,7 +160,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useToast = () => {
-  const context = useContext(ToastContext);
+  const context = React.useContext(ToastContext);
 
   if (!context) {
     throw new Error("useToast must be used within a ToastProvider");
