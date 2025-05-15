@@ -1,70 +1,62 @@
+import { useState, useCallback, useEffect } from "react";
+import { initialTabs, Tab } from "@/lib/dummyData";
+import { toast } from "@/components/ui/sonner";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { LucideIcon, Globe } from 'lucide-react';
-import { Tab as TabType } from '@/lib/dummyData';
-import { v4 as uuidv4 } from 'uuid';
+// Interface for tab history
+interface TabHistory {
+  [tabId: string]: string[];
+}
 
-export const useTabs = (defaultUrl: string = 'https://platodata.io') => {
-  const [tabs, setTabs] = useState<TabType[]>([]);
-  const [activeTabUrl, setActiveTabUrl] = useState<string | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [navigationHistory, setNavigationHistory] = useState<Record<string, string[]>>({});
-  const [historyPosition, setHistoryPosition] = useState<Record<string, number>>({});
+export function useTabs(defaultUrl: string = "https://platodata.io") {
+  const [tabs, setTabs] = useState<Tab[]>(() => {
+    // Update initialTabs with the provided defaultUrl for the active tab
+    return initialTabs.map(tab => {
+      if (tab.isActive) {
+        return {
+          ...tab,
+          url: defaultUrl,
+          title: defaultUrl.replace(/^https?:\/\//, '').split('/')[0]
+        };
+      }
+      return tab;
+    });
+  });
+  
+  const [currentUrl, setCurrentUrl] = useState<string>(
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://platodata.io")
+  );
+  
+  // History management for each tab
+  const [tabHistory, setTabHistory] = useState<TabHistory>({});
+  const [historyPosition, setHistoryPosition] = useState<{[tabId: string]: number}>({});
 
+  // Initialize history for default tabs
   useEffect(() => {
-    const storedTabs = localStorage.getItem('tabs');
-    if (storedTabs) {
-      setTabs(JSON.parse(storedTabs));
-    } else {
-      // Create initial tab with default URL
-      const initialTab: TabType = {
-        id: uuidv4(),
-        title: 'New Tab',
-        url: defaultUrl,
-        isActive: true,
-      };
-      setTabs([initialTab]);
-      setActiveTabUrl(defaultUrl);
-      
-      // Initialize history for this tab
-      setNavigationHistory(prev => ({ ...prev, [initialTab.id]: [defaultUrl] }));
-      setHistoryPosition(prev => ({ ...prev, [initialTab.id]: 0 }));
-    }
+    const initialHistory: TabHistory = {};
+    const initialPositions: {[tabId: string]: number} = {};
+    
+    tabs.forEach(tab => {
+      initialHistory[tab.id] = [tab.url];
+      initialPositions[tab.id] = 0;
+    });
+    
+    setTabHistory(initialHistory);
+    setHistoryPosition(initialPositions);
+  }, []);
 
-    const activeTab = localStorage.getItem('activeTabUrl');
-    if (activeTab) {
-      setActiveTabUrl(activeTab);
-    }
-  }, [defaultUrl]);
-
-  useEffect(() => {
-    localStorage.setItem('tabs', JSON.stringify(tabs));
+  // Get active tab ID
+  const getActiveTabId = useCallback(() => {
+    return tabs.find(tab => tab.isActive)?.id;
   }, [tabs]);
 
-  useEffect(() => {
-    if (activeTabUrl) {
-      localStorage.setItem('activeTabUrl', activeTabUrl);
-    }
-  }, [activeTabUrl]);
-
-  // Get the current active tab ID
-  const getActiveTabId = () => {
-    return tabs.find(tab => tab.isActive)?.id || '';
-  };
-
-  // Get the current URL
-  const currentUrl = activeTabUrl || defaultUrl;
-
-  // Add a new tab
-  const addTab = (tabData?: Partial<TabType>) => {
-    const newTab: TabType = {
-      id: uuidv4(),
-      title: tabData?.title || 'New Tab',
-      url: tabData?.url || defaultUrl,
-      isActive: true,
-      icon: tabData?.icon,
+  const addTab = useCallback(() => {
+    const newTabId = `tab-${Date.now()}`;
+    const newTab: Tab = {
+      id: newTabId,
+      title: "platodata.io",
+      url: "https://platodata.io",
+      isActive: false,
+      icon: undefined
     };
 
     setTabs(prevTabs => {
@@ -72,236 +64,276 @@ export const useTabs = (defaultUrl: string = 'https://platodata.io') => {
         ...tab,
         isActive: false
       }));
-      
-      return [...updatedTabs, newTab];
+      return [...updatedTabs, { ...newTab, isActive: true }];
     });
     
-    setActiveTabUrl(newTab.url);
-    searchParams.set('url', newTab.url);
-    setSearchParams(searchParams);
+    // Initialize history for the new tab
+    setTabHistory(prev => ({
+      ...prev,
+      [newTabId]: ["https://platodata.io"]
+    }));
     
-    // Initialize history for this tab
-    setNavigationHistory(prev => ({ ...prev, [newTab.id]: [newTab.url] }));
-    setHistoryPosition(prev => ({ ...prev, [newTab.id]: 0 }));
-  };
+    setHistoryPosition(prev => ({
+      ...prev,
+      [newTabId]: 0
+    }));
+    
+    setCurrentUrl("https://platodata.io");
+    toast.success("New tab opened");
+  }, []);
 
-  // Close a tab
-  const closeTab = (id: string) => {
+  const closeTab = useCallback((tabId: string) => {
     setTabs(prevTabs => {
-      const tabToClose = prevTabs.find(tab => tab.id === id);
-      const isActiveTab = tabToClose?.isActive || false;
-      const newTabs = prevTabs.filter(tab => tab.id !== id);
+      const tabToClose = prevTabs.find(tab => tab.id === tabId);
+      const updatedTabs = prevTabs.filter(tab => tab.id !== tabId);
       
-      // If the closed tab was active, make another tab active
-      if (isActiveTab && newTabs.length > 0) {
-        const lastTab = newTabs[newTabs.length - 1];
-        lastTab.isActive = true;
-        setActiveTabUrl(lastTab.url);
-        searchParams.set('url', lastTab.url);
-        setSearchParams(searchParams);
+      // If we're closing the active tab, activate the next or previous tab
+      if (tabToClose?.isActive && updatedTabs.length > 0) {
+        const tabIndex = prevTabs.findIndex(tab => tab.id === tabId);
+        const newActiveIndex = tabIndex === prevTabs.length - 1 ? tabIndex - 1 : tabIndex;
+        updatedTabs[newActiveIndex].isActive = true;
+        setCurrentUrl(updatedTabs[newActiveIndex].url);
+        
+        // Clean up history for closed tab
+        setTabHistory(prev => {
+          const newHistory = {...prev};
+          delete newHistory[tabId];
+          return newHistory;
+        });
+        
+        setHistoryPosition(prev => {
+          const newPositions = {...prev};
+          delete newPositions[tabId];
+          return newPositions;
+        });
       }
       
-      return newTabs;
+      return updatedTabs;
     });
-    
-    // Clean up history for this tab
-    setNavigationHistory(prev => {
-      const newHistory = { ...prev };
-      delete newHistory[id];
-      return newHistory;
-    });
-    
-    setHistoryPosition(prev => {
-      const newPositions = { ...prev };
-      delete newPositions[id];
-      return newPositions;
-    });
-  };
+    toast.info("Tab closed");
+  }, []);
 
-  // Activate a tab
-  const activateTab = (id: string) => {
+  const activateTab = useCallback((tabId: string) => {
     setTabs(prevTabs => {
-      return prevTabs.map(tab => ({
+      const updatedTabs = prevTabs.map(tab => ({
         ...tab,
-        isActive: tab.id === id
+        isActive: tab.id === tabId
       }));
+      
+      const activeTab = updatedTabs.find(tab => tab.id === tabId);
+      if (activeTab) {
+        setCurrentUrl(activeTab.url);
+      }
+      
+      return updatedTabs;
     });
+  }, []);
+
+  // Enhanced navigation function to handle URLs correctly
+  const navigateToUrl = useCallback((url: string) => {
+    // Debug log
+    console.log(`navigateToUrl called with: ${url}`);
     
-    const tabToActivate = tabs.find(tab => tab.id === id);
-    if (tabToActivate) {
-      setActiveTabUrl(tabToActivate.url);
-      searchParams.set('url', tabToActivate.url);
-      setSearchParams(searchParams);
+    // Check for internal routes first (without protocol)
+    if (url === '/history' || url === '/settings-docs' || url === '/extension-store') {
+      console.log(`Detected internal route: ${url}`);
+      setCurrentUrl(url);
+      
+      // Update active tab with the internal route
+      updateActiveTabUrl(url);
+      
+      // Add to history
+      updateHistory(url);
+      return;
     }
-  };
-
-  // Navigate to a URL in the current tab
-  const navigateToUrl = (url: string) => {
-    const activeTabId = getActiveTabId();
-    if (!activeTabId) return;
-
-    // Update the tab's URL
+    
+    // Ensure URL has protocol
+    let processedUrl = url;
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      processedUrl = `https://${url}`;
+      console.log(`Added protocol to URL: ${processedUrl}`);
+    }
+    
+    console.log(`Setting current URL to: ${processedUrl}`);
+    setCurrentUrl(processedUrl);
+    
+    // Update the active tab with the new URL
+    updateActiveTabUrl(processedUrl);
+    
+    // Add to history
+    updateHistory(processedUrl);
+    
+    toast.info(`Navigating to ${processedUrl}`);
+  }, []);
+  
+  // Helper function to update active tab's URL
+  const updateActiveTabUrl = useCallback((url: string) => {
     setTabs(prevTabs => {
       return prevTabs.map(tab => {
-        if (tab.id === activeTabId) {
-          return { ...tab, url };
+        if (tab.isActive) {
+          // Get a clean title from the URL
+          const title = url.startsWith('/') 
+            ? url.substring(1) // For internal routes, remove leading slash
+            : url.replace(/^https?:\/\//, '').split('/')[0]; // For external URLs
+            
+          return {
+            ...tab,
+            url,
+            title
+          };
         }
         return tab;
       });
     });
+  }, []);
+  
+  // Helper function to update history for the active tab
+  const updateHistory = useCallback((url: string) => {
+    const activeTabId = getActiveTabId();
+    if (!activeTabId) return;
     
-    setActiveTabUrl(url);
-    searchParams.set('url', url);
-    setSearchParams(searchParams);
-    
-    // Update navigation history
-    setNavigationHistory(prev => {
-      const currentTabHistory = [...(prev[activeTabId] || [])];
+    setTabHistory(prev => {
+      const activeTabHistory = [...(prev[activeTabId] || [])];
       const currentPosition = historyPosition[activeTabId] || 0;
       
-      // Remove any forward history if navigating from middle of history
-      const newHistory = currentTabHistory.slice(0, currentPosition + 1);
+      // If we navigated from a position that's not the end of history,
+      // truncate the history from that point
+      const newHistory = activeTabHistory.slice(0, currentPosition + 1);
       newHistory.push(url);
       
-      return { ...prev, [activeTabId]: newHistory };
+      return {
+        ...prev,
+        [activeTabId]: newHistory
+      };
     });
     
-    setHistoryPosition(prev => {
-      const currentPosition = prev[activeTabId] || 0;
-      return { ...prev, [activeTabId]: currentPosition + 1 };
-    });
-  };
+    // Update history position
+    setHistoryPosition(prev => ({
+      ...prev,
+      [activeTabId]: (prev[activeTabId] || 0) + 1
+    }));
+  }, [getActiveTabId, historyPosition]);
 
-  // Navigate back in history
-  const goBack = () => {
+  // Go back in history
+  const goBack = useCallback(() => {
     const activeTabId = getActiveTabId();
     if (!activeTabId) return;
     
     const currentPosition = historyPosition[activeTabId] || 0;
-    if (currentPosition <= 0) return; // Can't go back further
+    const tabHistoryEntries = tabHistory[activeTabId] || [];
     
-    const newPosition = currentPosition - 1;
-    const newUrl = navigationHistory[activeTabId][newPosition];
-    
-    // Update position without adding to history
-    setHistoryPosition(prev => ({ ...prev, [activeTabId]: newPosition }));
-    
-    // Update tab URL without adding to history
-    setTabs(prevTabs => {
-      return prevTabs.map(tab => {
-        if (tab.id === activeTabId) {
-          return { ...tab, url: newUrl };
-        }
-        return tab;
+    if (currentPosition > 0) {
+      const newPosition = currentPosition - 1;
+      const url = tabHistoryEntries[newPosition];
+      
+      setHistoryPosition(prev => ({
+        ...prev,
+        [activeTabId]: newPosition
+      }));
+      
+      setCurrentUrl(url);
+      
+      // Update tab with new URL without adding to history
+      setTabs(prevTabs => {
+        return prevTabs.map(tab => {
+          if (tab.id === activeTabId) {
+            return {
+              ...tab,
+              url,
+              title: url.replace(/^https?:\/\//, '').split('/')[0]
+            };
+          }
+          return tab;
+        });
       });
-    });
-    
-    setActiveTabUrl(newUrl);
-    searchParams.set('url', newUrl);
-    setSearchParams(searchParams);
-  };
+      
+      toast.info("Navigated back");
+    } else {
+      toast.info("No previous page");
+    }
+  }, [getActiveTabId, historyPosition, tabHistory]);
 
-  // Navigate forward in history
-  const goForward = () => {
+  // Go forward in history
+  const goForward = useCallback(() => {
     const activeTabId = getActiveTabId();
     if (!activeTabId) return;
     
     const currentPosition = historyPosition[activeTabId] || 0;
-    const maxPosition = (navigationHistory[activeTabId]?.length || 1) - 1;
+    const tabHistoryEntries = tabHistory[activeTabId] || [];
     
-    if (currentPosition >= maxPosition) return; // Can't go forward further
-    
-    const newPosition = currentPosition + 1;
-    const newUrl = navigationHistory[activeTabId][newPosition];
-    
-    // Update position without adding to history
-    setHistoryPosition(prev => ({ ...prev, [activeTabId]: newPosition }));
-    
-    // Update tab URL without adding to history
-    setTabs(prevTabs => {
-      return prevTabs.map(tab => {
-        if (tab.id === activeTabId) {
-          return { ...tab, url: newUrl };
-        }
-        return tab;
+    if (currentPosition < tabHistoryEntries.length - 1) {
+      const newPosition = currentPosition + 1;
+      const url = tabHistoryEntries[newPosition];
+      
+      setHistoryPosition(prev => ({
+        ...prev,
+        [activeTabId]: newPosition
+      }));
+      
+      setCurrentUrl(url);
+      
+      // Update tab with new URL without adding to history
+      setTabs(prevTabs => {
+        return prevTabs.map(tab => {
+          if (tab.id === activeTabId) {
+            return {
+              ...tab,
+              url,
+              title: url.replace(/^https?:\/\//, '').split('/')[0]
+            };
+          }
+          return tab;
+        });
       });
-    });
-    
-    setActiveTabUrl(newUrl);
-    searchParams.set('url', newUrl);
-    setSearchParams(searchParams);
-  };
+      
+      toast.info("Navigated forward");
+    } else {
+      toast.info("No next page");
+    }
+  }, [getActiveTabId, historyPosition, tabHistory]);
 
   // Refresh the current page
-  const refreshPage = () => {
+  const refreshPage = useCallback(() => {
     const activeTabId = getActiveTabId();
     if (!activeTabId) return;
     
-    // Re-navigate to the same URL to refresh
-    const currentUrl = tabs.find(tab => tab.id === activeTabId)?.url || '';
-    if (currentUrl) {
-      // Just trigger a re-render - in a real app this would reload the content
-      setTabs(prevTabs => [...prevTabs]);
-    }
-  };
+    toast.info(`Refreshing ${currentUrl}`);
+    
+    // We're just simulating a refresh since we don't actually load external content
+    setTimeout(() => {
+      toast.success("Page refreshed");
+    }, 500);
+  }, [currentUrl, getActiveTabId]);
 
-  // Check if can go back
-  const canGoBack = () => {
+  // Can go back/forward helpers
+  const canGoBack = useCallback(() => {
+    const activeTabId = getActiveTabId();
+    if (!activeTabId) return false;
+    
+    return (historyPosition[activeTabId] || 0) > 0;
+  }, [getActiveTabId, historyPosition]);
+
+  const canGoForward = useCallback(() => {
     const activeTabId = getActiveTabId();
     if (!activeTabId) return false;
     
     const currentPosition = historyPosition[activeTabId] || 0;
-    return currentPosition > 0;
-  };
-
-  // Check if can go forward
-  const canGoForward = () => {
-    const activeTabId = getActiveTabId();
-    if (!activeTabId) return false;
+    const tabHistoryEntries = tabHistory[activeTabId] || [];
     
-    const currentPosition = historyPosition[activeTabId] || 0;
-    const maxPosition = (navigationHistory[activeTabId]?.length || 1) - 1;
-    
-    return currentPosition < maxPosition;
-  };
-
-  // Toggle sidebar
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
-
-  // Get icon for tab
-  const getIconForTab = (url: string): LucideIcon => {
-    return Globe; // Using Globe as default icon
-  };
+    return currentPosition < tabHistoryEntries.length - 1;
+  }, [getActiveTabId, historyPosition, tabHistory]);
 
   return {
     tabs,
-    activeTabUrl,
     currentUrl,
     addTab,
     closeTab,
-    removeTab: closeTab, // Alias for compatibility
-    updateTab: (url: string, updatedTab: Partial<TabType>) => {
-      const tab = tabs.find(t => t.url === url);
-      if (tab) {
-        const updated = { ...tab, ...updatedTab };
-        setTabs(prevTabs => prevTabs.map(t => t.url === url ? updated : t));
-      }
-    },
     activateTab,
-    setActiveTab: (url: string) => {
-      const tab = tabs.find(t => t.url === url);
-      if (tab) activateTab(tab.id);
-    },
     navigateToUrl,
     goBack,
     goForward,
     refreshPage,
     canGoBack,
-    canGoForward,
-    isSidebarOpen,
-    toggleSidebar,
-    getIconForTab,
+    canGoForward
   };
-};
+}

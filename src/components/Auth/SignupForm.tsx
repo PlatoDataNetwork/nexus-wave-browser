@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 // Define form schema with validation
@@ -58,16 +59,18 @@ const SignupForm = () => {
         throw error;
       }
 
-      // Show success message using sonner toast
-      toast("Account created!", {
-        description: "Please check your email to confirm your account."
+      // Show success message
+      toast({
+        title: "Account created!",
+        description: "Please check your email to confirm your account.",
       });
       
       // Redirect to app after short delay
       setTimeout(() => navigate("/app"), 2000);
     } catch (error: any) {
       console.error("Signup error:", error);
-      toast("Registration failed", {
+      toast({
+        title: "Registration failed",
         description: error.message || "Could not create your account. Please try again.",
         variant: "destructive",
       });

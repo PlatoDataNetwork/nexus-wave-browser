@@ -70,7 +70,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
         <BrowserHeader
           tabs={tabs}
           currentUrl={currentUrl}
-          onAddTab={() => addTab()}
+          onAddTab={addTab}
           onCloseTab={closeTab}
           onActivateTab={activateTab}
           onNavigate={navigateToUrl}

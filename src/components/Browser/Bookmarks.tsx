@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { topProtocols } from "@/lib/protocolData";
 
 interface BookmarksProps {

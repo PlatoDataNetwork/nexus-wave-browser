@@ -15,7 +15,7 @@ import {
   MessageCircle,
   Video
 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
@@ -25,18 +25,13 @@ import ImageResults from "@/components/Search/ImageResults";
 // Import components
 import { Card, CardContent } from "@/components/ui/card";
 
-// Update the SearchResultItem interface to include publishedDate
-interface ExtendedSearchResultItem extends SearchResultItem {
-  publishedDate?: string;
-}
-
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastSearchedQuery, setLastSearchedQuery] = useState("");
-  const [results, setResults] = useState<ExtendedSearchResultItem[]>([]);
-  const [imageResults, setImageResults] = useState<ExtendedSearchResultItem[]>([]);
-  const [videoResults, setVideoResults] = useState<ExtendedSearchResultItem[]>([]);
-  const [newsResults, setNewsResults] = useState<ExtendedSearchResultItem[]>([]);
+  const [results, setResults] = useState<SearchResultItem[]>([]);
+  const [imageResults, setImageResults] = useState<SearchResultItem[]>([]);
+  const [videoResults, setVideoResults] = useState<SearchResultItem[]>([]);
+  const [newsResults, setNewsResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
@@ -84,28 +79,28 @@ const Search: React.FC = () => {
         // Image search - request 200 images
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "images", safeSearch, 200);
-          setImageResults(searchResults.results as ExtendedSearchResultItem[]);
+          setImageResults(searchResults.results || []);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 200);
-          setImageResults(searchResults.results as ExtendedSearchResultItem[]);
+          setImageResults(searchResults.results || []);
         }
       } else if (activeTab === "videos") {
         // Video search
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "videos", safeSearch, 100);
-          setVideoResults(searchResults.results as ExtendedSearchResultItem[]);
+          setVideoResults(searchResults.results || []);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 100);
-          setVideoResults(searchResults.results as ExtendedSearchResultItem[]);
+          setVideoResults(searchResults.results || []);
         }
       } else if (activeTab === "news") {
         // News search
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "news", safeSearch, 100);
-          setNewsResults(searchResults.results as ExtendedSearchResultItem[]);
+          setNewsResults(searchResults.results || []);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 100);
-          setNewsResults(searchResults.results as ExtendedSearchResultItem[]);
+          setNewsResults(searchResults.results || []);
         }
       } else {
         // Web search (and other types) - request 100 results
@@ -119,7 +114,7 @@ const Search: React.FC = () => {
         }
         
         // Update state with search results
-        setResults(searchResults.results as ExtendedSearchResultItem[]);
+        setResults(searchResults.results || []);
         setKnowledgeGraph(searchResults.knowledgeGraph || null);
         setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
         setRelatedSearches(searchResults.relatedSearches || []);
@@ -155,39 +150,20 @@ const Search: React.FC = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    
-    // Execute a search with the current query if there is text in the search bar
     if (searchQuery.trim()) {
-      // We need to reset state for the previous tab's results to avoid showing stale data
-      if (tab === "web" || tab === "nexus") {
-        setImageResults([]);
-        setVideoResults([]);
-        setNewsResults([]);
-      } else if (tab === "images") {
-        setResults([]);
-        setVideoResults([]);
-        setNewsResults([]);
-        setKnowledgeGraph(null);
-        setPeopleAlsoAsk([]);
-        setRelatedSearches([]);
-      } else if (tab === "videos") {
-        setResults([]);
-        setImageResults([]);
-        setNewsResults([]);
-        setKnowledgeGraph(null);
-        setPeopleAlsoAsk([]);
-        setRelatedSearches([]);
-      } else if (tab === "news") {
-        setResults([]);
-        setImageResults([]);
-        setVideoResults([]);
-        setKnowledgeGraph(null);
-        setPeopleAlsoAsk([]);
-        setRelatedSearches([]);
-      }
-      
-      // Execute the search for the new tab
-      handleSearch(searchQuery);
+      // If there's text in the search bar, apply search when switching tabs
+      handleSearch();
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); 
+    e.stopPropagation();
+    
+    if (conversationMode) {
+      // Handle conversation mode
+    } else {
+      handleSearch();
     }
   };
 
@@ -208,14 +184,8 @@ const Search: React.FC = () => {
     }
   };
 
-  // Added missing handleSubmit function
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleSearch();
-  };
-
   // Render Search Result component
-  const renderSearchResult = (result: ExtendedSearchResultItem) => {
+  const renderSearchResult = (result: SearchResultItem) => {
     switch (result.type) {
       case "web":
         return (
@@ -264,7 +234,7 @@ const Search: React.FC = () => {
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                   <div className="text-xs text-muted-foreground mt-1">
                     {result.source && <span className="font-medium mr-2">{result.source}</span>}
-                    {result.publishedDate && <span>{result.publishedDate}</span>}
+                    {result.date && <span>{result.date}</span>}
                   </div>
                 </div>
               </div>
@@ -613,8 +583,8 @@ const Search: React.FC = () => {
                                         alt={result.title} 
                                         className="w-full h-full object-cover" 
                                       />
-                                      <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="bg-black bg-opacity-20 rounded-full p-2">
+                                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                        <div className="bg-black bg-opacity-60 rounded-full p-2">
                                           <Play className="h-8 w-8 text-white" fill="white" />
                                         </div>
                                       </div>
@@ -690,7 +660,7 @@ const Search: React.FC = () => {
                                     <p className="text-sm text-muted-foreground">{result.description}</p>
                                     <div className="text-xs text-muted-foreground mt-1">
                                       {result.source && <span className="font-medium mr-2">{result.source}</span>}
-                                      {result.publishedDate && <span>{result.publishedDate}</span>}
+                                      {result.date && <span>{result.date}</span>}
                                     </div>
                                   </div>
                                 </div>

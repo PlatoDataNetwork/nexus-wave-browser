@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 // Define form schema with validation
@@ -46,13 +47,20 @@ const LoginForm = () => {
       }
 
       // Show success message
-      toast.success("Welcome back!");
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully signed in.",
+      });
       
       // Redirect to app
       navigate("/app");
     } catch (error: any) {
       console.error("Login error:", error);
-      toast.error("Authentication failed");
+      toast({
+        title: "Authentication failed",
+        description: error.message || "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +69,11 @@ const LoginForm = () => {
   const handleForgotPassword = async () => {
     const email = form.getValues("email");
     if (!email) {
-      toast.error("Email required");
+      toast({
+        title: "Email required",
+        description: "Please enter your email address first.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -76,9 +88,16 @@ const LoginForm = () => {
         throw error;
       }
 
-      toast.success("Password reset email sent");
+      toast({
+        title: "Password reset email sent",
+        description: "Check your inbox for instructions to reset your password.",
+      });
     } catch (error: any) {
-      toast.error("Reset request failed");
+      toast({
+        title: "Reset request failed",
+        description: error.message || "Could not process your request. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

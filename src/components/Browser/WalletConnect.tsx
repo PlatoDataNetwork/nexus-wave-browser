@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { Wallet, ExternalLink, Copy, Check, RefreshCw, AlertCircle, Clock, X, Edit2, Save } from "lucide-react";
 import { 
   Dialog,
