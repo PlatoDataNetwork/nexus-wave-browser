@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { 
-  Save, 
   RefreshCcw, 
   Shield, 
   Lightbulb, 
@@ -16,8 +15,8 @@ import {
   Plus,
   Trash2
 } from "lucide-react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useTheme } from "@/components/theme-provider";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useTheme } from "../../components/theme-provider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SearchEngine {
@@ -104,8 +103,6 @@ const SettingsSearch: React.FC = () => {
 
   const handleSelectSearchProvider = (provider: "serper" | "you") => {
     // This is a placeholder, replace with actual logic to change search provider
-    // For example, you might want to store the selected provider in local storage
-    // and use it in your search API calls.
     toast(`Search provider changed to ${provider === "serper" ? "Serper" : "You.com"}`);
   };
 
