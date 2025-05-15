@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { 
   Save, 
-  Reset, 
+  RefreshCcw, 
   Shield, 
   Lightbulb, 
   ListChecks, 
@@ -232,7 +232,7 @@ const SettingsSearch: React.FC = () => {
           </CardHeader>
           <CardContent className="pl-8 sm:pl-12">
             <Button variant="destructive" onClick={handleResetSearchHistory}>
-              <Reset className="h-4 w-4 mr-2" />
+              <RefreshCcw className="h-4 w-4 mr-2" />
               Reset Search History
             </Button>
           </CardContent>
