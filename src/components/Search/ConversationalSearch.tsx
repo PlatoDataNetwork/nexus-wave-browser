@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,8 +79,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
       console.error("Search error:", error);
-      toast({
-        title: "Search Error",
+      toast("Search Error", {
         description: "Failed to fetch search results. Please try again later.",
         variant: "destructive"
       });
@@ -108,8 +108,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   // Toggle safe search
   const handleToggleSafeSearch = () => {
     setSafeSearch(prev => !prev);
-    toast({
-      title: `Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`,
+    toast(`Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`, {
       description: `Search results will ${!safeSearch ? 'filter' : 'include'} potentially sensitive content.`
     });
   };
@@ -153,8 +152,8 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       }
       
       // Add top 3 results to the response
-      results.slice(0, 3).forEach((result, index) => {
-        responseContent += `${result.title}: ${result.description}\n\n`;
+      results.slice(0, 3).forEach((result) => {
+        responseContent += `${result.title}: ${result.description || ''}\n\n`;
         
         // Add to sources
         sources.push({

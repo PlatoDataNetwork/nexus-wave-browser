@@ -1,9 +1,39 @@
+
 import axios from 'axios';
 import { toast } from "sonner";
 
 const searchApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SEARCH_API_URL || 'http://localhost:3001',
 });
+
+// Define types for search API responses
+export interface SearchResultItem {
+  id: string;
+  title: string;
+  url: string;
+  description?: string;
+  source?: string;
+  thumbnailUrl?: string;
+  imageUrl?: string;
+  type?: string;
+}
+
+export interface SearchAPIResponse {
+  results: SearchResultItem[];
+  knowledgeGraph?: {
+    title: string;
+    type: string;
+    description?: string;
+    descriptionSource?: string;
+    descriptionLink?: string;
+    attributes?: Record<string, string>;
+  };
+  peopleAlsoAsk?: Array<{
+    question: string;
+    title: string;
+    link: string;
+  }>;
+}
 
 // Function to handle search queries
 export const performSearch = async (query: string, indexName: string = 'nexus-gpt-index') => {
@@ -13,6 +43,46 @@ export const performSearch = async (query: string, indexName: string = 'nexus-gp
   } catch (error: any) {
     handleError(error);
     return null;
+  }
+};
+
+// Function to search with Serper API
+export const searchWithSerper = async (
+  query: string, 
+  searchType: string = "search",
+  safeSearch: boolean = true,
+  numResults: number = 10
+): Promise<SearchAPIResponse> => {
+  try {
+    const response = await searchApi.post('/serper-search', { 
+      query, 
+      searchType,
+      safeSearch,
+      numResults
+    });
+    return response.data;
+  } catch (error: any) {
+    handleError(error);
+    return { results: [] };
+  }
+};
+
+// Function to search with You.com API
+export const searchWithYou = async (
+  query: string,
+  safeSearch: boolean = true,
+  numResults: number = 10
+): Promise<SearchAPIResponse> => {
+  try {
+    const response = await searchApi.post('/you-search', { 
+      query,
+      safeSearch,
+      numResults
+    });
+    return response.data;
+  } catch (error: any) {
+    handleError(error);
+    return { results: [] };
   }
 };
 

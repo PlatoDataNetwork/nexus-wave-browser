@@ -58,18 +58,16 @@ const SignupForm = () => {
         throw error;
       }
 
-      // Show success message
-      toast({
-        title: "Account created!",
-        description: "Please check your email to confirm your account.",
+      // Show success message using sonner toast
+      toast("Account created!", {
+        description: "Please check your email to confirm your account."
       });
       
       // Redirect to app after short delay
       setTimeout(() => navigate("/app"), 2000);
     } catch (error: any) {
       console.error("Signup error:", error);
-      toast({
-        title: "Registration failed",
+      toast("Registration failed", {
         description: error.message || "Could not create your account. Please try again.",
         variant: "destructive",
       });
