@@ -15,7 +15,7 @@ import {
   MessageCircle,
   Video
 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
@@ -25,13 +25,18 @@ import ImageResults from "@/components/Search/ImageResults";
 // Import components
 import { Card, CardContent } from "@/components/ui/card";
 
+// Update the SearchResultItem interface to include publishedDate
+interface ExtendedSearchResultItem extends SearchResultItem {
+  publishedDate?: string;
+}
+
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastSearchedQuery, setLastSearchedQuery] = useState("");
-  const [results, setResults] = useState<SearchResultItem[]>([]);
-  const [imageResults, setImageResults] = useState<SearchResultItem[]>([]);
-  const [videoResults, setVideoResults] = useState<SearchResultItem[]>([]);
-  const [newsResults, setNewsResults] = useState<SearchResultItem[]>([]);
+  const [results, setResults] = useState<ExtendedSearchResultItem[]>([]);
+  const [imageResults, setImageResults] = useState<ExtendedSearchResultItem[]>([]);
+  const [videoResults, setVideoResults] = useState<ExtendedSearchResultItem[]>([]);
+  const [newsResults, setNewsResults] = useState<ExtendedSearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
@@ -79,28 +84,28 @@ const Search: React.FC = () => {
         // Image search - request 200 images
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "images", safeSearch, 200);
-          setImageResults(searchResults.results || []);
+          setImageResults(searchResults.results as ExtendedSearchResultItem[]);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 200);
-          setImageResults(searchResults.results || []);
+          setImageResults(searchResults.results as ExtendedSearchResultItem[]);
         }
       } else if (activeTab === "videos") {
         // Video search
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "videos", safeSearch, 100);
-          setVideoResults(searchResults.results || []);
+          setVideoResults(searchResults.results as ExtendedSearchResultItem[]);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 100);
-          setVideoResults(searchResults.results || []);
+          setVideoResults(searchResults.results as ExtendedSearchResultItem[]);
         }
       } else if (activeTab === "news") {
         // News search
         if (searchProvider === "serper") {
           searchResults = await searchWithSerper(query, "news", safeSearch, 100);
-          setNewsResults(searchResults.results || []);
+          setNewsResults(searchResults.results as ExtendedSearchResultItem[]);
         } else {
           searchResults = await searchWithYou(query, safeSearch, 100);
-          setNewsResults(searchResults.results || []);
+          setNewsResults(searchResults.results as ExtendedSearchResultItem[]);
         }
       } else {
         // Web search (and other types) - request 100 results
@@ -114,7 +119,7 @@ const Search: React.FC = () => {
         }
         
         // Update state with search results
-        setResults(searchResults.results || []);
+        setResults(searchResults.results as ExtendedSearchResultItem[]);
         setKnowledgeGraph(searchResults.knowledgeGraph || null);
         setPeopleAlsoAsk(searchResults.peopleAlsoAsk || []);
         setRelatedSearches(searchResults.relatedSearches || []);
@@ -203,8 +208,14 @@ const Search: React.FC = () => {
     }
   };
 
+  // Added missing handleSubmit function
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearch();
+  };
+
   // Render Search Result component
-  const renderSearchResult = (result: SearchResultItem) => {
+  const renderSearchResult = (result: ExtendedSearchResultItem) => {
     switch (result.type) {
       case "web":
         return (
@@ -602,8 +613,8 @@ const Search: React.FC = () => {
                                         alt={result.title} 
                                         className="w-full h-full object-cover" 
                                       />
-                                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-                                        <div className="bg-black bg-opacity-60 rounded-full p-2">
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="bg-black bg-opacity-20 rounded-full p-2">
                                           <Play className="h-8 w-8 text-white" fill="white" />
                                         </div>
                                       </div>

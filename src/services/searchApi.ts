@@ -1,4 +1,3 @@
-
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -110,6 +109,7 @@ export interface SearchResultItem {
   thumbnailHeight?: number;
   source?: string;
   duration?: string;
+  publishedDate?: string; // Added publishedDate property
 }
 
 export interface KnowledgeGraphData {
