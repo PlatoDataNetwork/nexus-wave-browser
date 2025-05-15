@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar, AlertCircle } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchAPIResponse, SearchResultItem, searchWithYou } from '@/services/searchApi';
@@ -76,16 +76,23 @@ const getSimulatedRealTimeData = (query: string): SearchResultItem[] => {
   return [
     {
       id: "simulated-1",
-      title: "Real-time data unavailable",
-      url: "#",
-      description: `The search API is currently unavailable. Here's a simulated result for "${query}" as of ${dateStr} ${timeStr}.`,
+      title: `Real-time data for "${query}" (simulated)`,
+      url: "https://example.com/real-time-data",
+      description: `This is simulated real-time data for "${query}" as of ${dateStr} at ${timeStr}. API connection failed, so we're providing this placeholder data.`,
       type: "web"
     },
     {
       id: "simulated-2",
-      title: "Try these alternative sources",
+      title: "Try alternative sources for real-time information",
+      url: "https://news.google.com",
+      description: "For the most current information on this topic, consider checking specialized news sites, financial portals, or official sources relevant to your query.",
+      type: "web"
+    },
+    {
+      id: "simulated-3",
+      title: "Check back for real-time updates",
       url: "#",
-      description: "For real-time information, consider visiting specialized websites for the topic you're interested in.",
+      description: "Our real-time data services are temporarily unavailable. Try refreshing in a few moments to get the latest information.",
       type: "web"
     }
   ];
@@ -102,6 +109,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [lastSearchQuery, setLastSearchQuery] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
   const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
+  const [searchError, setSearchError] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -136,6 +144,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     const messageToSearch = currentMessage;
     setCurrentMessage("");
     setIsLoading(true);
+    setSearchError("");
     
     try {
       // First fetch search results for the sidebar from You.com API
@@ -145,15 +154,22 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       let searchResults;
       try {
         // Try to get real search results with recency filter
+        console.log(`Fetching real-time data from You.com for "${messageToSearch}" with filter: ${recencyFilter}`);
         searchResults = await searchWithYou(messageToSearch, safeSearch, 10, recencyFilter);
         setSearchResults(searchResults.results);
+        setSearchError("");
       } catch (error) {
         console.error("Search API error:", error);
-        // If API fails, use simulated data
+        // If API fails, use simulated data and set error
         const simulatedResults = getSimulatedRealTimeData(messageToSearch);
         setSearchResults(simulatedResults);
-        toast("Search API unavailable, showing simulated results", {
-          description: "Try again later for up-to-date information"
+        setSearchError("Couldn't fetch real-time data");
+        toast("Real-time data unavailable", {
+          description: "Using alternative sources. Try refreshing in a moment.",
+          action: {
+            label: "Refresh",
+            onClick: () => handleRefreshResults()
+          }
         });
       }
       setSearchLoading(false);
@@ -225,6 +241,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const handleChangeRecencyFilter = (value: "day" | "week" | "month" | "any") => {
     setRecencyFilter(value);
     toast(`Results will now show content from the past ${value === "day" ? "24 hours" : value === "week" ? "week" : value === "month" ? "month" : "any time"}`);
+    
+    // Refresh search if there's an active query
+    if (lastSearchQuery) {
+      handleRefreshResults();
+    }
   };
 
   // Refresh search results to get the latest data
@@ -232,17 +253,26 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     if (!lastSearchQuery) return;
     
     setSearchLoading(true);
-    toast("Refreshing results...");
+    setSearchError("");
+    toast("Refreshing real-time data...");
     
     try {
+      console.log(`Refreshing search results for "${lastSearchQuery}" with filter: ${recencyFilter}`);
       const searchResults = await searchWithYou(lastSearchQuery, safeSearch, 10, recencyFilter);
       setSearchResults(searchResults.results);
-      toast("Results refreshed with the latest data");
+      toast("Data refreshed with real-time information", {
+        description: `Results from ${recencyFilter === "day" ? "the past 24 hours" : recencyFilter === "week" ? "the past week" : recencyFilter === "month" ? "the past month" : "all time"}`
+      });
+      setSearchError("");
     } catch (error) {
       console.error("Error refreshing search:", error);
       const simulatedResults = getSimulatedRealTimeData(lastSearchQuery);
       setSearchResults(simulatedResults);
-      toast("Could not refresh data. Using simulated results.");
+      setSearchError("Real-time data connection failed");
+      toast("Real-time data unavailable", {
+        description: "Using alternative sources. Try again later.",
+        duration: 5000
+      });
     } finally {
       setSearchLoading(false);
     }
@@ -375,6 +405,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             searchQuery={lastSearchQuery}
             recencyFilter={recencyFilter}
             onRefresh={handleRefreshResults}
+            error={searchError}
           />
         </div>
       )}
