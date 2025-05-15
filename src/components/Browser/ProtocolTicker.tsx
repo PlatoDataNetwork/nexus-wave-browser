@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { topProtocols, Protocol } from "@/lib/protocolData";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,7 +20,6 @@ const ProtocolTicker: React.FC<ProtocolTickerProps> = ({ onNavigate }) => {
     toast({
       title: `Navigating to ${protocol.name}`,
       description: `Opening ${protocol.url}`,
-      duration: 2000,
     });
     onNavigate(protocol.url);
   };
