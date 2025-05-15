@@ -1,6 +1,6 @@
 
 // This file re-exports toast components from hooks/use-toast
-
+import { toast } from "sonner";
 import {
   ToastProvider,
   ToastViewport,
@@ -23,9 +23,7 @@ export {
   ToastDescription,
   ToastClose,
   ToastAction,
+  toast,
   type ToastProps,
   type ToastActionElement
 };
-
-// Re-export the toast function directly
-export const toast = useToast;

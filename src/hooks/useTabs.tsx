@@ -1,153 +1,103 @@
-import { useState, useCallback, useEffect } from "react";
-import { initialTabs, Tab } from "@/lib/dummyData";
-import { v4 as uuidv4 } from "uuid";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { LucideIcon, Globe } from 'lucide-react';
 
-// Interface for tab history
-interface TabHistory {
-  [tabId: string]: {
-    history: string[];
-    currentIndex: number;
-  };
+interface Tab {
+  url: string;
+  title: string;
+  favicon: string | null;
+  description: string | null;
+  keywords: string | null;
 }
 
-export function useTabs(defaultUrl: string = "https://platodata.io") {
-  const [tabs, setTabs] = useState<Tab[]>(initialTabs);
-  const [activeTab, setActiveTab] = useState<string | null>(initialTabs[0]?.id || null);
-  const [tabHistory, setTabHistory] = useState<TabHistory>({});
+export const useTabs = () => {
+  const [tabs, setTabs] = useState<Tab[]>([]);
+  const [activeTabUrl, setActiveTabUrl] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Initialize history for existing tabs
-    const initialHistory: TabHistory = {};
-    initialTabs.forEach(tab => {
-      initialHistory[tab.id] = {
-        history: [tab.url],
-        currentIndex: 0
-      };
-    });
-    setTabHistory(initialHistory);
-  }, []);
-
-  const currentUrl = activeTab && tabHistory[activeTab] ? tabHistory[activeTab].history[tabHistory[activeTab].currentIndex] : defaultUrl;
-
-  const canGoBack = useCallback(() => {
-    if (!activeTab || !tabHistory[activeTab]) return false;
-    return tabHistory[activeTab].currentIndex > 0;
-  }, [activeTab, tabHistory]);
-
-  const canGoForward = useCallback(() => {
-    if (!activeTab || !tabHistory[activeTab]) return false;
-    return tabHistory[activeTab].currentIndex < tabHistory[activeTab].history.length - 1;
-  }, [activeTab, tabHistory]);
-
-  const navigateToUrl = useCallback((url: string) => {
-    if (!activeTab) return;
-
-    setTabHistory(prev => {
-      const currentHistory = prev[activeTab] || { history: [], currentIndex: -1 };
-      const newHistory = [...currentHistory.history.slice(0, currentHistory.currentIndex + 1), url];
-
-      return {
-        ...prev,
-        [activeTab]: {
-          history: newHistory,
-          currentIndex: newHistory.length - 1
-        }
-      };
-    });
-
-    setTabs(prevTabs =>
-      prevTabs.map(tab =>
-        tab.id === activeTab ? { ...tab, url: url } : tab
-      )
-    );
-  }, [activeTab]);
-
-  const goBack = useCallback(() => {
-    if (!activeTab || !canGoBack()) return;
-
-    setTabHistory(prev => ({
-      ...prev,
-      [activeTab]: {
-        ...prev[activeTab],
-        currentIndex: prev[activeTab].currentIndex - 1
-      }
-    }));
-  }, [activeTab, canGoBack]);
-
-  const goForward = useCallback(() => {
-    if (!activeTab || !canGoForward()) return;
-
-    setTabHistory(prev => ({
-      ...prev,
-      [activeTab]: {
-        ...prev[activeTab],
-        currentIndex: prev[activeTab].currentIndex + 1
-      }
-    }));
-  }, [activeTab, canGoForward]);
-
-  const refreshPage = useCallback(() => {
-    if (!activeTab) return;
-    const currentTabHistory = tabHistory[activeTab];
-    const currentURL = currentTabHistory.history[currentTabHistory.currentIndex];
-    navigateToUrl(currentURL);
-  }, [activeTab, tabHistory, navigateToUrl]);
-  
-  const addTab = useCallback(() => {
-    const newTabId = `tab-${uuidv4()}`;
-    const newTab: Tab = {
-      id: newTabId,
-      title: "platodata.io",
-      url: defaultUrl,
-      icon: "https://platodata.io/favicon.ico"
-    };
-    
-    setTabs(prevTabs => [...prevTabs, newTab]);
-    setActiveTab(newTabId);
-    
-    // Initialize history for the new tab
-    setTabHistory(prev => ({
-      ...prev,
-      [newTabId]: {
-        history: [defaultUrl],
-        currentIndex: 0
-      }
-    }));
-    
-    return newTabId;
-  }, [defaultUrl]);
-
-  const closeTab = useCallback((tabId: string) => {
-    setTabs(prevTabs => prevTabs.filter(tab => tab.id !== tabId));
-    
-    // Remove tab history
-    setTabHistory(prev => {
-      const { [tabId]: _, ...rest } = prev;
-      return rest;
-    });
-
-    if (activeTab === tabId) {
-      const remainingTabs = tabs.filter(tab => tab.id !== tabId);
-      setActiveTab(remainingTabs.length > 0 ? remainingTabs[0].id : null);
+    const storedTabs = localStorage.getItem('tabs');
+    if (storedTabs) {
+      setTabs(JSON.parse(storedTabs));
     }
-  }, [activeTab, tabs]);
 
-  const activateTab = useCallback((tabId: string) => {
-    setActiveTab(tabId);
+    const activeTab = localStorage.getItem('activeTabUrl');
+    if (activeTab) {
+      setActiveTabUrl(activeTab);
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('tabs', JSON.stringify(tabs));
+  }, [tabs]);
+
+  useEffect(() => {
+    if (activeTabUrl) {
+      localStorage.setItem('activeTabUrl', activeTabUrl);
+    }
+  }, [activeTabUrl]);
+
+  const addTab = (tab: Tab) => {
+    setTabs(prevTabs => {
+      const newTabs = [...prevTabs, tab];
+      localStorage.setItem('tabs', JSON.stringify(newTabs));
+      return newTabs;
+    });
+    setActiveTabUrl(tab.url);
+    searchParams.set('url', tab.url);
+    setSearchParams(searchParams);
+  };
+
+  const removeTab = (url: string) => {
+    setTabs(prevTabs => {
+      const newTabs = prevTabs.filter(tab => tab.url !== url);
+      localStorage.setItem('tabs', JSON.stringify(newTabs));
+      return newTabs;
+    });
+    if (activeTabUrl === url) {
+      setActiveTabUrl(null);
+      searchParams.delete('url');
+      setSearchParams(searchParams);
+    }
+  };
+
+  const updateTab = (url: string, updatedTab: Partial<Tab>) => {
+    setTabs(prevTabs => {
+      const newTabs = prevTabs.map(tab => {
+        if (tab.url === url) {
+          return { ...tab, ...updatedTab };
+        }
+        return tab;
+      });
+      localStorage.setItem('tabs', JSON.stringify(newTabs));
+      return newTabs;
+    });
+  };
+
+  const setActiveTab = (url: string) => {
+    setActiveTabUrl(url);
+    searchParams.set('url', url);
+    setSearchParams(searchParams);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const getIconForTab = (url: string): LucideIcon => {
+    return Globe; // Using Globe as default icon
+  };
 
   return {
     tabs,
-    currentUrl,
+    activeTabUrl,
     addTab,
-    closeTab,
-    activateTab,
-    navigateToUrl,
-    goBack,
-    goForward,
-    refreshPage,
-    canGoBack,
-    canGoForward
+    removeTab,
+    updateTab,
+    setActiveTab,
+    isSidebarOpen,
+    toggleSidebar,
+    getIconForTab,
   };
-}
+};

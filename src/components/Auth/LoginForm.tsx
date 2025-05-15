@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 // Define form schema with validation
@@ -47,20 +46,13 @@ const LoginForm = () => {
       }
 
       // Show success message
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in.",
-      });
+      toast.success("Welcome back!");
       
       // Redirect to app
       navigate("/app");
     } catch (error: any) {
       console.error("Login error:", error);
-      toast({
-        title: "Authentication failed",
-        description: error.message || "Invalid email or password. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Authentication failed");
     } finally {
       setIsLoading(false);
     }
@@ -69,11 +61,7 @@ const LoginForm = () => {
   const handleForgotPassword = async () => {
     const email = form.getValues("email");
     if (!email) {
-      toast({
-        title: "Email required",
-        description: "Please enter your email address first.",
-        variant: "destructive",
-      });
+      toast.error("Email required");
       return;
     }
 
@@ -88,16 +76,9 @@ const LoginForm = () => {
         throw error;
       }
 
-      toast({
-        title: "Password reset email sent",
-        description: "Check your inbox for instructions to reset your password.",
-      });
+      toast.success("Password reset email sent");
     } catch (error: any) {
-      toast({
-        title: "Reset request failed",
-        description: error.message || "Could not process your request. Please try again later.",
-        variant: "destructive",
-      });
+      toast.error("Reset request failed");
     } finally {
       setIsLoading(false);
     }
