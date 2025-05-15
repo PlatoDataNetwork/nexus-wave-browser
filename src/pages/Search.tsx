@@ -15,15 +15,15 @@ import {
   MessageCircle,
   Video
 } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
-import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
-import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
+import { toast } from "sonner";
 import ConversationalSearch from "@/components/Search/ConversationalSearch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
-
-// Import components
 import { Card, CardContent } from "@/components/ui/card";
+import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
+
+// Import updated searchApi functionality
+import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -438,12 +438,14 @@ const Search: React.FC = () => {
             <MessageCircle className="h-4 w-4 mr-1" /> AI Assistant
           </Button>
           
-          <div className="ml-auto">
-            <SearchProviderSelector
-              selectedProvider={searchProvider}
-              onSelectProvider={setSearchProvider}
-            />
-          </div>
+          {!conversationMode && (
+            <div className="ml-auto">
+              <SearchProviderSelector
+                selectedProvider={searchProvider}
+                onSelectProvider={setSearchProvider}
+              />
+            </div>
+          )}
         </div>
 
         {!conversationMode && (
@@ -583,8 +585,8 @@ const Search: React.FC = () => {
                                         alt={result.title} 
                                         className="w-full h-full object-cover" 
                                       />
-                                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-                                        <div className="bg-black bg-opacity-60 rounded-full p-2">
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="bg-black bg-opacity-20 rounded-full p-2">
                                           <Play className="h-8 w-8 text-white" fill="white" />
                                         </div>
                                       </div>
@@ -722,7 +724,14 @@ const Search: React.FC = () => {
       </div>
 
       {conversationMode ? (
-        <ConversationalSearch />
+        <ConversationalSearch 
+          onSearch={(query) => {
+            // When AI assistant searches, update the URL parameter
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', query);
+            window.history.pushState({}, '', url.toString());
+          }}
+        />
       ) : null}
     </div>
   );

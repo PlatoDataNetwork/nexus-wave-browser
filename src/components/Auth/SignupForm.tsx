@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,8 +60,7 @@ const SignupForm = () => {
 
       // Show success message
       toast({
-        title: "Account created!",
-        description: "Please check your email to confirm your account.",
+        description: "Account created successfully",
       });
       
       // Redirect to app after short delay

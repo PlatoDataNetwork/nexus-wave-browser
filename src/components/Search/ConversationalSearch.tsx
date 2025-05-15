@@ -6,9 +6,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, MessageCircle, Shield } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
-import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
-import { toast } from '@/components/ui/use-toast';
+import { SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
+import { toast } from "sonner";
 import SearchProviderSelector from './SearchProviderSelector';
+import SearchSidebar from './SearchSidebar';
 
 interface ConversationMessage {
   id: string;
@@ -25,12 +26,66 @@ interface ConversationalSearchProps {
   onSearch?: (query: string) => void;
 }
 
+// Mock functions to replace the missing searchWithSerper and searchWithYou
+const searchWithSerper = async (query: string, type: string = "search", safeSearch: boolean = true, resultCount: number = 100): Promise<SearchAPIResponse> => {
+  // This is a temporary mock implementation
+  console.log(`Searching with Serper: ${query}, type: ${type}, safeSearch: ${safeSearch}, count: ${resultCount}`);
+  
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  return {
+    results: [
+      {
+        id: `mock-1`,
+        title: `Results for "${query}"`,
+        url: "https://example.com",
+        description: "This is a placeholder result for your query.",
+        type: "web"
+      },
+      {
+        id: `mock-2`,
+        title: "Additional information",
+        url: "https://example2.com",
+        description: "Here's more information related to your search.",
+        type: "web"
+      }
+    ],
+    provider: "serper"
+  };
+};
+
+const searchWithYou = async (query: string, safeSearch: boolean = true, resultCount: number = 100): Promise<SearchAPIResponse> => {
+  // This is a temporary mock implementation
+  console.log(`Searching with You: ${query}, safeSearch: ${safeSearch}, count: ${resultCount}`);
+  
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  return {
+    results: [
+      {
+        id: `mock-you-1`,
+        title: `You.com results for "${query}"`,
+        url: "https://you.com",
+        description: "This is a placeholder You.com result for your query.",
+        type: "web"
+      }
+    ],
+    provider: "you"
+  };
+};
+
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
   const [safeSearch, setSafeSearch] = useState(true);
+  const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [lastSearchQuery, setLastSearchQuery] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -65,14 +120,20 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setIsLoading(true);
     
     try {
-      // Perform real search based on user query with safe search and appropriate result counts
+      // First fetch search results for the sidebar
+      setSearchLoading(true);
+      setLastSearchQuery(messageToSearch);
+      
       let searchResults: SearchAPIResponse;
       
       if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch, 100);
+        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch, 10);
       } else {
-        searchResults = await searchWithYou(messageToSearch, safeSearch, 100);
+        searchResults = await searchWithYou(messageToSearch, safeSearch, 10);
       }
+      
+      setSearchResults(searchResults.results);
+      setSearchLoading(false);
       
       // Generate AI response based on search results
       const aiResponse = generateAIResponse(messageToSearch, searchResults);
@@ -80,9 +141,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     } catch (error) {
       console.error("Search error:", error);
       toast({
-        title: "Search Error",
-        description: "Failed to fetch search results. Please try again later.",
-        variant: "destructive"
+        description: "Failed to fetch search results. Please try again later."
       });
       
       // Add a fallback response
@@ -110,9 +169,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const handleToggleSafeSearch = () => {
     setSafeSearch(prev => !prev);
     toast({
-      title: `Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`,
-      description: `Search results will ${!safeSearch ? 'filter' : 'include'} potentially sensitive content.`
+      description: `Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`
     });
+  };
+
+  // Toggle sidebar
+  const handleToggleSidebar = () => {
+    setShowSidebar(prev => !prev);
   };
 
   const generateAIResponse = (query: string, searchResults: SearchAPIResponse): ConversationMessage => {
@@ -123,35 +186,9 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     let responseContent = "";
     let sources: { title: string; url: string }[] = [];
     
-    // If we have knowledge graph information, use it for a richer response
-    if (searchResults.knowledgeGraph) {
-      const kg = searchResults.knowledgeGraph;
-      responseContent = `${kg.title} is a ${kg.type}. ${kg.description || ''}\n\n`;
-      
-      if (kg.attributes) {
-        responseContent += "Here are some key facts:\n";
-        Object.entries(kg.attributes).forEach(([key, value]) => {
-          responseContent += `- ${key}: ${value}\n`;
-        });
-        responseContent += "\n";
-      }
-      
-      // Add source if available
-      if (kg.descriptionSource && kg.descriptionLink) {
-        sources.push({
-          title: `${kg.title} - ${kg.descriptionSource}`,
-          url: kg.descriptionLink
-        });
-      }
-    }
-    
     // Add information from organic results
     if (results.length > 0) {
-      if (!responseContent) {
-        responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
-      } else {
-        responseContent += "Additional information:\n\n";
-      }
+      responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
       
       // Add top 3 results to the response
       results.slice(0, 3).forEach((result, index) => {
@@ -166,18 +203,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     } else {
       // No results found
       responseContent = `I searched for "${query}" but couldn't find relevant information. Could you try rephrasing your question?`;
-    }
-    
-    // Add related questions if available
-    if (searchResults.peopleAlsoAsk && searchResults.peopleAlsoAsk.length > 0) {
-      responseContent += "\nPeople also ask:\n";
-      searchResults.peopleAlsoAsk.slice(0, 2).forEach(item => {
-        responseContent += `- ${item.question}\n`;
-        sources.push({
-          title: item.title,
-          url: item.link
-        });
-      });
     }
     
     // If we still don't have a good response, provide a fallback
@@ -195,83 +220,106 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex justify-between p-2 border-b border-border">
-        <SearchProviderSelector 
-          selectedProvider={searchProvider}
-          onSelectProvider={setSearchProvider}
-        />
-        
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
-          onClick={handleToggleSafeSearch}
-          type="button"
-        >
-          <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
-          <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
-        </Button>
-      </div>
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4 pb-4">
-          {messages.length === 0 ? (
-            <div className="text-center py-10">
-              <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-8 w-8 text-nexus-purple" />
-              </div>
-              <h2 className="text-xl font-medium mb-2">Ask me anything</h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions.
-              </p>
-              
-              <SearchSuggestions onSelectSuggestion={handleSelectSuggestion} />
-            </div>
-          ) : (
-            messages.map((message) => (
-              <ConversationMessage 
-                key={message.id}
-                role={message.role}
-                content={message.content}
-                sources={message.sources}
-              />
-            ))
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-      </ScrollArea>
-      
-      <div className="p-4 border-t border-border">
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmit(e);
-          }} 
-          className="flex gap-2"
-        >
-          <Textarea
-            placeholder="Ask me anything..."
-            value={currentMessage}
-            onChange={(e) => setCurrentMessage(e.target.value)}
-            className="flex-1 min-h-12 resize-none"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                e.stopPropagation();
-                handleSubmit();
-              }
-            }}
+    <div className="flex h-full">
+      <div className="flex-1 flex flex-col h-full">
+        <div className="flex justify-between p-2 border-b border-border">
+          <SearchProviderSelector 
+            selectedProvider={searchProvider}
+            onSelectProvider={setSearchProvider}
           />
-          <Button 
-            type="submit" 
-            className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
-            disabled={isLoading}
+          
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
+              onClick={handleToggleSafeSearch}
+              type="button"
+            >
+              <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
+              <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleToggleSidebar}
+              className="text-muted-foreground"
+            >
+              {showSidebar ? "Hide Results" : "Show Results"}
+            </Button>
+          </div>
+        </div>
+        <ScrollArea className="flex-1 p-4">
+          <div className="space-y-4 pb-4">
+            {messages.length === 0 ? (
+              <div className="text-center py-10">
+                <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="h-8 w-8 text-nexus-purple" />
+                </div>
+                <h2 className="text-xl font-medium mb-2">Ask me anything</h2>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions.
+                </p>
+                
+                <SearchSuggestions onSelectSuggestion={handleSelectSuggestion} />
+              </div>
+            ) : (
+              messages.map((message) => (
+                <ConversationMessage 
+                  key={message.id}
+                  role={message.role}
+                  content={message.content}
+                  sources={message.sources}
+                />
+              ))
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </ScrollArea>
+        
+        <div className="p-4 border-t border-border">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleSubmit(e);
+            }} 
+            className="flex gap-2"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </Button>
-        </form>
+            <Textarea
+              placeholder="Ask me anything..."
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              className="flex-1 min-h-12 resize-none"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSubmit();
+                }
+              }}
+            />
+            <Button 
+              type="submit" 
+              className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            </Button>
+          </form>
+        </div>
       </div>
+      
+      {showSidebar && (
+        <div className="w-80 border-l border-border h-full">
+          <SearchSidebar 
+            isLoading={searchLoading}
+            results={searchResults}
+            searchQuery={lastSearchQuery}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,4 @@
-
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 // Types for Serper API responses
@@ -110,6 +109,7 @@ export interface SearchResultItem {
   thumbnailHeight?: number;
   source?: string;
   duration?: string;
+  date?: string;
 }
 
 export interface KnowledgeGraphData {
@@ -299,9 +299,7 @@ export const searchWithSerper = async (
   } catch (error) {
     console.error("Error searching with Serper:", error);
     toast({
-      title: "Search Error",
-      description: "Failed to fetch search results from Serper. Please try again later.",
-      variant: "destructive"
+      description: "Failed to fetch search results from Serper. Please try again later."
     });
     return {
       results: [],
@@ -361,9 +359,7 @@ export const searchWithYou = async (
   } catch (error) {
     console.error("Error searching with You.com:", error);
     toast({
-      title: "Search Error",
-      description: "Failed to fetch search results from You.com. Please try again later.",
-      variant: "destructive"
+      description: "Failed to fetch search results from You.com. Please try again later."
     });
     return {
       results: [],

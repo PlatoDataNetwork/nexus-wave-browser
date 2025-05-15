@@ -1,380 +1,281 @@
 
-import React, { useState, useEffect } from "react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Plus, Check, Eye, EyeOff } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { Trash2, Plus, Loader2 } from "lucide-react";
 
-const SettingsSearch: React.FC = () => {
-  const { user } = useAuth();
+const defaultEngines = [
+  { id: "google", name: "Google", url: "https://www.google.com/search?q={searchTerms}" },
+  { id: "bing", name: "Bing", url: "https://www.bing.com/search?q={searchTerms}" },
+  { id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q={searchTerms}" },
+  { id: "you", name: "You.com", url: "https://you.com/search?q={searchTerms}" },
+];
+
+const SettingsSearch = () => {
+  const [defaultEngine, setDefaultEngine] = useState("google");
+  const [engines, setEngines] = useState(defaultEngines);
+  const [newEngineName, setNewEngineName] = useState("");
+  const [newEngineUrl, setNewEngineUrl] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   
-  const [defaultSearchEngine, setDefaultSearchEngine] = useState("platodata");
-  const [searchSuggestions, setSearchSuggestions] = useState(true);
-  const [contextualSearch, setContextualSearch] = useState(false);
-  const [showVisitedSites, setShowVisitedSites] = useState(true);
-  const [safeBrowsing, setSafeBrowsing] = useState(true);
-  const [newTabPage, setNewTabPage] = useState("top-sites");
-  const [searchProvider, setSearchProvider] = useState("serper");
+  // Safe search settings
+  const [safeSearch, setSafeSearch] = useState(true);
+  const [showExplicitImages, setShowExplicitImages] = useState(false);
+  const [trackSearchHistory, setTrackSearchHistory] = useState(true);
   
-  // API key management
-  const [serperApiKey, setSerperApiKey] = useState("");
-  const [youApiKey, setYouApiKey] = useState("");
-  const [showSerperKey, setShowSerperKey] = useState(false);
-  const [showYouKey, setShowYouKey] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // Clear search history
+  const [clearing, setClearing] = useState(false);
   
-  // Fetch existing API keys from Supabase if available
-  useEffect(() => {
-    const fetchApiKeys = async () => {
-      try {
-        if (!user) {
-          return;
-        }
-        
-        const { data, error } = await supabase
-          .from("search_api_keys")
-          .select("*")
-          .eq("user_id", user.id);
-        
-        if (error) {
-          console.error("Error fetching API keys:", error);
-          return;
-        }
-        
-        if (data && data.length > 0) {
-          const serperKeyObj = data.find(k => k.provider === "serper");
-          const youKeyObj = data.find(k => k.provider === "you");
-          
-          if (serperKeyObj) {
-            setSerperApiKey(serperKeyObj.api_key);
-          }
-          
-          if (youKeyObj) {
-            setYouApiKey(youKeyObj.api_key);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching API keys:", error);
-      }
-    };
+  const handleSetDefaultEngine = (engineId: string) => {
+    setDefaultEngine(engineId);
     
-    fetchApiKeys();
-  }, [user]);
-  
-  // Save API keys to Supabase
-  const saveApiKey = async (provider: "serper" | "you") => {
-    setIsLoading(true);
-    
-    try {
-      if (!user) {
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to save your API keys",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      const apiKey = provider === "serper" ? serperApiKey : youApiKey;
-      
-      if (!apiKey.trim()) {
-        toast({
-          title: "Error",
-          description: "API key cannot be empty",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      // Check if key already exists
-      const { data: existingKeys, error: fetchError } = await supabase
-        .from("search_api_keys")
-        .select("id")
-        .eq("user_id", user.id)
-        .eq("provider", provider);
-      
-      if (fetchError) {
-        throw fetchError;
-      }
-      
-      let result;
-      
-      if (existingKeys && existingKeys.length > 0) {
-        // Update existing key
-        result = await supabase
-          .from("search_api_keys")
-          .update({ api_key: apiKey })
-          .eq("user_id", user.id)
-          .eq("provider", provider);
-      } else {
-        // Insert new key
-        result = await supabase
-          .from("search_api_keys")
-          .insert({
-            user_id: user.id,
-            provider: provider,
-            api_key: apiKey
-          });
-      }
-      
-      if (result.error) {
-        throw result.error;
-      }
-      
+    // In a real app, this would save to a database
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
       toast({
-        title: "API key saved",
-        description: `Your ${provider === "serper" ? "Serper" : "You.com"} API key has been saved successfully`,
+        description: `Default search engine set to ${engines.find(e => e.id === engineId)?.name || engineId}`
       });
-      
-    } catch (error: any) {
-      console.error("Error saving API key:", error);
+    }, 500);
+  };
+  
+  const handleAddEngine = () => {
+    if (!newEngineName.trim() || !newEngineUrl.trim()) {
       toast({
-        title: "Error saving API key",
-        description: error.message || "There was an error saving your API key. Please try again later.",
+        description: "Please enter both a name and URL for the new search engine",
         variant: "destructive"
       });
-    } finally {
-      setIsLoading(false);
+      return;
     }
+    
+    if (!newEngineUrl.includes("{searchTerms}")) {
+      toast({
+        description: "Search URL must include {searchTerms} as a placeholder for the query"
+      });
+      return;
+    }
+    
+    const newEngine = {
+      id: `custom-${Date.now()}`,
+      name: newEngineName,
+      url: newEngineUrl
+    };
+    
+    setEngines([...engines, newEngine]);
+    setNewEngineName("");
+    setNewEngineUrl("");
+    
+    toast({
+      description: `Added ${newEngineName} search engine`
+    });
   };
-
+  
+  const handleRemoveEngine = (engineId: string) => {
+    // Don't remove default engines
+    if (defaultEngines.some(e => e.id === engineId)) {
+      toast({
+        description: "Cannot remove default search engines"
+      });
+      return;
+    }
+    
+    setEngines(engines.filter(e => e.id !== engineId));
+    
+    // If this was the default engine, reset to google
+    if (defaultEngine === engineId) {
+      setDefaultEngine("google");
+    }
+    
+    toast({
+      description: "Search engine removed"
+    });
+  };
+  
+  const handleClearSearchHistory = () => {
+    setClearing(true);
+    
+    // Simulate clearing search history
+    setTimeout(() => {
+      setClearing(false);
+      toast({
+        description: "Search history cleared"
+      });
+    }, 1000);
+  };
+  
+  const handleToggleSafeSearch = () => {
+    setSafeSearch(!safeSearch);
+    
+    toast({
+      description: `Safe search ${!safeSearch ? 'enabled' : 'disabled'}`
+    });
+  };
+  
+  const handleToggleExplicitImages = () => {
+    setShowExplicitImages(!showExplicitImages);
+    
+    toast({
+      description: `Explicit images will now be ${!showExplicitImages ? 'shown' : 'filtered'}`
+    });
+  };
+  
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-medium mb-2">Search engine</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          Manage search engine settings and suggestions
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <div>
-          <h3 className="text-md font-medium mb-3">Search API Configuration</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Configure your search API providers. Our application uses Serper API or You.com API for search functionality.
-          </p>
-          
-          {/* Serper API Key */}
-          <div className="mb-4 space-y-2">
-            <Label htmlFor="serper-api-key">Serper API Key</Label>
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Input 
-                  id="serper-api-key"
-                  type={showSerperKey ? "text" : "password"}
-                  value={serperApiKey}
-                  onChange={(e) => setSerperApiKey(e.target.value)}
-                  placeholder="Enter your Serper API key"
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  onClick={() => setShowSerperKey(!showSerperKey)}
+      <Card>
+        <CardHeader>
+          <CardTitle>Search Settings</CardTitle>
+          <CardDescription>
+            Configure how search works in Nexus Browser
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-1">
+            <Label htmlFor="defaultEngine">Default Search Engine</Label>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {engines.map((engine) => (
+                <Button
+                  key={engine.id}
+                  variant={defaultEngine === engine.id ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleSetDefaultEngine(engine.id)}
+                  disabled={isSaving}
                 >
-                  {showSerperKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              <Button 
-                onClick={() => saveApiKey("serper")} 
-                disabled={isLoading || !user}
-                className="bg-nexus-purple hover:bg-nexus-deep-purple"
-              >
-                <Check className="h-4 w-4" />
-                Save
-              </Button>
+                  {engine.name}
+                </Button>
+              ))}
+              
+              {isSaving && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Get your Serper API key at{" "}
-              <a href="https://serper.dev/" target="_blank" rel="noopener noreferrer" className="text-nexus-purple hover:underline">
-                serper.dev
-              </a>
-            </p>
           </div>
           
-          {/* You.com API Key */}
-          <div className="mb-4 space-y-2">
-            <Label htmlFor="you-api-key">You.com API Key</Label>
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Input 
-                  id="you-api-key"
-                  type={showYouKey ? "text" : "password"}
-                  value={youApiKey}
-                  onChange={(e) => setYouApiKey(e.target.value)}
-                  placeholder="Enter your You.com API key"
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  onClick={() => setShowYouKey(!showYouKey)}
-                >
-                  {showYouKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-              <Button 
-                onClick={() => saveApiKey("you")} 
-                disabled={isLoading || !user}
-                className="bg-nexus-purple hover:bg-nexus-deep-purple"
-              >
-                <Check className="h-4 w-4" />
-                Save
-              </Button>
+          <Separator className="my-4" />
+          
+          <div className="space-y-4">
+            <Label>Search Engines</Label>
+            <div className="space-y-2">
+              {engines.map((engine) => (
+                <div key={engine.id} className="flex items-center justify-between py-2">
+                  <div>
+                    <div className="font-medium">{engine.name}</div>
+                    <div className="text-xs text-muted-foreground">{engine.url}</div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleRemoveEngine(engine.id)}
+                    disabled={defaultEngines.some(e => e.id === engine.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </div>
+              ))}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Get your You.com API key at{" "}
-              <a href="https://you.com/api" target="_blank" rel="noopener noreferrer" className="text-nexus-purple hover:underline">
-                you.com/api
-              </a>
-            </p>
-            {!user && (
-              <p className="text-xs text-amber-500 mt-2">
-                You need to sign in to save API keys.
-              </p>
-            )}
+            
+            <div className="flex gap-2 mt-4">
+              <div className="grid gap-2 flex-1">
+                <Label htmlFor="engineName">Name</Label>
+                <Input
+                  id="engineName"
+                  placeholder="Engine name"
+                  value={newEngineName}
+                  onChange={(e) => setNewEngineName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2 flex-1">
+                <Label htmlFor="engineUrl">URL with {"{searchTerms}"}</Label>
+                <Input
+                  id="engineUrl"
+                  placeholder="https://example.com/search?q={searchTerms}"
+                  value={newEngineUrl}
+                  onChange={(e) => setNewEngineUrl(e.target.value)}
+                />
+              </div>
+              <div className="flex items-end">
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="mb-[1px]"
+                  onClick={handleAddEngine}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
           
-          <div className="mb-4 space-y-2">
-            <Label htmlFor="default-search-provider">Default Search Provider</Label>
-            <RadioGroup 
-              value={searchProvider} 
-              onValueChange={setSearchProvider}
-              className="flex space-x-4"
+          <Separator className="my-4" />
+          
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium">Safety & Privacy</h3>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="safeSearch">Safe Search</Label>
+                <p className="text-sm text-muted-foreground">
+                  Filter out explicit content from search results
+                </p>
+              </div>
+              <Switch
+                id="safeSearch"
+                checked={safeSearch}
+                onCheckedChange={handleToggleSafeSearch}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="explicitImages">Hide Explicit Images</Label>
+                <p className="text-sm text-muted-foreground">
+                  Blur images that may contain adult content
+                </p>
+              </div>
+              <Switch
+                id="explicitImages"
+                checked={!showExplicitImages}
+                onCheckedChange={handleToggleExplicitImages}
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="trackHistory">Save Search History</Label>
+                <p className="text-sm text-muted-foreground">
+                  Keep record of your searches for future reference
+                </p>
+              </div>
+              <Switch
+                id="trackHistory"
+                checked={trackSearchHistory}
+                onCheckedChange={() => {
+                  setTrackSearchHistory(!trackSearchHistory);
+                  toast({
+                    description: `Search history ${!trackSearchHistory ? 'will be saved' : 'will not be saved'}`
+                  });
+                }}
+              />
+            </div>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleClearSearchHistory}
+              disabled={clearing}
+              className="w-full"
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="serper" id="serper-provider" />
-                <Label htmlFor="serper-provider">Serper</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="you" id="you-provider" />
-                <Label htmlFor="you-provider">You.com</Label>
-              </div>
-            </RadioGroup>
+              {clearing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Clearing...
+                </>
+              ) : "Clear Search History"}
+            </Button>
           </div>
-        </div>
-
-        <Separator />
-
-        <div>
-          <h3 className="text-md font-medium mb-3">Default search engine</h3>
-          <RadioGroup value={defaultSearchEngine} onValueChange={setDefaultSearchEngine}>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="platodata" id="search-platodata" />
-              <Label htmlFor="search-platodata">Platodata</Label>
-            </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="google" id="search-google" />
-              <Label htmlFor="search-google">Google</Label>
-            </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="bing" id="search-bing" />
-              <Label htmlFor="search-bing">Bing</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="duckduckgo" id="search-duckduckgo" />
-              <Label htmlFor="search-duckduckgo">DuckDuckGo</Label>
-            </div>
-          </RadioGroup>
-        </div>
-
-        <div className="mt-4">
-          <Button variant="outline" size="sm" className="flex items-center gap-1">
-            <Plus className="h-3.5 w-3.5" />
-            Add search engine
-          </Button>
-        </div>
-
-        <Separator />
-
-        <div>
-          <h3 className="text-md font-medium mb-3">Search suggestions</h3>
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-sm">Show search suggestions</p>
-              <p className="text-xs text-muted-foreground">
-                Get suggestions from your search engine as you type
-              </p>
-            </div>
-            <Switch 
-              checked={searchSuggestions}
-              onCheckedChange={setSearchSuggestions}
-            />
-          </div>
-        </div>
-
-        <Separator />
-
-        <div>
-          <h3 className="text-md font-medium mb-3">New Tab page</h3>
-          <RadioGroup value={newTabPage} onValueChange={setNewTabPage}>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="top-sites" id="new-tab-sites" />
-              <Label htmlFor="new-tab-sites">Show top sites</Label>
-            </div>
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="search" id="new-tab-search" />
-              <Label htmlFor="new-tab-search">Show search box only</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="blank" id="new-tab-blank" />
-              <Label htmlFor="new-tab-blank">Show blank page</Label>
-            </div>
-          </RadioGroup>
-        </div>
-
-        <Separator />
-
-        <div>
-          <h3 className="text-md font-medium mb-3">Address bar suggestions</h3>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm">Show visited sites</p>
-                <p className="text-xs text-muted-foreground">
-                  Display sites from your browsing history
-                </p>
-              </div>
-              <Switch 
-                checked={showVisitedSites}
-                onCheckedChange={setShowVisitedSites}
-              />
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm">Contextual search</p>
-                <p className="text-xs text-muted-foreground">
-                  Get more relevant results based on your activity
-                </p>
-              </div>
-              <Switch 
-                checked={contextualSearch}
-                onCheckedChange={setContextualSearch}
-              />
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm">Safe browsing suggestions</p>
-                <p className="text-xs text-muted-foreground">
-                  Get warnings for potentially dangerous sites
-                </p>
-              </div>
-              <Switch 
-                checked={safeBrowsing}
-                onCheckedChange={setSafeBrowsing}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
