@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Calendar, RefreshCw, AlertCircle } from "lucide-react";
+import { Loader2, Calendar, RefreshCw, AlertCircle, Clock } from "lucide-react";
 import { SearchResultItem } from '@/services/searchApi';
 import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
@@ -15,6 +15,13 @@ interface SearchSidebarProps {
   recencyFilter?: "day" | "week" | "month" | "any";
   onRefresh?: () => void;
   error?: string;
+  realTimeData?: {
+    summary: string;
+    source: string;
+    timestamp: Date;
+  } | null;
+  isLoadingRealTimeData?: boolean;
+  onFetchRealTimeData?: () => void;
 }
 
 const SearchSidebar: React.FC<SearchSidebarProps> = ({ 
@@ -23,7 +30,10 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
   searchQuery,
   recencyFilter = "any",
   onRefresh,
-  error
+  error,
+  realTimeData,
+  isLoadingRealTimeData = false,
+  onFetchRealTimeData
 }) => {
   const [lastRefreshed, setLastRefreshed] = useState(new Date());
   const formattedDate = format(lastRefreshed, 'MMM d, yyyy');
@@ -34,6 +44,13 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
     if (onRefresh) {
       onRefresh();
       setLastRefreshed(new Date());
+    }
+  };
+
+  // Handle fetching real-time data
+  const handleFetchRealTimeData = () => {
+    if (onFetchRealTimeData) {
+      onFetchRealTimeData();
     }
   };
 
@@ -83,15 +100,34 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
           </div>
         </div>
         
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full text-xs flex items-center justify-center mb-2"
-          onClick={handleRefresh}
-        >
-          <RefreshCw className="h-3 w-3 mr-1" />
-          Refresh for real-time data
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full text-xs flex items-center justify-center"
+            onClick={handleRefresh}
+          >
+            <RefreshCw className="h-3 w-3 mr-1" />
+            Refresh Results
+          </Button>
+          
+          {onFetchRealTimeData && (
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="w-full text-xs flex items-center justify-center bg-nexus-purple hover:bg-nexus-deep-purple"
+              onClick={handleFetchRealTimeData}
+              disabled={isLoadingRealTimeData}
+            >
+              {isLoadingRealTimeData ? (
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+              ) : (
+                <Clock className="h-3 w-3 mr-1" />
+              )}
+              Get Real-Time Data
+            </Button>
+          )}
+        </div>
 
         {error && (
           <Alert variant="destructive" className="mb-2">
@@ -100,6 +136,29 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
               {error}. Using best available data.
             </AlertDescription>
           </Alert>
+        )}
+        
+        {/* Real-time data section */}
+        {realTimeData && (
+          <Card className="mb-3 border-nexus-purple/30 bg-nexus-purple/5">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium flex items-center">
+                  <Clock className="h-3 w-3 mr-1 text-nexus-purple" />
+                  <span>Real-Time Information</span>
+                </h4>
+                <span className="text-xs text-muted-foreground">
+                  {format(new Date(realTimeData.timestamp), 'h:mm a')}
+                </span>
+              </div>
+              <p className="text-sm">{realTimeData.summary}</p>
+              <div className="text-xs text-muted-foreground mt-2">
+                Source: <a href={realTimeData.source} target="_blank" rel="noopener noreferrer" className="hover:underline text-nexus-purple">
+                  {realTimeData.source.replace(/https?:\/\/(www\.)?/, '')}
+                </a>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {results.length === 0 ? (

@@ -1,12 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar, AlertCircle } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar, AlertCircle, Clock } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchAPIResponse, SearchResultItem, searchWithYou } from '@/services/searchApi';
+import { getRealTimeData } from '@/services/scrapingService';
 import { toast } from "sonner";
 import SearchProviderSelector from './SearchProviderSelector';
 import SearchSidebar from './SearchSidebar';
@@ -30,8 +30,15 @@ interface ConversationalSearchProps {
 const OPENAI_API_KEY = "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";
 
 // Function to get AI response using ChatGPT API
-const getChatGPTResponse = async (message: string): Promise<string> => {
+const getChatGPTResponse = async (message: string, realTimeData?: string): Promise<string> => {
   try {
+    let systemPrompt = 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.';
+    
+    // If we have real-time data, enhance the system prompt
+    if (realTimeData) {
+      systemPrompt = `You are a helpful assistant with access to real-time information. Use the following real-time data to enhance your response, and cite it as your source: ${realTimeData}`;
+    }
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -43,7 +50,7 @@ const getChatGPTResponse = async (message: string): Promise<string> => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.'
+            content: systemPrompt
           },
           {
             role: 'user',
@@ -111,6 +118,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
   const [searchError, setSearchError] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Add state for real-time data
+  const [realTimeData, setRealTimeData] = useState<{
+    summary: string;
+    source: string;
+    timestamp: Date;
+  } | null>(null);
+  const [isLoadingRealTimeData, setIsLoadingRealTimeData] = useState(false);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -145,6 +160,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setCurrentMessage("");
     setIsLoading(true);
     setSearchError("");
+    setRealTimeData(null);
     
     try {
       // First fetch search results for the sidebar from You.com API
@@ -163,19 +179,57 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
         // If API fails, use simulated data and set error
         const simulatedResults = getSimulatedRealTimeData(messageToSearch);
         setSearchResults(simulatedResults);
-        setSearchError("Couldn't fetch real-time data");
-        toast("Real-time data unavailable", {
-          description: "Using alternative sources. Try refreshing in a moment.",
+        setSearchError("Couldn't fetch real-time data from search API");
+        toast("Search API unavailable", {
+          description: "Using alternative sources. Try using the real-time data feature.",
           action: {
-            label: "Refresh",
-            onClick: () => handleRefreshResults()
+            label: "Get Real-Time Data",
+            onClick: () => handleFetchRealTimeData()
           }
         });
       }
       setSearchLoading(false);
       
-      // Generate AI response using ChatGPT API
-      const aiResponseContent = await getChatGPTResponse(messageToSearch);
+      // Check if the query is likely about real-time data
+      const isRealTimeQuery = 
+        messageToSearch.toLowerCase().includes('weather') ||
+        messageToSearch.toLowerCase().includes('news') ||
+        messageToSearch.toLowerCase().includes('price') ||
+        messageToSearch.toLowerCase().includes('stock') ||
+        messageToSearch.toLowerCase().includes('current') ||
+        messageToSearch.toLowerCase().includes('today') ||
+        messageToSearch.toLowerCase().includes('latest') ||
+        messageToSearch.toLowerCase().includes('update') ||
+        messageToSearch.toLowerCase().includes('now') ||
+        messageToSearch.toLowerCase().includes('exchange rate') ||
+        messageToSearch.toLowerCase().includes('live');
+      
+      let aiResponseContent;
+      
+      // If it's a real-time query, try to get real-time data right away
+      if (isRealTimeQuery) {
+        try {
+          setIsLoadingRealTimeData(true);
+          const realtimeInfo = await getRealTimeData(messageToSearch, OPENAI_API_KEY);
+          setRealTimeData(realtimeInfo);
+          
+          // Generate AI response using ChatGPT API with real-time data
+          aiResponseContent = await getChatGPTResponse(messageToSearch, realtimeInfo.summary);
+          
+          toast("Real-time data retrieved", {
+            description: "Using freshly scraped information from the web",
+          });
+        } catch (error) {
+          console.error("Error fetching real-time data:", error);
+          // Just continue with normal response if real-time data fails
+          aiResponseContent = await getChatGPTResponse(messageToSearch);
+        } finally {
+          setIsLoadingRealTimeData(false);
+        }
+      } else {
+        // Generate standard AI response using ChatGPT API
+        aiResponseContent = await getChatGPTResponse(messageToSearch);
+      }
       
       // Create sources from search results for citation
       let sources = [];
@@ -189,6 +243,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
           title: result.title,
           url: result.url
         }));
+      }
+      
+      // If we have real-time data, add it as a source
+      if (realTimeData) {
+        sources.unshift({
+          title: "Real-time data from " + realTimeData.source.replace(/https?:\/\/(www\.)?/, ''),
+          url: realTimeData.source
+        });
       }
       
       // Add AI response to conversation
@@ -215,6 +277,31 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       setMessages(prev => [...prev, fallbackResponse]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Function to fetch real-time data on demand
+  const handleFetchRealTimeData = async () => {
+    if (!lastSearchQuery) return;
+    
+    setIsLoadingRealTimeData(true);
+    toast("Fetching real-time data...");
+    
+    try {
+      const realtimeInfo = await getRealTimeData(lastSearchQuery, OPENAI_API_KEY);
+      setRealTimeData(realtimeInfo);
+      
+      toast("Real-time data retrieved", {
+        description: `Fresh information from ${realtimeInfo.source.replace(/https?:\/\/(www\.)?/, '')}`,
+      });
+    } catch (error) {
+      console.error("Error fetching real-time data:", error);
+      toast("Could not fetch real-time data", {
+        description: "Please try again later",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoadingRealTimeData(false);
     }
   };
 
@@ -321,19 +408,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             >
               {showSidebar ? "Hide Results" : "Show Results"}
             </Button>
-
-            {lastSearchQuery && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefreshResults}
-                className="text-xs"
-                disabled={searchLoading}
-              >
-                {searchLoading ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : null}
-                Refresh Data
-              </Button>
-            )}
           </div>
         </div>
         <ScrollArea className="flex-1 p-4">
@@ -406,6 +480,9 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             recencyFilter={recencyFilter}
             onRefresh={handleRefreshResults}
             error={searchError}
+            realTimeData={realTimeData}
+            isLoadingRealTimeData={isLoadingRealTimeData}
+            onFetchRealTimeData={handleFetchRealTimeData}
           />
         </div>
       )}
