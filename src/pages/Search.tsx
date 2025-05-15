@@ -454,25 +454,49 @@ const Search: React.FC = () => {
               </Button>
             </form>
 
-            <div className="flex justify-between mt-4">
+            <div className="flex items-center justify-between mt-4">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-                <TabsList className="bg-secondary/50">
-                  <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                    <Globe className="h-4 w-4 mr-1" /> Web
-                  </TabsTrigger>
-                  <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                    <Image className="h-4 w-4 mr-1" /> Images
-                  </TabsTrigger>
-                  <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                    <Video className="h-4 w-4 mr-1" /> Videos
-                  </TabsTrigger>
-                  <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                    <FileText className="h-4 w-4 mr-1" /> News
-                  </TabsTrigger>
-                  <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                    <Zap className="h-4 w-4 mr-1" /> Nexus Search
-                  </TabsTrigger>
-                </TabsList>
+                <div className="flex justify-between items-center">
+                  <TabsList className="bg-secondary/50">
+                    <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                      <Globe className="h-4 w-4 mr-1" /> Web
+                    </TabsTrigger>
+                    <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                      <Image className="h-4 w-4 mr-1" /> Images
+                    </TabsTrigger>
+                    <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                      <Video className="h-4 w-4 mr-1" /> Videos
+                    </TabsTrigger>
+                    <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                      <FileText className="h-4 w-4 mr-1" /> News
+                    </TabsTrigger>
+                    <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                      <Zap className="h-4 w-4 mr-1" /> Nexus Search
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="flex items-center gap-1"
+                      type="button"
+                    >
+                      <Clock className="h-4 w-4" />
+                      <span className="text-xs">Past 24h</span>
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
+                      onClick={handleToggleSafeSearch}
+                      type="button"
+                    >
+                      <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
+                      <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+                    </Button>
+                  </div>
+                </div>
                 
                 <div className="p-4 pb-20">
                   <TabsContent value="images">
@@ -484,152 +508,22 @@ const Search: React.FC = () => {
                   </TabsContent>
                   
                   <TabsContent value="web">
-                    {isLoading ? (
-                      <div className="flex flex-col items-center justify-center h-40">
-                        <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                        <p className="text-muted-foreground">Searching securely...</p>
-                      </div>
-                    ) : lastSearchedQuery && results.length > 0 ? (
-                      <div id="search-results">
-                        <p className="text-sm text-muted-foreground mb-4">
-                          About {results.length.toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                        </p>
-                        
-                        {/* Knowledge Graph */}
-                        {renderKnowledgeGraph()}
-                        
-                        {/* Main Results */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                          <div className="lg:col-span-2">
-                            {results.map(renderSearchResult)}
-                          </div>
-                          
-                          <div className="space-y-5">
-                            {/* People Also Ask */}
-                            {renderPeopleAlsoAsk()}
-                            
-                            {/* Related Searches */}
-                            {renderRelatedSearches()}
-                          </div>
-                        </div>
-                      </div>
-                    ) : lastSearchedQuery ? (
-                      <div className="text-center py-10">
-                        <h2 className="text-xl font-medium mb-2">No results found</h2>
-                        <p className="text-muted-foreground">Try different keywords or search terms</p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-16">
-                        <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
-                          <SearchIcon className="h-12 w-12 text-nexus-purple" />
-                        </div>
-                        <h2 className="text-2xl font-bold mb-2">Nexus Wave Search</h2>
-                        <p className="text-muted-foreground text-center max-w-md mb-6">
-                          Search the web with enhanced privacy and security. Your searches are never tracked or stored.
-                        </p>
-                      </div>
-                    )}
+                    {/* ... keep existing code (web search results display) */}
                   </TabsContent>
                   
                   <TabsContent value="videos">
-                    {isLoading ? (
-                      <div className="flex flex-col items-center justify-center h-40">
-                        <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                        <p className="text-muted-foreground">Searching videos...</p>
-                      </div>
-                    ) : lastSearchedQuery && videoResults.length > 0 ? (
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          About {videoResults.length.toLocaleString()} video results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                        </p>
-                        {videoResults.map(renderSearchResult)}
-                      </div>
-                    ) : lastSearchedQuery ? (
-                      <div className="text-center py-10">
-                        <h2 className="text-xl font-medium mb-2">No video results found</h2>
-                        <p className="text-muted-foreground">Try different keywords or search terms</p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-16">
-                        <div className="w-24 h-24 rounded-full bg-nexus-purple/10 flex items-center justify-center mb-6">
-                          <Video className="h-12 w-12 text-nexus-purple" />
-                        </div>
-                        <h2 className="text-xl font-medium mb-2">Search for videos</h2>
-                        <p className="text-muted-foreground">Enter a search term to find videos</p>
-                      </div>
-                    )}
+                    {/* ... keep existing code (video results display) */}
                   </TabsContent>
                   
                   <TabsContent value="news">
-                    {/* Render news search results similar to web results */}
-                    {isLoading ? (
-                      <div className="flex flex-col items-center justify-center h-40">
-                        <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                        <p className="text-muted-foreground">Searching news...</p>
-                      </div>
-                    ) : lastSearchedQuery && results.length > 0 ? (
-                      <div>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          About {results.length.toLocaleString()} news results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
-                        </p>
-                        {results.map(renderSearchResult)}
-                      </div>
-                    ) : lastSearchedQuery ? (
-                      <div className="text-center py-10">
-                        <h2 className="text-xl font-medium mb-2">No news results found</h2>
-                        <p className="text-muted-foreground">Try different keywords or search terms</p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-16">
-                        <h2 className="text-xl font-medium mb-2">Search for latest news</h2>
-                        <p className="text-muted-foreground">Enter a search term to find news articles</p>
-                      </div>
-                    )}
+                    {/* ... keep existing code (news results display) */}
                   </TabsContent>
                   
                   <TabsContent value="nexus">
-                    {/* Render nexus search results similar to web results */}
-                    {isLoading ? (
-                      <div className="flex flex-col items-center justify-center h-40">
-                        <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-                        <p className="text-muted-foreground">Searching Nexus resources...</p>
-                      </div>
-                    ) : lastSearchedQuery ? (
-                      <div className="text-center py-10">
-                        <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
-                        <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-16">
-                        <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
-                        <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
-                      </div>
-                    )}
+                    {/* ... keep existing code (nexus search results display) */}
                   </TabsContent>
                 </div>
               </Tabs>
-
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="flex items-center gap-1"
-                  type="button"
-                >
-                  <Clock className="h-4 w-4" />
-                  <span className="text-xs">Past 24h</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
-                  onClick={handleToggleSafeSearch}
-                  type="button"
-                >
-                  <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
-                  <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
-                </Button>
-              </div>
             </div>
           </>
         )}
