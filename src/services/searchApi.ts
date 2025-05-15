@@ -298,9 +298,7 @@ export const searchWithSerper = async (
     return mappedResponse;
   } catch (error) {
     console.error("Error searching with Serper:", error);
-    toast({
-      description: "Failed to fetch search results from Serper. Please try again later."
-    });
+    toast("Failed to fetch results from Serper. Please try again later.");
     return {
       results: [],
       error: error instanceof Error ? error.message : "Unknown error occurred",
@@ -358,9 +356,7 @@ export const searchWithYou = async (
     };
   } catch (error) {
     console.error("Error searching with You.com:", error);
-    toast({
-      description: "Failed to fetch search results from You.com. Please try again later."
-    });
+    toast("Failed to fetch results from You.com. Please try again later.");
     return {
       results: [],
       error: error instanceof Error ? error.message : "Unknown error occurred",

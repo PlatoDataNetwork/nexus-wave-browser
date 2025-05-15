@@ -120,12 +120,7 @@ const Search: React.FC = () => {
         setRelatedSearches(searchResults.relatedSearches || []);
       }
     } catch (error) {
-      console.error("Search error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch search results",
-        variant: "destructive"
-      });
+      toast("Error: Failed to fetch search results");
       setResults([]);
       setImageResults([]);
       setVideoResults([]);

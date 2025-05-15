@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -140,9 +139,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
       console.error("Search error:", error);
-      toast({
-        description: "Failed to fetch search results. Please try again later."
-      });
+      toast("Failed to fetch search results. Please try again later.");
       
       // Add a fallback response
       const fallbackResponse: ConversationMessage = {
@@ -168,9 +165,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   // Toggle safe search
   const handleToggleSafeSearch = () => {
     setSafeSearch(prev => !prev);
-    toast({
-      description: `Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`
-    });
+    toast(`Safe Search ${!safeSearch ? 'Enabled' : 'Disabled'}`);
   };
 
   // Toggle sidebar
