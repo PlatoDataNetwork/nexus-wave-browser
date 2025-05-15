@@ -1,7 +1,7 @@
 
+// This file re-exports toast components from hooks/use-toast
+
 import {
-  useToast,
-  toast,
   ToastProvider,
   ToastViewport,
   Toast,
@@ -10,12 +10,12 @@ import {
   ToastClose,
   ToastAction,
   type ToastProps,
-  type ToastActionElement
+  type ToastActionElement,
+  useToast,
 } from "@/hooks/use-toast";
 
 export {
   useToast,
-  toast,
   ToastProvider,
   ToastViewport,
   Toast,
@@ -26,3 +26,6 @@ export {
   type ToastProps,
   type ToastActionElement
 };
+
+// Re-export the toast function directly
+export const toast = useToast;
