@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, MessageCircle, Shield } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
-import { SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
+import { SearchAPIResponse, SearchResultItem, searchWithYou } from '@/services/searchApi';
 import { toast } from "sonner";
 import SearchProviderSelector from './SearchProviderSelector';
 import SearchSidebar from './SearchSidebar';
@@ -26,61 +26,52 @@ interface ConversationalSearchProps {
   onSearch?: (query: string) => void;
 }
 
-// Mock functions to replace the missing searchWithSerper and searchWithYou
-const searchWithSerper = async (query: string, type: string = "search", safeSearch: boolean = true, resultCount: number = 100): Promise<SearchAPIResponse> => {
-  // This is a temporary mock implementation
-  console.log(`Searching with Serper: ${query}, type: ${type}, safeSearch: ${safeSearch}, count: ${resultCount}`);
-  
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return {
-    results: [
-      {
-        id: `mock-1`,
-        title: `Results for "${query}"`,
-        url: "https://example.com",
-        description: "This is a placeholder result for your query.",
-        type: "web"
-      },
-      {
-        id: `mock-2`,
-        title: "Additional information",
-        url: "https://example2.com",
-        description: "Here's more information related to your search.",
-        type: "web"
-      }
-    ],
-    provider: "serper"
-  };
-};
+// OpenAI API key
+const OPENAI_API_KEY = "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";
 
-const searchWithYou = async (query: string, safeSearch: boolean = true, resultCount: number = 100): Promise<SearchAPIResponse> => {
-  // This is a temporary mock implementation
-  console.log(`Searching with You: ${query}, safeSearch: ${safeSearch}, count: ${resultCount}`);
-  
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return {
-    results: [
-      {
-        id: `mock-you-1`,
-        title: `You.com results for "${query}"`,
-        url: "https://you.com",
-        description: "This is a placeholder You.com result for your query.",
-        type: "web"
-      }
-    ],
-    provider: "you"
-  };
+// Function to get AI response using ChatGPT API
+const getChatGPTResponse = async (message: string): Promise<string> => {
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative.'
+          },
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error fetching AI response:", error);
+    throw error;
+  }
 };
 
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
+  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("you");
   const [safeSearch, setSafeSearch] = useState(true);
   const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -122,33 +113,42 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setIsLoading(true);
     
     try {
-      // First fetch search results for the sidebar
+      // First fetch search results for the sidebar from You.com API
       setSearchLoading(true);
       setLastSearchQuery(messageToSearch);
       
-      let searchResults: SearchAPIResponse;
-      
-      if (searchProvider === "serper") {
-        searchResults = await searchWithSerper(messageToSearch, "search", safeSearch, 10);
-      } else {
-        searchResults = await searchWithYou(messageToSearch, safeSearch, 10);
-      }
-      
+      const searchResults = await searchWithYou(messageToSearch, safeSearch, 10);
       setSearchResults(searchResults.results);
       setSearchLoading(false);
       
-      // Generate AI response based on search results
-      const aiResponse = generateAIResponse(messageToSearch, searchResults);
+      // Generate AI response using ChatGPT API
+      const aiResponseContent = await getChatGPTResponse(messageToSearch);
+      
+      // Create sources from search results for citation
+      const sources = searchResults.results.slice(0, 3).map(result => ({
+        title: result.title,
+        url: result.url
+      }));
+      
+      // Add AI response to conversation
+      const aiResponse: ConversationMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: aiResponseContent,
+        timestamp: new Date(),
+        sources: sources.length > 0 ? sources : undefined
+      };
+      
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
-      console.error("Search error:", error);
-      toast("Failed to fetch search results. Please try again later.");
+      console.error("Search or AI error:", error);
+      toast("Failed to fetch response. Please try again later.");
       
       // Add a fallback response
       const fallbackResponse: ConversationMessage = {
         id: Date.now().toString(),
         role: "assistant",
-        content: "I'm sorry, but I encountered an issue while searching. Please try again later.",
+        content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackResponse]);
@@ -174,47 +174,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   // Toggle sidebar
   const handleToggleSidebar = () => {
     setShowSidebar(prev => !prev);
-  };
-
-  const generateAIResponse = (query: string, searchResults: SearchAPIResponse): ConversationMessage => {
-    // Extract useful information from search results
-    const results = searchResults.results;
-    
-    // Create a response based on the search results
-    let responseContent = "";
-    let sources: { title: string; url: string }[] = [];
-    
-    // Add information from organic results
-    if (results.length > 0) {
-      responseContent = `Based on my search for "${query}", here's what I found:\n\n`;
-      
-      // Add top 3 results to the response
-      results.slice(0, 3).forEach((result, index) => {
-        responseContent += `${result.title}: ${result.description}\n\n`;
-        
-        // Add to sources
-        sources.push({
-          title: result.title,
-          url: result.url
-        });
-      });
-    } else {
-      // No results found
-      responseContent = `I searched for "${query}" but couldn't find relevant information. Could you try rephrasing your question?`;
-    }
-    
-    // If we still don't have a good response, provide a fallback
-    if (!responseContent || responseContent.trim().length === 0) {
-      responseContent = `I searched for information about "${query}", but I don't have a comprehensive answer at this moment. You might want to try a different search term or be more specific.`;
-    }
-    
-    return {
-      id: Date.now().toString(),
-      role: "assistant",
-      content: responseContent.trim(),
-      timestamp: new Date(),
-      sources: sources.length > 0 ? sources : undefined
-    };
   };
 
   return (
