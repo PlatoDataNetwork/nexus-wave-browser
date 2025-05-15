@@ -498,31 +498,183 @@ const Search: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="p-4 pb-20">
-                  <TabsContent value="images">
-                    <ImageResults 
-                      isLoading={isLoading} 
-                      results={imageResults} 
-                      searchQuery={lastSearchedQuery}
-                    />
-                  </TabsContent>
-                  
-                  <TabsContent value="web">
-                    {/* ... keep existing code (web search results display) */}
-                  </TabsContent>
-                  
-                  <TabsContent value="videos">
-                    {/* ... keep existing code (video results display) */}
-                  </TabsContent>
-                  
-                  <TabsContent value="news">
-                    {/* ... keep existing code (news results display) */}
-                  </TabsContent>
-                  
-                  <TabsContent value="nexus">
-                    {/* ... keep existing code (nexus search results display) */}
-                  </TabsContent>
-                </div>
+                <TabsContent value="web">
+                  <ScrollArea className="h-full">
+                    {isLoading ? (
+                      <div className="flex items-center justify-center py-10">
+                        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple" />
+                      </div>
+                    ) : lastSearchedQuery ? (
+                      <div>
+                        {/* Knowledge Graph */}
+                        {knowledgeGraph && renderKnowledgeGraph()}
+                        
+                        {/* Search Results */}
+                        <div className="space-y-1">
+                          {results.length > 0 ? (
+                            results.map((result) => renderSearchResult(result))
+                          ) : (
+                            <div className="text-center py-6">
+                              <p className="text-muted-foreground">No results found for "{lastSearchedQuery}"</p>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* People Also Ask */}
+                        {peopleAlsoAsk.length > 0 && renderPeopleAlsoAsk()}
+                        
+                        {/* Related Searches */}
+                        {relatedSearches.length > 0 && renderRelatedSearches()}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <Globe className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                        <h3 className="text-xl font-medium mb-2">Search the web securely</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto">
+                          Enter a search term above to get started
+                        </p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
+                
+                <TabsContent value="images">
+                  <ImageResults 
+                    isLoading={isLoading} 
+                    results={imageResults} 
+                    searchQuery={lastSearchedQuery}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="videos">
+                  <ScrollArea className="h-full">
+                    {isLoading ? (
+                      <div className="flex items-center justify-center py-10">
+                        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple" />
+                      </div>
+                    ) : lastSearchedQuery ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
+                        {videoResults.length > 0 ? (
+                          videoResults.map((result) => (
+                            <Card key={result.id} className="overflow-hidden hover:shadow-md transition-all">
+                              <a href={result.url} target="_blank" rel="noopener noreferrer" className="block">
+                                <div className="relative aspect-video">
+                                  {result.imageUrl ? (
+                                    <>
+                                      <img 
+                                        src={result.imageUrl} 
+                                        alt={result.title} 
+                                        className="w-full h-full object-cover" 
+                                      />
+                                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                                        <div className="bg-black bg-opacity-60 rounded-full p-2">
+                                          <Play className="h-8 w-8 text-white" fill="white" />
+                                        </div>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                                      <Video className="h-10 w-10 text-muted-foreground/50" />
+                                    </div>
+                                  )}
+                                  {result.duration && (
+                                    <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 px-1 py-0.5 rounded text-xs text-white">
+                                      {result.duration}
+                                    </div>
+                                  )}
+                                </div>
+                              </a>
+                              <CardContent className="p-3">
+                                <a 
+                                  href={result.url} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="block truncate font-medium hover:text-nexus-purple"
+                                >
+                                  {result.title}
+                                </a>
+                                <div className="text-xs text-muted-foreground truncate mt-1">
+                                  {result.source || result.url.replace(/^https?:\/\//, '').split('/')[0]}
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))
+                        ) : (
+                          <div className="col-span-full text-center py-6">
+                            <p className="text-muted-foreground">No video results found for "{lastSearchedQuery}"</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <Video className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                        <h3 className="text-xl font-medium mb-2">Search for videos</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto">
+                          Enter a search term above to get started
+                        </p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
+                
+                <TabsContent value="news">
+                  <ScrollArea className="h-full">
+                    {isLoading ? (
+                      <div className="flex items-center justify-center py-10">
+                        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple" />
+                      </div>
+                    ) : lastSearchedQuery ? (
+                      <div className="space-y-1">
+                        {results.length > 0 ? (
+                          results.map((result) => renderSearchResult(result))
+                        ) : (
+                          <div className="text-center py-6">
+                            <p className="text-muted-foreground">No news results found for "{lastSearchedQuery}"</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <FileText className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                        <h3 className="text-xl font-medium mb-2">Search for news</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto">
+                          Enter a search term above to get started
+                        </p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
+                
+                <TabsContent value="nexus">
+                  <ScrollArea className="h-full">
+                    {isLoading ? (
+                      <div className="flex items-center justify-center py-10">
+                        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple" />
+                      </div>
+                    ) : lastSearchedQuery ? (
+                      <div className="space-y-1">
+                        {results.length > 0 ? (
+                          results
+                            .filter(result => result.type === "nexus")
+                            .map((result) => renderSearchResult(result))
+                        ) : (
+                          <div className="text-center py-6">
+                            <p className="text-muted-foreground">No Nexus results found for "{lastSearchedQuery}"</p>
+                            <p className="text-sm text-muted-foreground mt-2">Nexus results are enhanced search results specifically for this platform.</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <Zap className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                        <h3 className="text-xl font-medium mb-2">Search Nexus</h3>
+                        <p className="text-muted-foreground max-w-md mx-auto">
+                          Enter a search term above to get enhanced Nexus results
+                        </p>
+                      </div>
+                    )}
+                  </ScrollArea>
+                </TabsContent>
               </Tabs>
             </div>
           </>
