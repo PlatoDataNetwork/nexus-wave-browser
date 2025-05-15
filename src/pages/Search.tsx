@@ -31,6 +31,7 @@ const Search: React.FC = () => {
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [imageResults, setImageResults] = useState<SearchResultItem[]>([]);
   const [videoResults, setVideoResults] = useState<SearchResultItem[]>([]);
+  const [newsResults, setNewsResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
   const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
@@ -58,6 +59,7 @@ const Search: React.FC = () => {
       setResults([]);
       setImageResults([]);
       setVideoResults([]);
+      setNewsResults([]);
       setKnowledgeGraph(null);
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
@@ -91,6 +93,15 @@ const Search: React.FC = () => {
           searchResults = await searchWithYou(query, safeSearch, 100);
           setVideoResults(searchResults.results || []);
         }
+      } else if (activeTab === "news") {
+        // News search
+        if (searchProvider === "serper") {
+          searchResults = await searchWithSerper(query, "news", safeSearch, 100);
+          setNewsResults(searchResults.results || []);
+        } else {
+          searchResults = await searchWithYou(query, safeSearch, 100);
+          setNewsResults(searchResults.results || []);
+        }
       } else {
         // Web search (and other types) - request 100 results
         const serperType = activeTab === "web" ? "search" : 
@@ -118,6 +129,7 @@ const Search: React.FC = () => {
       setResults([]);
       setImageResults([]);
       setVideoResults([]);
+      setNewsResults([]);
       setKnowledgeGraph(null);
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
@@ -165,6 +177,7 @@ const Search: React.FC = () => {
       setResults([]);
       setImageResults([]);
       setVideoResults([]);
+      setNewsResults([]);
       setKnowledgeGraph(null);
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
@@ -219,6 +232,10 @@ const Search: React.FC = () => {
                     <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
                   </a>
                   <p className="text-sm text-muted-foreground">{result.description}</p>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {result.source && <span className="font-medium mr-2">{result.source}</span>}
+                    {result.date && <span>{result.date}</span>}
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -625,8 +642,31 @@ const Search: React.FC = () => {
                       </div>
                     ) : lastSearchedQuery ? (
                       <div className="space-y-1">
-                        {results.length > 0 ? (
-                          results.map((result) => renderSearchResult(result))
+                        {newsResults.length > 0 ? (
+                          newsResults.map((result) => (
+                            <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
+                              <CardContent className="p-4">
+                                <div className="flex gap-4">
+                                  {result.imageUrl && (
+                                    <div className="flex-shrink-0">
+                                      <img src={result.imageUrl} alt={result.title} className="w-20 h-20 object-cover rounded-md" />
+                                    </div>
+                                  )}
+                                  <div>
+                                    <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
+                                    <a href={result.url} target="_blank" rel="noopener noreferrer">
+                                      <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
+                                    </a>
+                                    <p className="text-sm text-muted-foreground">{result.description}</p>
+                                    <div className="text-xs text-muted-foreground mt-1">
+                                      {result.source && <span className="font-medium mr-2">{result.source}</span>}
+                                      {result.date && <span>{result.date}</span>}
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))
                         ) : (
                           <div className="text-center py-6">
                             <p className="text-muted-foreground">No news results found for "{lastSearchedQuery}"</p>

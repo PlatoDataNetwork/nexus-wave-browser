@@ -1,3 +1,4 @@
+
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -65,6 +66,16 @@ export interface SerperSearchResponse {
     date?: string;
     source?: string;
     duration?: string;
+  }[];
+  // Add news type for news search
+  news?: {
+    title: string;
+    link: string;
+    snippet: string;
+    position: number;
+    imageUrl?: string;
+    date?: string;
+    source?: string;
   }[];
 }
 
@@ -246,6 +257,18 @@ export const searchWithSerper = async (
         source: video.source,
         duration: video.duration
       }));
+    } else if (type === "news" && data.news) {
+      // Map news search results
+      results = data.news.map((news, index) => ({
+        id: `serper-news-${index}`,
+        title: news.title,
+        url: news.link,
+        description: news.snippet,
+        type: "news",
+        imageUrl: news.imageUrl,
+        source: news.source,
+        date: news.date
+      }));
     } else {
       // Map regular search results
       results = data.organic.map((item) => ({
@@ -256,7 +279,8 @@ export const searchWithSerper = async (
         type: type === "news" ? "news" : "web",
         imageUrl: item.imageUrl,
         sitelinks: item.sitelinks,
-        position: item.position
+        position: item.position,
+        date: item.date
       }));
     }
 
