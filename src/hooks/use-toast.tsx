@@ -1,11 +1,10 @@
 
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
-import { X } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Toast Components
 const ToastProvider = ToastPrimitives.Provider;
 
 const ToastViewport = React.forwardRef<
@@ -43,15 +42,13 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
-  return (
-    <ToastPrimitives.Root
-      ref={ref}
-      className={cn(toastVariants({ variant }), className)}
-      {...props}
-    />
-  );
-});
+>(({ className, variant, ...props }, ref) => (
+  <ToastPrimitives.Root
+    ref={ref}
+    className={cn(toastVariants({ variant }), className)}
+    {...props}
+  />
+));
 Toast.displayName = ToastPrimitives.Root.displayName;
 
 const ToastAction = React.forwardRef<
@@ -115,7 +112,7 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
-// Toast Hook Implementation
+// Toast context for managing toast state
 type ToasterToast = ToastProps & {
   id: string;
   title?: React.ReactNode;
@@ -146,9 +143,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const dismiss = React.useCallback((toastId?: string) => {
     setToasts((prevToasts) =>
-      toastId
-        ? prevToasts.filter((toast) => toast.id !== toastId)
-        : []
+      toastId ? prevToasts.filter((toast) => toast.id !== toastId) : []
     );
   }, []);
 
@@ -161,11 +156,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 export const useToast = () => {
   const context = React.useContext(ToastContext);
-
   if (!context) {
     throw new Error("useToast must be used within a ToastProvider");
   }
-
   return context;
 };
 
