@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
-import { initialTabs, Tab } from "@/lib/dummyData";
-import { toast } from "@/components/ui/sonner";
+import { useState, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "sonner";
 
 // Interface for tab history
 interface TabHistory {
@@ -50,7 +50,7 @@ export function useTabs(defaultUrl: string = "https://platodata.io") {
   }, [tabs]);
 
   const addTab = useCallback(() => {
-    const newTabId = `tab-${Date.now()}`;
+    const newTabId = `tab-${uuidv4()}`;
     const newTab: Tab = {
       id: newTabId,
       title: "platodata.io",

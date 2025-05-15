@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface WebviewFrameProps {
