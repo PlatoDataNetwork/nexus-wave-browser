@@ -1,10 +1,12 @@
 
 import * as React from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
-import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+// Toast Components
 const ToastProvider = ToastPrimitives.Provider;
 
 const ToastViewport = React.forwardRef<
@@ -114,6 +116,65 @@ type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
+// Toast Hook Implementation
+type ToasterToast = ToastProps & {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: ToastActionElement;
+};
+
+type ToastContextType = {
+  toasts: ToasterToast[];
+  toast: (props: Omit<ToasterToast, "id">) => void;
+  dismiss: (toastId?: string) => void;
+};
+
+const ToastContext = createContext<ToastContextType>({
+  toasts: [],
+  toast: () => {},
+  dismiss: () => {},
+});
+
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = useState<ToasterToast[]>([]);
+
+  const toast = useCallback((props: Omit<ToasterToast, "id">) => {
+    const id = Math.random().toString(36).slice(2, 9);
+    setToasts((prevToasts) => [...prevToasts, { id, ...props }]);
+    return id;
+  }, []);
+
+  const dismiss = useCallback((toastId?: string) => {
+    setToasts((prevToasts) =>
+      toastId
+        ? prevToasts.filter((toast) => toast.id !== toastId)
+        : []
+    );
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ toasts, toast, dismiss }}>
+      {children}
+    </ToastContext.Provider>
+  );
+}
+
+export const useToast = () => {
+  const context = useContext(ToastContext);
+
+  if (!context) {
+    throw new Error("useToast must be used within a ToastProvider");
+  }
+
+  return context;
+};
+
+export function toast(props: Omit<ToasterToast, "id">) {
+  const { toast } = useToast();
+  return toast(props);
+}
+
 export {
   type ToastProps,
   type ToastActionElement,
@@ -125,39 +186,3 @@ export {
   ToastClose,
   ToastAction,
 };
-
-// Create a custom hook for toast
-import { createContext, useContext } from "react";
-
-type ToasterToast = ToastProps & {
-  id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: ToastActionElement;
-};
-
-const ToastContext = createContext<{
-  toasts: ToasterToast[];
-  toast: (props: Omit<ToasterToast, "id">) => void;
-  dismiss: (toastId?: string) => void;
-}>({
-  toasts: [],
-  toast: () => {},
-  dismiss: () => {},
-});
-
-export const useToast = () => {
-  const context = useContext(ToastContext);
-
-  if (context === undefined) {
-    throw new Error("useToast must be used within a ToastProvider");
-  }
-
-  return context;
-};
-
-// Helper function for toast
-export function toast(props: Omit<ToasterToast, "id">) {
-  const { toast } = useToast();
-  return toast(props);
-}
