@@ -150,20 +150,39 @@ const Search: React.FC = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    if (searchQuery.trim()) {
-      // If there's text in the search bar, apply search when switching tabs
-      handleSearch();
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); 
-    e.stopPropagation();
     
-    if (conversationMode) {
-      // Handle conversation mode
-    } else {
-      handleSearch();
+    // Execute a search with the current query if there is text in the search bar
+    if (searchQuery.trim()) {
+      // We need to reset state for the previous tab's results to avoid showing stale data
+      if (tab === "web" || tab === "nexus") {
+        setImageResults([]);
+        setVideoResults([]);
+        setNewsResults([]);
+      } else if (tab === "images") {
+        setResults([]);
+        setVideoResults([]);
+        setNewsResults([]);
+        setKnowledgeGraph(null);
+        setPeopleAlsoAsk([]);
+        setRelatedSearches([]);
+      } else if (tab === "videos") {
+        setResults([]);
+        setImageResults([]);
+        setNewsResults([]);
+        setKnowledgeGraph(null);
+        setPeopleAlsoAsk([]);
+        setRelatedSearches([]);
+      } else if (tab === "news") {
+        setResults([]);
+        setImageResults([]);
+        setVideoResults([]);
+        setKnowledgeGraph(null);
+        setPeopleAlsoAsk([]);
+        setRelatedSearches([]);
+      }
+      
+      // Execute the search for the new tab
+      handleSearch(searchQuery);
     }
   };
 
@@ -234,7 +253,7 @@ const Search: React.FC = () => {
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                   <div className="text-xs text-muted-foreground mt-1">
                     {result.source && <span className="font-medium mr-2">{result.source}</span>}
-                    {result.date && <span>{result.date}</span>}
+                    {result.publishedDate && <span>{result.publishedDate}</span>}
                   </div>
                 </div>
               </div>
@@ -660,7 +679,7 @@ const Search: React.FC = () => {
                                     <p className="text-sm text-muted-foreground">{result.description}</p>
                                     <div className="text-xs text-muted-foreground mt-1">
                                       {result.source && <span className="font-medium mr-2">{result.source}</span>}
-                                      {result.date && <span>{result.date}</span>}
+                                      {result.publishedDate && <span>{result.publishedDate}</span>}
                                     </div>
                                   </div>
                                 </div>
