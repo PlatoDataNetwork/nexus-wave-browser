@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [lastSearchedQuery, setLastSearchedQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
   const [imageResults, setImageResults] = useState<SearchResultItem[]>([]);
   const [videoResults, setVideoResults] = useState<SearchResultItem[]>([]);
@@ -53,9 +53,21 @@ const Search: React.FC = () => {
   }, []);
 
   const handleSearch = async (query = searchQuery) => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      // Clear results when search query is empty
+      setResults([]);
+      setImageResults([]);
+      setVideoResults([]);
+      setKnowledgeGraph(null);
+      setPeopleAlsoAsk([]);
+      setRelatedSearches([]);
+      setLastSearchedQuery("");
+      return;
+    }
     
     setIsLoading(true);
+    // Update last searched query
+    setLastSearchedQuery(query);
     
     try {
       let searchResults: SearchAPIResponse;
@@ -109,6 +121,7 @@ const Search: React.FC = () => {
       setKnowledgeGraph(null);
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
+      setLastSearchedQuery("");
     } finally {
       setIsLoading(false);
     }
@@ -142,6 +155,23 @@ const Search: React.FC = () => {
     }
   };
 
+  // Handle search input change
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+    setSearchQuery(newQuery);
+    
+    // If search box is cleared, reset results
+    if (!newQuery.trim() && lastSearchedQuery) {
+      setResults([]);
+      setImageResults([]);
+      setVideoResults([]);
+      setKnowledgeGraph(null);
+      setPeopleAlsoAsk([]);
+      setRelatedSearches([]);
+    }
+  };
+
+  // Render Search Result component
   const renderSearchResult = (result: SearchResultItem) => {
     switch (result.type) {
       case "web":
@@ -410,7 +440,7 @@ const Search: React.FC = () => {
                   type="search"
                   placeholder="Search the web securely..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchInputChange}
                   className="h-10 pl-10 bg-background"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -449,7 +479,7 @@ const Search: React.FC = () => {
                     <ImageResults 
                       isLoading={isLoading} 
                       results={imageResults} 
-                      searchQuery={searchQuery}
+                      searchQuery={lastSearchedQuery}
                     />
                   </TabsContent>
                   
@@ -459,7 +489,7 @@ const Search: React.FC = () => {
                         <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
                         <p className="text-muted-foreground">Searching securely...</p>
                       </div>
-                    ) : searchQuery && results.length > 0 ? (
+                    ) : lastSearchedQuery && results.length > 0 ? (
                       <div id="search-results">
                         <p className="text-sm text-muted-foreground mb-4">
                           About {results.length.toLocaleString()} results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
@@ -483,7 +513,7 @@ const Search: React.FC = () => {
                           </div>
                         </div>
                       </div>
-                    ) : searchQuery ? (
+                    ) : lastSearchedQuery ? (
                       <div className="text-center py-10">
                         <h2 className="text-xl font-medium mb-2">No results found</h2>
                         <p className="text-muted-foreground">Try different keywords or search terms</p>
@@ -507,14 +537,14 @@ const Search: React.FC = () => {
                         <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
                         <p className="text-muted-foreground">Searching videos...</p>
                       </div>
-                    ) : searchQuery && videoResults.length > 0 ? (
+                    ) : lastSearchedQuery && videoResults.length > 0 ? (
                       <div>
                         <p className="text-sm text-muted-foreground mb-4">
                           About {videoResults.length.toLocaleString()} video results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
                         </p>
                         {videoResults.map(renderSearchResult)}
                       </div>
-                    ) : searchQuery ? (
+                    ) : lastSearchedQuery ? (
                       <div className="text-center py-10">
                         <h2 className="text-xl font-medium mb-2">No video results found</h2>
                         <p className="text-muted-foreground">Try different keywords or search terms</p>
@@ -537,14 +567,14 @@ const Search: React.FC = () => {
                         <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
                         <p className="text-muted-foreground">Searching news...</p>
                       </div>
-                    ) : searchQuery && results.length > 0 ? (
+                    ) : lastSearchedQuery && results.length > 0 ? (
                       <div>
                         <p className="text-sm text-muted-foreground mb-4">
                           About {results.length.toLocaleString()} news results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
                         </p>
                         {results.map(renderSearchResult)}
                       </div>
-                    ) : searchQuery ? (
+                    ) : lastSearchedQuery ? (
                       <div className="text-center py-10">
                         <h2 className="text-xl font-medium mb-2">No news results found</h2>
                         <p className="text-muted-foreground">Try different keywords or search terms</p>
@@ -564,7 +594,7 @@ const Search: React.FC = () => {
                         <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
                         <p className="text-muted-foreground">Searching Nexus resources...</p>
                       </div>
-                    ) : searchQuery ? (
+                    ) : lastSearchedQuery ? (
                       <div className="text-center py-10">
                         <h2 className="text-xl font-medium mb-2">Nexus Search</h2>
                         <p className="text-muted-foreground">Search across the Nexus ecosystem (coming soon)</p>
