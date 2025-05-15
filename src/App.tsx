@@ -14,9 +14,9 @@ import Settings from "./pages/Settings";
 import Downloads from "./pages/Downloads";
 import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
+import { ToastProvider } from "./hooks/use-toast";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
-import { ToastProvider } from "./hooks/use-toast";
 
 const queryClient = new QueryClient();
 
