@@ -1,9 +1,53 @@
 
+"use client";
+
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// Create context
+type ToasterToast = {
+  id: string;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  action?: React.ReactNode;
+  variant?: "default" | "destructive";
+};
+
+type ToastContextType = {
+  toasts: ToasterToast[];
+  toast: (props: Omit<ToasterToast, "id">) => string;
+  dismiss: (toastId?: string) => void;
+};
+
+const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
+
+// Provider component
+function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = React.useState<ToasterToast[]>([]);
+
+  const toast = React.useCallback((props: Omit<ToasterToast, "id">) => {
+    const id = Math.random().toString(36).substring(2, 9);
+    setToasts((prevToasts) => [...prevToasts, { id, ...props }]);
+    return id;
+  }, []);
+
+  const dismiss = React.useCallback((toastId?: string) => {
+    setToasts((prevToasts) =>
+      toastId
+        ? prevToasts.filter((toast) => toast.id !== toastId)
+        : []
+    );
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ toasts, toast, dismiss }}>
+      {children}
+    </ToastContext.Provider>
+  );
+}
 
 // Toast viewport component
 const ToastViewport = React.forwardRef<
@@ -27,9 +71,9 @@ const toastVariants = cva(
   {
     variants: {
       variant: {
-        default: "border bg-background text-foreground",
+        default: "bg-background border",
         destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
+          "group destructive border-destructive bg-destructive text-destructive-foreground",
       },
     },
     defaultVariants: {
@@ -43,13 +87,15 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => (
-  <ToastPrimitives.Root
-    ref={ref}
-    className={cn(toastVariants({ variant }), className)}
-    {...props}
-  />
-));
+>(({ className, variant, ...props }, ref) => {
+  return (
+    <ToastPrimitives.Root
+      ref={ref}
+      className={cn(toastVariants({ variant }), className)}
+      {...props}
+    />
+  );
+});
 Toast.displayName = ToastPrimitives.Root.displayName;
 
 // Toast action component
@@ -60,7 +106,7 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
+      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-destructive/30 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
       className
     )}
     {...props}
@@ -116,50 +162,6 @@ ToastDescription.displayName = ToastPrimitives.Description.displayName;
 // Types for toast
 type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
 type ToastActionElement = React.ReactElement<typeof ToastAction>;
-
-// Toast context for managing toast state
-type ToasterToast = ToastProps & {
-  id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: ToastActionElement;
-};
-
-type ToastContextType = {
-  toasts: ToasterToast[];
-  toast: (props: Omit<ToasterToast, "id">) => string;
-  dismiss: (toastId?: string) => void;
-};
-
-// Create context
-const ToastContext = React.createContext<ToastContextType>({
-  toasts: [],
-  toast: () => "",
-  dismiss: () => {},
-});
-
-// Provider component
-function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = React.useState<ToasterToast[]>([]);
-
-  const toast = React.useCallback((props: Omit<ToasterToast, "id">) => {
-    const id = Math.random().toString(36).slice(2, 9);
-    setToasts((prevToasts) => [...prevToasts, { id, ...props }]);
-    return id;
-  }, []);
-
-  const dismiss = React.useCallback((toastId?: string) => {
-    setToasts((prevToasts) =>
-      toastId ? prevToasts.filter((toast) => toast.id !== toastId) : []
-    );
-  }, []);
-
-  return (
-    <ToastContext.Provider value={{ toasts, toast, dismiss }}>
-      {children}
-    </ToastContext.Provider>
-  );
-}
 
 // Hook to use toast
 function useToast() {
