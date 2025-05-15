@@ -50,9 +50,9 @@ const App = () => (
                 </div>
                 <Footer />
               </div>
+              <Toaster />
+              <Sonner />
             </BrowserRouter>
-            <Toaster />
-            <Sonner />
           </TooltipProvider>
         </ToastProvider>
       </AuthProvider>

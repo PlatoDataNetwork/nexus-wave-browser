@@ -25,7 +25,7 @@ type ToastContextType = {
 const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
 
 // Provider component
-function ToastProvider({ children }: { children: React.ReactNode }) {
+export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = React.useState<ToasterToast[]>([]);
 
   const toast = React.useCallback((props: Omit<ToasterToast, "id">) => {
@@ -42,15 +42,18 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  // Value to be provided by the context
+  const value = React.useMemo(() => ({ toasts, toast, dismiss }), [toasts, toast, dismiss]);
+
   return (
-    <ToastContext.Provider value={{ toasts, toast, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
     </ToastContext.Provider>
   );
 }
 
 // Toast viewport component
-const ToastViewport = React.forwardRef<
+export const ToastViewport = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Viewport>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
 >(({ className, ...props }, ref) => (
@@ -83,7 +86,7 @@ const toastVariants = cva(
 );
 
 // Toast component
-const Toast = React.forwardRef<
+export const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
@@ -99,7 +102,7 @@ const Toast = React.forwardRef<
 Toast.displayName = ToastPrimitives.Root.displayName;
 
 // Toast action component
-const ToastAction = React.forwardRef<
+export const ToastAction = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Action>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
 >(({ className, ...props }, ref) => (
@@ -115,7 +118,7 @@ const ToastAction = React.forwardRef<
 ToastAction.displayName = ToastPrimitives.Action.displayName;
 
 // Toast close component
-const ToastClose = React.forwardRef<
+export const ToastClose = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Close>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
 >(({ className, ...props }, ref) => (
@@ -134,7 +137,7 @@ const ToastClose = React.forwardRef<
 ToastClose.displayName = ToastPrimitives.Close.displayName;
 
 // Toast title component
-const ToastTitle = React.forwardRef<
+export const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
@@ -147,7 +150,7 @@ const ToastTitle = React.forwardRef<
 ToastTitle.displayName = ToastPrimitives.Title.displayName;
 
 // Toast description component
-const ToastDescription = React.forwardRef<
+export const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
 >(({ className, ...props }, ref) => (
@@ -160,11 +163,11 @@ const ToastDescription = React.forwardRef<
 ToastDescription.displayName = ToastPrimitives.Description.displayName;
 
 // Types for toast
-type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
-type ToastActionElement = React.ReactElement<typeof ToastAction>;
+export type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
+export type ToastActionElement = React.ReactElement<typeof ToastAction>;
 
 // Hook to use toast
-function useToast() {
+export function useToast() {
   const context = React.useContext(ToastContext);
   if (!context) {
     throw new Error("useToast must be used within a ToastProvider");
@@ -173,21 +176,7 @@ function useToast() {
 }
 
 // Helper function
-function toast(props: Omit<ToasterToast, "id">) {
+export function toast(props: Omit<ToasterToast, "id">) {
   const { toast } = useToast();
   return toast(props);
 }
-
-export {
-  type ToastProps,
-  type ToastActionElement,
-  Toast,
-  ToastAction,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-  useToast,
-  toast,
-};
