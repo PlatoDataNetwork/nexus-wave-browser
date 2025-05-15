@@ -1,3 +1,4 @@
+
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -181,12 +182,13 @@ const getApiKeys = async (): Promise<{ serperKey: string; youKey: string }> => {
   }
 };
 
-// Search using Serper API with result count parameter
+// Search using Serper API with result count and recency parameter
 export const searchWithSerper = async (
   query: string, 
   type: "search" | "images" | "videos" | "news" = "search",
   safeSearch: boolean = true,
-  resultCount: number = type === "images" ? 200 : 100
+  resultCount: number = type === "images" ? 200 : 100,
+  recencyFilter: "day" | "week" | "month" | "any" = "any"
 ): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "serper" };
@@ -200,14 +202,32 @@ export const searchWithSerper = async (
     myHeaders.append("X-API-KEY", apiKey);
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify({
+    // Add recency filter to the request
+    const requestBody: any = {
       q: query,
       gl: "us",
       hl: "en",
       autocorrect: true,
       safe: safeSearch,
       num: resultCount // Add number of results parameter
-    });
+    };
+
+    // Add date restrict parameter based on recency filter
+    if (recencyFilter !== "any") {
+      switch (recencyFilter) {
+        case "day":
+          requestBody.dateRestrict = "d1"; // past 1 day
+          break;
+        case "week":
+          requestBody.dateRestrict = "w1"; // past 1 week
+          break;
+        case "month":
+          requestBody.dateRestrict = "m1"; // past 1 month
+          break;
+      }
+    }
+
+    const raw = JSON.stringify(requestBody);
 
     const requestOptions = {
       method: "POST",
@@ -307,11 +327,12 @@ export const searchWithSerper = async (
   }
 };
 
-// Search using You.com API with result count parameter
+// Search using You.com API with result count and recency parameter
 export const searchWithYou = async (
   query: string,
   safeSearch: boolean = true,
-  resultCount: number = 100
+  resultCount: number = 100,
+  recencyFilter: "day" | "week" | "month" | "any" = "any"
 ): Promise<SearchAPIResponse> => {
   if (!query.trim()) {
     return { results: [], provider: "you" };
@@ -328,9 +349,34 @@ export const searchWithYou = async (
       }
     };
 
-    // Add safe search parameter to query URL if enabled
-    const safeSearchParam = safeSearch ? '&safesearch=on' : '';
-    const endpoint = `https://api.ydc-index.io/search?query=${encodeURIComponent(query)}${safeSearchParam}`;
+    // Add parameters to query URL
+    let queryParams = new URLSearchParams();
+    queryParams.append("query", query);
+    
+    // Add safe search parameter if enabled
+    if (safeSearch) {
+      queryParams.append("safesearch", "on");
+    }
+    
+    // Add recency parameter based on filter
+    if (recencyFilter !== "any") {
+      switch (recencyFilter) {
+        case "day":
+          queryParams.append("time", "d");
+          break;
+        case "week":
+          queryParams.append("time", "w");
+          break;
+        case "month":
+          queryParams.append("time", "m");
+          break;
+      }
+    }
+    
+    // Add count parameter
+    queryParams.append("count", resultCount.toString());
+    
+    const endpoint = `https://api.ydc-index.io/search?${queryParams.toString()}`;
     const response = await fetch(endpoint, options);
     
     if (!response.ok) {

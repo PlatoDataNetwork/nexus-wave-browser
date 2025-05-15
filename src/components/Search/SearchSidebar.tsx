@@ -2,19 +2,21 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2 } from "lucide-react";
+import { Loader2, Calendar } from "lucide-react";
 import { SearchResultItem } from '@/services/searchApi';
 
 interface SearchSidebarProps {
   isLoading: boolean;
   results: SearchResultItem[];
   searchQuery: string;
+  recencyFilter?: "day" | "week" | "month" | "any";
 }
 
 const SearchSidebar: React.FC<SearchSidebarProps> = ({ 
   isLoading, 
   results, 
-  searchQuery 
+  searchQuery,
+  recencyFilter = "any"
 }) => {
   if (isLoading) {
     return (
@@ -44,10 +46,29 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
     );
   }
 
+  // Helper function to format the recency filter text
+  const formatRecencyText = (filter: "day" | "week" | "month" | "any") => {
+    switch(filter) {
+      case "day": return "the past 24 hours";
+      case "week": return "the past week";
+      case "month": return "the past month";
+      default: return "any time";
+    }
+  };
+
   return (
     <ScrollArea className="h-full">
       <div className="p-4 space-y-3">
-        <h3 className="text-sm font-medium mb-2">Related Search Results</h3>
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-sm font-medium">Related Search Results</h3>
+          {recencyFilter !== "any" && (
+            <div className="flex items-center text-xs text-muted-foreground">
+              <Calendar className="h-3 w-3 mr-1" />
+              <span>From {formatRecencyText(recencyFilter)}</span>
+            </div>
+          )}
+        </div>
+
         {results.map((result) => (
           <Card key={result.id} className="hover:shadow-sm transition-all">
             <CardContent className="p-3">

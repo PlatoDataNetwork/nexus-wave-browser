@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchAPIResponse, SearchResultItem, searchWithYou } from '@/services/searchApi';
@@ -77,6 +76,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [showSidebar, setShowSidebar] = useState(true);
   const [lastSearchQuery, setLastSearchQuery] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
+  const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -117,7 +117,8 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       setSearchLoading(true);
       setLastSearchQuery(messageToSearch);
       
-      const searchResults = await searchWithYou(messageToSearch, safeSearch, 10);
+      // Pass recency filter to the search API
+      const searchResults = await searchWithYou(messageToSearch, safeSearch, 10, recencyFilter);
       setSearchResults(searchResults.results);
       setSearchLoading(false);
       
@@ -176,6 +177,12 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setShowSidebar(prev => !prev);
   };
 
+  // Change recency filter
+  const handleChangeRecencyFilter = (value: "day" | "week" | "month" | "any") => {
+    setRecencyFilter(value);
+    toast(`Results will now show content from the past ${value === "day" ? "24 hours" : value === "week" ? "week" : value === "month" ? "month" : "any time"}`);
+  };
+
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col h-full">
@@ -196,6 +203,20 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
               <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
               <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
             </Button>
+
+            <div className="flex items-center gap-1 border-l pl-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <select 
+                className="text-xs bg-transparent border-none focus:ring-0 cursor-pointer"
+                value={recencyFilter}
+                onChange={(e) => handleChangeRecencyFilter(e.target.value as "day" | "week" | "month" | "any")}
+              >
+                <option value="day">Last 24 hours</option>
+                <option value="week">Past week</option>
+                <option value="month">Past month</option>
+                <option value="any">Any time</option>
+              </select>
+            </div>
             
             <Button
               variant="ghost"
@@ -274,6 +295,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             isLoading={searchLoading}
             results={searchResults}
             searchQuery={lastSearchQuery}
+            recencyFilter={recencyFilter}
           />
         </div>
       )}
