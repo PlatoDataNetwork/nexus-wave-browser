@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,7 +43,7 @@ const getChatGPTResponse = async (message: string): Promise<string> => {
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative.'
+            content: 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.'
           },
           {
             role: 'user',
@@ -64,6 +65,30 @@ const getChatGPTResponse = async (message: string): Promise<string> => {
     console.error("Error fetching AI response:", error);
     throw error;
   }
+};
+
+// Function to simulate real-time data when API fails
+const getSimulatedRealTimeData = (query: string): SearchResultItem[] => {
+  const currentDate = new Date();
+  const dateStr = currentDate.toLocaleDateString();
+  const timeStr = currentDate.toLocaleTimeString();
+  
+  return [
+    {
+      id: "simulated-1",
+      title: "Real-time data unavailable",
+      url: "#",
+      description: `The search API is currently unavailable. Here's a simulated result for "${query}" as of ${dateStr} ${timeStr}.`,
+      type: "web"
+    },
+    {
+      id: "simulated-2",
+      title: "Try these alternative sources",
+      url: "#",
+      description: "For real-time information, consider visiting specialized websites for the topic you're interested in.",
+      type: "web"
+    }
+  ];
 };
 
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
@@ -117,19 +142,38 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       setSearchLoading(true);
       setLastSearchQuery(messageToSearch);
       
-      // Pass recency filter to the search API
-      const searchResults = await searchWithYou(messageToSearch, safeSearch, 10, recencyFilter);
-      setSearchResults(searchResults.results);
+      let searchResults;
+      try {
+        // Try to get real search results with recency filter
+        searchResults = await searchWithYou(messageToSearch, safeSearch, 10, recencyFilter);
+        setSearchResults(searchResults.results);
+      } catch (error) {
+        console.error("Search API error:", error);
+        // If API fails, use simulated data
+        const simulatedResults = getSimulatedRealTimeData(messageToSearch);
+        setSearchResults(simulatedResults);
+        toast("Search API unavailable, showing simulated results", {
+          description: "Try again later for up-to-date information"
+        });
+      }
       setSearchLoading(false);
       
       // Generate AI response using ChatGPT API
       const aiResponseContent = await getChatGPTResponse(messageToSearch);
       
       // Create sources from search results for citation
-      const sources = searchResults.results.slice(0, 3).map(result => ({
-        title: result.title,
-        url: result.url
-      }));
+      let sources = [];
+      if (searchResults && searchResults.results && searchResults.results.length > 0) {
+        sources = searchResults.results.slice(0, 3).map(result => ({
+          title: result.title,
+          url: result.url
+        }));
+      } else if (searchResults && Array.isArray(searchResults)) {
+        sources = searchResults.slice(0, 3).map(result => ({
+          title: result.title,
+          url: result.url
+        }));
+      }
       
       // Add AI response to conversation
       const aiResponse: ConversationMessage = {
@@ -142,14 +186,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
-      console.error("Search or AI error:", error);
+      console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
       
       // Add a fallback response
       const fallbackResponse: ConversationMessage = {
         id: Date.now().toString(),
         role: "assistant",
-        content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
+        content: "I'm sorry, but I encountered an issue while processing your request. For real-time information, please try again later or visit specialized websites for the topic you're interested in.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackResponse]);
@@ -181,6 +225,27 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const handleChangeRecencyFilter = (value: "day" | "week" | "month" | "any") => {
     setRecencyFilter(value);
     toast(`Results will now show content from the past ${value === "day" ? "24 hours" : value === "week" ? "week" : value === "month" ? "month" : "any time"}`);
+  };
+
+  // Refresh search results to get the latest data
+  const handleRefreshResults = async () => {
+    if (!lastSearchQuery) return;
+    
+    setSearchLoading(true);
+    toast("Refreshing results...");
+    
+    try {
+      const searchResults = await searchWithYou(lastSearchQuery, safeSearch, 10, recencyFilter);
+      setSearchResults(searchResults.results);
+      toast("Results refreshed with the latest data");
+    } catch (error) {
+      console.error("Error refreshing search:", error);
+      const simulatedResults = getSimulatedRealTimeData(lastSearchQuery);
+      setSearchResults(simulatedResults);
+      toast("Could not refresh data. Using simulated results.");
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   return (
@@ -226,6 +291,19 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             >
               {showSidebar ? "Hide Results" : "Show Results"}
             </Button>
+
+            {lastSearchQuery && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefreshResults}
+                className="text-xs"
+                disabled={searchLoading}
+              >
+                {searchLoading ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : null}
+                Refresh Data
+              </Button>
+            )}
           </div>
         </div>
         <ScrollArea className="flex-1 p-4">
@@ -296,6 +374,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             results={searchResults}
             searchQuery={lastSearchQuery}
             recencyFilter={recencyFilter}
+            onRefresh={handleRefreshResults}
           />
         </div>
       )}
