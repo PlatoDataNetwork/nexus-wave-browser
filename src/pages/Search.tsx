@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
+import { Link } from "react-router-dom";
 
 // Import updated searchApi functionality
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -406,6 +408,100 @@ const Search: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
+      {/* Top navigation bar similar to the home screen */}
+      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
+        <div className="container flex h-16 max-w-screen-2xl items-center">
+          {/* Logo and Brand */}
+          <div className="mr-4 flex items-center">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
+                  alt="Nexus Wave Logo" 
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <span className="hidden text-xl font-bold text-white sm:inline-block">
+                Nexus Wave
+              </span>
+            </Link>
+          </div>
+          
+          {/* Main Navigation */}
+          <nav className="flex-1">
+            <ul className="flex gap-1 md:gap-2">
+              <li>
+                <Link to="/search">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="text-white"
+                  >
+                    <SearchIcon className="mr-1 h-4 w-4" />
+                    <span className="hidden sm:inline">Search</span>
+                  </Button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/app">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white"
+                  >
+                    <Globe className="mr-1 h-4 w-4" />
+                    <span className="hidden sm:inline">Browser</span>
+                  </Button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/token">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white"
+                  >
+                    <Zap className="mr-1 h-4 w-4" />
+                    <span className="hidden sm:inline">Token</span>
+                  </Button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/staking">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white"
+                  >
+                    <Image className="mr-1 h-4 w-4" />
+                    <span className="hidden sm:inline">Staking</span>
+                  </Button>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          
+          {/* Right side actions */}
+          <div className="flex items-center gap-2">
+            <Link to="/profile">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white"
+              >
+                Signup
+              </Button>
+            </Link>
+            <Link to="/downloads">
+              <Button variant="macos" size="sm">
+                Download
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Search interface */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
         <div className="flex gap-2 mb-4 justify-end">
           <SearchProviderSelector
@@ -437,6 +533,7 @@ const Search: React.FC = () => {
           </Button>
         </form>
 
+        {/* Tabs and search controls */}
         <div className="flex items-center justify-between mt-4">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <div className="flex justify-between items-center">
@@ -481,6 +578,7 @@ const Search: React.FC = () => {
               </div>
             </div>
             
+            {/* Tab content sections */}
             <TabsContent value="web">
               <ScrollArea className="h-full">
                 {isLoading ? (
