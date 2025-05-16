@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -168,7 +169,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
         
         const url = link.getAttribute('href');
         if (url && onSearch) {
-          // Use the navigateToUrl function to open within the browser
+          // Use the app browser to open link within the app
           toast.info(`Opening ${url} in browser`);
           onSearch(url);
         }
