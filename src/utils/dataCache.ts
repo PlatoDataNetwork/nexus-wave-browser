@@ -5,8 +5,8 @@ interface CachedData {
   sources: Array<{ title: string; url: string }>;
   ttl: number; // Time to live in milliseconds
   chartData?: {
-    type: string;
-    symbols?: string[];
+    type: 'stockComparison';
+    symbols: string[];
     data: any[];
     title: string;
   };
@@ -47,8 +47,8 @@ class DataCache {
     sources: Array<{ title: string; url: string }>, 
     contentType: string,
     chartData?: {
-      type: string;
-      symbols?: string[];
+      type: 'stockComparison';
+      symbols: string[];
       data: any[];
       title: string;
     }
