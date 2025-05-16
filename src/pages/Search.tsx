@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,11 +18,10 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
-import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
 import { Link } from "react-router-dom";
 
 // Import updated searchApi functionality
-import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
+import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,7 +32,6 @@ const Search: React.FC = () => {
   const [newsResults, setNewsResults] = useState<SearchResultItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("web");
-  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("serper");
   const [knowledgeGraph, setKnowledgeGraph] = useState<any | null>(null);
   const [peopleAlsoAsk, setPeopleAlsoAsk] = useState<any[]>([]);
   const [relatedSearches, setRelatedSearches] = useState<string[]>([]);
@@ -76,41 +73,22 @@ const Search: React.FC = () => {
       // Handle different search types based on active tab
       if (activeTab === "images") {
         // Image search - request 200 images
-        if (searchProvider === "serper") {
-          searchResults = await searchWithSerper(query, "images", safeSearch, 200);
-          setImageResults(searchResults.results || []);
-        } else {
-          searchResults = await searchWithYou(query, safeSearch, 200);
-          setImageResults(searchResults.results || []);
-        }
+        searchResults = await searchWithSerper(query, "images", safeSearch, 200);
+        setImageResults(searchResults.results || []);
       } else if (activeTab === "videos") {
         // Video search
-        if (searchProvider === "serper") {
-          searchResults = await searchWithSerper(query, "videos", safeSearch, 100);
-          setVideoResults(searchResults.results || []);
-        } else {
-          searchResults = await searchWithYou(query, safeSearch, 100);
-          setVideoResults(searchResults.results || []);
-        }
+        searchResults = await searchWithSerper(query, "videos", safeSearch, 100);
+        setVideoResults(searchResults.results || []);
       } else if (activeTab === "news") {
         // News search
-        if (searchProvider === "serper") {
-          searchResults = await searchWithSerper(query, "news", safeSearch, 100);
-          setNewsResults(searchResults.results || []);
-        } else {
-          searchResults = await searchWithYou(query, safeSearch, 100);
-          setNewsResults(searchResults.results || []);
-        }
+        searchResults = await searchWithSerper(query, "news", safeSearch, 100);
+        setNewsResults(searchResults.results || []);
       } else {
         // Web search (and other types) - request 100 results
         const serperType = activeTab === "web" ? "search" : 
                          activeTab === "news" ? "news" : "search";
         
-        if (searchProvider === "serper") {
-          searchResults = await searchWithSerper(query, serperType, safeSearch, 100);
-        } else {
-          searchResults = await searchWithYou(query, safeSearch, 100);
-        }
+        searchResults = await searchWithSerper(query, serperType, safeSearch, 100);
         
         // Update state with search results
         setResults(searchResults.results || []);
@@ -503,13 +481,6 @@ const Search: React.FC = () => {
 
       {/* Search interface */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
-        <div className="flex gap-2 mb-4 justify-end">
-          <SearchProviderSelector
-            selectedProvider={searchProvider}
-            onSelectProvider={setSearchProvider}
-          />
-        </div>
-
         <form 
           onSubmit={handleSubmit}
           className="flex gap-2"

@@ -79,19 +79,6 @@ export interface SerperSearchResponse {
   }[];
 }
 
-// Types for You.com API responses
-export interface YouSearchResponse {
-  hits: {
-    url: string;
-    title: string;
-    description: string;
-    favicon_url?: string;
-    thumbnail_url?: string;
-    snippets?: string[];
-  }[];
-  latency: number;
-}
-
 // Common result format for our app
 export interface SearchResultItem {
   id: string;
@@ -135,50 +122,39 @@ export interface SearchAPIResponse {
   }[];
   relatedSearches?: string[];
   error?: string;
-  provider: "serper" | "you";
+  provider: "serper";
 }
 
-// Provider API keys
+// Provider API key
 const SERPER_API_KEY = "a84ace3f3a07c30b70a5cdfb487c85aa14688444"; // This is a sample key
-const YOU_API_KEY = "b4a7675d-d49a-4a31-a3ce-2dbf61cb935e<__>1P6A8vETU8N2v5f4IL9xcte2"; // This is a sample key
 
-// Function to get API keys from Supabase if available
-const getApiKeys = async (): Promise<{ serperKey: string; youKey: string }> => {
+// Function to get API key from Supabase if available
+const getApiKey = async (): Promise<string> => {
   // If Supabase is available, try to get keys from there
   try {
     // Check if user is authenticated first to avoid the UUID error
     const authResponse = await supabase.auth.getUser();
     if (!authResponse.data.user?.id) {
-      // If no authenticated user, return sample keys
-      return {
-        serperKey: SERPER_API_KEY,
-        youKey: YOU_API_KEY
-      };
+      // If no authenticated user, return sample key
+      return SERPER_API_KEY;
     }
     
     const { data: keys, error } = await supabase
       .from("search_api_keys")
       .select("provider, api_key")
-      .eq("user_id", authResponse.data.user.id);
+      .eq("user_id", authResponse.data.user.id)
+      .eq("provider", "serper");
 
     if (error) {
       throw error;
     }
 
     const serperKeyObj = keys?.find(k => k.provider === "serper");
-    const youKeyObj = keys?.find(k => k.provider === "you");
-
-    return {
-      serperKey: serperKeyObj?.api_key || SERPER_API_KEY,
-      youKey: youKeyObj?.api_key || YOU_API_KEY
-    };
+    return serperKeyObj?.api_key || SERPER_API_KEY;
   } catch (error) {
-    console.error("Error fetching API keys:", error);
-    // Fallback to sample keys
-    return {
-      serperKey: SERPER_API_KEY,
-      youKey: YOU_API_KEY
-    };
+    console.error("Error fetching API key:", error);
+    // Fallback to sample key
+    return SERPER_API_KEY;
   }
 };
 
@@ -195,8 +171,7 @@ export const searchWithSerper = async (
   }
 
   try {
-    const apiKeys = await getApiKeys();
-    const apiKey = apiKeys.serperKey;
+    const apiKey = await getApiKey();
 
     const myHeaders = new Headers();
     myHeaders.append("X-API-KEY", apiKey);
@@ -323,90 +298,6 @@ export const searchWithSerper = async (
       results: [],
       error: error instanceof Error ? error.message : "Unknown error occurred",
       provider: "serper"
-    };
-  }
-};
-
-// Search using You.com API with result count and recency parameter
-export const searchWithYou = async (
-  query: string,
-  safeSearch: boolean = true,
-  resultCount: number = 100,
-  recencyFilter: "day" | "week" | "month" | "any" = "any"
-): Promise<SearchAPIResponse> => {
-  if (!query.trim()) {
-    return { results: [], provider: "you" };
-  }
-
-  try {
-    const apiKeys = await getApiKeys();
-    const apiKey = apiKeys.youKey;
-
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-API-Key': apiKey
-      }
-    };
-
-    // Add parameters to query URL
-    let queryParams = new URLSearchParams();
-    queryParams.append("query", query);
-    
-    // Add safe search parameter if enabled
-    if (safeSearch) {
-      queryParams.append("safesearch", "on");
-    }
-    
-    // Add recency parameter based on filter
-    if (recencyFilter !== "any") {
-      switch (recencyFilter) {
-        case "day":
-          queryParams.append("time", "d");
-          break;
-        case "week":
-          queryParams.append("time", "w");
-          break;
-        case "month":
-          queryParams.append("time", "m");
-          break;
-      }
-    }
-    
-    // Add count parameter
-    queryParams.append("count", resultCount.toString());
-    
-    const endpoint = `https://api.ydc-index.io/search?${queryParams.toString()}`;
-    const response = await fetch(endpoint, options);
-    
-    if (!response.ok) {
-      throw new Error(`You.com API returned ${response.status}: ${response.statusText}`);
-    }
-
-    const data: YouSearchResponse = await response.json();
-    
-    // Map the response to our common format
-    const results: SearchResultItem[] = data.hits.map((item, index) => ({
-      id: `you-${index}`,
-      title: item.title,
-      url: item.url,
-      description: item.description,
-      type: "web",
-      imageUrl: item.thumbnail_url,
-      snippets: item.snippets
-    }));
-
-    return {
-      results,
-      provider: "you"
-    };
-  } catch (error) {
-    console.error("Error searching with You.com:", error);
-    toast("Failed to fetch results from You.com. Please try again later.");
-    return {
-      results: [],
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-      provider: "you"
     };
   }
 };
