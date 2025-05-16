@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +7,6 @@ import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchResultItem } from '@/services/searchApi';
 import { toast } from "sonner";
-import SearchProviderSelector from './SearchProviderSelector';
 import SearchSidebar from './SearchSidebar';
 
 interface ConversationMessage {
