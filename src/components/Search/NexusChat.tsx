@@ -142,10 +142,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           
-          // Show loading toast for real-time data
+          // Show loading toast for real-time data - positioned above input
           toast("Fetching real-time data...", {
             duration: 3000,
-            icon: <Globe className="h-4 w-4" />
+            icon: <Globe className="h-4 w-4" />,
+            position: "top-center" // Ensure toast appears at top
           });
           
           realTimeData = await getRealTimeData(messageToSearch, classification);
@@ -153,14 +154,16 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           if (realTimeData) {
             toast("Found real-time information", {
               duration: 2000,
-              icon: <Zap className="h-4 w-4 text-nexus-purple" />
+              icon: <Zap className="h-4 w-4 text-nexus-purple" />,
+              position: "top-center" // Ensure toast appears at top
             });
           }
         }
       } catch (error) {
         console.error("Error during classification or data fetching:", error);
         toast("Couldn't analyze query for real-time needs", {
-          duration: 2000
+          duration: 2000,
+          position: "top-center" // Ensure toast appears at top
         });
       } finally {
         setIsClassifying(false);
@@ -205,7 +208,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       setMessages(prev => [...prev, aiResponse]);
     } catch (error) {
       console.error("AI error:", error);
-      toast("Failed to fetch response. Please try again later.");
+      toast("Failed to fetch response. Please try again later.", {
+        position: "top-center" // Ensure error toast appears at top
+      });
       
       // Add a fallback response
       const fallbackResponse: ChatMessage = {
@@ -416,8 +421,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         </div>
       </ScrollArea>
       
-      {/* Fixed position input area */}
-      <div className="p-4 border-t border-border bg-background shadow-md absolute bottom-0 left-0 right-0 z-10">
+      {/* Fixed position input area with higher z-index than before but lower than toasts */}
+      <div className="p-4 border-t border-border bg-background shadow-md fixed bottom-0 left-0 right-0 z-20">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
             placeholder="Ask Nexus anything..."
