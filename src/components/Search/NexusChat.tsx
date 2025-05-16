@@ -31,7 +31,7 @@ const getChatGPTResponse = async (
   conversationHistory: { role: "user" | "assistant"; content: string }[]
 ): Promise<string> => {
   try {
-    const systemPrompt = 'You are Nexus Wave\'s helpful assistant answering questions for users. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources. Your goal is to provide accurate and helpful information.';
+    const systemPrompt = 'You are Nexus Wave\'s helpful assistant answering questions for users. Your responses should be well-formatted with proper markdown, especially for code blocks. When showing code examples, use triple backticks with the language name, e.g. ```javascript. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources. Your goal is to provide accurate and helpful information.';
     
     // Construct messages array with system prompt, conversation history, and current message
     const messages = [
@@ -56,7 +56,7 @@ const getChatGPTResponse = async (
         model: 'gpt-4o-mini',
         messages: messages,
         temperature: 0.7,
-        max_tokens: 500
+        max_tokens: 800
       })
     });
     
@@ -122,7 +122,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Generate AI response using ChatGPT API with conversation history
       const aiResponseContent = await getChatGPTResponse(
         messageToSearch, 
-        updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
+        updatedHistory // Pass the full history
       );
       
       // Update conversation history with assistant response

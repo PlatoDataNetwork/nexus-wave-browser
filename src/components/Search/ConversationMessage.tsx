@@ -1,5 +1,8 @@
 
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface Source {
   title: string;
@@ -26,7 +29,44 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             : "bg-secondary border border-border"
         }`}
       >
-        <p className="whitespace-pre-wrap">{content}</p>
+        {role === "user" ? (
+          <p className="whitespace-pre-wrap">{content}</p>
+        ) : (
+          <div className="conversation-markdown">
+            <ReactMarkdown
+              components={{
+                code({node, inline, className, children, ...props}) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      language={match[1]}
+                      style={atomDark}
+                      PreTag="div"
+                      className="rounded-md my-2"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className="bg-gray-800 text-gray-200 px-1 py-0.5 rounded" {...props}>
+                      {children}
+                    </code>
+                  )
+                },
+                p: ({children}) => <p className="mb-2">{children}</p>,
+                ul: ({children}) => <ul className="list-disc ml-6 mb-3">{children}</ul>,
+                ol: ({children}) => <ol className="list-decimal ml-6 mb-3">{children}</ol>,
+                li: ({children}) => <li className="mb-1">{children}</li>,
+                h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+                h2: ({children}) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+                h3: ({children}) => <h3 className="text-md font-bold mb-2">{children}</h3>,
+                a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-nexus-purple underline hover:text-nexus-deep-purple">{children}</a>,
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          </div>
+        )}
         
         {sources && sources.length > 0 && (
           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
