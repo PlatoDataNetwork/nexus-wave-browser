@@ -37,27 +37,35 @@ class DataCache {
    */
   set(key: string, data: any, sources: Array<{ title: string; url: string }>, contentType: string): void {
     // Set TTL based on content type
-    let ttl = 3600000; // Default: 1 hour
+    let ttl = 1800000; // Default: 30 minutes
     
     // Adjust TTL based on content type
     switch (contentType.toLowerCase()) {
       case 'weather':
-        ttl = 1800000; // 30 minutes
+        ttl = 900000; // 15 minutes
         break;
       case 'finance':
       case 'exchange rate':
       case 'stock':
       case 'crypto':
-        ttl = 300000; // 5 minutes
+        ttl = 120000; // 2 minutes
         break;
       case 'news':
-        ttl = 900000; // 15 minutes
+        ttl = 600000; // 10 minutes
         break;
       case 'sports':
         ttl = 300000; // 5 minutes
         break;
+      case 'technology':
+      case 'software':
+      case 'version':
+        ttl = 1800000; // 30 minutes
+        break;
+      case 'comparison':
+        ttl = 600000; // 10 minutes
+        break;
       default:
-        ttl = 3600000; // 1 hour
+        ttl = 1800000; // 30 minutes
     }
     
     this.cache[key] = {

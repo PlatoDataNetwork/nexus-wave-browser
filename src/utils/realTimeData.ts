@@ -33,44 +33,88 @@ export async function getRealTimeData(
     // Not in cache, fetch fresh data
     const contentType = classification.topics[0] || 'general';
     
-    // Choose the best search term from the suggestions
-    const searchTerm = classification.suggestedSearchTerms[0] || query;
+    // Choose the best search terms - prioritize recency
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
     
-    // Get search results using searchWithSerper instead of getSearchResults
-    const searchResponse = await searchWithSerper(
-      searchTerm, 
-      'search',  // use web search type
-      true,      // Safe search on
-      3,         // Limit to 3 results
-      'day'      // Recent results (last 24 hours)
-    );
+    // Create search terms that emphasize recency
+    const searchTerms = [
+      `${query} ${currentYear}`, 
+      `${query} ${currentMonth} ${currentYear}`,
+      `latest ${query}`,
+      `current ${query}`,
+      ...classification.suggestedSearchTerms
+    ];
+    
+    // Try different search terms until we get results
+    let searchResponse = null;
+    for (const term of searchTerms) {
+      console.log(`Trying search term: ${term}`);
+      
+      // Get search results using searchWithSerper
+      searchResponse = await searchWithSerper(
+        term, 
+        'search',  // use web search type
+        true,      // Safe search on
+        5,         // Limit to 5 results to get more diverse sources
+        'day'      // Recent results (last 24 hours)
+      );
+      
+      if (searchResponse && searchResponse.results.length > 0) {
+        console.log(`Found results using term: ${term}`);
+        break;
+      }
+    }
+    
+    // If we still don't have results, try with a longer time window
+    if (!searchResponse || searchResponse.results.length === 0) {
+      console.log("No day-recent results, trying week-recent results");
+      searchResponse = await searchWithSerper(
+        searchTerms[0], 
+        'search',
+        true,
+        5,
+        'week'  // Recent results (last week)
+      );
+    }
     
     if (!searchResponse || searchResponse.results.length === 0) {
-      console.log("No search results found for:", searchTerm);
+      console.log("No search results found for any search terms");
       return null;
     }
     
-    // Get top 3 relevant results
-    const topResults = searchResponse.results.slice(0, 3);
+    // Get top relevant results
+    const topResults = searchResponse.results.slice(0, 5);
     
     // Extract content from search results
     const extractedContent = topResults.map(result => ({
       title: result.title,
       url: result.url,
       description: result.description,
-      snippets: result.type === 'web' ? [result.description] : []
+      snippets: result.type === 'web' ? [result.description] : [],
+      date: result.date || 'Unknown'
     }));
     
-    // Use GPT to synthesize the information
+    // Use GPT to synthesize the information with emphasis on recency
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `You are an expert data extractor. Given search results about a query, extract and summarize the most relevant real-time information.
-            Focus on extracting factual, up-to-date information. Format your response to be clear, concise, and factual.
-            Include specific data points, numbers, and dates when available. DO NOT make up information.
-            If the search results don't seem to have relevant real-time information, state that clearly.`
+          content: `You are an expert data extractor. Given search results about a query, extract and summarize the most relevant REAL-TIME information.
+            
+            IMPORTANT INSTRUCTIONS:
+            1. Focus on extracting the MOST CURRENT information available, especially dates, versions, prices, statistics.
+            2. EXPLICITLY MENTION the recency of the data (today, this week, this month, etc.)
+            3. INCLUDE specific dates and times when available
+            4. FORMAT your response to be clear, concise, and factual
+            5. Make it OBVIOUS when data is from today/this week vs. older data
+            6. Include NUMERICAL data whenever relevant (prices, percentages, statistics)
+            7. DO NOT make up or assume information
+            8. If the search results don't have recent information, CLEARLY STATE that the data may not be current
+            9. If information seems outdated or contradictory, acknowledge this in your response
+            
+            The user's query is about "${query}" and they specifically want the LATEST information.`
         },
         {
           role: "user",
@@ -79,7 +123,7 @@ export async function getRealTimeData(
             Search results:
             ${JSON.stringify(extractedContent, null, 2)}
             
-            Extract and summarize the most relevant real-time information from these results.`
+            Extract and summarize the most up-to-date information from these results, emphasizing when the data is from.`
         }
       ]
     });

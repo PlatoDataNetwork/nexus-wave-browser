@@ -43,13 +43,26 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
       }
     }
     
+    // Check for specific entity comparisons (like "AAPL vs MSFT" or company/product comparisons)
+    const comparisonPattern = /\b(vs|versus|compare|comparison)\b/i;
+    const hasComparison = comparisonPattern.test(query);
+    
+    // Check for version-related queries (software versions, releases, etc.)
+    const versionPattern = /\b(version|release|update|latest|newest|current)\b/i;
+    const hasVersionQuery = versionPattern.test(query);
+    
     // For simple cases, we can avoid calling GPT
-    if (hasTimePattern && detectedTopics.length > 0) {
+    if ((hasTimePattern && detectedTopics.length > 0) || hasVersionQuery || hasComparison) {
       return {
         needsRealTimeData: true,
         confidence: 0.9,
-        topics: detectedTopics,
-        suggestedSearchTerms: [query, ...detectedTopics.map(topic => `${topic} ${query}`)]
+        topics: detectedTopics.length > 0 ? detectedTopics : ["general"],
+        suggestedSearchTerms: [
+          query,
+          `latest ${query}`, 
+          `current ${query} ${new Date().getFullYear()}`,
+          ...detectedTopics.map(topic => `${topic} ${query} latest`)
+        ]
       };
     }
     
@@ -61,10 +74,13 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
           role: "system",
           content: `You are an expert query classifier that determines if a user question requires real-time or up-to-date information. 
             Analyze the query and decide if it would benefit from web search to get the latest information.
+            Be very sensitive to queries that might need current information - assume by default that users want the most recent data.
+            For any comparisons (like "A vs B"), product details, prices, versions, or statistics, assume real-time data is needed.
+            
             Respond with a JSON object with the following fields:
             - needsRealTimeData: boolean (true if the query requires recent information)
             - confidence: float between 0 and 1 (how confident you are in this classification)
-            - topics: array of strings (categories of information needed, e.g., "weather", "finance", "news")
+            - topics: array of strings (categories of information needed, e.g., "weather", "finance", "news", "technology", "software", "products")
             - suggestedSearchTerms: array of strings (optimized search terms for web scraping)
             
             Examples of queries needing real-time data:
@@ -73,12 +89,10 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
             - "Latest news about the SpaceX launch"
             - "USD to EUR exchange rate"
             - "Who won the Liverpool game yesterday"
-            
-            Examples of queries NOT needing real-time data:
-            - "How tall is Mount Everest?"
-            - "What is the capital of France?"
-            - "How does photosynthesis work?"
-            - "Who was Albert Einstein?"
+            - "AAPL vs MSFT stock performance"
+            - "Latest version of Laravel"
+            - "Current price of iPhone 15"
+            - "Best laptop for programming 2024"
           `
         },
         {
@@ -95,16 +109,24 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
         needsRealTimeData: result.needsRealTimeData,
         confidence: result.confidence,
         topics: result.topics || [],
-        suggestedSearchTerms: result.suggestedSearchTerms || [query]
+        suggestedSearchTerms: result.suggestedSearchTerms || [
+          query,
+          `latest ${query}`,
+          `current ${query} ${new Date().getFullYear()}`
+        ]
       };
     } catch (e) {
       console.error("Error parsing GPT response:", e);
       // Fallback to pattern-based classification
       return {
-        needsRealTimeData: hasTimePattern,
+        needsRealTimeData: hasTimePattern || hasVersionQuery || hasComparison,
         confidence: 0.6,
-        topics: detectedTopics,
-        suggestedSearchTerms: [query]
+        topics: detectedTopics.length > 0 ? detectedTopics : ["general"],
+        suggestedSearchTerms: [
+          query,
+          `latest ${query}`,
+          `current ${query} ${new Date().getFullYear()}`
+        ]
       };
     }
   } catch (error) {
