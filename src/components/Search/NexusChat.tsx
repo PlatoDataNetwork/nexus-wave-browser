@@ -3,9 +3,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle } from "lucide-react";
+import { Loader2, Send, MessageCircle, Zap, Globe } from "lucide-react";
 import { toast } from "sonner";
 import ConversationMessage from './ConversationMessage';
+import { classifyQuery } from '@/utils/queryClassifier';
+import { getRealTimeData } from '@/utils/realTimeData';
+import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
 
 interface ChatMessage {
   id: string;
@@ -16,68 +19,19 @@ interface ChatMessage {
     title: string;
     url: string;
   }[];
+  hasRealTimeData?: boolean;
 }
 
 interface NexusChatProps {
   onSearch?: (query: string) => void;
 }
 
-// OpenAI API key
-const OPENAI_API_KEY = "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";
-
-// Function to get AI response using ChatGPT API with conversation history
-const getChatGPTResponse = async (
-  message: string, 
-  conversationHistory: { role: "user" | "assistant"; content: string }[]
-): Promise<string> => {
-  try {
-    const systemPrompt = 'You are Nexus Wave\'s helpful assistant answering questions for users. Your responses should be well-formatted with proper markdown, especially for code blocks. When showing code examples, use triple backticks with the language name, e.g. ```javascript. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources. Your goal is to provide accurate and helpful information.';
-    
-    // Construct messages array with system prompt, conversation history, and current message
-    const messages = [
-      {
-        role: 'system',
-        content: systemPrompt
-      },
-      ...conversationHistory,
-      {
-        role: 'user',
-        content: message
-      }
-    ];
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 800
-      })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("API Error:", errorData);
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error("Error fetching AI response:", error);
-    throw error;
-  }
-};
-
 const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isClassifying, setIsClassifying] = useState(false);
+  const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
@@ -116,13 +70,53 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     setIsLoading(true);
     
     try {
+      // Step 1: Classify the query to determine if it needs real-time data
+      setIsClassifying(true);
+      let realTimeData = null;
+      let needsRealTimeData = false;
+      
+      try {
+        const classification = await classifyQuery(messageToSearch);
+        needsRealTimeData = classification.needsRealTimeData;
+        
+        // Step 2: If needed, fetch real-time data from the web
+        if (needsRealTimeData) {
+          setIsClassifying(false);
+          setIsFetchingRealTimeData(true);
+          
+          // Show loading toast for real-time data
+          toast("Fetching real-time data...", {
+            duration: 3000,
+            icon: <Globe className="h-4 w-4" />
+          });
+          
+          realTimeData = await getRealTimeData(messageToSearch, classification);
+          
+          if (realTimeData) {
+            toast("Found real-time information", {
+              duration: 2000,
+              icon: <Zap className="h-4 w-4 text-nexus-purple" />
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error during classification or data fetching:", error);
+        toast("Couldn't analyze query for real-time needs", {
+          duration: 2000
+        });
+      } finally {
+        setIsClassifying(false);
+        setIsFetchingRealTimeData(false);
+      }
+      
       // Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
-      // Generate AI response using ChatGPT API with conversation history
-      const aiResponseContent = await getChatGPTResponse(
+      // Generate AI response using ChatGPT API with conversation history and real-time data if available
+      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
         messageToSearch, 
-        updatedHistory // Pass the full history
+        updatedHistory,
+        realTimeData
       );
       
       // Update conversation history with assistant response
@@ -131,12 +125,17 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         { role: "assistant" as const, content: aiResponseContent }
       ]);
       
+      // Create sources from real-time data for citation
+      const sources = realTimeData?.sources || [];
+      
       // Add AI response to conversation UI
       const aiResponse: ChatMessage = {
         id: Date.now().toString(),
         role: "assistant",
         content: aiResponseContent,
-        timestamp: new Date()
+        timestamp: new Date(),
+        sources: sources.length > 0 ? sources : undefined,
+        hasRealTimeData: !!realTimeData
       };
       
       setMessages(prev => [...prev, aiResponse]);
@@ -167,9 +166,43 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 <MessageCircle className="h-8 w-8 text-nexus-purple" />
               </div>
               <h2 className="text-xl font-medium mb-2">Welcome to Nexus AI</h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
                 Ask me anything and I'll provide helpful information and answers to your questions.
               </p>
+              <div className="flex gap-2 flex-wrap justify-center max-w-lg mx-auto">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("What's the weather in New York today?")}
+                  className="flex items-center gap-1"
+                >
+                  <Globe className="h-3 w-3" /> Weather in New York
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("Current USD to EUR exchange rate")}
+                  className="flex items-center gap-1"
+                >
+                  <Zap className="h-3 w-3" /> USD to EUR rate
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("Latest news about SpaceX")}
+                  className="flex items-center gap-1"
+                >
+                  <Globe className="h-3 w-3" /> SpaceX news
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("What's the current price of gold?")}
+                  className="flex items-center gap-1"
+                >
+                  <Zap className="h-3 w-3" /> Gold price
+                </Button>
+              </div>
             </div>
           ) : (
             messages.map((message) => (
@@ -201,10 +234,31 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           />
           <Button 
             type="submit" 
-            className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
+            className="h-full bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
             disabled={isLoading}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            {isLoading ? (
+              <div className="flex items-center gap-1">
+                {isClassifying ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs">Analyzing</span>
+                  </>
+                ) : isFetchingRealTimeData ? (
+                  <>
+                    <Globe className="h-4 w-4 animate-pulse" />
+                    <span className="text-xs">Searching</span>
+                  </>
+                ) : (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs">Thinking</span>
+                  </>
+                )}
+              </div>
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </form>
       </div>

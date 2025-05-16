@@ -3,6 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Clock, Globe } from 'lucide-react';
 
 interface Source {
   title: string;
@@ -13,6 +14,7 @@ interface ConversationMessageProps {
   role: "user" | "assistant";
   content: string;
   sources?: Source[];
+  hasRealTimeData?: boolean;
 }
 
 // Define a proper type for the code component props
@@ -27,7 +29,8 @@ interface CodeProps {
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
   role, 
   content, 
-  sources 
+  sources,
+  hasRealTimeData
 }) => {
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
@@ -42,6 +45,12 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <p className="whitespace-pre-wrap">{content}</p>
         ) : (
           <div className="conversation-markdown">
+            {hasRealTimeData && (
+              <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
+                <Globe className="h-3 w-3" />
+                <span>Enhanced with real-time web data</span>
+              </div>
+            )}
             <ReactMarkdown
               components={{
                 code: ({ node, inline, className, children, ...props }: CodeProps) => {
@@ -79,11 +88,14 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         
         {sources && sources.length > 0 && (
           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs font-medium mb-1">Sources:</p>
+            <div className="flex items-center gap-1 text-xs font-medium mb-1">
+              <Clock className="h-3 w-3" />
+              <span>Sources:</span>
+            </div>
             <ul className="space-y-1">
               {sources.map((source, index) => (
                 <li key={index} className="text-xs">
-                  <a href={source.url} className="text-nexus-purple underline hover:text-nexus-deep-purple">
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-nexus-purple underline hover:text-nexus-deep-purple">
                     {source.title}
                   </a>
                 </li>
