@@ -8,32 +8,14 @@ import { ExternalLink } from "lucide-react";
 
 interface ImageResultsGridProps {
   results: SearchResultItem[];
-  onNavigate?: (url: string) => void;
 }
 
-const ImageResultsGrid: React.FC<ImageResultsGridProps> = ({ results, onNavigate }) => {
-  // Handle click on image card
-  const handleImageClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
-    e.preventDefault(); // Always prevent default navigation
-    e.stopPropagation(); // Stop event propagation
-    
-    console.log(`ImageResultsGrid: Handling click for ${url}`);
-    if (onNavigate) {
-      onNavigate(url);
-    } else {
-      console.log("ImageResultsGrid: No navigation handler provided");
-    }
-  };
-
+const ImageResultsGrid: React.FC<ImageResultsGridProps> = ({ results }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {results.map((result) => (
         <Card key={result.id} className="overflow-hidden group hover:shadow-md transition-all">
-          <a 
-            href={result.url} 
-            onClick={(e) => handleImageClick(e, result.url)}
-            className="cursor-pointer"
-          >
+          <a href={result.url} target="_blank" rel="noopener noreferrer">
             <div className="relative">
               <AspectRatio ratio={1} className="bg-muted">
                 {result.thumbnailUrl ? (

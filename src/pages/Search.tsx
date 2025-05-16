@@ -23,11 +23,7 @@ import { Link } from "react-router-dom";
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 
-interface SearchProps {
-  onNavigate?: (url: string) => void;
-}
-
-const Search: React.FC<SearchProps> = ({ onNavigate }) => {
+const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastSearchedQuery, setLastSearchedQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
@@ -163,17 +159,8 @@ const Search: React.FC<SearchProps> = ({ onNavigate }) => {
           <Card key={result.id} className="mb-3 hover:shadow-md transition-all bg-card border border-border">
             <CardContent className="p-4">
               <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-              <a 
-                href={result.url} 
-                onClick={(e) => {
-                  if (onNavigate) {
-                    e.preventDefault();
-                    onNavigate(result.url);
-                  }
-                }}
-                className="cursor-pointer"
-              >
-                <h3 className="text-lg font-medium text-nexus-purple hover:underline">{result.title}</h3>
+              <a href={result.url} target="_blank" rel="noopener noreferrer">
+                <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
               </a>
               <p className="text-sm text-muted-foreground">{result.description}</p>
               
@@ -183,13 +170,9 @@ const Search: React.FC<SearchProps> = ({ onNavigate }) => {
                     <a 
                       key={index}
                       href={link.link}
-                      onClick={(e) => {
-                        if (onNavigate) {
-                          e.preventDefault();
-                          onNavigate(link.link);
-                        }
-                      }}
-                      className="text-xs text-nexus-purple hover:underline cursor-pointer"
+                      target="_blank"
+                      rel="noopener noreferrer" 
+                      className="text-xs text-nexus-purple hover:underline"
                     >
                       {link.title}
                     </a>
@@ -207,28 +190,13 @@ const Search: React.FC<SearchProps> = ({ onNavigate }) => {
               <div className="flex gap-4">
                 {result.imageUrl && (
                   <div className="flex-shrink-0">
-                    <img 
-                      src={result.imageUrl} 
-                      alt={result.title} 
-                      className="w-20 h-20 object-cover rounded-md"
-                      onClick={() => onNavigate && onNavigate(result.imageUrl || '')}
-                      style={{ cursor: 'pointer' }}
-                    />
+                    <img src={result.imageUrl} alt={result.title} className="w-20 h-20 object-cover rounded-md" />
                   </div>
                 )}
                 <div>
                   <div className="mb-1 text-xs text-muted-foreground">{result.url}</div>
-                  <a 
-                    href={result.url} 
-                    onClick={(e) => {
-                      if (onNavigate) {
-                        e.preventDefault();
-                        onNavigate(result.url);
-                      }
-                    }}
-                    className="cursor-pointer"
-                  >
-                    <h3 className="text-lg font-medium text-nexus-purple hover:underline">{result.title}</h3>
+                  <a href={result.url} target="_blank" rel="noopener noreferrer">
+                    <h3 className="text-lg font-medium text-nexus-purple hover:underline cursor-pointer">{result.title}</h3>
                   </a>
                   <p className="text-sm text-muted-foreground">{result.description}</p>
                   <div className="text-xs text-muted-foreground mt-1">
@@ -627,7 +595,6 @@ const Search: React.FC<SearchProps> = ({ onNavigate }) => {
                 isLoading={isLoading} 
                 results={imageResults} 
                 searchQuery={lastSearchedQuery}
-                onNavigate={onNavigate}
               />
             </TabsContent>
             

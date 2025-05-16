@@ -25,18 +25,17 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   // Create a navigation handler to use with the footer
   const handleNavigate = (url: string) => {
     if (onNavigate) {
-      console.log(`PageLayout: Delegating navigation to parent handler for: ${url}`);
+      console.log(`PageLayout: Navigating to ${url}`);
       onNavigate(url);
-      return; // Important: return here to prevent double navigation
-    }
-    
-    console.log(`PageLayout: Handling navigation internally for: ${url}`);
-    // For internal routes, use React Router
-    if (url.startsWith('/')) {
-      navigate(url);
     } else {
-      // For external URLs, open in new tab only if no onNavigate handler
-      window.open(url, '_blank');
+      console.log(`PageLayout: Navigating to ${url} using React Router`);
+      // For internal routes, use React Router
+      if (url.startsWith('/')) {
+        navigate(url);
+      } else {
+        // For external URLs, use window.open if no onNavigate function is provided
+        window.open(url, '_blank');
+      }
     }
   };
 

@@ -8,10 +8,9 @@ interface ImageResultsProps {
   isLoading: boolean;
   results: SearchResultItem[];
   searchQuery: string;
-  onNavigate?: (url: string) => void;
 }
 
-const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQuery, onNavigate }) => {
+const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQuery }) => {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-40">
@@ -44,10 +43,7 @@ const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQ
       <p className="text-sm text-muted-foreground mb-4">
         About {results.length.toLocaleString()} image results ({(Math.random() * 0.5 + 0.1).toFixed(2)} seconds)
       </p>
-      <ImageResultsGrid 
-        results={results} 
-        onNavigate={onNavigate} 
-      />
+      <ImageResultsGrid results={results} />
     </div>
   );
 };
