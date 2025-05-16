@@ -297,8 +297,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     } catch (error) {
       console.error("Error fetching real-time data:", error);
       toast("Could not fetch real-time data", {
-        description: "Please try again later",
-        variant: "destructive"
+        description: "Please try again later"
       });
     } finally {
       setIsLoadingRealTimeData(false);
