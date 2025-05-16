@@ -154,6 +154,35 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+  
+  // Add an effect to intercept all link clicks within the component
+  useEffect(() => {
+    const handleLinkClicks = (e: MouseEvent) => {
+      // Check if the clicked element is a link or inside an image
+      const target = e.target as HTMLElement;
+      const link = target.closest('a');
+      
+      // If it's a link and not already being handled by the app
+      if (link && !link.hasAttribute('data-app-handled')) {
+        e.preventDefault();
+        
+        const url = link.getAttribute('href');
+        if (url && onSearch) {
+          // Use the navigateToUrl function to open within the browser
+          toast.info(`Opening ${url} in browser`);
+          onSearch(url);
+        }
+      }
+    };
+    
+    // Add the event listener
+    document.addEventListener('click', handleLinkClicks);
+    
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener('click', handleLinkClicks);
+    };
+  }, [onSearch]);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
@@ -305,6 +334,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       toast("Search data unavailable");
     } finally {
       setSearchLoading(false);
+    }
+  };
+
+  // Handle image click to open in app browser
+  const handleImageClick = (url: string) => {
+    if (onSearch) {
+      toast.info(`Opening image in browser`);
+      onSearch(url);
     }
   };
 
