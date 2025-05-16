@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -199,11 +200,15 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         }
       }
       
-      // Generate new response
+      // Modified system prompt to ensure variety in responses
+      const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
+      
+      // Generate new response with diversity prompt
       const aiResponseContent = await getChatGPTResponseWithRealTimeData(
         userMessage.content,
         conversationHistory.slice(0, -1), // Exclude the last assistant response
-        realTimeData
+        realTimeData,
+        diversityPrompt // Pass the diversity prompt
       );
       
       // Create sources from real-time data for citation

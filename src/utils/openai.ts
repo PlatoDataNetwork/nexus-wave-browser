@@ -16,11 +16,17 @@ export const openai = new OpenAI({
 export async function getChatGPTResponseWithRealTimeData(
   message: string,
   conversationHistory: { role: "user" | "assistant"; content: string }[],
-  realTimeData?: { content: string; timestamp: Date } | null
+  realTimeData?: { content: string; timestamp: Date } | null,
+  diversityPrompt?: string
 ): Promise<string> {
   try {
     // Base system prompt
     let systemPrompt = 'You are Nexus Wave\'s helpful assistant answering questions for users. Your responses should be well-formatted with proper markdown, especially for code blocks. When showing code examples, use triple backticks with the language name, e.g. ```javascript. Be concise but informative.';
+    
+    // Add diversity prompt if provided (for regeneration requests)
+    if (diversityPrompt) {
+      systemPrompt += `\n\n${diversityPrompt}`;
+    }
     
     // Enhance the system prompt with real-time data if available
     if (realTimeData) {
@@ -41,10 +47,13 @@ export async function getChatGPTResponseWithRealTimeData(
       }
     ];
     
+    // Increase temperature for regeneration requests to get more varied responses
+    const temperature = diversityPrompt ? 0.9 : 0.7;
+    
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: messages as any,
-      temperature: 0.7,
+      temperature: temperature,
       max_tokens: 800
     });
     
