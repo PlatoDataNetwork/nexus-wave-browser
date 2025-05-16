@@ -14,8 +14,8 @@ interface ImageResultsGridProps {
 const ImageResultsGrid: React.FC<ImageResultsGridProps> = ({ results, onNavigate }) => {
   // Handle click on image card
   const handleImageClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    e.preventDefault(); // Always prevent default navigation
     if (onNavigate) {
-      e.preventDefault();
       onNavigate(url);
     }
   };

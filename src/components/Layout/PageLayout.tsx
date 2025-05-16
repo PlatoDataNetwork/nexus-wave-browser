@@ -33,7 +33,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       if (url.startsWith('/')) {
         navigate(url);
       } else {
-        // For external URLs, use window.open if no onNavigate function is provided
+        // For external URLs, open in new tab only if no onNavigate handler
         window.open(url, '_blank');
       }
     }
