@@ -22,6 +22,7 @@ interface ChatMessage {
   hasRealTimeData?: boolean;
   alternativeResponses?: string[];
   currentResponseIndex?: number;
+  relatedQuestions?: string[];
 }
 
 interface NexusChatProps {
@@ -43,6 +44,62 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Generate related questions based on the conversation context
+  const generateRelatedQuestions = async (userMessage: string, aiResponse: string): Promise<string[]> => {
+    try {
+      // Create a prompt specifically for related questions
+      const relatedQuestionsPrompt = 
+        "Based on the user's original query and your response, " +
+        "generate exactly 3 follow-up questions that the user might want to ask next. " +
+        "These should be natural continuations of the conversation, exploring related topics or " +
+        "deeper aspects of the current topic. Return ONLY the questions as a JSON array with no additional text. " +
+        "Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
+      
+      // Include just enough context for good question generation
+      const contextForQuestions = [
+        { role: "user" as const, content: userMessage },
+        { role: "assistant" as const, content: aiResponse },
+        { role: "user" as const, content: relatedQuestionsPrompt }
+      ];
+      
+      const questionsResponse = await getChatGPTResponseWithRealTimeData(
+        relatedQuestionsPrompt,
+        contextForQuestions,
+        null,
+        "Generate diverse, specific, and engaging questions the user might want to ask next"
+      );
+      
+      // Parse the response to get the questions array
+      try {
+        // The AI might return just the JSON array or it might include explanatory text,
+        // so we need to extract just the array part
+        const jsonMatch = questionsResponse.match(/\[\s*"[^"]+(?:",\s*"[^"]+")*\s*\]/);
+        if (jsonMatch) {
+          const questionsArray = JSON.parse(jsonMatch[0]);
+          return questionsArray.slice(0, 3); // Ensure we only have 3 questions
+        }
+        
+        // Fallback method if the regex doesn't match
+        const cleanedResponse = questionsResponse.replace(/^```json\s*|\s*```$/g, '');
+        const questions = JSON.parse(cleanedResponse);
+        return Array.isArray(questions) ? questions.slice(0, 3) : [];
+      } catch (error) {
+        console.error("Failed to parse related questions:", error);
+        // If parsing fails, extract questions using simple heuristics
+        const questionRegex = /(?:^|\n)["']?([^"'\n]+\?)/g;
+        const questions = [];
+        let match;
+        while ((match = questionRegex.exec(questionsResponse)) !== null && questions.length < 3) {
+          questions.push(match[1]);
+        }
+        return questions.length > 0 ? questions : [];
+      }
+    } catch (error) {
+      console.error("Error generating related questions:", error);
+      return [];
+    }
+  };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
@@ -130,6 +187,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Create sources from real-time data for citation
       const sources = realTimeData?.sources || [];
       
+      // Generate related questions
+      const relatedQuestions = await generateRelatedQuestions(messageToSearch, aiResponseContent);
+      
       // Add AI response to conversation UI
       const aiResponse: ChatMessage = {
         id: Date.now().toString(),
@@ -139,7 +199,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         sources: sources.length > 0 ? sources : undefined,
         hasRealTimeData: !!realTimeData,
         alternativeResponses: [],
-        currentResponseIndex: 0
+        currentResponseIndex: 0,
+        relatedQuestions: relatedQuestions
       };
       
       setMessages(prev => [...prev, aiResponse]);
@@ -158,6 +219,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRelatedQuestionClick = (question: string) => {
+    setCurrentMessage(question);
+    // Optional: automatically submit the related question
+    setTimeout(() => handleSubmit(), 100);
   };
 
   const handleRegenerateMessage = async (messageId: string) => {
@@ -220,6 +287,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         currentAssistantMessage.content
       ];
       
+      // Generate new related questions for this regenerated response
+      const relatedQuestions = await generateRelatedQuestions(userMessage.content, aiResponseContent);
+      
       // Create new AI response
       const regeneratedResponse: ChatMessage = {
         id: Date.now().toString(),
@@ -229,7 +299,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
         hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
         alternativeResponses: alternatives,
-        currentResponseIndex: 0
+        currentResponseIndex: 0,
+        relatedQuestions: relatedQuestions
       };
       
       // Replace the old message with the new one
@@ -336,6 +407,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 alternativeResponses={message.alternativeResponses || []}
                 currentResponseIndex={message.currentResponseIndex || 0}
                 onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
+                relatedQuestions={message.relatedQuestions}
+                onRelatedQuestionClick={handleRelatedQuestionClick}
               />
             ))
           )}

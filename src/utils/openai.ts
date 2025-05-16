@@ -16,7 +16,7 @@ export const openai = new OpenAI({
 export async function getChatGPTResponseWithRealTimeData(
   message: string,
   conversationHistory: { role: "user" | "assistant"; content: string }[],
-  realTimeData?: { content: string; timestamp: Date } | null,
+  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null,
   diversityPrompt?: string
 ): Promise<string> {
   try {

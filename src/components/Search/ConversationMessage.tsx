@@ -13,7 +13,8 @@ import {
   RefreshCw, 
   ArrowLeft, 
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  MessageSquarePlus
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,8 @@ interface ConversationMessageProps {
   alternativeResponses?: string[];
   currentResponseIndex?: number;
   onSelectAlternative?: (index: number) => void;
+  relatedQuestions?: string[];
+  onRelatedQuestionClick?: (question: string) => void;
 }
 
 // Define a proper type for the code component props
@@ -55,7 +58,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   onRegenerateMessage,
   alternativeResponses = [],
   currentResponseIndex = 0,
-  onSelectAlternative
+  onSelectAlternative,
+  relatedQuestions = [],
+  onRelatedQuestionClick
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -242,6 +247,29 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                       </a>
                     );
                   })}
+                </div>
+              </div>
+            )}
+            
+            {/* Related Questions Section */}
+            {role === "assistant" && relatedQuestions && relatedQuestions.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-1 text-xs font-medium mb-2">
+                  <MessageSquarePlus className="h-3 w-3" />
+                  <span>Related Questions:</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {relatedQuestions.map((question, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      size="sm"
+                      className="justify-start text-xs h-auto py-1.5 text-left"
+                      onClick={() => onRelatedQuestionClick && onRelatedQuestionClick(question)}
+                    >
+                      {question}
+                    </Button>
+                  ))}
                 </div>
               </div>
             )}
