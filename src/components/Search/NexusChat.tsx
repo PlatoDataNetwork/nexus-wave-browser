@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,15 +20,6 @@ interface ChatMessage {
     url: string;
   }[];
   hasRealTimeData?: boolean;
-  chartData?: {
-    type: 'stockComparison';
-    symbols: string[];
-    data: Array<{
-      date: string;
-      [key: string]: string | number;
-    }>;
-    title: string;
-  };
 }
 
 interface NexusChatProps {
@@ -143,8 +135,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         content: aiResponseContent,
         timestamp: new Date(),
         sources: sources.length > 0 ? sources : undefined,
-        hasRealTimeData: !!realTimeData,
-        chartData: realTimeData?.chartData
+        hasRealTimeData: !!realTimeData
       };
       
       setMessages(prev => [...prev, aiResponse]);
@@ -198,10 +189,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={() => setCurrentMessage("AAPL vs MSFT stock comparison")}
+                  onClick={() => setCurrentMessage("Latest news about SpaceX")}
                   className="flex items-center gap-1"
                 >
-                  <Globe className="h-3 w-3" /> AAPL vs MSFT
+                  <Globe className="h-3 w-3" /> SpaceX news
                 </Button>
                 <Button 
                   size="sm" 
@@ -220,8 +211,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 role={message.role}
                 content={message.content}
                 sources={message.sources}
-                hasRealTimeData={message.hasRealTimeData}
-                chartData={message.chartData}
               />
             ))
           )}

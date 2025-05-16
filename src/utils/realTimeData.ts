@@ -8,15 +8,6 @@ export interface RealTimeData {
   content: string;
   sources: Array<{ title: string; url: string }>;
   timestamp: Date;
-  chartData?: {
-    type: 'stockComparison';
-    symbols: string[];
-    data: Array<{
-      date: string;
-      [key: string]: string | number;
-    }>;
-    title: string;
-  };
 }
 
 /**
@@ -35,14 +26,9 @@ export async function getRealTimeData(
       return {
         content: cachedData.data,
         sources: cachedData.sources,
-        timestamp: new Date(cachedData.timestamp),
-        chartData: cachedData.chartData
+        timestamp: new Date(cachedData.timestamp)
       };
     }
-    
-    // Check if this is a stock comparison query
-    const stockComparisonPattern = /\b(compare|comparison|versus|vs\.?|against)\b.*?\b([A-Z]{1,5})\b.*?\b([A-Z]{1,5})\b/i;
-    const stockMatch = query.match(stockComparisonPattern);
     
     // Not in cache, fetch fresh data
     const contentType = classification.topics[0] || 'general';
@@ -150,56 +136,13 @@ export async function getRealTimeData(
       url: result.url
     }));
     
-    // Handle specific data visualization cases
-    let chartData = undefined;
-    
-    // Generate stock comparison chart data if needed
-    if (stockMatch && contentType.toLowerCase().includes('finance')) {
-      try {
-        const symbol1 = stockMatch[2].toUpperCase();
-        const symbol2 = stockMatch[3].toUpperCase();
-        
-        // Generate mock data for demonstration
-        // In a real implementation, you would fetch actual stock data from an API
-        const today = new Date();
-        const mockData = [];
-        
-        for (let i = 30; i >= 0; i--) {
-          const date = new Date(today);
-          date.setDate(date.getDate() - i);
-          
-          // Create random but somewhat realistic stock prices
-          const basePrice1 = symbol1 === 'AAPL' ? 180 : (symbol1 === 'MSFT' ? 370 : 100);
-          const basePrice2 = symbol2 === 'AAPL' ? 180 : (symbol2 === 'MSFT' ? 370 : 100);
-          
-          const dataPoint: any = {
-            date: date.toISOString().split('T')[0],
-            [symbol1]: (basePrice1 + (Math.random() * 20 - 5) + (i * 0.5)).toFixed(2),
-            [symbol2]: (basePrice2 + (Math.random() * 20 - 5) + (i * 0.3)).toFixed(2)
-          };
-          
-          mockData.push(dataPoint);
-        }
-        
-        chartData = {
-          type: 'stockComparison' as const,
-          symbols: [symbol1, symbol2],
-          data: mockData,
-          title: `${symbol1} vs ${symbol2} Stock Price (Last 30 Days)`
-        };
-      } catch (error) {
-        console.error("Failed to generate stock chart data", error);
-      }
-    }
-    
-    // Cache the results with chart data
-    dataCache.set(cacheKey, extractedData, sources, contentType, chartData);
+    // Cache the results
+    dataCache.set(cacheKey, extractedData, sources, contentType);
     
     return {
       content: extractedData,
       sources,
-      timestamp: new Date(),
-      chartData
+      timestamp: new Date()
     };
   } catch (error) {
     console.error("Error fetching real-time data:", error);
