@@ -1,7 +1,7 @@
 
 import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
-import { getSearchResults } from '../services/searchApi';
+import { searchWithSerper } from '../services/searchApi';
 import { openai } from './openai';
 
 export interface RealTimeData {
@@ -36,27 +36,29 @@ export async function getRealTimeData(
     // Choose the best search term from the suggestions
     const searchTerm = classification.suggestedSearchTerms[0] || query;
     
-    // Get search results
-    const searchResults = await getSearchResults(
+    // Get search results using searchWithSerper instead of getSearchResults
+    const searchResponse = await searchWithSerper(
       searchTerm, 
-      true, // Safe search on
-      'day' // Recent results
+      'search',  // use web search type
+      true,      // Safe search on
+      3,         // Limit to 3 results
+      'day'      // Recent results (last 24 hours)
     );
     
-    if (!searchResults || searchResults.length === 0) {
+    if (!searchResponse || searchResponse.results.length === 0) {
       console.log("No search results found for:", searchTerm);
       return null;
     }
     
     // Get top 3 relevant results
-    const topResults = searchResults.slice(0, 3);
+    const topResults = searchResponse.results.slice(0, 3);
     
     // Extract content from search results
     const extractedContent = topResults.map(result => ({
       title: result.title,
       url: result.url,
       description: result.description,
-      snippets: result.snippets || []
+      snippets: result.type === 'web' ? [result.description] : []
     }));
     
     // Use GPT to synthesize the information
