@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
 import SearchProviderSelector from "@/components/Search/SearchProviderSelector";
+import Header from "@/components/Layout/Header";
 
 // Import updated searchApi functionality
 import { searchWithSerper, searchWithYou, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -405,7 +406,10 @@ const Search: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-screen">
+      {/* Use the main Header component from the home page */}
+      <Header />
+      
       <div className="p-4 border-b border-border nexus-gradient-bg">
         <div className="flex gap-2 mb-4 justify-end">
           <SearchProviderSelector

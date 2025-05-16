@@ -26,7 +26,7 @@ const App = () => (
         <TooltipProvider>
           <BrowserRouter>
             <div className="min-h-screen flex flex-col">
-              <Header />
+              {/* Header moved to individual pages for better control */}
               <div className="flex-grow">
                 <Routes>
                   {/* Marketing Landing Page */}
