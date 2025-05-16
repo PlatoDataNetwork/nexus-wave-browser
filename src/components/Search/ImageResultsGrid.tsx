@@ -26,10 +26,8 @@ const ImageResultsGrid: React.FC<ImageResultsGridProps> = ({ results, onNavigate
         <Card key={result.id} className="overflow-hidden group hover:shadow-md transition-all">
           <a 
             href={result.url} 
-            target="_blank" 
-            rel="noopener noreferrer"
             onClick={(e) => handleImageClick(e, result.url)}
-            data-app-handled="true"
+            className="cursor-pointer"
           >
             <div className="relative">
               <AspectRatio ratio={1} className="bg-muted">

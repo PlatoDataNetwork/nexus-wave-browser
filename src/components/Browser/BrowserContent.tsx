@@ -91,7 +91,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     if (currentUrl === '/search' || currentUrl.includes('/search')) {
       return (
         <ScrollArea className="h-full w-full">
-          <Search />
+          <Search onNavigate={onNavigate} />
         </ScrollArea>
       );
     }

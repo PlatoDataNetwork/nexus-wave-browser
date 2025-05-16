@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -159,12 +158,12 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   // Add an effect to intercept all link clicks within the component
   useEffect(() => {
     const handleLinkClicks = (e: MouseEvent) => {
-      // Check if the clicked element is a link or inside an image
+      // Check if the clicked element is a link
       const target = e.target as HTMLElement;
       const link = target.closest('a');
       
       // If it's a link and not already being handled by the app
-      if (link && !link.hasAttribute('data-app-handled')) {
+      if (link) {
         e.preventDefault();
         
         const url = link.getAttribute('href');
