@@ -15,7 +15,7 @@ import {
   ArrowRight 
 } from 'lucide-react';
 import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -56,6 +56,25 @@ interface CodeProps {
   [key: string]: any;
 }
 
+// Properly type the CustomTooltip component with Recharts TooltipProps
+type CustomTooltipProps = TooltipProps<any, any>;
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background border border-border p-2 rounded-md shadow-md">
+        <p className="text-xs font-medium">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-xs" style={{ color: entry.color }}>
+            {entry.name}: {entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) => {
   if (!chartData || !chartData.data || chartData.data.length === 0) {
     return null;
@@ -79,23 +98,6 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
     };
   });
 
-  // Custom tooltip component that will be rendered as a div
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-background border border-border p-2 rounded-md shadow-md">
-          <p className="text-xs font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-xs" style={{ color: entry.color }}>
-              {entry.name}: {entry.value}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="mt-4 mb-4">
       <div className="flex items-center gap-2 mb-2">
@@ -112,8 +114,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            {/* Use the recharts Tooltip component directly with CustomTooltip */}
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={CustomTooltip} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
