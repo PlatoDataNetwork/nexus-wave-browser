@@ -1,12 +1,12 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar, AlertCircle, Clock } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
-import { SearchAPIResponse, SearchResultItem, searchWithYou } from '@/services/searchApi';
-import { getRealTimeData } from '@/services/scrapingService';
+import { SearchResultItem } from '@/services/searchApi';
 import { toast } from "sonner";
 import SearchProviderSelector from './SearchProviderSelector';
 import SearchSidebar from './SearchSidebar';
@@ -29,19 +29,73 @@ interface ConversationalSearchProps {
 // OpenAI API key
 const OPENAI_API_KEY = "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";
 
+// You.com API key
+const YOU_API_KEY = "b4a7675d-d49a-4a31-a3ce-2dbf61cb935e<__>1P6A8vETU8N2v5f4IL9xcte2";
+
+// Function to get search results from You.com API
+const getSearchResults = async (
+  query: string,
+  safeSearch: boolean = true,
+  recencyFilter: "day" | "week" | "month" | "any" = "day"
+): Promise<SearchResultItem[]> => {
+  try {
+    // Add parameters to query URL
+    let queryParams = new URLSearchParams();
+    queryParams.append("query", query);
+    
+    // Add safe search parameter if enabled
+    if (safeSearch) {
+      queryParams.append("safesearch", "on");
+    }
+    
+    // Add recency parameter based on filter
+    if (recencyFilter !== "any") {
+      queryParams.append("freshness", recencyFilter);
+    }
+    
+    // Add count parameter - request 10 results
+    queryParams.append("num_web_results", "10");
+    
+    const endpoint = `https://api.ydc-index.io/search?${queryParams.toString()}`;
+    
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        'X-API-Key': YOU_API_KEY
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`You.com API returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    // Map the response to our common format
+    const results: SearchResultItem[] = data.hits.map((item: any, index: number) => ({
+      id: `you-${index}`,
+      title: item.title,
+      url: item.url,
+      description: item.description,
+      type: "web",
+      imageUrl: item.thumbnail_url,
+      snippets: item.snippets
+    }));
+
+    return results;
+  } catch (error) {
+    console.error("Error searching with You.com:", error);
+    throw error;
+  }
+};
+
 // Function to get AI response using ChatGPT API with conversation history
 const getChatGPTResponse = async (
   message: string, 
-  conversationHistory: { role: "user" | "assistant"; content: string }[],
-  realTimeData?: string
+  conversationHistory: { role: "user" | "assistant"; content: string }[]
 ): Promise<string> => {
   try {
-    let systemPrompt = 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.';
-    
-    // If we have real-time data, enhance the system prompt
-    if (realTimeData) {
-      systemPrompt = `You are a helpful assistant with access to real-time information. Use the following real-time data to enhance your response, and cite it as your source: ${realTimeData}`;
-    }
+    const systemPrompt = 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.';
     
     // Construct messages array with system prompt, conversation history, and current message
     const messages = [
@@ -82,42 +136,10 @@ const getChatGPTResponse = async (
   }
 };
 
-// Function to simulate real-time data when API fails
-const getSimulatedRealTimeData = (query: string): SearchResultItem[] => {
-  const currentDate = new Date();
-  const dateStr = currentDate.toLocaleDateString();
-  const timeStr = currentDate.toLocaleTimeString();
-  
-  return [
-    {
-      id: "simulated-1",
-      title: `Real-time data for "${query}" (simulated)`,
-      url: "https://example.com/real-time-data",
-      description: `This is simulated real-time data for "${query}" as of ${dateStr} at ${timeStr}. API connection failed, so we're providing this placeholder data.`,
-      type: "web"
-    },
-    {
-      id: "simulated-2",
-      title: "Try alternative sources for real-time information",
-      url: "https://news.google.com",
-      description: "For the most current information on this topic, consider checking specialized news sites, financial portals, or official sources relevant to your query.",
-      type: "web"
-    },
-    {
-      id: "simulated-3",
-      title: "Check back for real-time updates",
-      url: "#",
-      description: "Our real-time data services are temporarily unavailable. Try refreshing in a few moments to get the latest information.",
-      type: "web"
-    }
-  ];
-};
-
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchProvider, setSearchProvider] = useState<"serper" | "you">("you");
   const [safeSearch, setSafeSearch] = useState(true);
   const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -126,14 +148,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
   const [searchError, setSearchError] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  // Add state for real-time data
-  const [realTimeData, setRealTimeData] = useState<{
-    summary: string;
-    source: string;
-    timestamp: Date;
-  } | null>(null);
-  const [isLoadingRealTimeData, setIsLoadingRealTimeData] = useState(false);
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
@@ -171,85 +185,34 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setCurrentMessage("");
     setIsLoading(true);
     setSearchError("");
-    setRealTimeData(null);
     
     try {
-      // 1. FIRST: Fetch search results for the sidebar from You.com API
+      // 1. Fetch search results for the sidebar from You.com API
       setSearchLoading(true);
       setLastSearchQuery(messageToSearch);
       
-      let searchResults;
       try {
         // Try to get search results with recency filter
         console.log(`Fetching search results from You.com for "${messageToSearch}" with filter: ${recencyFilter}`);
-        searchResults = await searchWithYou(messageToSearch, safeSearch, 10, recencyFilter);
-        setSearchResults(searchResults.results);
+        const results = await getSearchResults(messageToSearch, safeSearch, recencyFilter);
+        setSearchResults(results);
         setSearchError("");
       } catch (error) {
         console.error("Search API error:", error);
-        // If API fails, use simulated data and set error
-        const simulatedResults = getSimulatedRealTimeData(messageToSearch);
-        setSearchResults(simulatedResults);
-        setSearchError("Couldn't fetch search results from search API");
-        toast("Search API unavailable", {
-          description: "Using alternative sources. Try using the real-time data feature."
-        });
+        setSearchResults([]);
+        setSearchError("Couldn't fetch search results from You.com API");
+        toast("Search API unavailable");
       }
       setSearchLoading(false);
       
-      // 2. Check if the query is likely about real-time data
-      const isRealTimeQuery = 
-        messageToSearch.toLowerCase().includes('weather') ||
-        messageToSearch.toLowerCase().includes('news') ||
-        messageToSearch.toLowerCase().includes('price') ||
-        messageToSearch.toLowerCase().includes('stock') ||
-        messageToSearch.toLowerCase().includes('current') ||
-        messageToSearch.toLowerCase().includes('today') ||
-        messageToSearch.toLowerCase().includes('latest') ||
-        messageToSearch.toLowerCase().includes('update') ||
-        messageToSearch.toLowerCase().includes('now') ||
-        messageToSearch.toLowerCase().includes('exchange rate') ||
-        messageToSearch.toLowerCase().includes('live');
-      
-      // Update conversation history with the new user message
+      // 2. Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
-      let aiResponseContent;
-      
-      // 3. If it's a real-time query, try to get real-time data
-      if (isRealTimeQuery) {
-        try {
-          setIsLoadingRealTimeData(true);
-          const realtimeInfo = await getRealTimeData(messageToSearch, OPENAI_API_KEY);
-          setRealTimeData(realtimeInfo);
-          
-          // Generate AI response using ChatGPT API with conversation history and real-time data
-          aiResponseContent = await getChatGPTResponse(
-            messageToSearch, 
-            updatedHistory.slice(0, -1), // Exclude current message as it's passed separately
-            realtimeInfo.summary
-          );
-          
-          toast("Real-time data retrieved", {
-            description: "Using freshly scraped information from the web"
-          });
-        } catch (error) {
-          console.error("Error fetching real-time data:", error);
-          // Just continue with normal response if real-time data fails
-          aiResponseContent = await getChatGPTResponse(
-            messageToSearch, 
-            updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
-          );
-        } finally {
-          setIsLoadingRealTimeData(false);
-        }
-      } else {
-        // Generate standard AI response using ChatGPT API with conversation history
-        aiResponseContent = await getChatGPTResponse(
-          messageToSearch, 
-          updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
-        );
-      }
+      // 3. Generate AI response using ChatGPT API with conversation history
+      const aiResponseContent = await getChatGPTResponse(
+        messageToSearch, 
+        updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
+      );
       
       // 4. Update conversation history with assistant response
       setConversationHistory([
@@ -259,24 +222,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       
       // Create sources from search results for citation
       let sources = [];
-      if (searchResults && searchResults.results && searchResults.results.length > 0) {
-        sources = searchResults.results.slice(0, 3).map(result => ({
-          title: result.title,
-          url: result.url
-        }));
-      } else if (searchResults && Array.isArray(searchResults)) {
+      if (searchResults && searchResults.length > 0) {
         sources = searchResults.slice(0, 3).map(result => ({
           title: result.title,
           url: result.url
         }));
-      }
-      
-      // If we have real-time data, add it as a source
-      if (realTimeData) {
-        sources.unshift({
-          title: "Real-time data from " + realTimeData.source.replace(/https?:\/\/(www\.)?/, ''),
-          url: realTimeData.source
-        });
       }
       
       // Add AI response to conversation UI
@@ -297,36 +247,12 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       const fallbackResponse: ConversationMessage = {
         id: Date.now().toString(),
         role: "assistant",
-        content: "I'm sorry, but I encountered an issue while processing your request. For real-time information, please try again later or visit specialized websites for the topic you're interested in.",
+        content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackResponse]);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  // Function to fetch real-time data on demand
-  const handleFetchRealTimeData = async () => {
-    if (!lastSearchQuery) return;
-    
-    setIsLoadingRealTimeData(true);
-    toast("Fetching real-time data...");
-    
-    try {
-      const realtimeInfo = await getRealTimeData(lastSearchQuery, OPENAI_API_KEY);
-      setRealTimeData(realtimeInfo);
-      
-      toast("Real-time data retrieved", {
-        description: `Fresh information from ${realtimeInfo.source.replace(/https?:\/\/(www\.)?/, '')}`
-      });
-    } catch (error) {
-      console.error("Error fetching real-time data:", error);
-      toast("Could not fetch real-time data", {
-        description: "Please try again later"
-      });
-    } finally {
-      setIsLoadingRealTimeData(false);
     }
   };
 
@@ -370,20 +296,15 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     
     try {
       console.log(`Refreshing search results for "${lastSearchQuery}" with filter: ${recencyFilter}`);
-      const searchResults = await searchWithYou(lastSearchQuery, safeSearch, 10, recencyFilter);
-      setSearchResults(searchResults.results);
-      toast("Data refreshed with latest information", {
-        description: `Results from ${recencyFilter === "day" ? "the past 24 hours" : recencyFilter === "week" ? "the past week" : recencyFilter === "month" ? "the past month" : "all time"}`
-      });
+      const results = await getSearchResults(lastSearchQuery, safeSearch, recencyFilter);
+      setSearchResults(results);
+      toast("Data refreshed with latest information");
       setSearchError("");
     } catch (error) {
       console.error("Error refreshing search:", error);
-      const simulatedResults = getSimulatedRealTimeData(lastSearchQuery);
-      setSearchResults(simulatedResults);
+      setSearchResults([]);
       setSearchError("Search data connection failed");
-      toast("Search data unavailable", {
-        description: "Using alternative sources. Try again later."
-      });
+      toast("Search data unavailable");
     } finally {
       setSearchLoading(false);
     }
@@ -393,11 +314,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     <div className="flex h-full">
       <div className="flex-1 flex flex-col h-full">
         <div className="flex justify-between p-2 border-b border-border">
-          <SearchProviderSelector 
-            selectedProvider={searchProvider}
-            onSelectProvider={setSearchProvider}
-          />
-          
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
@@ -423,16 +339,16 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
                 <option value="any">Any time</option>
               </select>
             </div>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleToggleSidebar}
-              className="text-muted-foreground"
-            >
-              {showSidebar ? "Hide Results" : "Show Results"}
-            </Button>
           </div>
+          
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleToggleSidebar}
+            className="text-muted-foreground"
+          >
+            {showSidebar ? "Hide Results" : "Show Results"}
+          </Button>
         </div>
         <ScrollArea className="flex-1 p-4">
           <div className="space-y-4 pb-4">
@@ -463,14 +379,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
         </ScrollArea>
         
         <div className="p-4 border-t border-border">
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleSubmit(e);
-            }} 
-            className="flex gap-2"
-          >
+          <form onSubmit={handleSubmit} className="flex gap-2">
             <Textarea
               placeholder="Ask me anything..."
               value={currentMessage}
@@ -479,7 +388,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
-                  e.stopPropagation();
                   handleSubmit();
                 }
               }}
@@ -504,9 +412,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             recencyFilter={recencyFilter}
             onRefresh={handleRefreshResults}
             error={searchError}
-            realTimeData={realTimeData}
-            isLoadingRealTimeData={isLoadingRealTimeData}
-            onFetchRealTimeData={handleFetchRealTimeData}
           />
         </div>
       )}

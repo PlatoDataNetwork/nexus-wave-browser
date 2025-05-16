@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Calendar, RefreshCw, AlertCircle, Clock } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import { SearchResultItem } from '@/services/searchApi';
 import { Button } from "@/components/ui/button";
 import { format } from 'date-fns';
@@ -15,13 +14,6 @@ interface SearchSidebarProps {
   recencyFilter?: "day" | "week" | "month" | "any";
   onRefresh?: () => void;
   error?: string;
-  realTimeData?: {
-    summary: string;
-    source: string;
-    timestamp: Date;
-  } | null;
-  isLoadingRealTimeData?: boolean;
-  onFetchRealTimeData?: () => void;
 }
 
 const SearchSidebar: React.FC<SearchSidebarProps> = ({ 
@@ -30,15 +22,10 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
   searchQuery,
   recencyFilter = "any",
   onRefresh,
-  error,
-  realTimeData,
-  isLoadingRealTimeData = false,
-  onFetchRealTimeData
+  error
 }) => {
   const [lastRefreshed, setLastRefreshed] = useState(new Date());
-  const formattedDate = format(lastRefreshed, 'MMM d, yyyy');
-  const formattedTime = format(lastRefreshed, 'h:mm a');
-
+  
   // Update the last refreshed timestamp when results update or manual refresh
   const handleRefresh = () => {
     if (onRefresh) {
@@ -47,10 +34,13 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
     }
   };
 
-  // Handle fetching real-time data
-  const handleFetchRealTimeData = () => {
-    if (onFetchRealTimeData) {
-      onFetchRealTimeData();
+  // Helper function to format the recency filter text
+  const formatRecencyText = (filter: "day" | "week" | "month" | "any") => {
+    switch(filter) {
+      case "day": return "the past 24 hours";
+      case "week": return "the past week";
+      case "month": return "the past month";
+      default: return "any time";
     }
   };
 
@@ -72,31 +62,17 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
     );
   }
 
-  // Helper function to format the recency filter text
-  const formatRecencyText = (filter: "day" | "week" | "month" | "any") => {
-    switch(filter) {
-      case "day": return "the past 24 hours";
-      case "week": return "the past week";
-      case "month": return "the past month";
-      default: return "any time";
-    }
-  };
-
   return (
     <ScrollArea className="h-full">
       <div className="p-4 space-y-3">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-sm font-medium">Related Search Results</h3>
-          <div className="flex flex-col items-end">
+          <h3 className="text-sm font-medium">Search Results</h3>
+          <div className="flex items-end">
             {recencyFilter !== "any" && (
-              <div className="flex items-center text-xs text-muted-foreground">
-                <Calendar className="h-3 w-3 mr-1" />
-                <span>From {formatRecencyText(recencyFilter)}</span>
+              <div className="text-xs text-muted-foreground">
+                From {formatRecencyText(recencyFilter)}
               </div>
             )}
-            <div className="text-xs text-muted-foreground mt-1">
-              Data as of {formattedDate} {formattedTime}
-            </div>
           </div>
         </div>
         
@@ -110,55 +86,15 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
             <RefreshCw className="h-3 w-3 mr-1" />
             Refresh Results
           </Button>
-          
-          {onFetchRealTimeData && (
-            <Button 
-              variant="default" 
-              size="sm" 
-              className="w-full text-xs flex items-center justify-center bg-nexus-purple hover:bg-nexus-deep-purple"
-              onClick={handleFetchRealTimeData}
-              disabled={isLoadingRealTimeData}
-            >
-              {isLoadingRealTimeData ? (
-                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-              ) : (
-                <Clock className="h-3 w-3 mr-1" />
-              )}
-              Get Real-Time Data
-            </Button>
-          )}
         </div>
 
         {error && (
-          <Alert variant="destructive" className="mb-2">
+          <Alert className="mb-2">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription className="text-xs">
               {error}. Using best available data.
             </AlertDescription>
           </Alert>
-        )}
-        
-        {/* Real-time data section */}
-        {realTimeData && (
-          <Card className="mb-3 border-nexus-purple/30 bg-nexus-purple/5">
-            <CardContent className="p-3">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium flex items-center">
-                  <Clock className="h-3 w-3 mr-1 text-nexus-purple" />
-                  <span>Real-Time Information</span>
-                </h4>
-                <span className="text-xs text-muted-foreground">
-                  {format(new Date(realTimeData.timestamp), 'h:mm a')}
-                </span>
-              </div>
-              <p className="text-sm">{realTimeData.summary}</p>
-              <div className="text-xs text-muted-foreground mt-2">
-                Source: <a href={realTimeData.source} target="_blank" rel="noopener noreferrer" className="hover:underline text-nexus-purple">
-                  {realTimeData.source.replace(/https?:\/\/(www\.)?/, '')}
-                </a>
-              </div>
-            </CardContent>
-          </Card>
         )}
 
         {results.length === 0 ? (
@@ -173,12 +109,12 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
               className="mt-2"
               onClick={handleRefresh}
             >
-              Try refreshing for real-time data
+              Try refreshing
             </Button>
           </div>
         ) : (
-          results.map((result) => (
-            <Card key={result.id} className="hover:shadow-sm transition-all">
+          results.map((result, index) => (
+            <Card key={index} className="hover:shadow-sm transition-all">
               <CardContent className="p-3">
                 <a 
                   href={result.url} 
@@ -188,6 +124,9 @@ const SearchSidebar: React.FC<SearchSidebarProps> = ({
                 >
                   <h4 className="text-sm font-medium line-clamp-2 hover:text-nexus-purple">{result.title}</h4>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{result.description}</p>
+                  <div className="text-xs text-muted-foreground mt-1 truncate">
+                    {result.url.replace(/^https?:\/\/(www\.)?/, '')}
+                  </div>
                 </a>
               </CardContent>
             </Card>
