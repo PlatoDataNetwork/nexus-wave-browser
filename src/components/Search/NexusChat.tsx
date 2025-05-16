@@ -223,7 +223,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: new Date(),
         sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
         hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
-        chartData: realTimeData?.chartData || currentAssistantMessage.chartData,
         alternativeResponses: alternatives,
         currentResponseIndex: 0
       };
@@ -327,7 +326,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 content={message.content}
                 sources={message.sources}
                 hasRealTimeData={message.hasRealTimeData}
-                chartData={message.chartData}
                 messageId={message.id}
                 onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
                 alternativeResponses={message.alternativeResponses || []}
