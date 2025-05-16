@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import NexusChat from "@/components/Search/NexusChat";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -720,35 +721,13 @@ const Search: React.FC = () => {
               </ScrollArea>
             </TabsContent>
             
-            <TabsContent value="nexus">
-              <ScrollArea className="h-full">
-                {isLoading ? (
-                  <div className="flex items-center justify-center py-10">
-                    <Loader2 className="h-8 w-8 animate-spin text-nexus-purple" />
-                  </div>
-                ) : lastSearchedQuery ? (
-                  <div className="space-y-1">
-                    {results.length > 0 ? (
-                      results
-                        .filter(result => result.type === "nexus")
-                        .map((result) => renderSearchResult(result))
-                    ) : (
-                      <div className="text-center py-6">
-                        <p className="text-muted-foreground">No Nexus results found for "{lastSearchedQuery}"</p>
-                        <p className="text-sm text-muted-foreground mt-2">Nexus results are enhanced search results specifically for this platform.</p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-10">
-                    <Zap className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Search Nexus</h3>
-                    <p className="text-muted-foreground max-w-md mx-auto">
-                      Enter a search term above to get enhanced Nexus results
-                    </p>
-                  </div>
-                )}
-              </ScrollArea>
+            <TabsContent value="nexus" className="h-full flex flex-col">
+              <NexusChat onSearch={(query) => {
+                setSearchQuery(query);
+                if (!lastSearchedQuery) {
+                  setLastSearchedQuery(query);
+                }
+              }} />
             </TabsContent>
           </Tabs>
         </div>
