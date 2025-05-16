@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -5,7 +6,6 @@ import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { 
   Clock, 
   Globe, 
-  BarChart2, 
   Copy, 
   Download, 
   ThumbsUp, 
@@ -14,18 +14,6 @@ import {
   ArrowLeft, 
   ArrowRight 
 } from 'lucide-react';
-import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer,
-} from 'recharts';
-import { TooltipProps } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -35,21 +23,11 @@ interface Source {
   url: string;
 }
 
-interface ChartData {
-  type: string;
-  data: Array<Record<string, any>>;
-  title: string;
-  xAxisKey: string;
-  yAxisKeys: string[];
-  colors?: Record<string, string>;
-}
-
 interface ConversationMessageProps {
   role: "user" | "assistant";
   content: string;
   sources?: Source[];
   hasRealTimeData?: boolean;
-  chartData?: ChartData;
   messageId?: string;
   onRegenerateMessage?: (messageId: string) => void;
   alternativeResponses?: string[];
@@ -66,100 +44,11 @@ interface CodeProps {
   [key: string]: any;
 }
 
-// Define correctly typed CustomTooltip component that matches Recharts expectations
-// Using NameType and ValueType generics from TooltipProps
-type CustomTooltipProps = {
-  active?: boolean;
-  payload?: Array<{
-    name: string;
-    value: any;
-    payload?: any;
-    dataKey?: string;
-    color?: string;
-  }>;
-  label?: string;
-};
-
-// Create the CustomTooltip as a functional component with explicit return type for clarity
-const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-background border border-border p-2 rounded-md shadow-md">
-        <p className="text-xs font-medium">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-xs" style={{ color: entry.color }}>
-            {entry.name}: {entry.value}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
-const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) => {
-  if (!chartData || !chartData.data || chartData.data.length === 0) {
-    return null;
-  }
-
-  // Create color configuration for the chart
-  const chartConfig: Record<string, any> = {};
-  
-  // Set colors for each data series in the chart
-  chartData.yAxisKeys.forEach((key, index) => {
-    // Default colors if not provided
-    const defaultColors = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#0088fe'];
-    const color = chartData.colors?.[key] || defaultColors[index % defaultColors.length];
-    
-    chartConfig[key] = {
-      label: key,
-      theme: {
-        light: color,
-        dark: color
-      }
-    };
-  });
-
-  return (
-    <div className="mt-4 mb-4">
-      <div className="flex items-center gap-2 mb-2">
-        <BarChart2 className="h-4 w-4 text-nexus-purple" />
-        <h3 className="font-medium text-sm">{chartData.title}</h3>
-      </div>
-      <div className="h-80 w-full border rounded-lg p-4">
-        <ChartContainer config={chartConfig}>
-          <LineChart data={chartData.data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis 
-              dataKey={chartData.xAxisKey} 
-              fontSize={12}
-              tick={{ fill: 'var(--foreground)' }}
-            />
-            <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend content={(props) => <ChartLegendContent {...props} />} />
-            {chartData.yAxisKeys.map((key, index) => (
-              <Line
-                key={key}
-                type="monotone"
-                dataKey={key}
-                dot={{ strokeWidth: 2, r: 2 }}
-                activeDot={{ r: 6, strokeWidth: 0 }}
-              />
-            ))}
-          </LineChart>
-        </ChartContainer>
-      </div>
-    </div>
-  );
-};
-
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
   role, 
   content, 
   sources,
   hasRealTimeData,
-  chartData,
   messageId,
   onRegenerateMessage,
   alternativeResponses = [],
@@ -336,8 +225,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             >
               {content}
             </ReactMarkdown>
-            
-            {chartData && <ChartVisualization chartData={chartData} />}
             
             {role === "assistant" && (
               <div className="flex items-center justify-end gap-1 mt-4 pt-2 border-t border-border">

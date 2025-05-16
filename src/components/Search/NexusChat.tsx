@@ -19,14 +19,6 @@ interface ChatMessage {
     url: string;
   }[];
   hasRealTimeData?: boolean;
-  chartData?: {
-    type: string;
-    data: Array<Record<string, any>>;
-    title: string;
-    xAxisKey: string;
-    yAxisKeys: string[];
-    colors?: Record<string, string>;
-  };
   alternativeResponses?: string[];
   currentResponseIndex?: number;
 }
@@ -145,7 +137,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: new Date(),
         sources: sources.length > 0 ? sources : undefined,
         hasRealTimeData: !!realTimeData,
-        chartData: realTimeData?.chartData,
         alternativeResponses: [],
         currentResponseIndex: 0
       };
