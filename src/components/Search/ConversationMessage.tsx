@@ -35,9 +35,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <div className="conversation-markdown">
             <ReactMarkdown
               components={{
-                code({node, inline, className, children, ...props}) {
+                code: ({node, className, children, ...props}) => {
                   const match = /language-(\w+)/.exec(className || '');
-                  return !inline && match ? (
+                  return !props.inline && match ? (
                     <SyntaxHighlighter
                       language={match[1]}
                       style={atomDark}
