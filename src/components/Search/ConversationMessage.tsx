@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -23,7 +24,8 @@ import {
   CartesianGrid, 
   Tooltip as RechartsTooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  TooltipProps
 } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -65,15 +67,26 @@ interface CodeProps {
   [key: string]: any;
 }
 
-// Custom tooltip for chart
-const CustomTooltip: React.FC<any> = (props) => {
-  const { active, payload, label } = props;
-  
+// Explicitly define the type for CustomTooltip to match Recharts expectations
+// Using the PayloadEntry type from recharts for payload items
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: Array<{
+    name: string;
+    value: any;
+    payload?: any;
+    dataKey?: string;
+    color?: string;
+  }>;
+  label?: string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-2 rounded-md shadow-md">
         <p className="text-xs font-medium">{label}</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry, index) => (
           <p key={index} className="text-xs" style={{ color: entry.color }}>
             {entry.name}: {entry.value}
           </p>
@@ -123,7 +136,8 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            <RechartsTooltip content={CustomTooltip} />
+            {/* Proper typing for the content prop - passing as a render function */}
+            <RechartsTooltip content={(props) => <CustomTooltip {...props as CustomTooltipProps} />} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
