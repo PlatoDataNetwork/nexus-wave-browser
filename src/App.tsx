@@ -38,7 +38,7 @@ const App = () => (
                   <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
                   <Route path="/history" element={<Index defaultUrl="/history" />} />
                   <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-                  <Route path="/search" element={<Index defaultUrl="/search" />} />
+                  <Route path="/search" element={<Search />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/downloads" element={<Downloads />} />
                   
@@ -58,3 +58,4 @@ const App = () => (
 );
 
 export default App;
+
