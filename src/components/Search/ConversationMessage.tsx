@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -22,11 +21,11 @@ import {
   XAxis, 
   YAxis, 
   CartesianGrid, 
-  Tooltip as RechartsTooltip, 
+  Tooltip, 
   Legend, 
   ResponsiveContainer,
-  TooltipProps
 } from 'recharts';
+import { TooltipProps } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -67,8 +66,8 @@ interface CodeProps {
   [key: string]: any;
 }
 
-// Explicitly define the type for CustomTooltip to match Recharts expectations
-// Using the PayloadEntry type from recharts for payload items
+// Define correctly typed CustomTooltip component that matches Recharts expectations
+// Using NameType and ValueType generics from TooltipProps
 type CustomTooltipProps = {
   active?: boolean;
   payload?: Array<{
@@ -81,7 +80,8 @@ type CustomTooltipProps = {
   label?: string;
 };
 
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+// Create the CustomTooltip as a functional component with explicit return type for clarity
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-2 rounded-md shadow-md">
@@ -120,11 +120,6 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
     };
   });
 
-  // Define the custom tooltip as a render function to satisfy TypeScript
-  const renderTooltip = (props: any) => {
-    return <CustomTooltip {...props} />;
-  };
-
   return (
     <div className="mt-4 mb-4">
       <div className="flex items-center gap-2 mb-2">
@@ -141,7 +136,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            <RechartsTooltip content={renderTooltip} />
+            <Tooltip content={<CustomTooltip />} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
