@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -24,8 +23,7 @@ import {
   CartesianGrid, 
   Tooltip as RechartsTooltip, 
   Legend, 
-  ResponsiveContainer, 
-  TooltipProps 
+  ResponsiveContainer 
 } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -67,10 +65,10 @@ interface CodeProps {
   [key: string]: any;
 }
 
-// Properly type the CustomTooltip component with Recharts TooltipProps
-type CustomTooltipProps = TooltipProps<any, any>;
-
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+// Custom tooltip for chart
+const CustomTooltip: React.FC<any> = (props) => {
+  const { active, payload, label } = props;
+  
   if (active && payload && payload.length) {
     return (
       <div className="bg-background border border-border p-2 rounded-md shadow-md">
@@ -125,7 +123,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            <RechartsTooltip content={(props) => <CustomTooltip {...props} />} />
+            <RechartsTooltip content={CustomTooltip} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
