@@ -27,6 +27,8 @@ interface ChatMessage {
     yAxisKeys: string[];
     colors?: Record<string, string>;
   };
+  alternativeResponses?: string[];
+  currentResponseIndex?: number;
 }
 
 interface NexusChatProps {
@@ -143,7 +145,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: new Date(),
         sources: sources.length > 0 ? sources : undefined,
         hasRealTimeData: !!realTimeData,
-        chartData: realTimeData?.chartData
+        chartData: realTimeData?.chartData,
+        alternativeResponses: [],
+        currentResponseIndex: 0
       };
       
       setMessages(prev => [...prev, aiResponse]);
@@ -162,6 +166,118 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRegenerateMessage = async (messageId: string) => {
+    // Find the message and its corresponding user message
+    const messageIndex = messages.findIndex(msg => msg.id === messageId);
+    if (messageIndex === -1 || messages[messageIndex].role !== 'assistant') return;
+    
+    // Find the preceding user message
+    let userMessageIndex = messageIndex - 1;
+    while (userMessageIndex >= 0 && messages[userMessageIndex].role !== 'user') {
+      userMessageIndex--;
+    }
+    
+    if (userMessageIndex < 0) return;
+    
+    const userMessage = messages[userMessageIndex];
+    const currentAssistantMessage = messages[messageIndex];
+    
+    // Show regenerating toast
+    toast("Regenerating response...", {
+      duration: 3000,
+      icon: <Loader2 className="h-4 w-4 animate-spin" />
+    });
+    
+    setIsLoading(true);
+    
+    try {
+      // Get real-time data if the original response had it
+      let realTimeData = null;
+      
+      if (currentAssistantMessage.hasRealTimeData) {
+        try {
+          setIsFetchingRealTimeData(true);
+          const classification = await classifyQuery(userMessage.content);
+          realTimeData = await getRealTimeData(userMessage.content, classification);
+        } catch (error) {
+          console.error("Error fetching real-time data for regeneration:", error);
+        } finally {
+          setIsFetchingRealTimeData(false);
+        }
+      }
+      
+      // Generate new response
+      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
+        userMessage.content,
+        conversationHistory.slice(0, -1), // Exclude the last assistant response
+        realTimeData
+      );
+      
+      // Create sources from real-time data for citation
+      const sources = realTimeData?.sources || [];
+      
+      // Store the current response in alternatives
+      const alternatives = [
+        ...currentAssistantMessage.alternativeResponses || [],
+        currentAssistantMessage.content
+      ];
+      
+      // Create new AI response
+      const regeneratedResponse: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: aiResponseContent,
+        timestamp: new Date(),
+        sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
+        hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
+        chartData: realTimeData?.chartData || currentAssistantMessage.chartData,
+        alternativeResponses: alternatives,
+        currentResponseIndex: 0
+      };
+      
+      // Replace the old message with the new one
+      const updatedMessages = [...messages];
+      updatedMessages[messageIndex] = regeneratedResponse;
+      
+      setMessages(updatedMessages);
+      
+      // Update conversation history
+      const updatedHistory = [...conversationHistory];
+      updatedHistory.splice(-1, 1, { role: "assistant", content: aiResponseContent });
+      setConversationHistory(updatedHistory);
+      
+      toast.success("Response regenerated");
+    } catch (error) {
+      console.error("Error regenerating response:", error);
+      toast.error("Failed to regenerate response");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleSelectAlternative = (messageId: string, index: number) => {
+    setMessages(prevMessages => {
+      return prevMessages.map(message => {
+        if (message.id === messageId) {
+          // If we're selecting the current response (index 0), use the main content
+          // Otherwise, use one of the alternative responses
+          let content = message.content;
+          
+          if (index > 0 && message.alternativeResponses && index <= message.alternativeResponses.length) {
+            content = message.alternativeResponses[index - 1];
+          }
+          
+          return {
+            ...message,
+            currentResponseIndex: index,
+            content: index === 0 ? message.content : message.alternativeResponses![index - 1]
+          };
+        }
+        return message;
+      });
+    });
   };
 
   return (
@@ -221,6 +337,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 sources={message.sources}
                 hasRealTimeData={message.hasRealTimeData}
                 chartData={message.chartData}
+                messageId={message.id}
+                onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
+                alternativeResponses={message.alternativeResponses || []}
+                currentResponseIndex={message.currentResponseIndex || 0}
+                onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
               />
             ))
           )}
