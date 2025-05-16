@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,11 +7,12 @@ import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
 const Header: React.FC = () => {
   const location = useLocation();
   const isAppRoute = location.pathname.startsWith('/app');
+  const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
   const isHistoryRoute = location.pathname.startsWith('/history');
   
-  // Only hide header on app routes that have their own browser chrome, but keep it on search
-  const shouldHideHeader = isAppRoute || isExtensionStoreRoute || isHistoryRoute;
+  // Don't display header on app routes that have their own browser chrome
+  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
   
   if (shouldHideHeader) {
     return null;
