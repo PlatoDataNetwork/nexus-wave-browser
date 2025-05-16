@@ -14,7 +14,7 @@ import {
   ArrowLeft, 
   ArrowRight 
 } from 'lucide-react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegendContent } from "@/components/ui/chart";
+import { ChartContainer, ChartLegendContent } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -112,6 +112,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
+            {/* Use the recharts Tooltip component directly with CustomTooltip */}
             <Tooltip content={<CustomTooltip />} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
