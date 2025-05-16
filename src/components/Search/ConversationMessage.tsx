@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -80,6 +79,23 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
     };
   });
 
+  // Custom tooltip component that will be rendered as a div
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-background border border-border p-2 rounded-md shadow-md">
+          <p className="text-xs font-medium">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} className="text-xs" style={{ color: entry.color }}>
+              {entry.name}: {entry.value}
+            </p>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="mt-4 mb-4">
       <div className="flex items-center gap-2 mb-2">
@@ -96,23 +112,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            <ChartTooltip
-              content={(props) => {
-                if (props.active && props.payload && props.payload.length) {
-                  return (
-                    <div className="bg-background border border-border p-2 rounded-md shadow-md">
-                      <p className="text-xs font-medium">{props.label}</p>
-                      {props.payload.map((entry: any, index: number) => (
-                        <p key={index} className="text-xs" style={{ color: entry.color }}>
-                          {entry.name}: {entry.value}
-                        </p>
-                      ))}
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
