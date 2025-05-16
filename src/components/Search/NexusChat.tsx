@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -348,7 +347,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <ScrollArea className="flex-1 p-4">
+      {/* Increased height of the ScrollArea to make room for input area */}
+      <ScrollArea className="flex-1 p-4 pb-20">
         <div className="space-y-4 pb-4">
           {messages.length === 0 ? (
             <div className="text-center py-10">
@@ -416,7 +416,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t border-border mt-auto">
+      {/* Fixed position input area */}
+      <div className="p-4 border-t border-border bg-background shadow-md absolute bottom-0 left-0 right-0 z-10">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
             placeholder="Ask Nexus anything..."
@@ -460,6 +461,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           </Button>
         </form>
       </div>
+      
+      {/* Add padding at the bottom to prevent content from being hidden behind the input area */}
+      <div className="h-20"></div>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,6 +50,9 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 15% 20%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Toast z-index */
+    --toast-z-index: 9999;
   }
 }
 
@@ -241,5 +245,20 @@
   
   .macos-maximize {
     @apply bg-green-500 hover:bg-green-600;
+  }
+  
+  /* Fix for notifications to appear above other elements */
+  .toast-viewport {
+    position: fixed;
+    z-index: var(--toast-z-index);
+  }
+  
+  /* Message input area fix */
+  .message-input-fixed {
+    position: sticky;
+    bottom: 0;
+    background-color: hsl(var(--background));
+    z-index: 20;
+    border-top: 1px solid hsl(var(--border));
   }
 }
