@@ -64,6 +64,7 @@ const StockComparisonChart: React.FC<StockComparisonChartProps> = ({
             ...symbolColors,
             theme: {
               dark: "hsl(240 10% 3.9%)",
+              light: "hsl(0 0% 95%)" // Add the required light theme color
             },
           }}
         >
