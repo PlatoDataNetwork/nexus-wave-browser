@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -176,26 +175,6 @@
       transform: scaleY(0.1);
     }
   }
-  
-  /* Typewriter cursor animation */
-  .animate-blink {
-    animation: cursor-blink 1s step-end infinite;
-  }
-  
-  @keyframes cursor-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-  
-  /* Fade-in animation for message appearance */
-  .fade-in {
-    animation: fadeIn 0.3s ease-in-out forwards;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
 
   /* Rainbow gradient animation */
   .rainbow-gradient {
@@ -267,23 +246,18 @@
     @apply bg-green-500 hover:bg-green-600;
   }
   
-  /* Toast positioning and styles - OPTIMIZED FOR VISIBILITY */
+  /* Toast positioning and styles */
   .sonner-toast-container {
-    position: fixed !important;
+    position: fixed;
     z-index: var(--toast-z-index) !important;
-    top: 16px !important;
-    padding-bottom: 0 !important;
+    padding-bottom: 6rem !important; /* Ensure enough space above the input area */
   }
   
-  /* Ensure toasts are always on top */
-  div[data-sonner-toaster] {
-    z-index: var(--toast-z-index) !important;
-  }
-  
-  /* Make toast more visible with stronger shadow and border */
-  div[data-sonner-toast] {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-    border: 1px solid rgba(123, 99, 221, 0.3) !important;
+  /* When in mobile view, move toasts higher up */
+  @media (max-width: 640px) {
+    .sonner-toast-container {
+      padding-bottom: 8rem !important;
+    }
   }
 
   /* Fix for notifications to appear above other elements */
@@ -301,4 +275,3 @@
     border-top: 1px solid hsl(var(--border));
   }
 }
-
