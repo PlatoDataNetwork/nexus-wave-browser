@@ -3,11 +3,22 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Clock, Globe } from 'lucide-react';
+import { Clock, Globe, LineChart } from 'lucide-react';
+import StockComparisonChart from './StockComparisonChart';
 
 interface Source {
   title: string;
   url: string;
+}
+
+interface ChartData {
+  type: 'stockComparison';
+  symbols: string[];
+  data: Array<{
+    date: string;
+    [key: string]: string | number;
+  }>;
+  title: string;
 }
 
 interface ConversationMessageProps {
@@ -15,6 +26,7 @@ interface ConversationMessageProps {
   content: string;
   sources?: Source[];
   hasRealTimeData?: boolean;
+  chartData?: ChartData;
 }
 
 // Define a proper type for the code component props
@@ -30,7 +42,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   role, 
   content, 
   sources,
-  hasRealTimeData
+  hasRealTimeData,
+  chartData
 }) => {
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
@@ -83,6 +96,22 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             >
               {content}
             </ReactMarkdown>
+            
+            {/* Display chart if available */}
+            {chartData && chartData.type === 'stockComparison' && (
+              <div className="mt-4 border-t pt-4 border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-1 text-xs font-medium mb-2">
+                  <LineChart className="h-3 w-3" />
+                  <span>Stock Price Comparison Chart:</span>
+                </div>
+                <StockComparisonChart 
+                  data={chartData.data}
+                  symbols={chartData.symbols}
+                  title={chartData.title}
+                  className="mt-2"
+                />
+              </div>
+            )}
           </div>
         )}
         
