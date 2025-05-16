@@ -78,11 +78,11 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
             <ChartTooltip
-              content={({ active, payload, label }) => (
+              content={(props) => (
                 <ChartTooltipContent
-                  active={active}
-                  payload={payload}
-                  label={label}
+                  active={props.active}
+                  payload={props.payload}
+                  label={props.label}
                 />
               )}
             />
