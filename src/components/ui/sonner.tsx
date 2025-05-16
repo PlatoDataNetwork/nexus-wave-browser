@@ -25,7 +25,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
       // Position toasts at the top center of the screen, well above the input area
       position="top-center"
       // Set higher z-index to ensure it's above the input area
-      style={{ zIndex: 100 }}
+      style={{ zIndex: 9999 }}
+      // Expand width on mobile for better visibility
+      expand={true}
+      // Adjust duration for better readability
+      duration={4000}
       {...props}
     />
   )
