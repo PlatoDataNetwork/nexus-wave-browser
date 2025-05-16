@@ -15,6 +15,15 @@ interface ConversationMessageProps {
   sources?: Source[];
 }
 
+// Define a proper type for the code component props
+interface CodeProps {
+  node: any;
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
   role, 
   content, 
@@ -35,9 +44,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <div className="conversation-markdown">
             <ReactMarkdown
               components={{
-                code: ({node, className, children, ...props}) => {
+                code: ({ node, inline, className, children, ...props }: CodeProps) => {
                   const match = /language-(\w+)/.exec(className || '');
-                  return !props.inline && match ? (
+                  return !inline && match ? (
                     <SyntaxHighlighter
                       language={match[1]}
                       style={atomDark}
