@@ -4,6 +4,14 @@ interface CachedData {
   timestamp: number;
   sources: Array<{ title: string; url: string }>;
   ttl: number; // Time to live in milliseconds
+  chartData?: {
+    type: string;
+    data: Array<Record<string, any>>;
+    title: string;
+    xAxisKey: string;
+    yAxisKeys: string[];
+    colors?: Record<string, string>;
+  };
 }
 
 /**
@@ -35,7 +43,20 @@ class DataCache {
   /**
    * Store data in the cache with TTL based on content type
    */
-  set(key: string, data: any, sources: Array<{ title: string; url: string }>, contentType: string): void {
+  set(
+    key: string, 
+    data: any, 
+    sources: Array<{ title: string; url: string }>, 
+    contentType: string,
+    chartData?: {
+      type: string;
+      data: Array<Record<string, any>>;
+      title: string;
+      xAxisKey: string;
+      yAxisKeys: string[];
+      colors?: Record<string, string>;
+    }
+  ): void {
     // Set TTL based on content type
     let ttl = 1800000; // Default: 30 minutes
     
@@ -72,7 +93,8 @@ class DataCache {
       data,
       timestamp: Date.now(),
       sources,
-      ttl
+      ttl,
+      chartData
     };
   }
   

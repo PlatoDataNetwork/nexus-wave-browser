@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +19,14 @@ interface ChatMessage {
     url: string;
   }[];
   hasRealTimeData?: boolean;
+  chartData?: {
+    type: string;
+    data: Array<Record<string, any>>;
+    title: string;
+    xAxisKey: string;
+    yAxisKeys: string[];
+    colors?: Record<string, string>;
+  };
 }
 
 interface NexusChatProps {
@@ -135,7 +142,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         content: aiResponseContent,
         timestamp: new Date(),
         sources: sources.length > 0 ? sources : undefined,
-        hasRealTimeData: !!realTimeData
+        hasRealTimeData: !!realTimeData,
+        chartData: realTimeData?.chartData
       };
       
       setMessages(prev => [...prev, aiResponse]);
@@ -197,10 +205,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={() => setCurrentMessage("What's the current price of gold?")}
+                  onClick={() => setCurrentMessage("Show me a chart of Bitcoin price trends")}
                   className="flex items-center gap-1"
                 >
-                  <Zap className="h-3 w-3" /> Gold price
+                  <Zap className="h-3 w-3" /> Bitcoin price chart
                 </Button>
               </div>
             </div>
@@ -211,6 +219,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 role={message.role}
                 content={message.content}
                 sources={message.sources}
+                hasRealTimeData={message.hasRealTimeData}
+                chartData={message.chartData}
               />
             ))
           )}
