@@ -15,8 +15,13 @@ const ImageResultsGrid: React.FC<ImageResultsGridProps> = ({ results, onNavigate
   // Handle click on image card
   const handleImageClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
     e.preventDefault(); // Always prevent default navigation
+    e.stopPropagation(); // Stop event propagation
+    
+    console.log(`ImageResultsGrid: Handling click for ${url}`);
     if (onNavigate) {
       onNavigate(url);
+    } else {
+      console.log("ImageResultsGrid: No navigation handler provided");
     }
   };
 

@@ -42,6 +42,13 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     return () => clearTimeout(timer);
   }, [searchParams, onNavigate]);
 
+  // Handle navigation within the browser content
+  const handleContentNavigate = (url: string) => {
+    console.log(`BrowserContent: Handling navigation to ${url}`);
+    // Always use the parent onNavigate handler to ensure consistent navigation
+    onNavigate(url);
+  };
+
   // Helper function to determine if a URL is external
   const isExternalUrl = (url: string) => {
     if (!url) return false; // Guard against undefined URLs
@@ -75,7 +82,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     if (currentUrl === '/extension-store' || currentUrl.includes('/extension-store')) {
       return (
         <ScrollArea className="h-full w-full">
-          <ExtensionStore onNavigate={onNavigate} />
+          <ExtensionStore onNavigate={handleContentNavigate} />
         </ScrollArea>
       );
     }
@@ -91,7 +98,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     if (currentUrl === '/search' || currentUrl.includes('/search')) {
       return (
         <ScrollArea className="h-full w-full">
-          <Search onNavigate={onNavigate} />
+          <Search onNavigate={handleContentNavigate} />
         </ScrollArea>
       );
     }
@@ -105,7 +112,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
   };
 
   return (
-    <PageLayout includeFooter={true} onNavigate={onNavigate}>
+    <PageLayout includeFooter={true} onNavigate={handleContentNavigate}>
       <div className="flex-1 h-full w-full overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
