@@ -120,6 +120,11 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
     };
   });
 
+  // Define the custom tooltip as a render function to satisfy TypeScript
+  const renderTooltip = (props: any) => {
+    return <CustomTooltip {...props} />;
+  };
+
   return (
     <div className="mt-4 mb-4">
       <div className="flex items-center gap-2 mb-2">
@@ -136,8 +141,7 @@ const ChartVisualization: React.FC<{ chartData: ChartData }> = ({ chartData }) =
               tick={{ fill: 'var(--foreground)' }}
             />
             <YAxis fontSize={12} tick={{ fill: 'var(--foreground)' }} />
-            {/* Proper typing for the content prop - passing as a render function */}
-            <RechartsTooltip content={(props) => <CustomTooltip {...props as CustomTooltipProps} />} />
+            <RechartsTooltip content={renderTooltip} />
             <Legend content={(props) => <ChartLegendContent {...props} />} />
             {chartData.yAxisKeys.map((key, index) => (
               <Line
