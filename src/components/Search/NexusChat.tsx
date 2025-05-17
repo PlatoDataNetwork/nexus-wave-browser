@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -314,8 +313,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
 
   const handleRelatedQuestionClick = (question: string) => {
     setCurrentMessage(question);
-    // Automatically submit the related question
-    setTimeout(() => handleSubmit(), 100);
+    // Immediately submit the question without any delay
+    handleSubmit();
   };
 
   const handleEditMessage = (messageId: string, content: string) => {

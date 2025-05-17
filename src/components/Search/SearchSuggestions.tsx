@@ -25,6 +25,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
 }) => {
   const handleSuggestionClick = (suggestion: string) => {
     onSelectSuggestion(suggestion);
+    // No need for any additional action as the parent component now handles auto-submission
   };
   
   return (
