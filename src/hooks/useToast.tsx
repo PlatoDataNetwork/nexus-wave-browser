@@ -18,8 +18,6 @@ export const useUnifiedToast = () => {
       className: props.variant === "destructive" ? "bg-destructive text-destructive-foreground" : 
                 props.variant === "success" ? "bg-green-500 text-white" : undefined
     });
-    
-    // No need to call shadcn toast as well - we're standardizing on Sonner
   };
   
   return { toast };

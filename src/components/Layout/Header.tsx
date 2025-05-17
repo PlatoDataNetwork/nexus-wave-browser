@@ -43,7 +43,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation - Updated to hide Search on search page */}
+        {/* Main Navigation */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             {/* Hide Search button when already on search page */}
