@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -79,6 +80,52 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Helper function to create a new branch
+  const createNewBranch = (questionId: string, questionVersion: number): string => {
+    const branchId = `branch-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    
+    setConversationBranches(prevBranches => [
+      ...prevBranches,
+      {
+        id: branchId,
+        questionId,
+        questionVersion,
+        messageIds: []
+      }
+    ]);
+    
+    return branchId;
+  };
+
+  // Helper function to switch to a specific branch
+  const switchToBranch = (branchId: string) => {
+    setActiveBranchId(branchId);
+  };
+
+  // Helper function to add a message to a branch
+  const addMessageToBranch = (branchId: string, messageId: string) => {
+    setConversationBranches(prevBranches => 
+      prevBranches.map(branch => {
+        if (branch.id === branchId) {
+          return {
+            ...branch,
+            messageIds: [...branch.messageIds, messageId]
+          };
+        }
+        return branch;
+      })
+    );
+  };
+
+  // Helper function to find which branch a message belongs to
+  const findBranchForMessage = (messageId: string): string | null => {
+    const branch = conversationBranches.find(branch => 
+      branch.messageIds.includes(messageId)
+    );
+    
+    return branch ? branch.id : null;
+  };
 
   // Helper function to find messages in the active branch
   const getVisibleMessages = () => {
