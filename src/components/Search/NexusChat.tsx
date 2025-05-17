@@ -146,11 +146,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           
-          // Show loading toast for real-time data - positioned above input
+          // Show loading toast for real-time data
           toast("Fetching real-time data...", {
             duration: 3000,
-            icon: <Globe className="h-4 w-4" />,
-            position: "top-center" // Ensure toast appears at top
+            icon: <Globe className="h-4 w-4" />
           });
           
           realTimeData = await getRealTimeData(messageToSearch, classification);
@@ -158,16 +157,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           if (realTimeData) {
             toast("Found real-time information", {
               duration: 2000,
-              icon: <Zap className="h-4 w-4 text-nexus-purple" />,
-              position: "top-center" // Ensure toast appears at top
+              icon: <Zap className="h-4 w-4 text-nexus-purple" />
             });
           }
         }
       } catch (error) {
         console.error("Error during classification or data fetching:", error);
         toast("Couldn't analyze query for real-time needs", {
-          duration: 2000,
-          position: "top-center" // Ensure toast appears at top
+          duration: 2000
         });
       } finally {
         setIsClassifying(false);
@@ -250,9 +247,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
     } catch (error) {
       console.error("AI error:", error);
-      toast("Failed to fetch response. Please try again later.", {
-        position: "top-center" // Ensure error toast appears at top
-      });
+      toast("Failed to fetch response. Please try again later.");
       
       // Add a fallback response
       const fallbackResponse: ChatMessage = {
@@ -508,10 +503,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                         </div>
                       )}
                       
-                      {/* Streaming Typewriter Effect */}
+                      {/* Streaming with blinking cursor */}
                       <TypewriterEffect 
-                        text={message.content} 
-                        speed={5}
+                        text={message.content}
+                        isStreaming={true}
                         className="conversation-markdown"
                       />
                       

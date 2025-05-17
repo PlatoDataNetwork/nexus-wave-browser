@@ -14,7 +14,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       toastOptions={{
-        // Update classname to add custom styles for positioning
         classNames: {
           toast: "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
           description: "group-[.toast]:text-muted-foreground",
@@ -24,8 +23,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       // Position toasts at the top center of the screen, well above the input area
       position="top-center"
-      // Set higher z-index to ensure it's above the input area
-      style={{ zIndex: 100 }}
+      // Set higher z-index to ensure it's above all other elements
+      style={{ zIndex: 9999 }}
       {...props}
     />
   )

@@ -66,6 +66,7 @@ export async function getChatGPTResponseWithRealTimeData(
 
 /**
  * Stream an AI response using the ChatGPT API with conversation history and real-time data
+ * This function streams the response in real-time to provide a more interactive experience
  */
 export async function streamChatGPTResponseWithRealTimeData(
   message: string,
@@ -121,6 +122,7 @@ export async function streamChatGPTResponseWithRealTimeData(
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {
         accumulatedText += content;
+        // Send the complete text so far, not just the new chunk
         onChunk(accumulatedText, false);
       }
     }

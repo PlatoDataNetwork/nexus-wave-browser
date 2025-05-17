@@ -1,14 +1,12 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface TypewriterEffectProps {
   text: string;
-  speed?: number;
-  onComplete?: () => void;
-  isComplete?: boolean;
+  isStreaming?: boolean;
   className?: string;
 }
 
@@ -21,41 +19,10 @@ interface CodeProps {
 
 const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
   text,
-  speed = 10,
-  onComplete,
-  isComplete = false,
+  isStreaming = false,
   className = '',
 }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // If isComplete is true, show the entire text immediately
-    if (isComplete) {
-      setDisplayedText(text);
-      setCurrentIndex(text.length);
-      if (onComplete) onComplete();
-      return;
-    }
-
-    // Reset if text changes completely
-    if (!text.startsWith(displayedText) && !displayedText.startsWith(text)) {
-      setDisplayedText('');
-      setCurrentIndex(0);
-    }
-
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText(text.substring(0, currentIndex + 1));
-        setCurrentIndex(prevIndex => prevIndex + 1);
-      }, speed);
-
-      return () => clearTimeout(timeout);
-    } else if (currentIndex === text.length && onComplete) {
-      onComplete();
-    }
-  }, [text, currentIndex, speed, onComplete, isComplete, displayedText]);
 
   return (
     <div ref={contentRef} className={className}>
@@ -90,8 +57,12 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
           img: ({src, alt}) => <img src={src} alt={alt || ''} className="max-w-full h-auto rounded-md my-2" />
         }}
       >
-        {displayedText}
+        {text}
       </ReactMarkdown>
+      
+      {isStreaming && (
+        <span className="inline-block w-2 h-4 ml-1 bg-nexus-purple animate-pulse" />
+      )}
     </div>
   );
 };
