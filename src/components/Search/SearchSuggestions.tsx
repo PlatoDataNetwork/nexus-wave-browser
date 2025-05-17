@@ -7,6 +7,7 @@ interface SearchSuggestionsProps {
   onSelectSuggestion: (suggestion: string) => void;
   autoSubmit?: boolean;
   suggestions?: string[];
+  isDisabled?: boolean;
 }
 
 const DEFAULT_SUGGESTIONS = [
@@ -21,7 +22,8 @@ const DEFAULT_SUGGESTIONS = [
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({ 
   onSelectSuggestion,
   autoSubmit = true,
-  suggestions = DEFAULT_SUGGESTIONS
+  suggestions = DEFAULT_SUGGESTIONS,
+  isDisabled = false
 }) => {
   const handleSuggestionClick = (suggestion: string) => {
     // Simply pass the suggestion to the parent component
@@ -37,6 +39,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
           variant="outline" 
           className="flex items-center justify-between"
           onClick={() => handleSuggestionClick(suggestion)}
+          disabled={isDisabled}
         >
           <span>{suggestion}</span>
           <ArrowRight className="h-4 w-4" />

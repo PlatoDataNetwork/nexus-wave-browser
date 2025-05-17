@@ -14,16 +14,26 @@ import {
   ArrowRight,
   ExternalLink,
   MessageSquarePlus,
-  Pencil
+  Pencil,
+  History,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Avatar } from '@/components/ui/avatar';
+import { format } from 'date-fns';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface Source {
   title: string;
   url: string;
+}
+
+interface EditHistoryItem {
+  id: string;
+  content: string;
+  timestamp: Date;
 }
 
 interface ConversationMessageProps {
@@ -39,6 +49,10 @@ interface ConversationMessageProps {
   relatedQuestions?: string[];
   onRelatedQuestionClick?: (question: string) => void;
   onEditMessage?: (messageId: string, content: string) => void;
+  isEdited?: boolean;
+  editHistory?: EditHistoryItem[];
+  onToggleEditHistory?: () => void;
+  isRegeneratingChain?: boolean;
 }
 
 // Define a proper type for the code component props
@@ -62,14 +76,20 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   onSelectAlternative,
   relatedQuestions = [],
   onRelatedQuestionClick,
-  onEditMessage
+  onEditMessage,
+  isEdited,
+  editHistory = [],
+  onToggleEditHistory,
+  isRegeneratingChain = false
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
+  const [showEditHistory, setShowEditHistory] = useState(false);
   
   const hasAlternatives = alternativeResponses.length > 0;
   const canGoBack = hasAlternatives && currentResponseIndex > 0;
   const canGoForward = hasAlternatives && currentResponseIndex < alternativeResponses.length;
+  const hasEditHistory = isEdited && editHistory && editHistory.length > 0;
 
   const handleCopy = () => {
     // Copy the content to clipboard
@@ -161,6 +181,13 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     }
   };
 
+  const handleToggleEditHistory = () => {
+    setShowEditHistory(!showEditHistory);
+    if (onToggleEditHistory) {
+      onToggleEditHistory();
+    }
+  };
+
   // Extract domain from URL for favicon
   const getDomainFromUrl = (url: string): string => {
     try {
@@ -188,13 +215,66 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         {role === "user" ? (
           <div className="whitespace-pre-wrap">
             <div className="flex justify-between items-start">
-              <p className="pr-6">{content}</p>
+              <div className="space-y-1 flex-1 pr-6">
+                {/* Show edited indicator if the message has been edited */}
+                {isEdited && (
+                  <div className="flex items-center gap-1 mb-1">
+                    <span className="text-xs text-white/70">(edited)</span>
+                    {hasEditHistory && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-5 w-5 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple"
+                        onClick={handleToggleEditHistory}
+                      >
+                        <History className="h-3 w-3" />
+                        <span className="sr-only">Show edit history</span>
+                      </Button>
+                    )}
+                  </div>
+                )}
+                <p>{content}</p>
+                
+                {/* Show edit history in a collapsible section */}
+                {hasEditHistory && showEditHistory && (
+                  <Collapsible 
+                    className="mt-2 border-t border-white/20 pt-2"
+                    open={showEditHistory}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-between p-1 h-auto text-white/70 hover:text-white hover:bg-nexus-deep-purple"
+                      >
+                        <span className="text-xs flex items-center gap-1">
+                          <History className="h-3 w-3" /> 
+                          Edit History
+                        </span>
+                        <ChevronRight className="h-3 w-3" />
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="space-y-2 mt-1">
+                      {editHistory.map((edit, index) => (
+                        <div key={index} className="border-l-2 border-white/40 pl-2 text-white/90">
+                          <div className="text-xs text-white/60 mb-1">
+                            {format(edit.timestamp, 'MMM d, yyyy h:mm a')}
+                          </div>
+                          <div className="text-sm">{edit.content}</div>
+                        </div>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+              </div>
+              
               {onEditMessage && messageId && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-6 w-6 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple -mt-1"
                   onClick={handleEditMessage}
+                  disabled={isRegeneratingChain}
                 >
                   <Pencil className="h-3 w-3" />
                   <span className="sr-only">Edit message</span>
@@ -289,6 +369,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                       size="sm"
                       className="justify-start text-xs h-auto py-1.5 text-left"
                       onClick={() => onRelatedQuestionClick && onRelatedQuestionClick(question)}
+                      disabled={isRegeneratingChain}
                     >
                       {question}
                     </Button>
@@ -371,9 +452,10 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                       variant="ghost"
                       className="h-7 px-2 text-xs"
                       onClick={handleRegenerate}
+                      disabled={isRegeneratingChain}
                     >
-                      <RefreshCw className="h-3 w-3 mr-1" />
-                      Regenerate
+                      <RefreshCw className={`h-3 w-3 mr-1 ${isRegeneratingChain ? 'animate-spin' : ''}`} />
+                      {isRegeneratingChain ? 'Regenerating...' : 'Regenerate'}
                     </Button>
                   )}
                 </div>
@@ -387,7 +469,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                     variant="outline"
                     className="h-7 w-7 p-0 rounded-full"
                     onClick={handlePreviousResponse}
-                    disabled={!canGoBack}
+                    disabled={!canGoBack || isRegeneratingChain}
                   >
                     <ArrowLeft className="h-3 w-3" />
                   </Button>
@@ -401,7 +483,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                     variant="outline"
                     className="h-7 w-7 p-0 rounded-full"
                     onClick={handleNextResponse}
-                    disabled={!canGoForward}
+                    disabled={!canGoForward || isRegeneratingChain}
                   >
                     <ArrowRight className="h-3 w-3" />
                   </Button>
