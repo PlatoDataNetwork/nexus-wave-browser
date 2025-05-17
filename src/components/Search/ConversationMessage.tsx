@@ -121,7 +121,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     setEditContent(content);
   }, [content]);
 
-  const hasAlternatives = alternativeResponses.length > 0;
+  // Only show alternative navigation controls when there are actual alternatives
+  const hasAlternatives = alternativeResponses && alternativeResponses.length > 0;
   const canGoBack = hasAlternatives && currentResponseIndex > 0;
   const canGoForward = hasAlternatives && currentResponseIndex < alternativeResponses.length;
   const hasEditHistory = isEdited && editHistory && editHistory.length > 0;
@@ -459,7 +460,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     );
   }
   
-  // For assistant messages (unchanged from the original)
+  // For assistant messages
   return (
     <div className="flex justify-start">
       <div className="max-w-3/4 rounded-lg p-4 bg-secondary border border-border">
@@ -535,7 +536,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           )}
           
           {/* Related Questions Section */}
-          {role === "assistant" && relatedQuestions && relatedQuestions.length > 0 && (
+          {relatedQuestions && relatedQuestions.length > 0 && (
             <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-1 text-xs font-medium mb-2">
                 <MessageSquarePlus className="h-3 w-3" />
@@ -641,7 +642,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             </div>
             
-            {/* Navigation controls for alternative responses moved to bottom */}
+            {/* Only show navigation controls when there are actual alternatives */}
             {hasAlternatives && (
               <div className="flex items-center justify-center gap-3 mt-1">
                 <Button

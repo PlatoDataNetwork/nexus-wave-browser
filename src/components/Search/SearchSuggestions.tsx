@@ -8,6 +8,7 @@ interface SearchSuggestionsProps {
   autoSubmit?: boolean;
   suggestions?: string[];
   isDisabled?: boolean;
+  maxDisplay?: number; // New prop to control how many suggestions to display
 }
 
 const DEFAULT_SUGGESTIONS = [
@@ -23,7 +24,8 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   onSelectSuggestion,
   autoSubmit = true,
   suggestions = DEFAULT_SUGGESTIONS,
-  isDisabled = false
+  isDisabled = false,
+  maxDisplay = 4 // Default to show 4 suggestions
 }) => {
   const handleSuggestionClick = (suggestion: string) => {
     onSelectSuggestion(suggestion);
@@ -31,7 +33,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   
   return (
     <div className="mt-6 flex flex-col gap-2 max-w-md mx-auto">
-      {suggestions.slice(0, 4).map((suggestion, index) => (
+      {suggestions.slice(0, maxDisplay).map((suggestion, index) => (
         <Button 
           key={index}
           variant="outline" 
