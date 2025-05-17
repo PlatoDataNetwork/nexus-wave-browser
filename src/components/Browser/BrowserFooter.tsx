@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -68,14 +67,12 @@ const BrowserFooter: React.FC<{
     });
   };
 
+  // Updated to ALWAYS use React Router navigation for search
   const handleSearchClick = () => {
-    console.log("Search clicked, navigating");
+    console.log("Search clicked, navigating directly to /search");
     
-    if (onNavigate) {
-      onNavigate("/search");
-    } else {
-      navigate('/search');
-    }
+    // Always use the direct React Router navigation for search, bypassing onNavigate
+    navigate('/search');
     
     toast({
       title: "Opening Nexus Search",
