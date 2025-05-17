@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -72,13 +71,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     const messageIndex = messages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1) return [];
     
-    // For simple parent-child relationship in a linear conversation:
-    // Child messages are those that follow the current message in the conversation
     const childIds: string[] = [];
     
-    // Start from the next message and collect all IDs
-    // For now, we'll simply consider all subsequent messages as children
-    // in a more complex system, we'd use the explicit parent-child relationships
     for (let i = messageIndex + 1; i < messages.length; i++) {
       childIds.push(messages[i].id);
     }
@@ -88,7 +82,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
 
   const generateRelatedQuestions = async (userMessage: string, aiResponse: string): Promise<string[]> => {
     try {
-      // Create a prompt specifically for related questions
       const relatedQuestionsPrompt = 
         "Based on the user's original query and your response, " +
         "generate exactly 3 follow-up questions that the user might want to ask next. " +
@@ -96,7 +89,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         "deeper aspects of the current topic. Return ONLY the questions as a JSON array with no additional text. " +
         "Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
       
-      // Include just enough context for good question generation
       const contextForQuestions = [
         { role: "user" as const, content: userMessage },
         { role: "assistant" as const, content: aiResponse },
@@ -110,23 +102,18 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         "Generate diverse, specific, and engaging questions the user might want to ask next"
       );
       
-      // Parse the response to get the questions array
       try {
-        // The AI might return just the JSON array or it might include explanatory text,
-        // so we need to extract just the array part
         const jsonMatch = questionsResponse.match(/\[\s*"[^"]+(?:",\s*"[^"]+")*\s*\]/);
         if (jsonMatch) {
           const questionsArray = JSON.parse(jsonMatch[0]);
-          return questionsArray.slice(0, 3); // Ensure we only have 3 questions
+          return questionsArray.slice(0, 3);
         }
         
-        // Fallback method if the regex doesn't match
         const cleanedResponse = questionsResponse.replace(/^```json\s*|\s*```$/g, '');
         const questions = JSON.parse(cleanedResponse);
         return Array.isArray(questions) ? questions.slice(0, 3) : [];
       } catch (error) {
         console.error("Failed to parse related questions:", error);
-        // If parsing fails, extract questions using simple heuristics
         const questionRegex = /(?:^|\n)["']?([^"'\n]+\?)/g;
         const questions = [];
         let match;
@@ -147,63 +134,48 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       e.stopPropagation();
     }
     
-    // Use direct message if provided, otherwise use current message state
     const messageToProcess = directMessage || currentMessage;
     
     if (!messageToProcess.trim()) return;
     
-    // Check if we're editing an existing message in-place
     if (activeEditId) {
-      // Find the message being edited
       const messageIndex = messages.findIndex(msg => msg.id === activeEditId);
       if (messageIndex !== -1) {
         const originalMessage = messages[messageIndex];
         
-        // Create updated message with edit history
         const updatedMessages = [...messages];
         
-        // Create history entry for the original content if this is the first edit
         const history = originalMessage.editHistory || [];
         
-        // Always add the current content to history before replacing it
         history.push({
           id: originalMessage.id,
           content: originalMessage.content,
           timestamp: new Date()
         });
         
-        // Get the current edit history index
         let currentVersion = originalMessage.editHistoryIndex || 0;
-        const newVersionCount = history.length + 1; // +1 for the new version we're adding
+        const newVersionCount = history.length + 1;
         
-        // Update the message with new content and edit history
         updatedMessages[messageIndex] = {
           ...updatedMessages[messageIndex],
           content: messageToProcess,
           isEdited: true,
           editHistory: history,
-          editHistoryIndex: newVersionCount - 1, // Set to the latest version
+          editHistoryIndex: newVersionCount - 1,
         };
         
-        // Update messages
         setMessages(updatedMessages);
-        
-        // Clear editing state
         setActiveEditId(null);
         
-        // Find all subsequent messages that need to be regenerated
         const childMessageIds = findChildMessages(originalMessage.id);
         
-        // If there are messages to regenerate, start with the first response
         if (childMessageIds.length > 0) {
           const nextMessageId = childMessageIds[0];
-          // Show toast for chain regeneration
           toast.info("Regenerating conversation chain...", {
             duration: 3000,
           });
           
           setIsRegeneratingChain(true);
-          // Start chain regeneration with the first child message
           await regenerateMessageChain(nextMessageId, updatedMessages);
           setIsRegeneratingChain(false);
         }
@@ -212,16 +184,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       }
     }
     
-    // Check if we're editing an existing message via the bottom input
     if (editingMessageId) {
-      // Find the message being edited
       const messageIndex = messages.findIndex(msg => msg.id === editingMessageId);
       if (messageIndex !== -1) {
         const originalMessage = messages[messageIndex];
-        // Create updated message with edit history
         const updatedMessages = [...messages];
         
-        // Create history entry for the original content if this is the first edit
         const history = originalMessage.editHistory || [];
         
         if (!originalMessage.isEdited) {
@@ -232,35 +200,27 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           });
         }
         
-        // Update the message with new content and edit history
         updatedMessages[messageIndex] = {
           ...updatedMessages[messageIndex],
           content: messageToProcess,
           isEdited: true,
           editHistory: history,
-          editHistoryIndex: history.length // New version is at the end
+          editHistoryIndex: history.length
         };
         
-        // Update messages
         setMessages(updatedMessages);
-        
-        // Clear editing state and input field
         setEditingMessageId(null);
         setCurrentMessage("");
         
-        // Find all subsequent messages that need to be regenerated
         const childMessageIds = findChildMessages(originalMessage.id);
         
-        // If there are messages to regenerate, start with the first response
         if (childMessageIds.length > 0) {
           const nextMessageId = childMessageIds[0];
-          // Show toast for chain regeneration
           toast.info("Regenerating conversation chain...", {
             duration: 3000,
           });
           
           setIsRegeneratingChain(true);
-          // Start chain regeneration with the first child message
           await regenerateMessageChain(nextMessageId, updatedMessages);
           setIsRegeneratingChain(false);
         }
@@ -269,7 +229,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       }
     }
     
-    // Add user message to conversation
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
@@ -281,13 +240,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     setMessages(prevMessages => [...prevMessages, userMessage]);
     
-    // Call onSearch without updating URL - just inform parent component
     if (onSearch) {
       onSearch(messageToProcess);
     }
     
-    // Clear the input field only when using the current message state
-    // If a direct message was provided, don't clear the input
     if (!directMessage) {
       setCurrentMessage("");
     }
@@ -303,12 +259,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         const classification = await classifyQuery(messageToProcess);
         needsRealTimeData = classification.needsRealTimeData;
         
-        // Step 2: If needed, fetch real-time data from the web
         if (needsRealTimeData) {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           
-          // Show loading toast for real-time data
           toast("Fetching real-time data...", {
             duration: 3000,
             icon: <Globe className="h-4 w-4" />
@@ -333,15 +287,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         setIsFetchingRealTimeData(false);
       }
       
-      // Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToProcess }];
       
-      // Create a placeholder for streaming response
       const tempResponseId = Date.now().toString() + "-streaming";
       const tempAssistantMessage: ChatMessage = {
         id: tempResponseId,
         role: "assistant",
-        content: "", // Empty at first, will be populated as chunks arrive
+        content: "",
         timestamp: new Date(),
         sources: realTimeData?.sources || [],
         hasRealTimeData: !!realTimeData,
@@ -349,11 +301,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         currentResponseIndex: 0,
         isStreaming: true,
         editHistoryIndex: 0,
-        // Establish relationship with the parent message (the user message)
         parentMessageId: userMessage.id
       };
       
-      // Update the user message to reference this response
       setMessages(prev => {
         const updatedMessages = [...prev];
         const userMsgIndex = updatedMessages.length - 1;
@@ -368,7 +318,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       setIsStreaming(true);
       
-      // Stream AI response using the ChatGPT API with conversation history and real-time data
       await streamChatGPTResponseWithRealTimeData(
         messageToProcess, 
         updatedHistory,
@@ -391,13 +340,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           
           if (isDone) {
             setIsStreaming(false);
-            // Update conversation history with the complete assistant response
             setConversationHistory([
               ...updatedHistory,
               { role: "assistant" as const, content: currentStreamContent }
             ]);
             
-            // Generate related questions once streaming is complete
             generateRelatedQuestions(messageToProcess, currentStreamContent).then(relatedQuestions => {
               setMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
@@ -408,10 +355,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   updatedMessages[streamingMsgIndex] = {
                     ...updatedMessages[streamingMsgIndex],
                     relatedQuestions: relatedQuestions,
-                    id: permanentId // Replace with permanent ID
+                    id: permanentId
                   };
                   
-                  // Update parent message's childMessageIds with the permanent ID
                   const parentIndex = updatedMessages.findIndex(
                     msg => msg.childMessageIds?.includes(tempResponseId)
                   );
@@ -428,7 +374,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             });
           }
           
-          // Scroll to bottom with each chunk
           messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         },
         realTimeData
@@ -438,14 +383,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
       
-      // Add a fallback response
       const fallbackResponse: ChatMessage = {
         id: Date.now().toString(),
         role: "assistant",
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date(),
         parentMessageId: userMessage.id,
-        editHistoryIndex: a = 0
+        editHistoryIndex: 0
       };
       setMessages(prev => [...prev, fallbackResponse]);
       setIsStreaming(false);
@@ -454,7 +398,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
   };
 
-  // Function to regenerate a chain of messages starting from a specific message
   const regenerateMessageChain = async (messageId: string, currentMessages: ChatMessage[] = messages) => {
     const messageIndex = currentMessages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1 || currentMessages[messageIndex].role !== 'assistant') {
@@ -462,7 +405,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       return;
     }
     
-    // Find the parent message (user question)
     const currentMessage = currentMessages[messageIndex];
     const parentId = currentMessage.parentMessageId;
     
@@ -479,7 +421,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     const userMessage = currentMessages[parentIndex];
     
-    // Show regenerating toast
     toast("Regenerating response...", {
       duration: 3000,
       icon: <Loader2 className="h-4 w-4 animate-spin" />
@@ -488,7 +429,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     setIsLoading(true);
     
     try {
-      // Get real-time data if the original response had it
       let realTimeData = null;
       
       if (currentMessage.hasRealTimeData) {
@@ -503,8 +443,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         }
       }
       
-      // Create conversation history up to this point
-      // We need to find all messages before the parent message that are part of the conversation
       const historyMessages: { role: "user" | "assistant"; content: string }[] = [];
       
       for (let i = 0; i < parentIndex; i++) {
@@ -514,29 +452,23 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         });
       }
       
-      // Add the parent message (user question)
       historyMessages.push({
         role: userMessage.role,
         content: userMessage.content
       });
       
-      // Modified system prompt to ensure variety in responses
       const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
 
-      // Create a placeholder for the regenerated streaming response
       const tempRegeneratedId = Date.now().toString() + "-regenerating";
       
-      // Get alternative responses if they exist
       const alternatives = [
         ...currentMessage.alternativeResponses || [],
         currentMessage.content
       ];
       
-      // Replace the old message with the regenerating version
       setMessages(prevMessages => {
         const updatedMessages = [...prevMessages];
         
-        // Find the index in the current state, which might be different from messageIndex
         const currentIndex = updatedMessages.findIndex(msg => msg.id === messageId);
         
         if (currentIndex !== -1) {
@@ -550,7 +482,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           };
         }
         
-        // Also update any child message references
         const parentMsgIndex = updatedMessages.findIndex(msg => 
           msg.childMessageIds?.includes(messageId)
         );
@@ -573,7 +504,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       setIsStreaming(true);
       
-      // Stream regenerated response
       await streamChatGPTResponseWithRealTimeData(
         userMessage.content,
         historyMessages,
@@ -597,7 +527,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           if (isDone) {
             const newMessageId = Date.now().toString();
             
-            // Update the message with the permanent ID
             setMessages(prevMessages => {
               const updatedMessages = [...prevMessages];
               const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempRegeneratedId);
@@ -607,12 +536,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   ...updatedMessages[streamingMsgIndex],
                   id: newMessageId,
                   isStreaming: false,
-                  // Keep parent reference
                   parentMessageId: userMessage.id
                 };
               }
               
-              // Update parent references to the new message ID
               const parentMsgIndex = updatedMessages.findIndex(msg => 
                 msg.childMessageIds?.includes(tempRegeneratedId)
               );
@@ -633,10 +560,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               return updatedMessages;
             });
             
-            // Clear streaming state
-            setIsStreaming(false);
-            
-            // Generate new related questions for the regenerated response
             generateRelatedQuestions(userMessage.content, currentStreamContent).then(relatedQuestions => {
               setMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
@@ -653,32 +576,22 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               });
             });
             
-            // If this message has child messages, continue the regeneration chain
             const childMessageIds = findChildMessages(messageId);
             
             if (childMessageIds.length > 0 && childMessageIds[0] !== messageId) {
-              // Get the updated messages state
-              const nextMessageId = childMessageIds[0];
-              
-              // Wait a moment before starting the next regeneration
               await new Promise(resolve => setTimeout(resolve, 500));
-              
-              // Recursively regenerate the next message in the chain
-              await regenerateMessageChain(nextMessageId, 
-                // Get fresh copy of messages since state might have changed
+              await regenerateMessageChain(childMessageIds[0], 
                 [...document.querySelectorAll('[data-message-id]')].map(el => {
                   const id = el.getAttribute('data-message-id');
                   return messages.find(msg => msg.id === id) as ChatMessage;
                 })
               );
             } else {
-              // End of chain, show success toast
               toast.success("Conversation chain regenerated");
               setIsRegeneratingChain(false);
             }
           }
           
-          // Scroll to bottom with each chunk
           messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
         },
         realTimeData,
@@ -696,14 +609,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   };
 
   const handleStopStreaming = () => {
-    // Find the streaming message and mark it as complete
     setMessages(prevMessages => {
       return prevMessages.map(msg => {
         if (msg.isStreaming) {
           return {
             ...msg,
             isStreaming: false,
-            id: Date.now().toString() // Assign a permanent ID
+            id: Date.now().toString()
           };
         }
         return msg;
@@ -713,24 +625,17 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   };
 
   const handleRelatedQuestionClick = (question: string) => {
-    // Set the question in the input field for visibility, but pass it directly to handleSubmit
     setCurrentMessage(question);
-    // Directly submit the question without relying on state update
     handleSubmit(undefined, question);
   };
 
-  // Updated to handle in-place editing
   const handleEditMessage = (messageId: string, content: string, isInPlace: boolean = false) => {
     if (isInPlace) {
-      // Set the active edit ID for in-place editing
       setActiveEditId(messageId);
     } else {
-      // Set the message content in the input field for editing at the bottom
       setCurrentMessage(content);
-      // Set the editing message ID
       setEditingMessageId(messageId);
       
-      // Focus the textarea
       const textarea = document.querySelector('textarea');
       if (textarea) {
         textarea.focus();
@@ -738,22 +643,17 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
   };
 
-  // Handle canceling an in-place edit
   const handleCancelEdit = (messageId: string) => {
     setActiveEditId(null);
   };
 
-  // Handle saving an in-place edit
   const handleSaveEdit = (messageId: string, newContent: string) => {
-    // Find the message being edited
     const messageIndex = messages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1) return;
     
     const originalMessage = messages[messageIndex];
-    // Create updated message with edit history
     const updatedMessages = [...messages];
     
-    // Create history entry for the original content if this is the first edit
     const history = originalMessage.editHistory || [];
     
     if (!originalMessage.isEdited) {
@@ -763,7 +663,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: originalMessage.timestamp
       });
     } else {
-      // If already edited, add the current version to history
       history.push({
         id: originalMessage.id,
         content: originalMessage.content,
@@ -771,34 +670,26 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       });
     }
     
-    // Update the message with new content and edit history
     updatedMessages[messageIndex] = {
       ...updatedMessages[messageIndex],
       content: newContent,
       isEdited: true,
       editHistory: history,
-      editHistoryIndex: history.length // point to the new version
+      editHistoryIndex: history.length
     };
     
-    // Update messages
     setMessages(updatedMessages);
-    
-    // Clear editing state
     setActiveEditId(null);
     
-    // Find all subsequent messages that need to be regenerated
     const childMessageIds = findChildMessages(originalMessage.id);
     
-    // If there are messages to regenerate, start with the first response
     if (childMessageIds.length > 0) {
       const nextMessageId = childMessageIds[0];
-      // Show toast for chain regeneration
       toast.info("Regenerating conversation chain...", {
         duration: 3000,
       });
       
       setIsRegeneratingChain(true);
-      // Start chain regeneration with the first child message
       regenerateMessageChain(nextMessageId, updatedMessages).then(() => {
         setIsRegeneratingChain(false);
       });
@@ -806,11 +697,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   };
 
   const handleRegenerateMessage = async (messageId: string) => {
-    // Find the message and its corresponding user message
     const messageIndex = messages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1 || messages[messageIndex].role !== 'assistant') return;
 
-    // Show regenerating chain toast
     toast.info("Regenerating conversation chain...", {
       duration: 3000,
     });
@@ -824,8 +713,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {
         if (message.id === messageId) {
-          // If we're selecting the current response (index 0), use the main content
-          // Otherwise, use one of the alternative responses
           let content = message.content;
           
           if (index > 0 && message.alternativeResponses && index <= message.alternativeResponses.length) {
@@ -842,37 +729,30 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       });
     });
     
-    // Find all child messages of this message
     const childMessageIds = findChildMessages(messageId);
     
-    // If there are child messages, trigger regeneration chain
     if (childMessageIds.length > 0) {
       const nextMessageId = childMessageIds[0];
       
-      // Show toast for chain regeneration
       toast.info("Regenerating conversation chain...", {
         duration: 3000,
       });
       
       setIsRegeneratingChain(true);
-      // Start chain regeneration with the first child message
       regenerateMessageChain(nextMessageId).then(() => {
         setIsRegeneratingChain(false);
       });
     }
   };
 
-  // New function for version navigation
   const handleNavigateEditHistory = (messageId: string, direction: "prev" | "next") => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {
         if (message.id === messageId) {
-          // Find the current index
           const currentIndex = message.editHistoryIndex || 0;
           const history = message.editHistory || [];
-          const totalVersions = history.length + 1; // +1 for the current version
+          const totalVersions = history.length + 1;
           
-          // Calculate new index based on direction
           let newIndex = currentIndex;
           if (direction === "prev" && currentIndex > 0) {
             newIndex = currentIndex - 1;
@@ -880,14 +760,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             newIndex = currentIndex + 1;
           }
           
-          // Get content for the new version
-          let newContent = message.content; // Default to current content
+          let newContent = message.content;
           
-          // If we're showing a historical version
           if (newIndex < history.length) {
             newContent = history[newIndex].content;
           } else if (newIndex === history.length) {
-            // We're showing the latest version, which is the current content
             newContent = message.content;
           }
           
@@ -902,7 +779,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     });
   };
 
-  // Function to toggle showing edit history
   const handleToggleEditHistory = (messageId: string) => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {
@@ -919,7 +795,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Increased height of the ScrollArea to make room for input area */}
       <ScrollArea className="flex-1 p-4 pb-20">
         <div className="space-y-4 pb-4">
           {messages.length === 0 ? (
@@ -932,7 +807,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 Ask me anything and I'll provide helpful information and answers to your questions.
               </p>
               
-              {/* Search suggestions with auto-submit */}
               <SearchSuggestions 
                 onSelectSuggestion={handleRelatedQuestionClick}
                 autoSubmit={true}
@@ -940,7 +814,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </div>
           ) : (
             messages.map((message, index) => {
-              // If there's an active edit, hide all messages after the one being edited
               if (activeEditId) {
                 const activeEditIndex = messages.findIndex(m => m.id === activeEditId);
                 if (index > activeEditIndex) {
@@ -960,14 +833,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                           </div>
                         )}
                         
-                        {/* Streaming with blinking cursor */}
                         <TypewriterEffect 
                           text={message.content}
                           isStreaming={true}
                           className="conversation-markdown"
                         />
                         
-                        {/* Stop streaming button */}
                         <div className="mt-3 flex justify-center">
                           <Button
                             size="sm"
@@ -999,13 +870,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                       editHistory={message.editHistory}
                       onToggleEditHistory={() => handleToggleEditHistory(message.id)}
                       isRegeneratingChain={isRegeneratingChain}
-                      // New props for in-place editing
                       isActivelyEditing={message.id === activeEditId}
                       onInPlaceEdit={handleEditMessage}
                       onCancelEdit={handleCancelEdit}
                       onSaveEdit={handleSaveEdit}
                       editHistoryIndex={message.editHistoryIndex || 0}
-                      editVersionCount={(message.editHistory?.length || 0) + 1} // +1 for current version
+                      editVersionCount={(message.editHistory?.length || 0) + 1}
                       onNavigateEditHistory={handleNavigateEditHistory}
                     />
                   )}
@@ -1017,7 +887,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         </div>
       </ScrollArea>
       
-      {/* Fixed position input area with higher z-index than before but lower than toasts */}
       <div className="p-4 border-t border-border bg-background shadow-md fixed bottom-0 left-0 right-0 z-20">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
@@ -1075,7 +944,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           </Button>
         </form>
         
-        {/* Show cancel button when editing via the bottom input */}
         {editingMessageId && (
           <div className="flex justify-end mt-2">
             <Button
@@ -1093,7 +961,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         )}
       </div>
       
-      {/* Add padding at the bottom to prevent content from being hidden behind the input area */}
       <div className="h-20"></div>
     </div>
   );
