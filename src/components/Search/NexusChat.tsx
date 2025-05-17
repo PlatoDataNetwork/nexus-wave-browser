@@ -106,13 +106,16 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
   };
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent, directMessage?: string) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     
-    if (!currentMessage.trim()) return;
+    // Use direct message if provided, otherwise use current message state
+    const messageToProcess = directMessage || currentMessage;
+    
+    if (!messageToProcess.trim()) return;
     
     // Check if we're editing an existing message
     if (editingMessageId) {
@@ -123,7 +126,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         const updatedMessages = [...messages];
         updatedMessages[messageIndex] = {
           ...updatedMessages[messageIndex],
-          content: currentMessage
+          content: messageToProcess
         };
         
         // Update messages
@@ -147,7 +150,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: currentMessage,
+      content: messageToProcess,
       timestamp: new Date()
     };
     
@@ -155,11 +158,15 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     // Call onSearch without updating URL - just inform parent component
     if (onSearch) {
-      onSearch(currentMessage);
+      onSearch(messageToProcess);
     }
     
-    const messageToSearch = currentMessage;
-    setCurrentMessage("");
+    // Clear the input field only when using the current message state
+    // If a direct message was provided, don't clear the input
+    if (!directMessage) {
+      setCurrentMessage("");
+    }
+    
     setIsLoading(true);
     
     try {
@@ -169,7 +176,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       let needsRealTimeData = false;
       
       try {
-        const classification = await classifyQuery(messageToSearch);
+        const classification = await classifyQuery(messageToProcess);
         needsRealTimeData = classification.needsRealTimeData;
         
         // Step 2: If needed, fetch real-time data from the web
@@ -183,7 +190,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             icon: <Globe className="h-4 w-4" />
           });
           
-          realTimeData = await getRealTimeData(messageToSearch, classification);
+          realTimeData = await getRealTimeData(messageToProcess, classification);
           
           if (realTimeData) {
             toast("Found real-time information", {
@@ -203,7 +210,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       }
       
       // Update conversation history with the new user message
-      const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
+      const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToProcess }];
       
       // Create a placeholder for streaming response
       const tempResponseId = Date.now().toString() + "-streaming";
@@ -224,7 +231,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       // Stream AI response using the ChatGPT API with conversation history and real-time data
       await streamChatGPTResponseWithRealTimeData(
-        messageToSearch, 
+        messageToProcess, 
         updatedHistory,
         (currentStreamContent, isDone) => {
           setMessages(prevMessages => {
@@ -252,7 +259,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             ]);
             
             // Generate related questions once streaming is complete
-            generateRelatedQuestions(messageToSearch, currentStreamContent).then(relatedQuestions => {
+            generateRelatedQuestions(messageToProcess, currentStreamContent).then(relatedQuestions => {
               setMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
                 const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempResponseId);
@@ -312,9 +319,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   };
 
   const handleRelatedQuestionClick = (question: string) => {
+    // Set the question in the input field for visibility, but pass it directly to handleSubmit
     setCurrentMessage(question);
-    // Immediately submit the question without any delay
-    handleSubmit();
+    // Directly submit the question without relying on state update
+    handleSubmit(undefined, question);
   };
 
   const handleEditMessage = (messageId: string, content: string) => {
