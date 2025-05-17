@@ -114,6 +114,7 @@ const Header: React.FC = () => {
 
           <Link to="/downloads">
             <Button variant="macos" size="sm">
+              <Download className="mr-1 h-4 w-4" />
               Download
             </Button>
           </Link>

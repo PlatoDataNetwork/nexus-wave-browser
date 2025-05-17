@@ -480,8 +480,8 @@ const Search: React.FC = () => {
         </div>
       </header>
 
-      {/* Search interface */}
-      <div className="p-4 border-b border-border nexus-gradient-bg">
+      {/* Search interface - Adjusted to work with the main header */}
+      <div className="p-4 border-b border-border nexus-gradient-bg pt-6">
         <form 
           onSubmit={handleSubmit}
           className="flex gap-2"
