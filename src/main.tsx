@@ -2,7 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { ThemeProvider } from './components/theme-provider'
+import { ThemeProvider } from './hooks/useTheme'
 
 // Create a favicon link element
 const favicon = document.createElement('link');
