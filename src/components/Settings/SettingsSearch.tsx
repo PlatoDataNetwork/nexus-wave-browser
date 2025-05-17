@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import {
   Trash2
 } from "lucide-react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
-import { useTheme } from "../../components/theme-provider";
+import { useTheme } from "../../hooks/useTheme";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SearchEngine {
@@ -33,7 +34,7 @@ const SettingsSearch: React.FC = () => {
   const [customSearchEngines, setCustomSearchEngines] = useLocalStorage<SearchEngine[]>("customSearchEngines", []);
   const [newEngineName, setNewEngineName] = useState("");
   const [newEngineUrl, setNewEngineUrl] = useState("");
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [showSearchSuggestions, setShowSearchSuggestions] = useState(true);
   const [showSearchHistory, setShowSearchHistory] = useState(true);
 
@@ -208,7 +209,7 @@ const SettingsSearch: React.FC = () => {
             <div className="grid gap-4">
               <div className="flex items-center justify-between">
                 <Label htmlFor="theme">Theme</Label>
-                <Select onValueChange={setTheme} defaultValue={localStorage.getItem("theme") || "system"}>
+                <Select value={theme} onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select theme" />
                   </SelectTrigger>
