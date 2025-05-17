@@ -26,8 +26,6 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
   isDisabled = false
 }) => {
   const handleSuggestionClick = (suggestion: string) => {
-    // Simply pass the suggestion to the parent component
-    // The parent component will handle submission directly
     onSelectSuggestion(suggestion);
   };
   

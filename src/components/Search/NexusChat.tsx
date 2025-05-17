@@ -1,9 +1,10 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, MessageCircle, Zap, Globe, Square } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import ConversationMessage from './ConversationMessage';
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
@@ -26,7 +27,7 @@ interface ChatMessage {
   relatedQuestions?: string[];
   isStreaming?: boolean;
   fullContent?: string;
-  // New fields for edit history and message chain support
+  // Fields for edit history and message chain support
   editHistory?: {
     id: string;
     content: string;
@@ -36,8 +37,9 @@ interface ChatMessage {
   parentMessageId?: string;
   childMessageIds?: string[];
   isEdited?: boolean;
-  // Add the missing property
   showEditHistory?: boolean;
+  // New field to track edit versions
+  editHistoryIndex?: number;
 }
 
 interface NexusChatProps {
@@ -53,6 +55,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [isRegeneratingChain, setIsRegeneratingChain] = useState(false);
+  // New state for in-place editing
+  const [activeEditId, setActiveEditId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
@@ -148,7 +152,67 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     if (!messageToProcess.trim()) return;
     
-    // Check if we're editing an existing message
+    // Check if we're editing an existing message in-place
+    if (activeEditId) {
+      // Find the message being edited
+      const messageIndex = messages.findIndex(msg => msg.id === activeEditId);
+      if (messageIndex !== -1) {
+        const originalMessage = messages[messageIndex];
+        
+        // Create updated message with edit history
+        const updatedMessages = [...messages];
+        
+        // Create history entry for the original content if this is the first edit
+        const history = originalMessage.editHistory || [];
+        
+        // Always add the current content to history before replacing it
+        history.push({
+          id: originalMessage.id,
+          content: originalMessage.content,
+          timestamp: new Date()
+        });
+        
+        // Get the current edit history index
+        let currentVersion = originalMessage.editHistoryIndex || 0;
+        const newVersionCount = history.length + 1; // +1 for the new version we're adding
+        
+        // Update the message with new content and edit history
+        updatedMessages[messageIndex] = {
+          ...updatedMessages[messageIndex],
+          content: messageToProcess,
+          isEdited: true,
+          editHistory: history,
+          editHistoryIndex: newVersionCount - 1, // Set to the latest version
+        };
+        
+        // Update messages
+        setMessages(updatedMessages);
+        
+        // Clear editing state
+        setActiveEditId(null);
+        
+        // Find all subsequent messages that need to be regenerated
+        const childMessageIds = findChildMessages(originalMessage.id);
+        
+        // If there are messages to regenerate, start with the first response
+        if (childMessageIds.length > 0) {
+          const nextMessageId = childMessageIds[0];
+          // Show toast for chain regeneration
+          toast.info("Regenerating conversation chain...", {
+            duration: 3000,
+          });
+          
+          setIsRegeneratingChain(true);
+          // Start chain regeneration with the first child message
+          await regenerateMessageChain(nextMessageId, updatedMessages);
+          setIsRegeneratingChain(false);
+        }
+        
+        return;
+      }
+    }
+    
+    // Check if we're editing an existing message via the bottom input
     if (editingMessageId) {
       // Find the message being edited
       const messageIndex = messages.findIndex(msg => msg.id === editingMessageId);
@@ -173,7 +237,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           ...updatedMessages[messageIndex],
           content: messageToProcess,
           isEdited: true,
-          editHistory: history
+          editHistory: history,
+          editHistoryIndex: history.length // New version is at the end
         };
         
         // Update messages
@@ -210,7 +275,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       role: "user",
       content: messageToProcess,
       timestamp: new Date(),
-      childMessageIds: []
+      childMessageIds: [],
+      editHistoryIndex: 0
     };
     
     setMessages(prevMessages => [...prevMessages, userMessage]);
@@ -282,6 +348,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         alternativeResponses: [],
         currentResponseIndex: 0,
         isStreaming: true,
+        editHistoryIndex: 0,
         // Establish relationship with the parent message (the user message)
         parentMessageId: userMessage.id
       };
@@ -377,7 +444,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         role: "assistant",
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date(),
-        parentMessageId: userMessage.id
+        parentMessageId: userMessage.id,
+        editHistoryIndex: a = 0
       };
       setMessages(prev => [...prev, fallbackResponse]);
       setIsStreaming(false);
@@ -386,7 +454,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
   };
 
-  // New function to regenerate a chain of messages starting from a specific message
+  // Function to regenerate a chain of messages starting from a specific message
   const regenerateMessageChain = async (messageId: string, currentMessages: ChatMessage[] = messages) => {
     const messageIndex = currentMessages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1 || currentMessages[messageIndex].role !== 'assistant') {
@@ -651,17 +719,89 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     handleSubmit(undefined, question);
   };
 
-  const handleEditMessage = (messageId: string, content: string) => {
-    // Set the message content in the input field
-    setCurrentMessage(content);
+  // Updated to handle in-place editing
+  const handleEditMessage = (messageId: string, content: string, isInPlace: boolean = false) => {
+    if (isInPlace) {
+      // Set the active edit ID for in-place editing
+      setActiveEditId(messageId);
+    } else {
+      // Set the message content in the input field for editing at the bottom
+      setCurrentMessage(content);
+      // Set the editing message ID
+      setEditingMessageId(messageId);
+      
+      // Focus the textarea
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+        textarea.focus();
+      }
+    }
+  };
+
+  // Handle canceling an in-place edit
+  const handleCancelEdit = (messageId: string) => {
+    setActiveEditId(null);
+  };
+
+  // Handle saving an in-place edit
+  const handleSaveEdit = (messageId: string, newContent: string) => {
+    // Find the message being edited
+    const messageIndex = messages.findIndex(msg => msg.id === messageId);
+    if (messageIndex === -1) return;
     
-    // Set the editing message ID
-    setEditingMessageId(messageId);
+    const originalMessage = messages[messageIndex];
+    // Create updated message with edit history
+    const updatedMessages = [...messages];
     
-    // Focus the textarea
-    const textarea = document.querySelector('textarea');
-    if (textarea) {
-      textarea.focus();
+    // Create history entry for the original content if this is the first edit
+    const history = originalMessage.editHistory || [];
+    
+    if (!originalMessage.isEdited) {
+      history.push({
+        id: originalMessage.id,
+        content: originalMessage.content,
+        timestamp: originalMessage.timestamp
+      });
+    } else {
+      // If already edited, add the current version to history
+      history.push({
+        id: originalMessage.id,
+        content: originalMessage.content,
+        timestamp: new Date()
+      });
+    }
+    
+    // Update the message with new content and edit history
+    updatedMessages[messageIndex] = {
+      ...updatedMessages[messageIndex],
+      content: newContent,
+      isEdited: true,
+      editHistory: history,
+      editHistoryIndex: history.length // point to the new version
+    };
+    
+    // Update messages
+    setMessages(updatedMessages);
+    
+    // Clear editing state
+    setActiveEditId(null);
+    
+    // Find all subsequent messages that need to be regenerated
+    const childMessageIds = findChildMessages(originalMessage.id);
+    
+    // If there are messages to regenerate, start with the first response
+    if (childMessageIds.length > 0) {
+      const nextMessageId = childMessageIds[0];
+      // Show toast for chain regeneration
+      toast.info("Regenerating conversation chain...", {
+        duration: 3000,
+      });
+      
+      setIsRegeneratingChain(true);
+      // Start chain regeneration with the first child message
+      regenerateMessageChain(nextMessageId, updatedMessages).then(() => {
+        setIsRegeneratingChain(false);
+      });
     }
   };
 
@@ -695,7 +835,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           return {
             ...message,
             currentResponseIndex: index,
-            content: index === 0 ? message.content : message.alternativeResponses![index - 1]
+            content: content
           };
         }
         return message;
@@ -722,7 +862,47 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
   };
 
-  // New function to toggle showing edit history
+  // New function for version navigation
+  const handleNavigateEditHistory = (messageId: string, direction: "prev" | "next") => {
+    setMessages(prevMessages => {
+      return prevMessages.map(message => {
+        if (message.id === messageId) {
+          // Find the current index
+          const currentIndex = message.editHistoryIndex || 0;
+          const history = message.editHistory || [];
+          const totalVersions = history.length + 1; // +1 for the current version
+          
+          // Calculate new index based on direction
+          let newIndex = currentIndex;
+          if (direction === "prev" && currentIndex > 0) {
+            newIndex = currentIndex - 1;
+          } else if (direction === "next" && currentIndex < totalVersions - 1) {
+            newIndex = currentIndex + 1;
+          }
+          
+          // Get content for the new version
+          let newContent = message.content; // Default to current content
+          
+          // If we're showing a historical version
+          if (newIndex < history.length) {
+            newContent = history[newIndex].content;
+          } else if (newIndex === history.length) {
+            // We're showing the latest version, which is the current content
+            newContent = message.content;
+          }
+          
+          return {
+            ...message,
+            content: newContent,
+            editHistoryIndex: newIndex
+          };
+        }
+        return message;
+      });
+    });
+  };
+
+  // Function to toggle showing edit history
   const handleToggleEditHistory = (messageId: string) => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {
@@ -759,61 +939,79 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               />
             </div>
           ) : (
-            messages.map((message) => (
-              <div key={message.id} className="message-container" data-message-id={message.id}>
-                {message.role === "assistant" && message.isStreaming ? (
-                  <div className={`flex justify-start`}>
-                    <div className="max-w-3/4 rounded-lg p-4 bg-secondary border border-border">
-                      {message.hasRealTimeData && (
-                        <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
-                          <Globe className="h-3 w-3" />
-                          <span>Enhanced with real-time web data</span>
+            messages.map((message, index) => {
+              // If there's an active edit, hide all messages after the one being edited
+              if (activeEditId) {
+                const activeEditIndex = messages.findIndex(m => m.id === activeEditId);
+                if (index > activeEditIndex) {
+                  return null;
+                }
+              }
+              
+              return (
+                <div key={message.id} className="message-container" data-message-id={message.id}>
+                  {message.role === "assistant" && message.isStreaming ? (
+                    <div className="flex justify-start">
+                      <div className="max-w-3/4 rounded-lg p-4 bg-secondary border border-border">
+                        {message.hasRealTimeData && (
+                          <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
+                            <Globe className="h-3 w-3" />
+                            <span>Enhanced with real-time web data</span>
+                          </div>
+                        )}
+                        
+                        {/* Streaming with blinking cursor */}
+                        <TypewriterEffect 
+                          text={message.content}
+                          isStreaming={true}
+                          className="conversation-markdown"
+                        />
+                        
+                        {/* Stop streaming button */}
+                        <div className="mt-3 flex justify-center">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex items-center gap-1"
+                            onClick={handleStopStreaming}
+                          >
+                            <Square className="h-3 w-3" />
+                            Stop streaming
+                          </Button>
                         </div>
-                      )}
-                      
-                      {/* Streaming with blinking cursor */}
-                      <TypewriterEffect 
-                        text={message.content}
-                        isStreaming={true}
-                        className="conversation-markdown"
-                      />
-                      
-                      {/* Stop streaming button */}
-                      <div className="mt-3 flex justify-center">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex items-center gap-1"
-                          onClick={handleStopStreaming}
-                        >
-                          <Square className="h-3 w-3" />
-                          Stop streaming
-                        </Button>
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <ConversationMessage 
-                    role={message.role}
-                    content={message.content}
-                    sources={message.sources}
-                    hasRealTimeData={message.hasRealTimeData}
-                    messageId={message.id}
-                    onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
-                    alternativeResponses={message.alternativeResponses || []}
-                    currentResponseIndex={message.currentResponseIndex || 0}
-                    onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
-                    relatedQuestions={message.relatedQuestions}
-                    onRelatedQuestionClick={handleRelatedQuestionClick}
-                    onEditMessage={message.role === 'user' ? handleEditMessage : undefined}
-                    isEdited={message.isEdited}
-                    editHistory={message.editHistory}
-                    onToggleEditHistory={() => handleToggleEditHistory(message.id)}
-                    isRegeneratingChain={isRegeneratingChain}
-                  />
-                )}
-              </div>
-            ))
+                  ) : (
+                    <ConversationMessage 
+                      role={message.role}
+                      content={message.content}
+                      sources={message.sources}
+                      hasRealTimeData={message.hasRealTimeData}
+                      messageId={message.id}
+                      onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
+                      alternativeResponses={message.alternativeResponses || []}
+                      currentResponseIndex={message.currentResponseIndex || 0}
+                      onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
+                      relatedQuestions={message.relatedQuestions}
+                      onRelatedQuestionClick={handleRelatedQuestionClick}
+                      onEditMessage={message.role === 'user' ? handleEditMessage : undefined}
+                      isEdited={message.isEdited}
+                      editHistory={message.editHistory}
+                      onToggleEditHistory={() => handleToggleEditHistory(message.id)}
+                      isRegeneratingChain={isRegeneratingChain}
+                      // New props for in-place editing
+                      isActivelyEditing={message.id === activeEditId}
+                      onInPlaceEdit={handleEditMessage}
+                      onCancelEdit={handleCancelEdit}
+                      onSaveEdit={handleSaveEdit}
+                      editHistoryIndex={message.editHistoryIndex || 0}
+                      editVersionCount={(message.editHistory?.length || 0) + 1} // +1 for current version
+                      onNavigateEditHistory={handleNavigateEditHistory}
+                    />
+                  )}
+                </div>
+              );
+            })
           )}
           <div ref={messagesEndRef} />
         </div>
@@ -833,12 +1031,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 handleSubmit();
               }
             }}
-            disabled={isStreaming || isRegeneratingChain}
+            disabled={isStreaming || isRegeneratingChain || activeEditId !== null}
           />
           <Button 
             type="submit" 
             className="h-full bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-            disabled={isLoading || isStreaming || isRegeneratingChain}
+            disabled={isLoading || isStreaming || isRegeneratingChain || activeEditId !== null}
           >
             {isLoading || isStreaming || isRegeneratingChain ? (
               <div className="flex items-center gap-1">
@@ -877,7 +1075,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           </Button>
         </form>
         
-        {/* Show cancel button when editing */}
+        {/* Show cancel button when editing via the bottom input */}
         {editingMessageId && (
           <div className="flex justify-end mt-2">
             <Button
