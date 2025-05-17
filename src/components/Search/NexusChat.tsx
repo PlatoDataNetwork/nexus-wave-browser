@@ -36,6 +36,8 @@ interface ChatMessage {
   parentMessageId?: string;
   childMessageIds?: string[];
   isEdited?: boolean;
+  // Add the missing property
+  showEditHistory?: boolean;
 }
 
 interface NexusChatProps {
