@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   const isHistoryRoute = location.pathname.startsWith('/history');
   
   // Don't display header on app routes that have their own browser chrome
-  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
+  const shouldHideHeader = isAppRoute || isExtensionStoreRoute || isHistoryRoute;
   
   if (shouldHideHeader) {
     return null;
@@ -43,21 +43,24 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation - Updated menu items with Downloads removed */}
+        {/* Main Navigation - Updated to hide Search on search page */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
-            <li>
-              <Link to="/search">
-                <Button
-                  variant={isActive('/search') ? "secondary" : "ghost"}
-                  size="sm"
-                  className="text-white"
-                >
-                  <Search className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Search</span>
-                </Button>
-              </Link>
-            </li>
+            {/* Hide Search button when already on search page */}
+            {!isSearchRoute && (
+              <li>
+                <Link to="/search">
+                  <Button
+                    variant={isActive('/search') ? "secondary" : "ghost"}
+                    size="sm"
+                    className="text-white"
+                  >
+                    <Search className="mr-1 h-4 w-4" />
+                    <span className="hidden sm:inline">Search</span>
+                  </Button>
+                </Link>
+              </li>
+            )}
             <li>
               <Link to="/app">
                 <Button
