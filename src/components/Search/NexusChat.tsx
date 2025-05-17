@@ -5,10 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Zap } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
 import ConversationMessage from './ConversationMessage';
-import TypewriterEffect from './TypewriterEffect';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
-import { ChatMessage, ConversationBranch, Source, EditHistoryItem } from './types';
+import { ChatMessage, ConversationGroup } from './types';
 
 // Sample related questions
 const SAMPLE_RELATED_QUESTIONS = [
@@ -29,22 +28,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [loadingDots, setLoadingDots] = useState(0);
   const [relatedQuestions, setRelatedQuestions] = useState<string[]>(SAMPLE_RELATED_QUESTIONS);
   
-  // Branching conversation state
-  const [conversationBranches, setConversationBranches] = useState<ConversationBranch[]>([
-    // Initialize with a default branch
-    {
-      id: 'default-branch',
-      questionId: 'root',
-      questionVersion: 0,
-      messageIds: []
-    }
-  ]);
-  const [activeBranchId, setActiveBranchId] = useState('default-branch');
-  const [questionVersionCount, setQuestionVersionCount] = useState<Record<string, number>>({});
+  // Simplified conversation state (single conversation group)
+  const [conversationGroup, setConversationGroup] = useState<ConversationGroup>({
+    id: 'default-group',
+    messageIds: []
+  });
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const typingTimeout = useRef<NodeJS.Timeout | null>(null);
   
   // Effect for animating loading dots
   useEffect(() => {
@@ -61,71 +52,19 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Helper function to create a new branch
-  const createNewBranch = (questionId: string, questionVersion: number): string => {
-    const branchId = `branch-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    
-    setConversationBranches(prevBranches => [
-      ...prevBranches,
-      {
-        id: branchId,
-        questionId,
-        questionVersion,
-        messageIds: []
-      }
-    ]);
-    
-    return branchId;
-  };
-
-  // Helper function to switch to a specific branch
-  const switchToBranch = (branchId: string) => {
-    setActiveBranchId(branchId);
-  };
-
-  // Helper function to add a message to a branch
-  const addMessageToBranch = (branchId: string, messageId: string) => {
-    setConversationBranches(prevBranches => 
-      prevBranches.map(branch => {
-        if (branch.id === branchId) {
-          return {
-            ...branch,
-            messageIds: [...branch.messageIds, messageId]
-          };
-        }
-        return branch;
-      })
-    );
-  };
-
-  // Helper function to find which branch a message belongs to
-  const findBranchForMessage = (messageId: string): string | null => {
-    const branch = conversationBranches.find(branch => 
-      branch.messageIds.includes(messageId)
-    );
-    
-    return branch ? branch.id : null;
+  // Helper function to add a message to the conversation
+  const addMessageToConversation = (messageId: string) => {
+    setConversationGroup(prev => ({
+      ...prev,
+      messageIds: [...prev.messageIds, messageId]
+    }));
   };
   
-  // Get the current branch object
-  const getCurrentBranch = (): ConversationBranch | undefined => {
-    return conversationBranches.find(branch => branch.id === activeBranchId);
-  };
-
-  // Helper function to find messages in the active branch
+  // Get the visible messages
   const getVisibleMessages = () => {
-    const currentBranch = getCurrentBranch();
-    if (!currentBranch) return [];
-    
     return messages.filter(message => 
-      currentBranch.messageIds.includes(message.id)
+      conversationGroup.messageIds.includes(message.id)
     );
-  };
-  
-  // Helper function to get available versions for a question
-  const getAvailableVersionsForQuestion = (questionId: string) => {
-    const branches = conversationBranches.filter(branch => branch.questionId === questionId);
-    return branches.map(branch => branch.questionVersion).sort((a, b) => a - b);
   };
 
   // Handle form submission
@@ -141,31 +80,25 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
     
     const userMessageId = uuidv4();
-    const currentBranch = getCurrentBranch();
-    
-    // Determine question version
-    const newQuestionVersion = questionVersionCount[userMessageId] || 0;
     
     // Create a new message object
     const newUserMessage: ChatMessage = {
       id: userMessageId,
       role: "user",
       content: trimmedValue,
-      timestamp: new Date(),
-      questionVersion: newQuestionVersion,
-      branchId: activeBranchId
+      timestamp: new Date()
     };
     
     // Update the messages state
     setMessages(prev => [...prev, newUserMessage]);
     
-    // Add the message to the current branch
-    addMessageToBranch(activeBranchId, userMessageId);
+    // Add the message to the conversation group
+    addMessageToConversation(userMessageId);
     
     // Clear input
     setInputValue("");
     
-    // Generate AI response (simulated)
+    // Generate AI response
     simulateAIResponse(userMessageId);
   };
   
@@ -183,14 +116,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         role: "assistant",
         content: generateRandomResponse(),
         timestamp: new Date(),
-        hasRealTimeData: Math.random() > 0.5,
-        questionId: questionId,
-        questionVersion: messages.find(m => m.id === questionId)?.questionVersion || 0,
-        branchId: activeBranchId
+        hasRealTimeData: Math.random() > 0.5
       };
       
       setMessages(prev => [...prev, responseMessage]);
-      addMessageToBranch(activeBranchId, responseId);
+      addMessageToConversation(responseId);
       
       // Also generate new related questions
       setRelatedQuestions(generateRelatedQuestions());
@@ -334,21 +264,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     if (!messageToEdit || messageToEdit.role !== "user") return;
     
-    // Check if this edit should create a new branch
-    const questionId = messageId;
-    const currentVersion = messageToEdit.questionVersion || 0;
-    const newVersion = currentVersion + 1;
-    
-    // Update question version count
-    setQuestionVersionCount(prev => ({
-      ...prev,
-      [questionId]: newVersion
-    }));
-    
-    // Create a new branch for this edited question
-    const newBranchId = createNewBranch(questionId, newVersion);
-    
-    // Add this message as the first message in the new branch
+    // Update edit history
     const newEditHistory: EditHistoryItem = {
       id: uuidv4(),
       content: messageToEdit.content,
@@ -363,8 +279,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           content: newContent,
           isActivelyEditing: false,
           isEdited: true,
-          questionVersion: newVersion,
-          branchId: newBranchId,
           editHistory: [
             ...(msg.editHistory || []),
             newEditHistory
@@ -374,65 +288,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       return msg;
     }));
     
-    // Add the message to the new branch
-    addMessageToBranch(newBranchId, messageId);
-    
-    // Switch to the new branch
-    switchToBranch(newBranchId);
-    
     // Generate a new AI response for the edited message
     simulateAIResponse(messageId);
-  };
-  
-  // Handle navigating through edit history
-  const handleNavigateEditHistory = (messageId: string, direction: "prev" | "next") => {
-    // Find the message with the given ID
-    const messageToNavigate = messages.find(msg => msg.id === messageId);
-    
-    if (!messageToNavigate || !messageToNavigate.editHistory) return;
-    
-    // Find the branch for this message version
-    const branchId = findBranchForMessage(messageId);
-    if (!branchId) return;
-    
-    const branch = conversationBranches.find(b => b.id === branchId);
-    if (!branch) return;
-    
-    // Find branches with the same questionId but different versions
-    const questionBranches = conversationBranches.filter(
-      b => b.questionId === branch.questionId
-    ).sort((a, b) => a.questionVersion - b.questionVersion);
-    
-    // Find current index
-    const currentBranchIndex = questionBranches.findIndex(b => b.id === branchId);
-    if (currentBranchIndex === -1) return;
-    
-    // Calculate the new index based on direction
-    const newIndex = direction === "prev" 
-      ? Math.max(0, currentBranchIndex - 1)
-      : Math.min(questionBranches.length - 1, currentBranchIndex + 1);
-    
-    // Switch to the branch at the new index if different from current
-    if (newIndex !== currentBranchIndex) {
-      const targetBranch = questionBranches[newIndex];
-      switchToBranch(targetBranch.id);
-    }
-  };
-  
-  // Handle switching question versions
-  const handleSwitchQuestionVersion = (version: number) => {
-    const currentBranch = getCurrentBranch();
-    if (!currentBranch) return;
-    
-    // Find the branch with the same question ID and the specified version
-    const targetBranch = conversationBranches.find(
-      branch => branch.questionId === currentBranch.questionId && 
-                branch.questionVersion === version
-    );
-    
-    if (targetBranch) {
-      switchToBranch(targetBranch.id);
-    }
   };
   
   // Generate random response for demo
@@ -465,7 +322,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       .slice(0, 4);
   };
   
-  // Get the visible messages for the current branch
+  // Get the visible messages
   const visibleMessages = getVisibleMessages();
 
   return (
@@ -496,47 +353,29 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </div>
           ) : (
             <div className="flex flex-col gap-4 p-4">
-              {visibleMessages.map((message) => {
-                // Find which branch this message belongs to
-                const messageBranchId = findBranchForMessage(message.id);
-                const messageBranch = conversationBranches.find(b => b.id === messageBranchId);
-                
-                // Get all available versions for this question if it's a user message
-                const availableVersions = message.role === "user" && messageBranch
-                  ? getAvailableVersionsForQuestion(message.id)
-                  : [];
-                
-                return (
-                  <ConversationMessage
-                    key={message.id}
-                    role={message.role}
-                    content={message.content}
-                    sources={message.sources}
-                    hasRealTimeData={message.hasRealTimeData}
-                    messageId={message.id}
-                    onRegenerateMessage={handleRegenerateMessage}
-                    alternativeResponses={message.alternativeResponses || []}
-                    currentResponseIndex={message.currentResponseIndex || 0}
-                    onSelectAlternative={handleSelectAlternative}
-                    relatedQuestions={message.role === "assistant" ? relatedQuestions : []}
-                    onRelatedQuestionClick={handleRelatedQuestionClick}
-                    isEdited={message.isEdited}
-                    editHistory={message.editHistory}
-                    isActivelyEditing={message.isActivelyEditing}
-                    onInPlaceEdit={handleInPlaceEdit}
-                    onCancelEdit={handleCancelEdit}
-                    onSaveEdit={handleSaveEdit}
-                    editHistoryIndex={messageBranch ? messageBranch.questionVersion : 0}
-                    editVersionCount={message.role === "user" ? (availableVersions.length || 1) : 1}
-                    onNavigateEditHistory={handleNavigateEditHistory}
-                    questionVersion={messageBranch ? messageBranch.questionVersion : 0}
-                    branchId={messageBranchId || undefined}
-                    onSwitchQuestionVersion={handleSwitchQuestionVersion}
-                    availableQuestionVersions={availableVersions}
-                    isRegeneratingChain={isLoading}
-                  />
-                );
-              })}
+              {visibleMessages.map((message) => (
+                <ConversationMessage
+                  key={message.id}
+                  role={message.role}
+                  content={message.content}
+                  sources={message.sources}
+                  hasRealTimeData={message.hasRealTimeData}
+                  messageId={message.id}
+                  onRegenerateMessage={handleRegenerateMessage}
+                  alternativeResponses={message.alternativeResponses}
+                  currentResponseIndex={message.currentResponseIndex}
+                  onSelectAlternative={handleSelectAlternative}
+                  relatedQuestions={message.role === "assistant" ? relatedQuestions : []}
+                  onRelatedQuestionClick={handleRelatedQuestionClick}
+                  isEdited={message.isEdited}
+                  editHistory={message.editHistory}
+                  isActivelyEditing={message.isActivelyEditing}
+                  onInPlaceEdit={handleInPlaceEdit}
+                  onCancelEdit={handleCancelEdit}
+                  onSaveEdit={handleSaveEdit}
+                  isRegeneratingChain={isLoading}
+                />
+              ))}
               <div ref={messagesEndRef} />
               {isLoading && (
                 <div className="flex justify-start">

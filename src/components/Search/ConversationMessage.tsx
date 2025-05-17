@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -18,28 +19,16 @@ import {
   History,
   ChevronRight,
   Check,
-  X,
-  GitBranch
+  X
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Avatar } from '@/components/ui/avatar';
 import { Textarea } from "@/components/ui/textarea";
 import { format } from 'date-fns';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
-
-interface Source {
-  title: string;
-  url: string;
-}
-
-interface EditHistoryItem {
-  id: string;
-  content: string;
-  timestamp: Date;
-}
+import { Source, EditHistoryItem } from './types';
 
 interface ConversationMessageProps {
   role: "user" | "assistant";
@@ -53,24 +42,14 @@ interface ConversationMessageProps {
   onSelectAlternative?: (index: number) => void;
   relatedQuestions?: string[];
   onRelatedQuestionClick?: (question: string) => void;
-  onEditMessage?: (messageId: string, content: string) => void;
   isEdited?: boolean;
   editHistory?: EditHistoryItem[];
-  onToggleEditHistory?: () => void;
   isRegeneratingChain?: boolean;
   // In-place editing props
   isActivelyEditing?: boolean;
-  onInPlaceEdit?: (messageId: string, content: string, isInPlace: boolean) => void;
+  onInPlaceEdit?: (messageId: string, content: string) => void;
   onCancelEdit?: (messageId: string) => void;
   onSaveEdit?: (messageId: string, newContent: string) => void;
-  editHistoryIndex?: number;
-  editVersionCount?: number;
-  onNavigateEditHistory?: (messageId: string, direction: "prev" | "next") => void;
-  // Branching conversation props
-  questionVersion?: number;
-  branchId?: string;
-  onSwitchQuestionVersion?: (version: number) => void;
-  availableQuestionVersions?: number[]; // Available versions of this question
 }
 
 // Define a proper type for the code component props
@@ -94,24 +73,14 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   onSelectAlternative,
   relatedQuestions = [],
   onRelatedQuestionClick,
-  onEditMessage,
   isEdited,
   editHistory = [],
-  onToggleEditHistory,
   isRegeneratingChain = false,
   // In-place editing props
   isActivelyEditing = false,
   onInPlaceEdit,
   onCancelEdit,
-  onSaveEdit,
-  editHistoryIndex = 0,
-  editVersionCount = 1,
-  onNavigateEditHistory,
-  // Branching conversation props
-  questionVersion = 0,
-  branchId,
-  onSwitchQuestionVersion,
-  availableQuestionVersions = [],
+  onSaveEdit
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -128,23 +97,16 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     }
   }, [isActivelyEditing]);
   
-  // Effect to update textarea content when content changes externally (like version navigation)
+  // Effect to update textarea content when content changes externally
   useEffect(() => {
     setEditContent(content);
   }, [content]);
 
-  // Only show alternative navigation controls when there are actual alternatives in this version
+  // Only show alternative navigation controls when there are actual alternatives
   const hasAlternatives = alternativeResponses && alternativeResponses.length > 0;
   const canGoBack = hasAlternatives && currentResponseIndex > 0;
   const canGoForward = hasAlternatives && currentResponseIndex < alternativeResponses.length;
   const hasEditHistory = isEdited && editHistory && editHistory.length > 0;
-
-  // Version navigation controls
-  const canGoPrevVersion = editHistoryIndex > 0;
-  const canGoNextVersion = editHistoryIndex < editVersionCount - 1;
-  
-  // Determine if this message is part of a branch (a question with multiple versions)
-  const hasMultipleVersions = availableQuestionVersions.length > 1;
 
   const handleCopy = () => {
     // Copy the content to clipboard
@@ -232,7 +194,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
 
   const handleEditMessage = () => {
     if (messageId && onInPlaceEdit) {
-      onInPlaceEdit(messageId, content, true);
+      onInPlaceEdit(messageId, content);
     }
   };
 
@@ -249,29 +211,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     }
   };
 
-  const handlePreviousVersion = () => {
-    if (messageId && onNavigateEditHistory && canGoPrevVersion) {
-      onNavigateEditHistory(messageId, "prev");
-    }
-  };
-
-  const handleNextVersion = () => {
-    if (messageId && onNavigateEditHistory && canGoNextVersion) {
-      onNavigateEditHistory(messageId, "next");
-    }
-  };
-
-  const handleSwitchQuestionVersion = (version: number) => {
-    if (onSwitchQuestionVersion) {
-      onSwitchQuestionVersion(version);
-    }
-  };
-
   const handleToggleEditHistory = () => {
     setShowEditHistory(!showEditHistory);
-    if (onToggleEditHistory) {
-      onToggleEditHistory();
-    }
   };
 
   // Extract domain from URL for favicon
@@ -297,12 +238,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         <div className="flex justify-end">
           <div className="max-w-3/4 rounded-lg p-4 bg-nexus-purple text-white">
             <div className="flex flex-col space-y-3">
-              {hasMultipleVersions && (
-                <Badge className="self-start bg-nexus-deep-purple text-white mb-1">
-                  <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion + 1}
-                </Badge>
-              )}
-              
               <Textarea
                 ref={textareaRef}
                 value={editContent}
@@ -317,35 +252,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               />
               
               <div className="flex justify-between items-center">
-                {/* Version navigation for edited messages */}
-                {isEdited && (
-                  <div className="flex items-center gap-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 w-7 p-0 rounded-full border-white/20 bg-transparent text-white hover:bg-nexus-deep-purple hover:text-white"
-                      onClick={handlePreviousVersion}
-                      disabled={!canGoPrevVersion || isRegeneratingChain}
-                    >
-                      <ArrowLeft className="h-3 w-3" />
-                    </Button>
-                    
-                    <span className="text-xs text-white/70">
-                      Version {editHistoryIndex + 1} of {editVersionCount}
-                    </span>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 w-7 p-0 rounded-full border-white/20 bg-transparent text-white hover:bg-nexus-deep-purple hover:text-white"
-                      onClick={handleNextVersion}
-                      disabled={!canGoNextVersion || isRegeneratingChain}
-                    >
-                      <ArrowRight className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
-                
                 <div className="flex gap-2 ml-auto">
                   <Button
                     size="sm"
@@ -370,9 +276,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                 </div>
               </div>
               
-              {/* Note about edit consequences */}
               <p className="text-xs text-white/70 mt-2">
-                Editing this message will create a new version and generate a new response.
+                Editing this message will generate a new response.
               </p>
             </div>
           </div>
@@ -387,67 +292,10 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <div className="whitespace-pre-wrap">
             <div className="flex justify-between items-start">
               <div className="space-y-1 flex-1 pr-6">
-                {/* Show version badge if this has multiple versions */}
-                {hasMultipleVersions && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge className="bg-nexus-deep-purple text-white">
-                      <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion + 1}
-                    </Badge>
-                    
-                    {availableQuestionVersions.length > 1 && (
-                      <div className="flex items-center gap-1">
-                        {availableQuestionVersions.map((version) => (
-                          <Button
-                            key={version}
-                            size="sm"
-                            variant={version === questionVersion ? "secondary" : "ghost"}
-                            className={`h-5 w-5 p-0 rounded-full ${
-                              version === questionVersion 
-                                ? "bg-white text-nexus-purple" 
-                                : "text-white/70 hover:text-white hover:bg-nexus-deep-purple"
-                            }`}
-                            onClick={() => handleSwitchQuestionVersion(version)}
-                            disabled={isRegeneratingChain}
-                          >
-                            {version + 1}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                
                 {/* Show edited indicator */}
                 {isEdited && (
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs text-white/70">(edited)</span>
-                    
-                    {/* Version navigation controls */}
-                    <div className="flex items-center gap-1">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-5 w-5 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple rounded-full"
-                        onClick={handlePreviousVersion}
-                        disabled={!canGoPrevVersion || isRegeneratingChain}
-                      >
-                        <ArrowLeft className="h-3 w-3" />
-                      </Button>
-                      
-                      <span className="text-xs text-white/70">
-                        {editHistoryIndex + 1}/{editVersionCount}
-                      </span>
-                      
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-5 w-5 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple rounded-full"
-                        onClick={handleNextVersion}
-                        disabled={!canGoNextVersion || isRegeneratingChain}
-                      >
-                        <ArrowRight className="h-3 w-3" />
-                      </Button>
-                    </div>
                     
                     {hasEditHistory && (
                       <Button
@@ -497,7 +345,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                 )}
               </div>
               
-              {onEditMessage && messageId && (
+              {onInPlaceEdit && messageId && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -525,16 +373,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
               <Globe className="h-3 w-3" />
               <span>Enhanced with real-time web data</span>
-            </div>
-          )}
-          
-          {/* If this response is part of a versioned question, show the version badge */}
-          {hasMultipleVersions && (
-            <div className="mb-3">
-              <Badge className="bg-nexus-purple/20 text-nexus-purple">
-                <GitBranch className="h-3 w-3 mr-1" /> 
-                Response to Question v{questionVersion + 1}
-              </Badge>
             </div>
           )}
           

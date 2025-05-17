@@ -18,21 +18,19 @@ export interface ChatMessage {
   timestamp: Date;
   sources?: Source[];
   hasRealTimeData?: boolean;
-  // Added fields to track branches and versioning
-  questionId?: string;            // ID of the question this message responds to (for assistant messages)
-  questionVersion?: number;       // Version number of the question
-  branchId?: string;              // ID of the branch this message belongs to
-  alternativeResponses?: string[]; // Alternative responses (only for primary responses)
-  currentResponseIndex?: number;   // Current index in alternativeResponses array
-  isEdited?: boolean;              // Whether this message has been edited
-  editHistory?: EditHistoryItem[]; // History of edits for this message
-  isActivelyEditing?: boolean;     // Whether this message is currently being edited
+  
+  // Simplified versioning and editing fields
+  isEdited?: boolean;
+  editHistory?: EditHistoryItem[];
+  isActivelyEditing?: boolean;
+  
+  // Simplified alternative responses handling
+  alternativeResponses?: string[];
+  currentResponseIndex?: number;
 }
 
-export interface ConversationBranch {
+// Simplified conversation branch structure
+export interface ConversationGroup {
   id: string;
-  questionId: string;          // ID of the question that started this branch
-  questionVersion: number;     // Version number of the question
-  messageIds: string[];        // IDs of messages in this branch
-  parentBranchId?: string;     // ID of the parent branch (if branched from another conversation)
+  messageIds: string[];
 }
