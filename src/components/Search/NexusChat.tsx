@@ -39,6 +39,17 @@ interface ChatMessage {
   showEditHistory?: boolean;
   // New field to track edit versions
   editHistoryIndex?: number;
+  // New fields for branching conversation support
+  branchId?: string;
+  questionVersion?: number;
+  isHidden?: boolean;
+}
+
+interface ConversationBranch {
+  id: string;
+  questionId: string;
+  questionVersion: number;
+  messageIds: string[];
 }
 
 interface NexusChatProps {
@@ -54,8 +65,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [isRegeneratingChain, setIsRegeneratingChain] = useState(false);
-  // New state for in-place editing
   const [activeEditId, setActiveEditId] = useState<string | null>(null);
+  // New states for branch management
+  const [conversationBranches, setConversationBranches] = useState<ConversationBranch[]>([]);
+  const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
@@ -66,8 +80,30 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Helper function to find messages in the active branch
+  const getVisibleMessages = () => {
+    if (!activeBranchId) return messages;
+    
+    // Find the active branch
+    const activeBranch = conversationBranches.find(branch => branch.id === activeBranchId);
+    if (!activeBranch) return messages;
+    
+    // Return only messages that belong to this branch
+    return messages.filter(msg => activeBranch.messageIds.includes(msg.id));
+  };
+
   // Helper function to find child messages in the conversation chain
-  const findChildMessages = (messageId: string): string[] => {
+  const findChildMessages = (messageId: string, withinBranchId?: string): string[] => {
+    if (withinBranchId) {
+      const branch = conversationBranches.find(b => b.id === withinBranchId);
+      if (!branch) return [];
+      
+      const messageIndex = branch.messageIds.indexOf(messageId);
+      if (messageIndex === -1) return [];
+      
+      return branch.messageIds.slice(messageIndex + 1);
+    }
+    
     const messageIndex = messages.findIndex(msg => msg.id === messageId);
     if (messageIndex === -1) return [];
     
@@ -138,13 +174,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     if (!messageToProcess.trim()) return;
     
+    // Handle in-place editing of existing message
     if (activeEditId) {
       const messageIndex = messages.findIndex(msg => msg.id === activeEditId);
       if (messageIndex !== -1) {
         const originalMessage = messages[messageIndex];
         
+        // Update message history
         const updatedMessages = [...messages];
-        
         const history = originalMessage.editHistory || [];
         
         history.push({
@@ -153,37 +190,44 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           timestamp: new Date()
         });
         
-        let currentVersion = originalMessage.editHistoryIndex || 0;
-        const newVersionCount = history.length + 1;
+        const newQuestionVersion = (originalMessage.questionVersion || 0) + 1;
+        const newBranchId = createNewBranch(originalMessage.id, newQuestionVersion);
         
+        // Update the message with its new version and branch
         updatedMessages[messageIndex] = {
           ...updatedMessages[messageIndex],
           content: messageToProcess,
           isEdited: true,
           editHistory: history,
-          editHistoryIndex: newVersionCount - 1,
+          editHistoryIndex: history.length,
+          questionVersion: newQuestionVersion,
+          branchId: newBranchId
         };
         
         setMessages(updatedMessages);
         setActiveEditId(null);
+        switchToBranch(newBranchId);
         
+        // Hide old responses from previous versions
         const childMessageIds = findChildMessages(originalMessage.id);
-        
         if (childMessageIds.length > 0) {
-          const nextMessageId = childMessageIds[0];
-          toast.info("Regenerating conversation chain...", {
-            duration: 3000,
-          });
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              childMessageIds.includes(msg.id) 
+                ? {...msg, isHidden: true} 
+                : msg
+            )
+          );
           
-          setIsRegeneratingChain(true);
-          await regenerateMessageChain(nextMessageId, updatedMessages);
-          setIsRegeneratingChain(false);
+          // Generate new response for the edited message
+          await generateResponseForMessage(messageToProcess, originalMessage.id, newBranchId);
         }
         
         return;
       }
     }
     
+    // Handle regular message editing (not in-place)
     if (editingMessageId) {
       const messageIndex = messages.findIndex(msg => msg.id === editingMessageId);
       if (messageIndex !== -1) {
@@ -200,45 +244,66 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           });
         }
         
+        const newQuestionVersion = (originalMessage.questionVersion || 0) + 1;
+        const newBranchId = createNewBranch(originalMessage.id, newQuestionVersion);
+        
         updatedMessages[messageIndex] = {
           ...updatedMessages[messageIndex],
           content: messageToProcess,
           isEdited: true,
           editHistory: history,
-          editHistoryIndex: history.length
+          editHistoryIndex: history.length,
+          questionVersion: newQuestionVersion,
+          branchId: newBranchId
         };
         
         setMessages(updatedMessages);
         setEditingMessageId(null);
         setCurrentMessage("");
+        switchToBranch(newBranchId);
         
+        // Hide old responses from previous versions
         const childMessageIds = findChildMessages(originalMessage.id);
-        
         if (childMessageIds.length > 0) {
-          const nextMessageId = childMessageIds[0];
-          toast.info("Regenerating conversation chain...", {
-            duration: 3000,
-          });
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              childMessageIds.includes(msg.id) 
+                ? {...msg, isHidden: true} 
+                : msg
+            )
+          );
           
-          setIsRegeneratingChain(true);
-          await regenerateMessageChain(nextMessageId, updatedMessages);
-          setIsRegeneratingChain(false);
+          // Generate new response for the edited message
+          await generateResponseForMessage(messageToProcess, originalMessage.id, newBranchId);
         }
         
         return;
       }
     }
     
+    // Handle new message
+    const userMessageId = Date.now().toString();
+    let currentBranchId = activeBranchId;
+    
+    // If there's no active branch, create a new one
+    if (!currentBranchId) {
+      currentBranchId = createNewBranch(userMessageId, 0);
+      switchToBranch(currentBranchId);
+    }
+    
     const userMessage: ChatMessage = {
-      id: Date.now().toString(),
+      id: userMessageId,
       role: "user",
       content: messageToProcess,
       timestamp: new Date(),
       childMessageIds: [],
-      editHistoryIndex: 0
+      editHistoryIndex: 0,
+      questionVersion: 0,
+      branchId: currentBranchId
     };
     
     setMessages(prevMessages => [...prevMessages, userMessage]);
+    addMessageToBranch(currentBranchId, userMessageId);
     
     if (onSearch) {
       onSearch(messageToProcess);
@@ -248,6 +313,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       setCurrentMessage("");
     }
     
+    await generateResponseForMessage(messageToProcess, userMessageId, currentBranchId);
+  };
+
+  // Helper function to generate a response for a specific message
+  const generateResponseForMessage = async (messageContent: string, parentMessageId: string, branchId: string) => {
     setIsLoading(true);
     
     try {
@@ -256,7 +326,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       let needsRealTimeData = false;
       
       try {
-        const classification = await classifyQuery(messageToProcess);
+        const classification = await classifyQuery(messageContent);
         needsRealTimeData = classification.needsRealTimeData;
         
         if (needsRealTimeData) {
@@ -268,7 +338,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             icon: <Globe className="h-4 w-4" />
           });
           
-          realTimeData = await getRealTimeData(messageToProcess, classification);
+          realTimeData = await getRealTimeData(messageContent, classification);
           
           if (realTimeData) {
             toast("Found real-time information", {
@@ -287,7 +357,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         setIsFetchingRealTimeData(false);
       }
       
-      const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToProcess }];
+      const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageContent }];
       
       const tempResponseId = Date.now().toString() + "-streaming";
       const tempAssistantMessage: ChatMessage = {
@@ -301,25 +371,29 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         currentResponseIndex: 0,
         isStreaming: true,
         editHistoryIndex: 0,
-        parentMessageId: userMessage.id
+        parentMessageId: parentMessageId,
+        branchId: branchId
       };
       
       setMessages(prev => {
         const updatedMessages = [...prev];
-        const userMsgIndex = updatedMessages.length - 1;
-        if (userMsgIndex >= 0 && updatedMessages[userMsgIndex].id === userMessage.id) {
+        const userMsgIndex = updatedMessages.findIndex(msg => msg.id === parentMessageId);
+        
+        if (userMsgIndex >= 0) {
           updatedMessages[userMsgIndex] = {
             ...updatedMessages[userMsgIndex],
-            childMessageIds: [tempResponseId]
+            childMessageIds: [...(updatedMessages[userMsgIndex].childMessageIds || []), tempResponseId]
           };
         }
+        
         return [...updatedMessages, tempAssistantMessage];
       });
       
+      addMessageToBranch(branchId, tempResponseId);
       setIsStreaming(true);
       
       await streamChatGPTResponseWithRealTimeData(
-        messageToProcess, 
+        messageContent, 
         updatedHistory,
         (currentStreamContent, isDone) => {
           setMessages(prevMessages => {
@@ -345,7 +419,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               { role: "assistant" as const, content: currentStreamContent }
             ]);
             
-            generateRelatedQuestions(messageToProcess, currentStreamContent).then(relatedQuestions => {
+            generateRelatedQuestions(messageContent, currentStreamContent).then(relatedQuestions => {
               setMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
                 const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempResponseId);
@@ -358,13 +432,30 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                     id: permanentId
                   };
                   
+                  // Update the branch with the permanent ID
+                  setConversationBranches(prevBranches => 
+                    prevBranches.map(branch => {
+                      if (branch.id === branchId) {
+                        return {
+                          ...branch,
+                          messageIds: branch.messageIds.map(id => 
+                            id === tempResponseId ? permanentId : id
+                          )
+                        };
+                      }
+                      return branch;
+                    })
+                  );
+                  
                   const parentIndex = updatedMessages.findIndex(
                     msg => msg.childMessageIds?.includes(tempResponseId)
                   );
                   if (parentIndex !== -1) {
                     updatedMessages[parentIndex] = {
                       ...updatedMessages[parentIndex],
-                      childMessageIds: [permanentId]
+                      childMessageIds: updatedMessages[parentIndex].childMessageIds?.map(id => 
+                        id === tempResponseId ? permanentId : id
+                      )
                     };
                   }
                 }
@@ -388,10 +479,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         role: "assistant",
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date(),
-        parentMessageId: userMessage.id,
-        editHistoryIndex: 0
+        parentMessageId: parentMessageId,
+        editHistoryIndex: 0,
+        branchId: branchId
       };
+      
       setMessages(prev => [...prev, fallbackResponse]);
+      addMessageToBranch(branchId, fallbackResponse.id);
       setIsStreaming(false);
     } finally {
       setIsLoading(false);
@@ -407,6 +501,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     
     const currentMessage = currentMessages[messageIndex];
     const parentId = currentMessage.parentMessageId;
+    const branchId = currentMessage.branchId || findBranchForMessage(messageId);
     
     if (!parentId) {
       console.error("Parent message not found for:", messageId);
@@ -443,19 +538,37 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         }
       }
       
+      // Create conversation history for this branch
       const historyMessages: { role: "user" | "assistant"; content: string }[] = [];
       
-      for (let i = 0; i < parentIndex; i++) {
+      // Find the branch and get its messages
+      const branch = conversationBranches.find(b => b.id === branchId);
+      if (branch) {
+        for (const msgId of branch.messageIds) {
+          if (msgId === messageId) break; // Stop when we reach the current message
+          
+          const msg = currentMessages.find(m => m.id === msgId);
+          if (msg) {
+            historyMessages.push({
+              role: msg.role,
+              content: msg.content
+            });
+          }
+        }
+      } else {
+        // Fallback if branch is not found
+        for (let i = 0; i < parentIndex; i++) {
+          historyMessages.push({
+            role: currentMessages[i].role,
+            content: currentMessages[i].content
+          });
+        }
+        
         historyMessages.push({
-          role: currentMessages[i].role,
-          content: currentMessages[i].content
+          role: userMessage.role,
+          content: userMessage.content
         });
       }
-      
-      historyMessages.push({
-        role: userMessage.role,
-        content: userMessage.content
-      });
       
       const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
 
@@ -477,7 +590,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             id: tempRegeneratedId,
             content: "",
             alternativeResponses: alternatives,
-            currentResponseIndex: 0,
+            currentResponseIndex: alternatives.length, // Set to new response
             isStreaming: true
           };
         }
@@ -501,6 +614,23 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         
         return updatedMessages;
       });
+      
+      // Update branch with new ID
+      if (branchId) {
+        setConversationBranches(prevBranches => 
+          prevBranches.map(branch => {
+            if (branch.id === branchId) {
+              return {
+                ...branch,
+                messageIds: branch.messageIds.map(id => 
+                  id === messageId ? tempRegeneratedId : id
+                )
+              };
+            }
+            return branch;
+          })
+        );
+      }
       
       setIsStreaming(true);
       
@@ -536,7 +666,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   ...updatedMessages[streamingMsgIndex],
                   id: newMessageId,
                   isStreaming: false,
-                  parentMessageId: userMessage.id
+                  parentMessageId: userMessage.id,
+                  branchId: branchId
                 };
               }
               
@@ -560,6 +691,23 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               return updatedMessages;
             });
             
+            // Update branch with permanent ID
+            if (branchId) {
+              setConversationBranches(prevBranches => 
+                prevBranches.map(branch => {
+                  if (branch.id === branchId) {
+                    return {
+                      ...branch,
+                      messageIds: branch.messageIds.map(id => 
+                        id === tempRegeneratedId ? newMessageId : id
+                      )
+                    };
+                  }
+                  return branch;
+                })
+              );
+            }
+            
             generateRelatedQuestions(userMessage.content, currentStreamContent).then(relatedQuestions => {
               setMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
@@ -576,14 +724,20 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               });
             });
             
-            const childMessageIds = findChildMessages(messageId);
+            // Find child messages in the same branch
+            const childMessageIds = branch ? 
+              branch.messageIds.slice(branch.messageIds.indexOf(newMessageId) + 1) :
+              findChildMessages(messageId);
             
             if (childMessageIds.length > 0 && childMessageIds[0] !== messageId) {
               await new Promise(resolve => setTimeout(resolve, 500));
               await regenerateMessageChain(childMessageIds[0], 
-                [...document.querySelectorAll('[data-message-id]')].map(el => {
-                  const id = el.getAttribute('data-message-id');
-                  return messages.find(msg => msg.id === id) as ChatMessage;
+                messages.map(msg => {
+                  const updatedMsg = {...msg};
+                  if (msg.id === messageId) {
+                    updatedMsg.id = newMessageId;
+                  }
+                  return updatedMsg;
                 })
               );
             } else {
@@ -713,10 +867,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {
         if (message.id === messageId) {
+          // Get the correct content
           let content = message.content;
           
           if (index > 0 && message.alternativeResponses && index <= message.alternativeResponses.length) {
             content = message.alternativeResponses[index - 1];
+          } else if (index === 0 && message.alternativeResponses && message.alternativeResponses.length > 0) {
+            // Index 0 means the original response before regenerations
+            content = message.alternativeResponses[message.alternativeResponses.length - 1];
           }
           
           return {
@@ -729,19 +887,41 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       });
     });
     
-    const childMessageIds = findChildMessages(messageId);
-    
-    if (childMessageIds.length > 0) {
-      const nextMessageId = childMessageIds[0];
+    // If we're in a branch, find the next message in this branch
+    const branchId = findBranchForMessage(messageId);
+    if (branchId) {
+      const branch = conversationBranches.find(b => b.id === branchId);
+      if (branch) {
+        const msgIndex = branch.messageIds.indexOf(messageId);
+        if (msgIndex !== -1 && msgIndex < branch.messageIds.length - 1) {
+          const nextMessageId = branch.messageIds[msgIndex + 1];
+          
+          toast.info("Regenerating conversation chain...", {
+            duration: 3000,
+          });
+          
+          setIsRegeneratingChain(true);
+          regenerateMessageChain(nextMessageId).then(() => {
+            setIsRegeneratingChain(false);
+          });
+        }
+      }
+    } else {
+      // Fallback to old behavior
+      const childMessageIds = findChildMessages(messageId);
       
-      toast.info("Regenerating conversation chain...", {
-        duration: 3000,
-      });
-      
-      setIsRegeneratingChain(true);
-      regenerateMessageChain(nextMessageId).then(() => {
-        setIsRegeneratingChain(false);
-      });
+      if (childMessageIds.length > 0) {
+        const nextMessageId = childMessageIds[0];
+        
+        toast.info("Regenerating conversation chain...", {
+          duration: 3000,
+        });
+        
+        setIsRegeneratingChain(true);
+        regenerateMessageChain(nextMessageId).then(() => {
+          setIsRegeneratingChain(false);
+        });
+      }
     }
   };
 
@@ -793,6 +973,35 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     });
   };
 
+  // New method to switch between question versions
+  const handleSwitchQuestionVersion = (messageId: string, version: number) => {
+    const message = messages.find(msg => msg.id === messageId);
+    if (!message) return;
+    
+    // Find all branches related to this question
+    const relatedBranches = conversationBranches.filter(branch => 
+      branch.questionId === messageId || branch.questionId === message.parentMessageId
+    );
+    
+    // Find the branch for the selected version
+    const targetBranch = relatedBranches.find(branch => 
+      branch.questionVersion === version
+    );
+    
+    if (targetBranch) {
+      switchToBranch(targetBranch.id);
+      
+      // Update UI to show the messages are from a different branch
+      setMessages(prevMessages => 
+        prevMessages.map(msg => ({
+          ...msg,
+          isHidden: !targetBranch.messageIds.includes(msg.id) && 
+                    relatedBranches.some(branch => branch.messageIds.includes(msg.id))
+        }))
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1 p-4 pb-20">
@@ -813,10 +1022,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               />
             </div>
           ) : (
-            messages.map((message, index) => {
+            getVisibleMessages().map((message, index) => {
+              if (message.isHidden) return null;
+              
               if (activeEditId) {
                 const activeEditIndex = messages.findIndex(m => m.id === activeEditId);
-                if (index > activeEditIndex) {
+                if (activeEditIndex !== -1 && message.branchId !== messages[activeEditIndex].branchId) {
                   return null;
                 }
               }
@@ -877,6 +1088,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                       editHistoryIndex={message.editHistoryIndex || 0}
                       editVersionCount={(message.editHistory?.length || 0) + 1}
                       onNavigateEditHistory={handleNavigateEditHistory}
+                      // New props for branching conversations
+                      questionVersion={message.questionVersion}
+                      branchId={message.branchId}
+                      onSwitchQuestionVersion={(version) => handleSwitchQuestionVersion(message.id, version)}
                     />
                   )}
                 </div>

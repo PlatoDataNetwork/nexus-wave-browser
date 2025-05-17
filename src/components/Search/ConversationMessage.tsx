@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -18,7 +19,8 @@ import {
   History,
   ChevronRight,
   Check,
-  X
+  X,
+  GitBranch
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Textarea } from "@/components/ui/textarea";
 import { format } from 'date-fns';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Badge } from "@/components/ui/badge";
 
 interface Source {
   title: string;
@@ -56,7 +59,7 @@ interface ConversationMessageProps {
   editHistory?: EditHistoryItem[];
   onToggleEditHistory?: () => void;
   isRegeneratingChain?: boolean;
-  // New props for in-place editing
+  // In-place editing props
   isActivelyEditing?: boolean;
   onInPlaceEdit?: (messageId: string, content: string, isInPlace: boolean) => void;
   onCancelEdit?: (messageId: string) => void;
@@ -64,6 +67,11 @@ interface ConversationMessageProps {
   editHistoryIndex?: number;
   editVersionCount?: number;
   onNavigateEditHistory?: (messageId: string, direction: "prev" | "next") => void;
+  // New props for branching conversations
+  questionVersion?: number;
+  branchId?: string;
+  onSwitchQuestionVersion?: (version: number) => void;
+  availableQuestionVersions?: number[]; // Available versions of this question
 }
 
 // Define a proper type for the code component props
@@ -92,14 +100,19 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   editHistory = [],
   onToggleEditHistory,
   isRegeneratingChain = false,
-  // New props usage
+  // In-place editing props
   isActivelyEditing = false,
   onInPlaceEdit,
   onCancelEdit,
   onSaveEdit,
   editHistoryIndex = 0,
   editVersionCount = 1,
-  onNavigateEditHistory
+  onNavigateEditHistory,
+  // Branching conversation props
+  questionVersion,
+  branchId,
+  onSwitchQuestionVersion,
+  availableQuestionVersions = [],
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -127,9 +140,12 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   const canGoForward = hasAlternatives && currentResponseIndex < alternativeResponses.length;
   const hasEditHistory = isEdited && editHistory && editHistory.length > 0;
 
-  // New version navigation controls
+  // Version navigation controls
   const canGoPrevVersion = editHistoryIndex > 0;
   const canGoNextVersion = editHistoryIndex < editVersionCount - 1;
+  
+  // Determine if this message is part of a branch (a question with multiple versions)
+  const hasMultipleVersions = questionVersion !== undefined && questionVersion > 0;
 
   const handleCopy = () => {
     // Copy the content to clipboard
@@ -234,7 +250,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     }
   };
 
-  // New handlers for version navigation
   const handlePreviousVersion = () => {
     if (messageId && onNavigateEditHistory && canGoPrevVersion) {
       onNavigateEditHistory(messageId, "prev");
@@ -244,6 +259,12 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   const handleNextVersion = () => {
     if (messageId && onNavigateEditHistory && canGoNextVersion) {
       onNavigateEditHistory(messageId, "next");
+    }
+  };
+
+  const handleSwitchQuestionVersion = (version: number) => {
+    if (onSwitchQuestionVersion) {
+      onSwitchQuestionVersion(version);
     }
   };
 
@@ -277,6 +298,12 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         <div className="flex justify-end">
           <div className="max-w-3/4 rounded-lg p-4 bg-nexus-purple text-white">
             <div className="flex flex-col space-y-3">
+              {hasMultipleVersions && (
+                <Badge className="self-start bg-nexus-deep-purple text-white mb-1">
+                  <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion}
+                </Badge>
+              )}
+              
               <Textarea
                 ref={textareaRef}
                 value={editContent}
@@ -346,7 +373,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               
               {/* Note about edit consequences */}
               <p className="text-xs text-white/70 mt-2">
-                Editing this message will regenerate the AI's response.
+                Editing this message will create a new version and generate a new response.
               </p>
             </div>
           </div>
@@ -361,6 +388,13 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <div className="whitespace-pre-wrap">
             <div className="flex justify-between items-start">
               <div className="space-y-1 flex-1 pr-6">
+                {/* Show version badge if this is a versioned question */}
+                {hasMultipleVersions && (
+                  <Badge className="bg-nexus-deep-purple text-white mb-2">
+                    <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion}
+                  </Badge>
+                )}
+                
                 {/* Show edited indicator and version navigation if message has been edited */}
                 {isEdited && (
                   <div className="flex items-center gap-2 mb-1">
@@ -469,6 +503,15 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
               <Globe className="h-3 w-3" />
               <span>Enhanced with real-time web data</span>
+            </div>
+          )}
+          
+          {/* If this response is part of a versioned question, show the version badge */}
+          {hasMultipleVersions && questionVersion !== undefined && (
+            <div className="mb-3">
+              <Badge className="bg-nexus-purple/20 text-nexus-purple">
+                <GitBranch className="h-3 w-3 mr-1" /> Response to Question v{questionVersion}
+              </Badge>
             </div>
           )}
           
