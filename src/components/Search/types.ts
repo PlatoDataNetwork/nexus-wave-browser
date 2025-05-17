@@ -26,6 +26,7 @@ export interface ChatMessage {
   currentResponseIndex?: number;   // Current index in alternativeResponses array
   isEdited?: boolean;              // Whether this message has been edited
   editHistory?: EditHistoryItem[]; // History of edits for this message
+  isActivelyEditing?: boolean;     // Whether this message is currently being edited
 }
 
 export interface ConversationBranch {
