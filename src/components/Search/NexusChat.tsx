@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Zap, Globe } from "lucide-react";
-import { toast } from "sonner";
+import { Loader2, Send, MessageCircle, Zap, Globe, Square } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 import ConversationMessage from './ConversationMessage';
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
-import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
+import { getChatGPTResponseWithRealTimeData, streamChatGPTResponseWithRealTimeData } from '@/utils/openai';
+import TypewriterEffect from './TypewriterEffect';
 
 interface ChatMessage {
   id: string;
@@ -22,6 +23,8 @@ interface ChatMessage {
   alternativeResponses?: string[];
   currentResponseIndex?: number;
   relatedQuestions?: string[];
+  isStreaming?: boolean;
+  fullContent?: string;
 }
 
 interface NexusChatProps {
@@ -34,6 +37,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isClassifying, setIsClassifying] = useState(false);
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
@@ -173,39 +177,77 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
-      // Generate AI response using ChatGPT API with conversation history and real-time data if available
-      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
-        messageToSearch, 
-        updatedHistory,
-        realTimeData
-      );
-      
-      // Update conversation history with assistant response
-      setConversationHistory([
-        ...updatedHistory,
-        { role: "assistant" as const, content: aiResponseContent }
-      ]);
-      
-      // Create sources from real-time data for citation
-      const sources = realTimeData?.sources || [];
-      
-      // Generate related questions
-      const relatedQuestions = await generateRelatedQuestions(messageToSearch, aiResponseContent);
-      
-      // Add AI response to conversation UI
-      const aiResponse: ChatMessage = {
-        id: Date.now().toString(),
+      // Create a placeholder for streaming response
+      const tempResponseId = Date.now().toString() + "-streaming";
+      const tempAssistantMessage: ChatMessage = {
+        id: tempResponseId,
         role: "assistant",
-        content: aiResponseContent,
+        content: "", // Empty at first, will be populated as chunks arrive
         timestamp: new Date(),
-        sources: sources.length > 0 ? sources : undefined,
+        sources: realTimeData?.sources || [],
         hasRealTimeData: !!realTimeData,
         alternativeResponses: [],
         currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
+        isStreaming: true
       };
       
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev => [...prev, tempAssistantMessage]);
+      setIsStreaming(true);
+      
+      // Stream AI response using the ChatGPT API with conversation history and real-time data
+      await streamChatGPTResponseWithRealTimeData(
+        messageToSearch, 
+        updatedHistory,
+        (currentStreamContent, isDone) => {
+          setMessages(prevMessages => {
+            const updatedMessages = [...prevMessages];
+            const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempResponseId);
+            
+            if (streamingMsgIndex !== -1) {
+              updatedMessages[streamingMsgIndex] = {
+                ...updatedMessages[streamingMsgIndex],
+                content: currentStreamContent,
+                fullContent: currentStreamContent,
+                isStreaming: !isDone
+              };
+            }
+            
+            return updatedMessages;
+          });
+          
+          if (isDone) {
+            setIsStreaming(false);
+            // Update conversation history with the complete assistant response
+            setConversationHistory([
+              ...updatedHistory,
+              { role: "assistant" as const, content: currentStreamContent }
+            ]);
+            
+            // Generate related questions once streaming is complete
+            generateRelatedQuestions(messageToSearch, currentStreamContent).then(relatedQuestions => {
+              setMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempResponseId);
+                
+                if (streamingMsgIndex !== -1) {
+                  updatedMessages[streamingMsgIndex] = {
+                    ...updatedMessages[streamingMsgIndex],
+                    relatedQuestions: relatedQuestions,
+                    id: Date.now().toString() // Replace with permanent ID
+                  };
+                }
+                
+                return updatedMessages;
+              });
+            });
+          }
+          
+          // Scroll to bottom with each chunk
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        },
+        realTimeData
+      );
+      
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.", {
@@ -220,9 +262,27 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackResponse]);
+      setIsStreaming(false);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleStopStreaming = () => {
+    // Find the streaming message and mark it as complete
+    setMessages(prevMessages => {
+      return prevMessages.map(msg => {
+        if (msg.isStreaming) {
+          return {
+            ...msg,
+            isStreaming: false,
+            id: Date.now().toString() // Assign a permanent ID
+          };
+        }
+        return msg;
+      });
+    });
+    setIsStreaming(false);
   };
 
   const handleRelatedQuestionClick = (question: string) => {
@@ -273,55 +333,91 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       // Modified system prompt to ensure variety in responses
       const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
-      
-      // Generate new response with diversity prompt
-      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
-        userMessage.content,
-        conversationHistory.slice(0, -1), // Exclude the last assistant response
-        realTimeData,
-        diversityPrompt // Pass the diversity prompt
-      );
-      
-      // Create sources from real-time data for citation
-      const sources = realTimeData?.sources || [];
-      
-      // Store the current response in alternatives
+
+      // Create a placeholder for the regenerated streaming response
+      const tempRegeneratedId = Date.now().toString() + "-regenerating";
       const alternatives = [
         ...currentAssistantMessage.alternativeResponses || [],
         currentAssistantMessage.content
       ];
       
-      // Generate new related questions for this regenerated response
-      const relatedQuestions = await generateRelatedQuestions(userMessage.content, aiResponseContent);
+      // Replace the old message with the regenerating version
+      setMessages(prevMessages => {
+        const updatedMessages = [...prevMessages];
+        updatedMessages[messageIndex] = {
+          ...updatedMessages[messageIndex],
+          id: tempRegeneratedId,
+          content: "",
+          alternativeResponses: alternatives,
+          currentResponseIndex: 0,
+          isStreaming: true
+        };
+        return updatedMessages;
+      });
       
-      // Create new AI response
-      const regeneratedResponse: ChatMessage = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: aiResponseContent,
-        timestamp: new Date(),
-        sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
-        hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
-        alternativeResponses: alternatives,
-        currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
-      };
+      setIsStreaming(true);
       
-      // Replace the old message with the new one
-      const updatedMessages = [...messages];
-      updatedMessages[messageIndex] = regeneratedResponse;
+      // Stream regenerated response
+      await streamChatGPTResponseWithRealTimeData(
+        userMessage.content,
+        conversationHistory.slice(0, -1), // Exclude the last assistant response
+        (currentStreamContent, isDone) => {
+          setMessages(prevMessages => {
+            const updatedMessages = [...prevMessages];
+            const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempRegeneratedId);
+            
+            if (streamingMsgIndex !== -1) {
+              updatedMessages[streamingMsgIndex] = {
+                ...updatedMessages[streamingMsgIndex],
+                content: currentStreamContent,
+                fullContent: currentStreamContent,
+                isStreaming: !isDone
+              };
+            }
+            
+            return updatedMessages;
+          });
+          
+          if (isDone) {
+            setIsStreaming(false);
+            
+            // Update conversation history
+            const updatedHistory = [...conversationHistory];
+            updatedHistory.splice(-1, 1, { role: "assistant", content: currentStreamContent });
+            setConversationHistory(updatedHistory);
+            
+            // Generate new related questions for the regenerated response
+            generateRelatedQuestions(userMessage.content, currentStreamContent).then(relatedQuestions => {
+              setMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                const streamingMsgIndex = updatedMessages.findIndex(msg => msg.id === tempRegeneratedId);
+                
+                if (streamingMsgIndex !== -1) {
+                  updatedMessages[streamingMsgIndex] = {
+                    ...updatedMessages[streamingMsgIndex],
+                    relatedQuestions: relatedQuestions,
+                    id: Date.now().toString() // Replace with permanent ID
+                  };
+                }
+                
+                return updatedMessages;
+              });
+            });
+            
+            toast.success("Response regenerated");
+          }
+          
+          // Scroll to bottom with each chunk
+          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        },
+        realTimeData,
+        diversityPrompt
+      );
       
-      setMessages(updatedMessages);
-      
-      // Update conversation history
-      const updatedHistory = [...conversationHistory];
-      updatedHistory.splice(-1, 1, { role: "assistant", content: aiResponseContent });
-      setConversationHistory(updatedHistory);
-      
-      toast.success("Response regenerated");
     } catch (error) {
       console.error("Error regenerating response:", error);
       toast.error("Failed to regenerate response");
+      setIsStreaming(false);
     } finally {
       setIsLoading(false);
     }
@@ -401,20 +497,54 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </div>
           ) : (
             messages.map((message) => (
-              <ConversationMessage 
-                key={message.id}
-                role={message.role}
-                content={message.content}
-                sources={message.sources}
-                hasRealTimeData={message.hasRealTimeData}
-                messageId={message.id}
-                onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
-                alternativeResponses={message.alternativeResponses || []}
-                currentResponseIndex={message.currentResponseIndex || 0}
-                onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
-                relatedQuestions={message.relatedQuestions}
-                onRelatedQuestionClick={handleRelatedQuestionClick}
-              />
+              <div key={message.id} className="message-container">
+                {message.role === "assistant" && message.isStreaming ? (
+                  <div className={`flex justify-start`}>
+                    <div className="max-w-3/4 rounded-lg p-4 bg-secondary border border-border">
+                      {message.hasRealTimeData && (
+                        <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
+                          <Globe className="h-3 w-3" />
+                          <span>Enhanced with real-time web data</span>
+                        </div>
+                      )}
+                      
+                      {/* Streaming Typewriter Effect */}
+                      <TypewriterEffect 
+                        text={message.content} 
+                        speed={5}
+                        className="conversation-markdown"
+                      />
+                      
+                      {/* Stop streaming button */}
+                      <div className="mt-3 flex justify-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex items-center gap-1"
+                          onClick={handleStopStreaming}
+                        >
+                          <Square className="h-3 w-3" />
+                          Stop streaming
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <ConversationMessage 
+                    role={message.role}
+                    content={message.content}
+                    sources={message.sources}
+                    hasRealTimeData={message.hasRealTimeData}
+                    messageId={message.id}
+                    onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
+                    alternativeResponses={message.alternativeResponses || []}
+                    currentResponseIndex={message.currentResponseIndex || 0}
+                    onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
+                    relatedQuestions={message.relatedQuestions}
+                    onRelatedQuestionClick={handleRelatedQuestionClick}
+                  />
+                )}
+              </div>
             ))
           )}
           <div ref={messagesEndRef} />
@@ -435,13 +565,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 handleSubmit();
               }
             }}
+            disabled={isStreaming}
           />
           <Button 
             type="submit" 
             className="h-full bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-            disabled={isLoading}
+            disabled={isLoading || isStreaming}
           >
-            {isLoading ? (
+            {isLoading || isStreaming ? (
               <div className="flex items-center gap-1">
                 {isClassifying ? (
                   <>
@@ -452,6 +583,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   <>
                     <Globe className="h-4 w-4 animate-pulse" />
                     <span className="text-xs">Searching</span>
+                  </>
+                ) : isStreaming ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs">Streaming</span>
                   </>
                 ) : (
                   <>
