@@ -61,7 +61,7 @@ const TypewriterEffect: React.FC<TypewriterEffectProps> = ({
       </ReactMarkdown>
       
       {isStreaming && (
-        <span className="inline-block w-2 h-4 ml-1 bg-nexus-purple animate-pulse" />
+        <span className="inline-block w-2 h-4 ml-1 bg-nexus-purple animate-blink" />
       )}
     </div>
   );

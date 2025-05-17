@@ -108,6 +108,9 @@ export async function streamChatGPTResponseWithRealTimeData(
     
     let accumulatedText = '';
 
+    // Log that we're starting the stream
+    console.log("Starting OpenAI stream...");
+
     const stream = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: messages as any,
@@ -122,10 +125,14 @@ export async function streamChatGPTResponseWithRealTimeData(
       const content = chunk.choices[0]?.delta?.content || '';
       if (content) {
         accumulatedText += content;
+        console.log("Received chunk:", content); // Debug log
+        
         // Send the complete text so far, not just the new chunk
         onChunk(accumulatedText, false);
       }
     }
+    
+    console.log("Stream completed, final text length:", accumulatedText.length); // Debug log
     
     // Signal that streaming is complete
     onChunk(accumulatedText, true);
