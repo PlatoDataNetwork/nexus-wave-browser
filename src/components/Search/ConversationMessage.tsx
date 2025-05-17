@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -14,7 +13,8 @@ import {
   ArrowLeft, 
   ArrowRight,
   ExternalLink,
-  MessageSquarePlus
+  MessageSquarePlus,
+  Pencil
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,7 @@ interface ConversationMessageProps {
   onSelectAlternative?: (index: number) => void;
   relatedQuestions?: string[];
   onRelatedQuestionClick?: (question: string) => void;
+  onEditMessage?: (messageId: string, content: string) => void;
 }
 
 // Define a proper type for the code component props
@@ -60,7 +61,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   currentResponseIndex = 0,
   onSelectAlternative,
   relatedQuestions = [],
-  onRelatedQuestionClick
+  onRelatedQuestionClick,
+  onEditMessage
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -153,6 +155,12 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     }
   };
 
+  const handleEditMessage = () => {
+    if (messageId && onEditMessage) {
+      onEditMessage(messageId, content);
+    }
+  };
+
   // Extract domain from URL for favicon
   const getDomainFromUrl = (url: string): string => {
     try {
@@ -178,7 +186,22 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         }`}
       >
         {role === "user" ? (
-          <p className="whitespace-pre-wrap">{content}</p>
+          <div className="whitespace-pre-wrap">
+            <div className="flex justify-between items-start">
+              <p className="pr-6">{content}</p>
+              {onEditMessage && messageId && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple -mt-1"
+                  onClick={handleEditMessage}
+                >
+                  <Pencil className="h-3 w-3" />
+                  <span className="sr-only">Edit message</span>
+                </Button>
+              )}
+            </div>
+          </div>
         ) : (
           <div className="conversation-markdown">
             {hasRealTimeData && (

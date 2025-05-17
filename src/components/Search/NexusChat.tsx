@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,6 +10,7 @@ import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData, streamChatGPTResponseWithRealTimeData } from '@/utils/openai';
 import TypewriterEffect from './TypewriterEffect';
+import SearchSuggestions from './SearchSuggestions';
 
 interface ChatMessage {
   id: string;
@@ -38,6 +40,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [isClassifying, setIsClassifying] = useState(false);
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
@@ -111,6 +114,35 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     }
     
     if (!currentMessage.trim()) return;
+    
+    // Check if we're editing an existing message
+    if (editingMessageId) {
+      // Find the message being edited
+      const messageIndex = messages.findIndex(msg => msg.id === editingMessageId);
+      if (messageIndex !== -1) {
+        // Create updated message array
+        const updatedMessages = [...messages];
+        updatedMessages[messageIndex] = {
+          ...updatedMessages[messageIndex],
+          content: currentMessage
+        };
+        
+        // Update messages
+        setMessages(updatedMessages);
+        
+        // Clear editing state and input field
+        setEditingMessageId(null);
+        setCurrentMessage("");
+        
+        // Regenerate the response for the edited message
+        const nextMessage = messages[messageIndex + 1];
+        if (nextMessage && nextMessage.role === "assistant") {
+          handleRegenerateMessage(nextMessage.id);
+        }
+        
+        return;
+      }
+    }
     
     // Add user message to conversation
     const userMessage: ChatMessage = {
@@ -282,8 +314,22 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
 
   const handleRelatedQuestionClick = (question: string) => {
     setCurrentMessage(question);
-    // Optional: automatically submit the related question
+    // Automatically submit the related question
     setTimeout(() => handleSubmit(), 100);
+  };
+
+  const handleEditMessage = (messageId: string, content: string) => {
+    // Set the message content in the input field
+    setCurrentMessage(content);
+    
+    // Set the editing message ID
+    setEditingMessageId(messageId);
+    
+    // Focus the textarea
+    const textarea = document.querySelector('textarea');
+    if (textarea) {
+      textarea.focus();
+    }
   };
 
   const handleRegenerateMessage = async (messageId: string) => {
@@ -455,40 +501,12 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               <p className="text-muted-foreground max-w-md mx-auto mb-6">
                 Ask me anything and I'll provide helpful information and answers to your questions.
               </p>
-              <div className="flex gap-2 flex-wrap justify-center max-w-lg mx-auto">
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => setCurrentMessage("What's the weather in New York today?")}
-                  className="flex items-center gap-1"
-                >
-                  <Globe className="h-3 w-3" /> Weather in New York
-                </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => setCurrentMessage("Current USD to EUR exchange rate")}
-                  className="flex items-center gap-1"
-                >
-                  <Zap className="h-3 w-3" /> USD to EUR rate
-                </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => setCurrentMessage("Latest news about SpaceX")}
-                  className="flex items-center gap-1"
-                >
-                  <Globe className="h-3 w-3" /> SpaceX news
-                </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => setCurrentMessage("Show me a chart of Bitcoin price trends")}
-                  className="flex items-center gap-1"
-                >
-                  <Zap className="h-3 w-3" /> Bitcoin price chart
-                </Button>
-              </div>
+              
+              {/* Search suggestions with auto-submit */}
+              <SearchSuggestions 
+                onSelectSuggestion={handleRelatedQuestionClick}
+                autoSubmit={true}
+              />
             </div>
           ) : (
             messages.map((message) => (
@@ -537,6 +555,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                     onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
                     relatedQuestions={message.relatedQuestions}
                     onRelatedQuestionClick={handleRelatedQuestionClick}
+                    onEditMessage={message.role === 'user' ? handleEditMessage : undefined}
                   />
                 )}
               </div>
@@ -550,7 +569,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       <div className="p-4 border-t border-border bg-background shadow-md fixed bottom-0 left-0 right-0 z-20">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
-            placeholder="Ask Nexus anything..."
+            placeholder={editingMessageId ? "Edit your message..." : "Ask Nexus anything..."}
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
             className="flex-1 min-h-12 resize-none"
@@ -591,11 +610,30 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   </>
                 )}
               </div>
+            ) : editingMessageId ? (
+              <span className="text-xs">Update</span>
             ) : (
               <Send className="h-4 w-4" />
             )}
           </Button>
         </form>
+        
+        {/* Show cancel button when editing */}
+        {editingMessageId && (
+          <div className="flex justify-end mt-2">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-6 text-xs"
+              onClick={() => {
+                setEditingMessageId(null);
+                setCurrentMessage("");
+              }}
+            >
+              Cancel editing
+            </Button>
+          </div>
+        )}
       </div>
       
       {/* Add padding at the bottom to prevent content from being hidden behind the input area */}

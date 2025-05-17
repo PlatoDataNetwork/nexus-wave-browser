@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 interface SearchSuggestionsProps {
   onSelectSuggestion: (suggestion: string) => void;
+  autoSubmit?: boolean;
   suggestions?: string[];
 }
 
@@ -19,8 +20,13 @@ const DEFAULT_SUGGESTIONS = [
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({ 
   onSelectSuggestion,
+  autoSubmit = true,
   suggestions = DEFAULT_SUGGESTIONS
 }) => {
+  const handleSuggestionClick = (suggestion: string) => {
+    onSelectSuggestion(suggestion);
+  };
+  
   return (
     <div className="mt-6 flex flex-col gap-2 max-w-md mx-auto">
       {suggestions.slice(0, 4).map((suggestion, index) => (
@@ -28,7 +34,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
           key={index}
           variant="outline" 
           className="flex items-center justify-between"
-          onClick={() => onSelectSuggestion(suggestion)}
+          onClick={() => handleSuggestionClick(suggestion)}
         >
           <span>{suggestion}</span>
           <ArrowRight className="h-4 w-4" />
