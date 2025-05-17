@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -67,7 +66,7 @@ interface ConversationMessageProps {
   editHistoryIndex?: number;
   editVersionCount?: number;
   onNavigateEditHistory?: (messageId: string, direction: "prev" | "next") => void;
-  // New props for branching conversations
+  // Branching conversation props
   questionVersion?: number;
   branchId?: string;
   onSwitchQuestionVersion?: (version: number) => void;
@@ -109,7 +108,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   editVersionCount = 1,
   onNavigateEditHistory,
   // Branching conversation props
-  questionVersion,
+  questionVersion = 0,
   branchId,
   onSwitchQuestionVersion,
   availableQuestionVersions = [],
@@ -134,7 +133,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     setEditContent(content);
   }, [content]);
 
-  // Only show alternative navigation controls when there are actual alternatives
+  // Only show alternative navigation controls when there are actual alternatives in this version
   const hasAlternatives = alternativeResponses && alternativeResponses.length > 0;
   const canGoBack = hasAlternatives && currentResponseIndex > 0;
   const canGoForward = hasAlternatives && currentResponseIndex < alternativeResponses.length;
@@ -145,7 +144,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   const canGoNextVersion = editHistoryIndex < editVersionCount - 1;
   
   // Determine if this message is part of a branch (a question with multiple versions)
-  const hasMultipleVersions = questionVersion !== undefined && questionVersion > 0;
+  const hasMultipleVersions = availableQuestionVersions.length > 1;
 
   const handleCopy = () => {
     // Copy the content to clipboard
@@ -300,7 +299,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             <div className="flex flex-col space-y-3">
               {hasMultipleVersions && (
                 <Badge className="self-start bg-nexus-deep-purple text-white mb-1">
-                  <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion}
+                  <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion + 1}
                 </Badge>
               )}
               
@@ -326,7 +325,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                       variant="outline"
                       className="h-7 w-7 p-0 rounded-full border-white/20 bg-transparent text-white hover:bg-nexus-deep-purple hover:text-white"
                       onClick={handlePreviousVersion}
-                      disabled={!canGoPrevVersion}
+                      disabled={!canGoPrevVersion || isRegeneratingChain}
                     >
                       <ArrowLeft className="h-3 w-3" />
                     </Button>
@@ -340,7 +339,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                       variant="outline"
                       className="h-7 w-7 p-0 rounded-full border-white/20 bg-transparent text-white hover:bg-nexus-deep-purple hover:text-white"
                       onClick={handleNextVersion}
-                      disabled={!canGoNextVersion}
+                      disabled={!canGoNextVersion || isRegeneratingChain}
                     >
                       <ArrowRight className="h-3 w-3" />
                     </Button>
@@ -388,14 +387,37 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           <div className="whitespace-pre-wrap">
             <div className="flex justify-between items-start">
               <div className="space-y-1 flex-1 pr-6">
-                {/* Show version badge if this is a versioned question */}
+                {/* Show version badge if this has multiple versions */}
                 {hasMultipleVersions && (
-                  <Badge className="bg-nexus-deep-purple text-white mb-2">
-                    <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion}
-                  </Badge>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge className="bg-nexus-deep-purple text-white">
+                      <GitBranch className="h-3 w-3 mr-1" /> Version {questionVersion + 1}
+                    </Badge>
+                    
+                    {availableQuestionVersions.length > 1 && (
+                      <div className="flex items-center gap-1">
+                        {availableQuestionVersions.map((version) => (
+                          <Button
+                            key={version}
+                            size="sm"
+                            variant={version === questionVersion ? "secondary" : "ghost"}
+                            className={`h-5 w-5 p-0 rounded-full ${
+                              version === questionVersion 
+                                ? "bg-white text-nexus-purple" 
+                                : "text-white/70 hover:text-white hover:bg-nexus-deep-purple"
+                            }`}
+                            onClick={() => handleSwitchQuestionVersion(version)}
+                            disabled={isRegeneratingChain}
+                          >
+                            {version + 1}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
                 
-                {/* Show edited indicator and version navigation if message has been edited */}
+                {/* Show edited indicator */}
                 {isEdited && (
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-xs text-white/70">(edited)</span>
@@ -407,7 +429,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                         variant="ghost"
                         className="h-5 w-5 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple rounded-full"
                         onClick={handlePreviousVersion}
-                        disabled={!canGoPrevVersion}
+                        disabled={!canGoPrevVersion || isRegeneratingChain}
                       >
                         <ArrowLeft className="h-3 w-3" />
                       </Button>
@@ -421,7 +443,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                         variant="ghost"
                         className="h-5 w-5 p-0 text-white/70 hover:text-white hover:bg-nexus-deep-purple rounded-full"
                         onClick={handleNextVersion}
-                        disabled={!canGoNextVersion}
+                        disabled={!canGoNextVersion || isRegeneratingChain}
                       >
                         <ArrowRight className="h-3 w-3" />
                       </Button>
@@ -507,10 +529,11 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
           )}
           
           {/* If this response is part of a versioned question, show the version badge */}
-          {hasMultipleVersions && questionVersion !== undefined && (
+          {hasMultipleVersions && (
             <div className="mb-3">
               <Badge className="bg-nexus-purple/20 text-nexus-purple">
-                <GitBranch className="h-3 w-3 mr-1" /> Response to Question v{questionVersion}
+                <GitBranch className="h-3 w-3 mr-1" /> 
+                Response to Question v{questionVersion + 1}
               </Badge>
             </div>
           )}
