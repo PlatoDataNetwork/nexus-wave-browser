@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Chrome, Settings, Bookmark, FileText, History, Shield, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/useToast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import WalletConnect from "./WalletConnect";
@@ -16,7 +16,6 @@ const BrowserFooter: React.FC<{
   onToggleFooter?: () => void,
   isVisible?: boolean
 }> = ({ onNavigate, onToggleFooter, isVisible = true }) => {
-  const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
@@ -29,11 +28,7 @@ const BrowserFooter: React.FC<{
   };
 
   const handleSettingsClick = () => {
-    if (onNavigate) {
-      onNavigate('/settings-docs');
-    } else {
-      navigate('/settings-docs');
-    }
+    navigate('/settings-docs');
   };
   
   const handleHomeClick = () => {
@@ -41,11 +36,7 @@ const BrowserFooter: React.FC<{
   };
   
   const handleDocumentationClick = () => {
-    if (onNavigate) {
-      onNavigate('/settings-docs?tab=documentation');
-    } else {
-      navigate('/settings-docs?tab=documentation');
-    }
+    navigate('/settings-docs?tab=documentation');
   };
   
   const handleHistoryClick = () => {
@@ -53,13 +44,7 @@ const BrowserFooter: React.FC<{
   };
   
   const handleExtensionStoreClick = () => {
-    console.log("Extension store clicked, navigating");
-    
-    if (onNavigate) {
-      onNavigate("/extension-store");
-    } else {
-      navigate('/extension-store');
-    }
+    navigate('/extension-store');
     
     toast({
       title: "Opening Extension Store",
@@ -67,11 +52,7 @@ const BrowserFooter: React.FC<{
     });
   };
 
-  // Updated to ALWAYS use React Router navigation for search
   const handleSearchClick = () => {
-    console.log("Search clicked, navigating directly to /search");
-    
-    // Always use the direct React Router navigation for search, bypassing onNavigate
     navigate('/search');
     
     toast({
@@ -80,18 +61,8 @@ const BrowserFooter: React.FC<{
     });
   };
 
-  // Improved check for extension store page
-  const isExtensionStoreActive = 
-    location.pathname === '/extension-store' || 
-    location.pathname === '/' && location.search.includes('extension-store');
-  
-  const isSearchActive = 
-    location.pathname === '/search' || 
-    location.pathname === '/' && location.search.includes('search');
-  
-  // Add a debug log to help troubleshoot
-  console.log("Current path:", location.pathname);
-  console.log("Is extension store active?", isExtensionStoreActive);
+  const isExtensionStoreActive = location.pathname === '/extension-store';
+  const isSearchActive = location.pathname === '/search';
 
   const handleSecurityClick = () => {
     toast({
@@ -103,7 +74,6 @@ const BrowserFooter: React.FC<{
   return (
     <div className="flex items-center justify-between px-4 py-2 nexus-gradient-bg border-t border-border text-xs text-muted-foreground">
       <div className="flex items-center space-x-2">
-        {/* Hide Footer button with updated color to Medium Purple (#7B63DD) */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
@@ -119,7 +89,6 @@ const BrowserFooter: React.FC<{
           </TooltipContent>
         </Tooltip>
 
-        {/* Shield security button */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
@@ -137,7 +106,6 @@ const BrowserFooter: React.FC<{
           </TooltipContent>
         </Tooltip>
 
-        {/* Search button - NEW */}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button 
