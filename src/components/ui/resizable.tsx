@@ -1,3 +1,4 @@
+
 import { GripVertical } from "lucide-react"
 import * as ResizablePrimitive from "react-resizable-panels"
 
@@ -16,7 +17,17 @@ const ResizablePanelGroup = ({
   />
 )
 
-const ResizablePanel = ResizablePrimitive.Panel
+// Add isolation to ResizablePanel for better stacking context management
+const ResizablePanel = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof ResizablePrimitive.Panel>) => (
+  <ResizablePrimitive.Panel
+    className={cn("relative", className)}
+    style={{ isolation: 'isolate' }}
+    {...props}
+  />
+)
 
 const ResizableHandle = ({
   withHandle,

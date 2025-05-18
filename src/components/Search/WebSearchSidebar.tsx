@@ -111,9 +111,10 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     }
   }, [currentQuery]);
 
-  // Handle scroll events to implement infinite scroll
+  // Enhanced scroll handler with better isolation
   const handleScroll = useCallback((e: Event) => {
-    // Stop event propagation to prevent affecting other scroll areas
+    // Prevent default behavior and stop propagation completely
+    e.preventDefault();
     e.stopPropagation();
     
     if (!scrollAreaRef.current || isLoading || !hasMore) return;
@@ -125,21 +126,20 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     const { scrollTop, scrollHeight, clientHeight } = scrollableArea as HTMLDivElement;
     if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
       setPage(prevPage => {
-        // Use the updated page value immediately
         const nextPage = prevPage + 1;
-        // Fetch more results with the new page number
         fetchSearchResults(nextPage, true);
         return nextPage;
       });
     }
-  }, [isLoading, hasMore]); 
+  }, [isLoading, hasMore, fetchSearchResults]); 
 
-  // Add scroll event listener with proper isolation
+  // Add scroll event listener with improved isolation using capture phase
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      scrollableArea.addEventListener('scroll', handleScroll, { passive: false });
-      return () => scrollableArea.removeEventListener('scroll', handleScroll);
+      // Use capture phase to intercept events before they bubble up
+      scrollableArea.addEventListener('scroll', handleScroll, { passive: false, capture: true });
+      return () => scrollableArea.removeEventListener('scroll', handleScroll, { capture: true });
     }
   }, [handleScroll]);
 
@@ -195,9 +195,9 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         )}
       </div>
       
-      {/* Wrap the ScrollArea in a div with flex-grow and overflow-hidden */}
+      {/* Use overscroll-behavior-contain for scroll isolation */}
       <div className="flex-grow overflow-hidden">
-        <ScrollArea className="h-full" ref={scrollAreaRef}>
+        <ScrollArea className="h-full overscroll-contain" ref={scrollAreaRef} style={{ overscrollBehavior: 'contain' }}>
           {isLoading && page === 1 ? (
             <div className="h-32 flex items-center justify-center">
               <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
