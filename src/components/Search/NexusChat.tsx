@@ -2,425 +2,461 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Send, Zap } from "lucide-react";
-import { v4 as uuidv4 } from 'uuid';
-import ConversationMessage from './ConversationMessage';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Loader2, Send, MessageCircle, Zap, Globe } from "lucide-react";
 import { toast } from "sonner";
-import { ChatMessage, ConversationGroup } from './types';
+import ConversationMessage from './ConversationMessage';
+import { classifyQuery } from '@/utils/queryClassifier';
+import { getRealTimeData } from '@/utils/realTimeData';
+import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
 
-// Sample related questions
-const SAMPLE_RELATED_QUESTIONS = [
-  "What are the benefits of decentralized finance?",
-  "How do blockchain transactions work?",
-  "What is the difference between Bitcoin and Ethereum?",
-  "Explain smart contracts in simple terms"
-];
+interface ChatMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+  sources?: {
+    title: string;
+    url: string;
+  }[];
+  hasRealTimeData?: boolean;
+  alternativeResponses?: string[];
+  currentResponseIndex?: number;
+  relatedQuestions?: string[];
+}
 
 interface NexusChatProps {
   onSearch?: (query: string) => void;
 }
 
 const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [loadingDots, setLoadingDots] = useState(0);
-  const [relatedQuestions, setRelatedQuestions] = useState<string[]>(SAMPLE_RELATED_QUESTIONS);
-  
-  // Simplified conversation state (single conversation group)
-  const [conversationGroup, setConversationGroup] = useState<ConversationGroup>({
-    id: 'default-group',
-    messageIds: []
-  });
-  
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isClassifying, setIsClassifying] = useState(false);
+  const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
   
-  // Effect for animating loading dots
-  useEffect(() => {
-    if (isLoading) {
-      const interval = setInterval(() => {
-        setLoadingDots((prev) => (prev + 1) % 4);
-      }, 500);
-      return () => clearInterval(interval);
-    }
-  }, [isLoading]);
-  
-  // Effect for scrolling to bottom when messages change
+  // State to maintain conversation history for GPT
+  const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+
+  // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Helper function to add a message to the conversation
-  const addMessageToConversation = (messageId: string) => {
-    setConversationGroup(prev => ({
-      ...prev,
-      messageIds: [...prev.messageIds, messageId]
-    }));
-  };
-  
-  // Get the visible messages
-  const getVisibleMessages = () => {
-    return messages.filter(message => 
-      conversationGroup.messageIds.includes(message.id)
-    );
-  };
-
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmedValue = inputValue.trim();
-    
-    if (!trimmedValue || isLoading) return;
-    
-    // If onSearch is provided, call it with the input value
-    if (onSearch) {
-      onSearch(trimmedValue);
-    }
-    
-    const userMessageId = uuidv4();
-    
-    // Create a new message object
-    const newUserMessage: ChatMessage = {
-      id: userMessageId,
-      role: "user",
-      content: trimmedValue,
-      timestamp: new Date()
-    };
-    
-    // Update the messages state
-    setMessages(prev => [...prev, newUserMessage]);
-    
-    // Add the message to the conversation group
-    addMessageToConversation(userMessageId);
-    
-    // Clear input
-    setInputValue("");
-    
-    // Generate AI response
-    simulateAIResponse(userMessageId);
-  };
-  
-  // Simulate AI response generation
-  const simulateAIResponse = async (questionId: string) => {
-    setIsLoading(true);
-    
+  // Generate related questions based on the conversation context
+  const generateRelatedQuestions = async (userMessage: string, aiResponse: string): Promise<string[]> => {
     try {
-      // Add delay to simulate processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Create a prompt specifically for related questions
+      const relatedQuestionsPrompt = 
+        "Based on the user's original query and your response, " +
+        "generate exactly 3 follow-up questions that the user might want to ask next. " +
+        "These should be natural continuations of the conversation, exploring related topics or " +
+        "deeper aspects of the current topic. Return ONLY the questions as a JSON array with no additional text. " +
+        "Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
       
-      const responseId = uuidv4();
-      const responseMessage: ChatMessage = {
-        id: responseId,
-        role: "assistant",
-        content: generateRandomResponse(),
-        timestamp: new Date(),
-        hasRealTimeData: Math.random() > 0.5
-      };
+      // Include just enough context for good question generation
+      const contextForQuestions = [
+        { role: "user" as const, content: userMessage },
+        { role: "assistant" as const, content: aiResponse },
+        { role: "user" as const, content: relatedQuestionsPrompt }
+      ];
       
-      setMessages(prev => [...prev, responseMessage]);
-      addMessageToConversation(responseId);
+      const questionsResponse = await getChatGPTResponseWithRealTimeData(
+        relatedQuestionsPrompt,
+        contextForQuestions,
+        null,
+        "Generate diverse, specific, and engaging questions the user might want to ask next"
+      );
       
-      // Also generate new related questions
-      setRelatedQuestions(generateRelatedQuestions());
-    } catch (error) {
-      toast("Error: Failed to generate response");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-  };
-  
-  // Handle related question click
-  const handleRelatedQuestionClick = (question: string) => {
-    setInputValue(question);
-    // Focus the input
-    inputRef.current?.focus();
-  };
-  
-  // Handle regenerating a message
-  const handleRegenerateMessage = async (messageId: string) => {
-    // Find the message to regenerate
-    const messageToRegenerate = messages.find(msg => msg.id === messageId);
-    
-    if (!messageToRegenerate || messageToRegenerate.role !== "assistant") return;
-    
-    // Store the current response as an alternative
-    const updatedMessages = messages.map(msg => {
-      if (msg.id === messageId) {
-        const alternativeResponses = msg.alternativeResponses || [];
-        return {
-          ...msg,
-          alternativeResponses: [...alternativeResponses, msg.content],
-          currentResponseIndex: 0
-        };
-      }
-      return msg;
-    });
-    
-    setMessages(updatedMessages);
-    
-    // Generate a new response
-    setIsLoading(true);
-    
-    try {
-      // Add delay to simulate processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const newContent = generateRandomResponse();
-      
-      // Update the message with the new content
-      setMessages(prev => prev.map(msg => {
-        if (msg.id === messageId) {
-          return {
-            ...msg,
-            content: newContent
-          };
-        }
-        return msg;
-      }));
-    } catch (error) {
-      toast("Error: Failed to regenerate response");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  // Handle selecting an alternative response
-  const handleSelectAlternative = (index: number) => {
-    setMessages(prev => prev.map(msg => {
-      if (msg.alternativeResponses && msg.alternativeResponses.length > 0) {
-        // If selecting the original response (index 0)
-        if (index === 0) {
-          const originalContent = msg.alternativeResponses[0];
-          const remainingAlternatives = msg.alternativeResponses.slice(1);
-          return {
-            ...msg,
-            content: originalContent,
-            alternativeResponses: [msg.content, ...remainingAlternatives.slice(0, -1)],
-            currentResponseIndex: index
-          };
+      // Parse the response to get the questions array
+      try {
+        // The AI might return just the JSON array or it might include explanatory text,
+        // so we need to extract just the array part
+        const jsonMatch = questionsResponse.match(/\[\s*"[^"]+(?:",\s*"[^"]+")*\s*\]/);
+        if (jsonMatch) {
+          const questionsArray = JSON.parse(jsonMatch[0]);
+          return questionsArray.slice(0, 3); // Ensure we only have 3 questions
         }
         
-        // If selecting an alternative
-        const actualIndex = index - 1;
-        if (actualIndex < msg.alternativeResponses.length) {
-          const selectedContent = msg.alternativeResponses[actualIndex];
-          const newAlternatives = [...msg.alternativeResponses];
-          newAlternatives[actualIndex] = msg.content;
-          
-          return {
-            ...msg,
-            content: selectedContent,
-            alternativeResponses: newAlternatives,
-            currentResponseIndex: index
-          };
+        // Fallback method if the regex doesn't match
+        const cleanedResponse = questionsResponse.replace(/^```json\s*|\s*```$/g, '');
+        const questions = JSON.parse(cleanedResponse);
+        return Array.isArray(questions) ? questions.slice(0, 3) : [];
+      } catch (error) {
+        console.error("Failed to parse related questions:", error);
+        // If parsing fails, extract questions using simple heuristics
+        const questionRegex = /(?:^|\n)["']?([^"'\n]+\?)/g;
+        const questions = [];
+        let match;
+        while ((match = questionRegex.exec(questionsResponse)) !== null && questions.length < 3) {
+          questions.push(match[1]);
         }
+        return questions.length > 0 ? questions : [];
       }
-      return msg;
-    }));
+    } catch (error) {
+      console.error("Error generating related questions:", error);
+      return [];
+    }
   };
-  
-  // Handle in-place editing of a message
-  const handleInPlaceEdit = (messageId: string, content: string) => {
-    const messageToEdit = messages.find(msg => msg.id === messageId);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     
-    if (!messageToEdit || messageToEdit.role !== "user") return;
+    if (!currentMessage.trim()) return;
     
-    // Update the message to indicate it's being edited
-    setMessages(prev => prev.map(msg => {
-      if (msg.id === messageId) {
-        return {
-          ...msg,
-          isActivelyEditing: true
-        };
-      }
-      return msg;
-    }));
-  };
-  
-  // Handle canceling the edit
-  const handleCancelEdit = (messageId: string) => {
-    setMessages(prev => prev.map(msg => {
-      if (msg.id === messageId) {
-        return {
-          ...msg,
-          isActivelyEditing: false
-        };
-      }
-      return msg;
-    }));
-  };
-  
-  // Handle saving the edit
-  const handleSaveEdit = (messageId: string, newContent: string) => {
-    // Find the message to edit
-    const messageToEdit = messages.find(msg => msg.id === messageId);
-    
-    if (!messageToEdit || messageToEdit.role !== "user") return;
-    
-    // Update edit history
-    const newEditHistory: EditHistoryItem = {
-      id: uuidv4(),
-      content: messageToEdit.content,
+    // Add user message to conversation
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      content: currentMessage,
       timestamp: new Date()
     };
     
-    // Update the message with the new content and history
-    setMessages(prev => prev.map(msg => {
-      if (msg.id === messageId) {
-        return {
-          ...msg,
-          content: newContent,
-          isActivelyEditing: false,
-          isEdited: true,
-          editHistory: [
-            ...(msg.editHistory || []),
-            newEditHistory
-          ]
-        };
+    setMessages(prevMessages => [...prevMessages, userMessage]);
+    
+    // Call onSearch without updating URL - just inform parent component
+    if (onSearch) {
+      onSearch(currentMessage);
+    }
+    
+    const messageToSearch = currentMessage;
+    setCurrentMessage("");
+    setIsLoading(true);
+    
+    try {
+      // Step 1: Classify the query to determine if it needs real-time data
+      setIsClassifying(true);
+      let realTimeData = null;
+      let needsRealTimeData = false;
+      
+      try {
+        const classification = await classifyQuery(messageToSearch);
+        needsRealTimeData = classification.needsRealTimeData;
+        
+        // Step 2: If needed, fetch real-time data from the web
+        if (needsRealTimeData) {
+          setIsClassifying(false);
+          setIsFetchingRealTimeData(true);
+          
+          // Show loading toast for real-time data
+          toast("Fetching real-time data...", {
+            duration: 3000,
+            icon: <Globe className="h-4 w-4" />
+          });
+          
+          realTimeData = await getRealTimeData(messageToSearch, classification);
+          
+          if (realTimeData) {
+            toast("Found real-time information", {
+              duration: 2000,
+              icon: <Zap className="h-4 w-4 text-nexus-purple" />
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error during classification or data fetching:", error);
+        toast("Couldn't analyze query for real-time needs", {
+          duration: 2000
+        });
+      } finally {
+        setIsClassifying(false);
+        setIsFetchingRealTimeData(false);
       }
-      return msg;
-    }));
+      
+      // Update conversation history with the new user message
+      const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
+      
+      // Generate AI response using ChatGPT API with conversation history and real-time data if available
+      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
+        messageToSearch, 
+        updatedHistory,
+        realTimeData
+      );
+      
+      // Update conversation history with assistant response
+      setConversationHistory([
+        ...updatedHistory,
+        { role: "assistant" as const, content: aiResponseContent }
+      ]);
+      
+      // Create sources from real-time data for citation
+      const sources = realTimeData?.sources || [];
+      
+      // Generate related questions
+      const relatedQuestions = await generateRelatedQuestions(messageToSearch, aiResponseContent);
+      
+      // Add AI response to conversation UI
+      const aiResponse: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: aiResponseContent,
+        timestamp: new Date(),
+        sources: sources.length > 0 ? sources : undefined,
+        hasRealTimeData: !!realTimeData,
+        alternativeResponses: [],
+        currentResponseIndex: 0,
+        relatedQuestions: relatedQuestions
+      };
+      
+      setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("AI error:", error);
+      toast("Failed to fetch response. Please try again later.");
+      
+      // Add a fallback response
+      const fallbackResponse: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, fallbackResponse]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRelatedQuestionClick = (question: string) => {
+    setCurrentMessage(question);
+    // Optional: automatically submit the related question
+    setTimeout(() => handleSubmit(), 100);
+  };
+
+  const handleRegenerateMessage = async (messageId: string) => {
+    // Find the message and its corresponding user message
+    const messageIndex = messages.findIndex(msg => msg.id === messageId);
+    if (messageIndex === -1 || messages[messageIndex].role !== 'assistant') return;
     
-    // Generate a new AI response for the edited message
-    simulateAIResponse(messageId);
-  };
-  
-  // Generate random response for demo
-  const generateRandomResponse = () => {
-    const responses = [
-      "Nexus is a privacy-focused browser with built-in Web3 capabilities. It's designed to protect your digital identity while enabling seamless interaction with decentralized applications.",
-      "The key features of Nexus include end-to-end encryption, a built-in cryptocurrency wallet, decentralized identity management, and protection against tracking and fingerprinting.",
-      "Nexus differs from traditional browsers by prioritizing user privacy and ownership of data. It integrates blockchain technology directly into the browsing experience, allowing for secure transactions and identity verification without relying on centralized authorities.",
-      "Web3 refers to the next generation of the internet, built on decentralized protocols. It aims to reduce reliance on large tech companies by enabling direct peer-to-peer interactions and user ownership of data and digital assets."
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-  
-  // Generate related questions for demo
-  const generateRelatedQuestions = () => {
-    const allQuestions = [
-      "How does Nexus protect my privacy?",
-      "What cryptocurrencies are supported by Nexus?",
-      "Can I import my bookmarks from another browser?",
-      "How do I connect to a decentralized application?",
-      "What is the difference between Web2 and Web3?",
-      "How secure is the Nexus browser?",
-      "Does Nexus block all advertisements?",
-      "How can I stake tokens in Nexus?"
-    ];
+    // Find the preceding user message
+    let userMessageIndex = messageIndex - 1;
+    while (userMessageIndex >= 0 && messages[userMessageIndex].role !== 'user') {
+      userMessageIndex--;
+    }
     
-    // Shuffle and take first 4
-    return [...allQuestions]
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 4);
+    if (userMessageIndex < 0) return;
+    
+    const userMessage = messages[userMessageIndex];
+    const currentAssistantMessage = messages[messageIndex];
+    
+    // Show regenerating toast
+    toast("Regenerating response...", {
+      duration: 3000,
+      icon: <Loader2 className="h-4 w-4 animate-spin" />
+    });
+    
+    setIsLoading(true);
+    
+    try {
+      // Get real-time data if the original response had it
+      let realTimeData = null;
+      
+      if (currentAssistantMessage.hasRealTimeData) {
+        try {
+          setIsFetchingRealTimeData(true);
+          const classification = await classifyQuery(userMessage.content);
+          realTimeData = await getRealTimeData(userMessage.content, classification);
+        } catch (error) {
+          console.error("Error fetching real-time data for regeneration:", error);
+        } finally {
+          setIsFetchingRealTimeData(false);
+        }
+      }
+      
+      // Modified system prompt to ensure variety in responses
+      const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
+      
+      // Generate new response with diversity prompt
+      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
+        userMessage.content,
+        conversationHistory.slice(0, -1), // Exclude the last assistant response
+        realTimeData,
+        diversityPrompt // Pass the diversity prompt
+      );
+      
+      // Create sources from real-time data for citation
+      const sources = realTimeData?.sources || [];
+      
+      // Store the current response in alternatives
+      const alternatives = [
+        ...currentAssistantMessage.alternativeResponses || [],
+        currentAssistantMessage.content
+      ];
+      
+      // Generate new related questions for this regenerated response
+      const relatedQuestions = await generateRelatedQuestions(userMessage.content, aiResponseContent);
+      
+      // Create new AI response
+      const regeneratedResponse: ChatMessage = {
+        id: Date.now().toString(),
+        role: "assistant",
+        content: aiResponseContent,
+        timestamp: new Date(),
+        sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
+        hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
+        alternativeResponses: alternatives,
+        currentResponseIndex: 0,
+        relatedQuestions: relatedQuestions
+      };
+      
+      // Replace the old message with the new one
+      const updatedMessages = [...messages];
+      updatedMessages[messageIndex] = regeneratedResponse;
+      
+      setMessages(updatedMessages);
+      
+      // Update conversation history
+      const updatedHistory = [...conversationHistory];
+      updatedHistory.splice(-1, 1, { role: "assistant", content: aiResponseContent });
+      setConversationHistory(updatedHistory);
+      
+      toast.success("Response regenerated");
+    } catch (error) {
+      console.error("Error regenerating response:", error);
+      toast.error("Failed to regenerate response");
+    } finally {
+      setIsLoading(false);
+    }
   };
   
-  // Get the visible messages
-  const visibleMessages = getVisibleMessages();
+  const handleSelectAlternative = (messageId: string, index: number) => {
+    setMessages(prevMessages => {
+      return prevMessages.map(message => {
+        if (message.id === messageId) {
+          // If we're selecting the current response (index 0), use the main content
+          // Otherwise, use one of the alternative responses
+          let content = message.content;
+          
+          if (index > 0 && message.alternativeResponses && index <= message.alternativeResponses.length) {
+            content = message.alternativeResponses[index - 1];
+          }
+          
+          return {
+            ...message,
+            currentResponseIndex: index,
+            content: index === 0 ? message.content : message.alternativeResponses![index - 1]
+          };
+        }
+        return message;
+      });
+    });
+  };
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full">
-          {visibleMessages.length === 0 ? (
-            <div className="flex h-full items-center justify-center">
-              <div className="max-w-md text-center px-4 py-10">
-                <Zap className="mx-auto h-12 w-12 text-nexus-purple mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Nexus Search</h2>
-                <p className="text-muted-foreground mb-6">
-                  Ask anything about Web3, crypto, or blockchain technology. Nexus AI will provide you with accurate, up-to-date information.
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {relatedQuestions.map((question, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      className="text-left justify-start h-auto py-2"
-                      onClick={() => handleRelatedQuestionClick(question)}
-                    >
-                      {question}
-                    </Button>
-                  ))}
-                </div>
+    <div className="flex flex-col h-full">
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-4 pb-4">
+          {messages.length === 0 ? (
+            <div className="text-center py-10">
+              <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-8 w-8 text-nexus-purple" />
+              </div>
+              <h2 className="text-xl font-medium mb-2">Welcome to Nexus AI</h2>
+              <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                Ask me anything and I'll provide helpful information and answers to your questions.
+              </p>
+              <div className="flex gap-2 flex-wrap justify-center max-w-lg mx-auto">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("What's the weather in New York today?")}
+                  className="flex items-center gap-1"
+                >
+                  <Globe className="h-3 w-3" /> Weather in New York
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("Current USD to EUR exchange rate")}
+                  className="flex items-center gap-1"
+                >
+                  <Zap className="h-3 w-3" /> USD to EUR rate
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("Latest news about SpaceX")}
+                  className="flex items-center gap-1"
+                >
+                  <Globe className="h-3 w-3" /> SpaceX news
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => setCurrentMessage("Show me a chart of Bitcoin price trends")}
+                  className="flex items-center gap-1"
+                >
+                  <Zap className="h-3 w-3" /> Bitcoin price chart
+                </Button>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4 p-4">
-              {visibleMessages.map((message) => (
-                <ConversationMessage
-                  key={message.id}
-                  role={message.role}
-                  content={message.content}
-                  sources={message.sources}
-                  hasRealTimeData={message.hasRealTimeData}
-                  messageId={message.id}
-                  onRegenerateMessage={handleRegenerateMessage}
-                  alternativeResponses={message.alternativeResponses}
-                  currentResponseIndex={message.currentResponseIndex}
-                  onSelectAlternative={handleSelectAlternative}
-                  relatedQuestions={message.role === "assistant" ? relatedQuestions : []}
-                  onRelatedQuestionClick={handleRelatedQuestionClick}
-                  isEdited={message.isEdited}
-                  editHistory={message.editHistory}
-                  isActivelyEditing={message.isActivelyEditing}
-                  onInPlaceEdit={handleInPlaceEdit}
-                  onCancelEdit={handleCancelEdit}
-                  onSaveEdit={handleSaveEdit}
-                  isRegeneratingChain={isLoading}
-                />
-              ))}
-              <div ref={messagesEndRef} />
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="rounded-lg p-4 bg-secondary animate-pulse">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>
-                        Generating response
-                        {'.'.repeat(loadingDots)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            messages.map((message) => (
+              <ConversationMessage 
+                key={message.id}
+                role={message.role}
+                content={message.content}
+                sources={message.sources}
+                hasRealTimeData={message.hasRealTimeData}
+                messageId={message.id}
+                onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
+                alternativeResponses={message.alternativeResponses || []}
+                currentResponseIndex={message.currentResponseIndex || 0}
+                onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
+                relatedQuestions={message.relatedQuestions}
+                onRelatedQuestionClick={handleRelatedQuestionClick}
+              />
+            ))
           )}
-        </ScrollArea>
-      </div>
-      <div className="border-t p-4">
+          <div ref={messagesEndRef} />
+        </div>
+      </ScrollArea>
+      
+      <div className="p-4 border-t border-border mt-auto">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
-            ref={inputRef}
-            placeholder="Ask anything about Web3, blockchain, or crypto..."
-            value={inputValue}
-            onChange={handleInputChange}
-            className="min-h-10 flex-1"
+            placeholder="Ask Nexus anything..."
+            value={currentMessage}
+            onChange={(e) => setCurrentMessage(e.target.value)}
+            className="flex-1 min-h-12 resize-none"
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                handleSubmit(e);
+                handleSubmit();
               }
             }}
           />
           <Button 
             type="submit" 
-            size="icon" 
-            className="h-10 w-10 shrink-0 rounded-full"
-            disabled={isLoading || !inputValue.trim()}
+            className="h-full bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
+            disabled={isLoading}
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <div className="flex items-center gap-1">
+                {isClassifying ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs">Analyzing</span>
+                  </>
+                ) : isFetchingRealTimeData ? (
+                  <>
+                    <Globe className="h-4 w-4 animate-pulse" />
+                    <span className="text-xs">Searching</span>
+                  </>
+                ) : (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="text-xs">Thinking</span>
+                  </>
+                )}
+              </div>
             ) : (
               <Send className="h-4 w-4" />
             )}
-            <span className="sr-only">Send message</span>
           </Button>
         </form>
       </div>

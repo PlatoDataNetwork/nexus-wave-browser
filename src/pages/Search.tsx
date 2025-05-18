@@ -385,9 +385,6 @@ const Search: React.FC = () => {
     );
   };
 
-  // Determine if search form should be shown (hide on nexus tab)
-  const showSearchForm = activeTab !== "nexus";
-
   return (
     <div className="flex flex-col h-full">
       {/* Top navigation bar similar to the home screen */}
@@ -485,34 +482,31 @@ const Search: React.FC = () => {
 
       {/* Search interface */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
-        {/* Conditionally render search form based on active tab */}
-        {showSearchForm && (
-          <form 
-            onSubmit={handleSubmit}
-            className="flex gap-2 mb-4"
+        <form 
+          onSubmit={handleSubmit}
+          className="flex gap-2"
+        >
+          <div className="flex-1 relative">
+            <Input
+              type="search"
+              placeholder="Search the web securely..."
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              className="h-10 pl-10 bg-background"
+            />
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          </div>
+          <Button 
+            type="submit"
+            className="bg-nexus-purple hover:bg-nexus-deep-purple" 
+            disabled={isLoading}
           >
-            <div className="flex-1 relative">
-              <Input
-                type="search"
-                placeholder="Search the web securely..."
-                value={searchQuery}
-                onChange={handleSearchInputChange}
-                className="h-10 pl-10 bg-background"
-              />
-              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            </div>
-            <Button 
-              type="submit"
-              className="bg-nexus-purple hover:bg-nexus-deep-purple" 
-              disabled={isLoading}
-            >
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
-            </Button>
-          </form>
-        )}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
+          </Button>
+        </form>
 
         {/* Tabs and search controls */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-4">
           <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <div className="flex justify-between items-center">
               <TabsList className="bg-secondary/50">

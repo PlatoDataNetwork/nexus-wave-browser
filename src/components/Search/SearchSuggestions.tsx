@@ -5,10 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 interface SearchSuggestionsProps {
   onSelectSuggestion: (suggestion: string) => void;
-  autoSubmit?: boolean;
   suggestions?: string[];
-  isDisabled?: boolean;
-  maxDisplay?: number; // New prop to control how many suggestions to display
 }
 
 const DEFAULT_SUGGESTIONS = [
@@ -22,24 +19,16 @@ const DEFAULT_SUGGESTIONS = [
 
 const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({ 
   onSelectSuggestion,
-  autoSubmit = true,
-  suggestions = DEFAULT_SUGGESTIONS,
-  isDisabled = false,
-  maxDisplay = 4 // Default to show 4 suggestions
+  suggestions = DEFAULT_SUGGESTIONS
 }) => {
-  const handleSuggestionClick = (suggestion: string) => {
-    onSelectSuggestion(suggestion);
-  };
-  
   return (
     <div className="mt-6 flex flex-col gap-2 max-w-md mx-auto">
-      {suggestions.slice(0, maxDisplay).map((suggestion, index) => (
+      {suggestions.slice(0, 4).map((suggestion, index) => (
         <Button 
           key={index}
           variant="outline" 
           className="flex items-center justify-between"
-          onClick={() => handleSuggestionClick(suggestion)}
-          disabled={isDisabled}
+          onClick={() => onSelectSuggestion(suggestion)}
         >
           <span>{suggestion}</span>
           <ArrowRight className="h-4 w-4" />
