@@ -2,7 +2,7 @@
 // realTimeData.ts - This file will be implemented without breaking changes to existing functionality
 import { classifyQuery, ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
-import { fetchAndScrapePage, ScrapedContent } from './contentScraper';
+import { scrapeContent, ScrapedContent } from './contentScraper';
 
 interface RealTimeData {
   content: string;
@@ -24,7 +24,7 @@ export async function getRealTimeData(
     const cachedData = dataCache.get(query);
     if (cachedData) {
       console.info('Using cached data for query:', query);
-      return cachedData;
+      return cachedData as RealTimeData;
     }
     
     // If classification doesn't indicate a need for real-time data, return null
@@ -68,7 +68,7 @@ export async function getRealTimeData(
     const scrapePromises = topResults.map(async (result) => {
       try {
         // Try to fetch and scrape the page
-        const scrapedContent = await fetchAndScrapePage(result.url);
+        const scrapedContent = await scrapeContent(result.url);
         
         if (scrapedContent && scrapedContent.content && scrapedContent.content.length > 100) {
           // If we got good content, use it
@@ -84,7 +84,7 @@ export async function getRealTimeData(
       // Fallback to snippet if scraping fails or content is too short
       return {
         title: result.title,
-        content: result.snippet,
+        content: result.snippets ? result.snippets : "No content available",
         url: result.url,
         isPartial: true
       };
@@ -115,7 +115,7 @@ export async function getRealTimeData(
     // If no content was successfully scraped, return simplified data
     if (contentBlocks.length === 0) {
       const simpleContent = topResults.map(result => 
-        `[${result.title}]: ${result.snippet}`
+        `[${result.title}]: ${result.snippets ? result.snippets : "No snippet available"}`
       ).join('\n\n');
       
       const realTimeData = {
