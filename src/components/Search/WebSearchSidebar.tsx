@@ -121,10 +121,15 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     // Check if scrolled to bottom
     const { scrollTop, scrollHeight, clientHeight } = scrollableArea as HTMLDivElement;
     if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
-      setPage(prevPage => prevPage + 1);
-      fetchSearchResults(page + 1, true);
+      setPage(prevPage => {
+        // Use the updated page value immediately
+        const nextPage = prevPage + 1;
+        // Fetch more results with the new page number
+        fetchSearchResults(nextPage, true);
+        return nextPage;
+      });
     }
-  }, [isLoading, hasMore, page]);
+  }, [isLoading, hasMore]); // Remove page from dependency array as we're using functional updates
 
   // Add scroll event listener
   useEffect(() => {
