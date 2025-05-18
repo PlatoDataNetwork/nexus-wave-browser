@@ -13,8 +13,86 @@ export const openai = new OpenAI({
 const SYSTEM_PROMPTS = {
   DEFAULT: 'You are Nexus Wave\'s helpful assistant answering questions. Be concise but informative.',
   REALTIME: 'You are a fast and efficient information synthesizer. Focus on brevity and clarity in your responses.',
-  DIVERSITY: 'Provide a different perspective or approach than previous responses. Use different examples and structure.'
+  DIVERSITY: 'Provide a different perspective or approach than previous responses. Use different examples and structure.',
+  STREAMING: 'You are a real-time assistant providing information as quickly as possible. Focus on the most important details first.'
 };
+
+/**
+ * Get a streaming AI response using the ChatGPT API
+ * Optimized for the fastest possible first token time
+ */
+export async function getStreamingResponse(
+  message: string,
+  conversationHistory: { role: "user" | "assistant"; content: string }[],
+  onToken: (token: string) => void,
+  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null
+): Promise<void> {
+  try {
+    console.time('streaming-first-token');
+    
+    // Base system prompt - kept very concise for faster first token
+    let systemPrompt = SYSTEM_PROMPTS.STREAMING;
+    
+    // Add real-time data if available (but keep it minimal for faster processing)
+    if (realTimeData) {
+      systemPrompt += `\n\nUse this real-time data:\n${realTimeData.content}`;
+    }
+    
+    // Keep history minimal for faster processing
+    let prunedHistory = conversationHistory;
+    if (conversationHistory.length > 6) {
+      // Keep the first message for context and the most recent messages
+      prunedHistory = [
+        conversationHistory[0],
+        ...conversationHistory.slice(-4)
+      ];
+    }
+    
+    // Construct messages array with system prompt, conversation history, and current message
+    const messages = [
+      {
+        role: 'system',
+        content: systemPrompt
+      },
+      ...prunedHistory,
+      {
+        role: 'user',
+        content: message
+      }
+    ];
+    
+    // Request with optimized parameters for fastest possible first token
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini', // Using mini for faster responses
+      messages: messages as any,
+      temperature: 0.5,
+      max_tokens: 800,
+      stream: true, // Enable streaming
+      frequency_penalty: 0.3
+    });
+    
+    let fullResponse = '';
+    
+    // Process the stream
+    for await (const chunk of stream) {
+      if (chunk.choices[0]?.delta?.content) {
+        const token = chunk.choices[0].delta.content;
+        fullResponse += token;
+        onToken(token);
+      }
+      
+      // Record time to first token
+      if (fullResponse.length > 0 && fullResponse.length <= 20) {
+        console.timeEnd('streaming-first-token');
+      }
+    }
+    
+    return;
+  } catch (error) {
+    console.error("Error fetching streaming AI response:", error);
+    throw error;
+  }
+}
 
 /**
  * Get an AI response using the ChatGPT API with conversation history and real-time data

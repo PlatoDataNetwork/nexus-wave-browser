@@ -3,6 +3,7 @@ import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
 import { searchWithSerper } from '../services/searchApi';
 import { openai } from './openai';
+import { scrapeContent, ScrapedContent } from './contentScraper';
 
 export interface RealTimeData {
   content: string;
@@ -12,12 +13,16 @@ export interface RealTimeData {
 
 /**
  * Fetches real-time data by scraping web results from multiple sources
+ * Enhanced with full content scraping and parallel processing
  */
 export async function getRealTimeData(
   query: string, 
   classification: ClassificationResult
 ): Promise<RealTimeData | null> {
   try {
+    // Measure performance
+    console.time('realtime-data-total');
+    
     // Check cache first for faster responses
     const cacheKey = query.toLowerCase();
     const cachedData = dataCache.get(cacheKey);
@@ -43,75 +48,121 @@ export async function getRealTimeData(
       `${query} ${currentYear}`, 
       `${query} ${currentMonth} ${currentYear}`,
       `latest ${query}`,
-      `current ${query}`,
+      `current ${query} news`,
       ...classification.suggestedSearchTerms
     ];
     
-    // Try different search terms until we get results
-    console.time('searchResults');
-    let searchResponse = null;
-    for (const term of searchTerms) {
-      console.log(`Trying search term: ${term}`);
-      
-      // Get search results using searchWithSerper - use 'day' for most recent results
-      searchResponse = await searchWithSerper(
+    // Try different search terms until we get results - use parallel requests for speed
+    console.time('parallel-search');
+    const searchPromises = searchTerms.map(term => 
+      searchWithSerper(
         term, 
         'search',  
         true,      // Safe search on
-        7,         // Limit to 7 results to get more diverse sources
+        5,         // Limit to 5 results for faster processing
         'day'      // Recent results (last 24 hours)
-      );
-      
-      if (searchResponse && searchResponse.results.length > 0) {
-        console.log(`Found results using term: ${term}`);
-        break;
+      )
+    );
+    
+    // Wait for all searches to complete
+    const searchResults = await Promise.all(searchPromises);
+    
+    // Combine and deduplicate results
+    const allResults = [];
+    const seenUrls = new Set();
+    
+    for (const result of searchResults) {
+      if (result && result.results) {
+        for (const item of result.results) {
+          if (!seenUrls.has(item.url)) {
+            allResults.push(item);
+            seenUrls.add(item.url);
+          }
+        }
       }
     }
     
-    // If we still don't have results, try with a longer time window
-    if (!searchResponse || searchResponse.results.length === 0) {
+    console.timeEnd('parallel-search');
+    
+    // If we have no results, try with a longer time window
+    if (allResults.length === 0) {
       console.log("No day-recent results, trying week-recent results");
-      searchResponse = await searchWithSerper(
+      const weekResults = await searchWithSerper(
         searchTerms[0], 
         'search',
         true,
         7,
         'week'  // Recent results (last week)
       );
+      
+      if (weekResults && weekResults.results) {
+        allResults.push(...weekResults.results);
+      }
     }
     
-    if (!searchResponse || searchResponse.results.length === 0) {
+    if (allResults.length === 0) {
       console.log("No search results found for any search terms");
       return null;
     }
-    console.timeEnd('searchResults');
     
     // Select top relevant results using our scoring system
-    const scoredResults = scoreAndRankResults(searchResponse.results);
+    const scoredResults = scoreAndRankResults(allResults);
     
     // Select top 3 diverse sources based on domain and content
     const selectedResults = selectDiverseSources(scoredResults, 3);
     
     console.log(`Selected ${selectedResults.length} diverse sources to fetch content from`);
     
-    // Extract content from search results - optimized for parallel fetching
-    console.time('contentExtraction');
-    const extractedContentPromises = selectedResults.map(async result => {
-      return {
-        title: result.title,
-        url: result.url,
-        description: result.description,
-        snippets: result.type === 'web' ? [result.description] : [],
-        date: result.date || 'Unknown'
-      };
-    });
+    // Extract content from search results - use full content scraping in parallel
+    console.time('content-extraction');
     
-    const extractedContent = await Promise.all(extractedContentPromises);
-    console.timeEnd('contentExtraction');
+    // Use Promise.allSettled to handle failures gracefully
+    const scrapingPromises = selectedResults.map(result => 
+      scrapeContent(result.url).catch(error => {
+        console.error(`Failed to scrape ${result.url}:`, error);
+        // Return a basic result with just the description from search
+        return {
+          title: result.title,
+          content: result.description,
+          url: result.url,
+          isPartial: true
+        } as ScrapedContent;
+      })
+    );
+    
+    const scrapingResults = await Promise.allSettled(scrapingPromises);
+    
+    // Process results, handling both fulfilled and rejected promises
+    const extractedContent = scrapingResults
+      .map((result, index) => {
+        if (result.status === 'fulfilled' && result.value) {
+          return result.value;
+        } else {
+          // Fallback for failed requests
+          const searchResult = selectedResults[index];
+          return {
+            title: searchResult.title,
+            content: searchResult.description,
+            url: searchResult.url,
+            isPartial: true
+          };
+        }
+      })
+      .filter(Boolean);
+    
+    console.timeEnd('content-extraction');
+    
+    // Check if we have enough content to synthesize
+    if (extractedContent.length === 0) {
+      console.log("No content extracted from any sources");
+      return null;
+    }
     
     // Use GPT to synthesize the information with emphasis on recency and performance
-    console.time('gptSynthesis');
-    const systemPrompt = `You are an expert data extractor focused on SPEED and ACCURACY. Given search results about a query, extract and summarize the most relevant REAL-TIME information.
+    console.time('gpt-synthesis');
+    
+    // Create a detailed but streamlined system prompt
+    const systemPrompt = `You are an expert data synthesizer focused on SPEED and ACCURACY. Given scraped content about a query, extract and summarize the most relevant REAL-TIME information.
        
        IMPORTANT INSTRUCTIONS:
        1. Focus on extracting the MOST CURRENT information available, especially dates, versions, prices, statistics.
@@ -121,11 +172,20 @@ export async function getRealTimeData(
        5. Make it OBVIOUS when data is from today/this week vs. older data
        6. Include NUMERICAL data whenever relevant (prices, percentages, statistics)
        7. DO NOT make up or assume information
-       8. If the search results don't have recent information, CLEARLY STATE that the data may not be current
+       8. Clearly indicate which source provided which information
        9. If information seems outdated or contradictory, acknowledge this in your response
-       10. Keep your response short and to the point - under 250 words if possible
+       10. Keep your response short and to the point - under 300 words
        
        The user's query is about "${query}" and they specifically want the LATEST information.`;
+    
+    // Prepare the content for GPT - make it concise to reduce tokens
+    const contentForGPT = extractedContent.map(content => ({
+      title: content.title,
+      url: content.url,
+      content: content.content.substring(0, 2000), // Limit each content to 2000 chars
+      isPartial: content.isPartial,
+      date: content.date || 'Unknown'
+    }));
     
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini", // Using mini for speed
@@ -138,16 +198,17 @@ export async function getRealTimeData(
           role: "user",
           content: `Original query: "${query}"
             
-            Search results:
-            ${JSON.stringify(extractedContent, null, 2)}
+            Scraped content from sources:
+            ${JSON.stringify(contentForGPT, null, 2)}
             
-            Extract and summarize the most up-to-date information from these results, emphasizing when the data is from. Be CONCISE.`
+            Extract and synthesize the most up-to-date information, emphasizing when the data is from. Be CONCISE.`
         }
       ],
       temperature: 0.3, // Lower temperature for more factual responses
       max_tokens: 350 // Limit token count for faster responses
     });
-    console.timeEnd('gptSynthesis');
+    
+    console.timeEnd('gpt-synthesis');
     
     const extractedData = response.choices[0].message.content || '';
     
@@ -159,6 +220,8 @@ export async function getRealTimeData(
     
     // Cache the results
     dataCache.set(cacheKey, extractedData, sources, contentType);
+    
+    console.timeEnd('realtime-data-total');
     
     return {
       content: extractedData,
