@@ -18,78 +18,54 @@ const SYSTEM_PROMPTS = {
 };
 
 /**
- * Get a streaming AI response using the ChatGPT API
- * Optimized for the fastest possible first token time
+ * Get streaming response from OpenAI
  */
 export async function getStreamingResponse(
-  message: string,
+  query: string,
   conversationHistory: { role: "user" | "assistant"; content: string }[],
   onToken: (token: string) => void,
-  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null
+  realTimeData?: RealTimeData
 ): Promise<void> {
   try {
-    console.time('streaming-first-token');
+    // Check if we have real-time data to enhance the response
+    const systemPrompt = realTimeData 
+      ? `You are a helpful AI assistant with access to real-time information. Use the provided real-time data when relevant to the query.
+         
+         Real-time data available:
+         ${realTimeData.content}
+         
+         Sources: ${realTimeData.sources.map(s => s.title).join(', ')}
+         
+         When using this real-time information, cite the appropriate source(s).
+         
+         For questions unrelated to this real-time data, respond normally as a helpful assistant.
+         Be accurate, helpful, and concise.`
+      : "You are a helpful AI assistant. You provide accurate, relevant, and thoughtful answers to queries. Be clear, concise, and helpful.";
     
-    // Base system prompt - kept very concise for faster first token
-    let systemPrompt = SYSTEM_PROMPTS.STREAMING;
-    
-    // Add real-time data if available (but keep it minimal for faster processing)
-    if (realTimeData) {
-      systemPrompt += `\n\nUse this real-time data:\n${realTimeData.content}`;
-    }
-    
-    // Keep history minimal for faster processing
-    let prunedHistory = conversationHistory;
-    if (conversationHistory.length > 6) {
-      // Keep the first message for context and the most recent messages
-      prunedHistory = [
-        conversationHistory[0],
-        ...conversationHistory.slice(-4)
-      ];
-    }
-    
-    // Construct messages array with system prompt, conversation history, and current message
+    // Create messages array with system prompt and conversation history
     const messages = [
-      {
-        role: 'system',
-        content: systemPrompt
-      },
-      ...prunedHistory,
-      {
-        role: 'user',
-        content: message
-      }
+      { role: "system", content: systemPrompt },
+      ...conversationHistory
     ];
     
-    // Request with optimized parameters for fastest possible first token
+    // Stream the response
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using mini for faster responses
-      messages: messages as any,
-      temperature: 0.5,
-      max_tokens: 800,
-      stream: true, // Enable streaming
-      frequency_penalty: 0.3
+      model: "gpt-4o-mini", // Using mini for speed
+      messages: messages,
+      stream: true,
+      temperature: 0.7
     });
     
-    let fullResponse = '';
-    
-    // Process the stream
+    // Process each chunk as it arrives
     for await (const chunk of stream) {
-      if (chunk.choices[0]?.delta?.content) {
-        const token = chunk.choices[0].delta.content;
-        fullResponse += token;
-        onToken(token);
-      }
-      
-      // Record time to first token
-      if (fullResponse.length > 0 && fullResponse.length <= 20) {
-        console.timeEnd('streaming-first-token');
+      const content = chunk.choices[0]?.delta?.content || "";
+      if (content) {
+        onToken(content);
       }
     }
     
-    return;
   } catch (error) {
-    console.error("Error fetching streaming AI response:", error);
+    console.error("Error streaming response:", error);
     throw error;
   }
 }

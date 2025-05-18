@@ -1,10 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, MessageCircle, Shield, Calendar, Zap } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
+import MessageStream from './MessageStream'; // Import MessageStream component
 import SearchSuggestions from './SearchSuggestions';
 import { SearchResultItem } from '@/services/searchApi';
 import { toast } from "sonner";
@@ -16,8 +16,8 @@ import { getRealTimeData } from '@/utils/realTimeData';
 // Default classification for simple queries
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
   topics: ['general'],
-  queryType: 'informational',
-  suggestedSearchTerms: []
+  suggestedSearchTerms: [],
+  queryType: 'informational' // This is now allowed with the updated interface
 };
 
 /**
@@ -190,7 +190,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       // Wait for real-time data to be available
       const realTimeData = await realTimeDataPromise;
       
-      // Start streaming response
+      // Start streaming response - fixing the argument issue
       await getStreamingResponse(
         messageToSearch,
         updatedHistory,

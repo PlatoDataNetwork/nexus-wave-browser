@@ -73,6 +73,15 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     }
   }, [visibleText]);
   
+  // Create loading and typing indicator components to fix the type error issues
+  const loadingIndicator = (
+    <span className="inline-flex items-center">
+      <Loader2 className="h-3 w-3 animate-spin ml-1 mr-1" />
+    </span>
+  );
+  
+  const typingIndicator = <span className="typing-cursor">|</span>;
+  
   return (
     <div className="message-stream conversation-markdown" ref={contentRef}>
       <ReactMarkdown
@@ -122,13 +131,9 @@ const MessageStream: React.FC<MessageStreamProps> = ({
         }}
       >
         {visibleText || ' '} 
-        {isTyping && <span className="typing-cursor">|</span>}
-        {isLoading && (
-          <span className="inline-flex items-center">
-            <Loader2 className="h-3 w-3 animate-spin ml-1 mr-1" />
-          </span>
-        )}
       </ReactMarkdown>
+      {isTyping && typingIndicator}
+      {isLoading && loadingIndicator}
     </div>
   );
 };

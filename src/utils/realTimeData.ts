@@ -1,4 +1,3 @@
-
 import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
 import { searchWithSerper } from '../services/searchApi';
@@ -9,6 +8,15 @@ export interface RealTimeData {
   content: string;
   sources: Array<{ title: string; url: string }>;
   timestamp: Date;
+}
+
+// Update the ScrapedContent type to ensure date is properly defined
+interface ContentForGPT {
+  title: string;
+  url: string;
+  content: string;
+  isPartial: boolean;
+  date?: string; // Make sure date is defined as optional
 }
 
 /**
@@ -179,12 +187,12 @@ export async function getRealTimeData(
        The user's query is about "${query}" and they specifically want the LATEST information.`;
     
     // Prepare the content for GPT - make it concise to reduce tokens
-    const contentForGPT = extractedContent.map(content => ({
+    const contentForGPT: ContentForGPT[] = extractedContent.map(content => ({
       title: content.title,
       url: content.url,
       content: content.content.substring(0, 2000), // Limit each content to 2000 chars
       isPartial: content.isPartial,
-      date: content.date || 'Unknown'
+      date: 'date' in content && content.date ? content.date : 'Unknown'
     }));
     
     const response = await openai.chat.completions.create({
