@@ -24,7 +24,12 @@ export async function getRealTimeData(
     const cachedData = dataCache.get(query);
     if (cachedData) {
       console.info('Using cached data for query:', query);
-      return cachedData as RealTimeData;
+      // Fix: Convert CachedItem to RealTimeData structure
+      return {
+        content: cachedData.data,
+        timestamp: new Date(cachedData.timestamp),
+        sources: cachedData.sources || []
+      };
     }
     
     // If classification doesn't indicate a need for real-time data, return null
@@ -124,15 +129,22 @@ export async function getRealTimeData(
         sources
       };
       
-      // Cache the data
-      dataCache.set(query, realTimeData);
+      // Fix: Add required parameters to dataCache.set() call
+      dataCache.set(query, simpleContent, sources, 'text');
       return realTimeData;
     }
     
     // Create a rich consolidated content from all scraped sources
     // Format the content to make it easy to read and use by LLMs
     const consolidatedContent = contentBlocks.map(block => {
-      return `## ${block.title}\n${block.content.substring(0, 1000)}${block.content.length > 1000 ? '...' : ''}\n*Source: ${block.source}*`;
+      // Fix: Ensure content is a string before calling substring
+      const blockContent = typeof block.content === 'string' 
+        ? block.content.substring(0, 1000) + (block.content.length > 1000 ? '...' : '')
+        : Array.isArray(block.content)
+          ? block.content.join(' ').slice(0, 1000) + (block.content.join(' ').length > 1000 ? '...' : '')
+          : 'Content unavailable';
+          
+      return `## ${block.title}\n${blockContent}\n*Source: ${block.source}*`;
     }).join('\n\n---\n\n');
     
     // Create real-time data package
@@ -142,8 +154,8 @@ export async function getRealTimeData(
       sources
     };
     
-    // Cache the data for future requests
-    dataCache.set(query, realTimeData);
+    // Fix: Add required parameters to dataCache.set() call
+    dataCache.set(query, consolidatedContent, sources, 'markdown');
     
     return realTimeData;
   } catch (error) {
