@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -137,7 +138,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      scrollableArea.addEventListener('scroll', handleScroll, { passive: true });
+      scrollableArea.addEventListener('scroll', handleScroll, { passive: false });
       return () => scrollableArea.removeEventListener('scroll', handleScroll);
     }
   }, [handleScroll]);
@@ -168,7 +169,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col isolate">
+    <div className="h-full flex flex-col">
       <div className="p-3 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-nexus-purple" />
@@ -194,62 +195,65 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         )}
       </div>
       
-      <ScrollArea className="flex-1" ref={scrollAreaRef}>
-        {isLoading && page === 1 ? (
-          <div className="h-32 flex items-center justify-center">
-            <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
-          </div>
-        ) : error && page === 1 ? (
-          <div className="p-4">
-            <Card className="p-4 flex items-center gap-2 bg-red-500/10">
-              <AlertCircle className="h-5 w-5 text-red-500" />
-              <p className="text-sm">{error}</p>
-            </Card>
-          </div>
-        ) : results.length === 0 ? (
-          <div className="p-4 text-center text-muted-foreground">
-            {currentQuery ? 'No results found' : 'Start a conversation to see web results'}
-          </div>
-        ) : (
-          <div className="p-4 space-y-3">
-            {results.map((result, index) => (
-              <Card key={index} className="p-3 hover:shadow-md transition-all">
-                <a href={result.url} target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-1">
-                      <img 
-                        src={getFaviconUrl(result.url)} 
-                        alt={`${extractDomain(result.url)} favicon`}
-                        className="h-4 w-4"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' fill='%23F0F0F0' /%3E%3Ctext x='8' y='12' font-size='12' text-anchor='middle' fill='%23666666'%3E?%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-medium line-clamp-2 hover:text-nexus-purple">{result.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{result.description}</p>
-                      <div className="text-xs text-muted-foreground mt-1 truncate flex items-center gap-1">
-                        <span className="font-medium text-muted-foreground/70">{extractDomain(result.url)}</span>
+      {/* Wrap the ScrollArea in a div with flex-grow and overflow-hidden */}
+      <div className="flex-grow overflow-hidden">
+        <ScrollArea className="h-full" ref={scrollAreaRef}>
+          {isLoading && page === 1 ? (
+            <div className="h-32 flex items-center justify-center">
+              <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
+            </div>
+          ) : error && page === 1 ? (
+            <div className="p-4">
+              <Card className="p-4 flex items-center gap-2 bg-red-500/10">
+                <AlertCircle className="h-5 w-5 text-red-500" />
+                <p className="text-sm">{error}</p>
+              </Card>
+            </div>
+          ) : results.length === 0 ? (
+            <div className="p-4 text-center text-muted-foreground">
+              {currentQuery ? 'No results found' : 'Start a conversation to see web results'}
+            </div>
+          ) : (
+            <div className="p-4 space-y-3">
+              {results.map((result, index) => (
+                <Card key={index} className="p-3 hover:shadow-md transition-all">
+                  <a href={result.url} target="_blank" rel="noopener noreferrer" className="block">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-1">
+                        <img 
+                          src={getFaviconUrl(result.url)} 
+                          alt={`${extractDomain(result.url)} favicon`}
+                          className="h-4 w-4"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' fill='%23F0F0F0' /%3E%3Ctext x='8' y='12' font-size='12' text-anchor='middle' fill='%23666666'%3E?%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                      </div>
+                      <div className="flex-grow">
+                        <h4 className="text-sm font-medium line-clamp-2 hover:text-nexus-purple">{result.title}</h4>
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{result.description}</p>
+                        <div className="text-xs text-muted-foreground mt-1 truncate flex items-center gap-1">
+                          <span className="font-medium text-muted-foreground/70">{extractDomain(result.url)}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </Card>
-            ))}
-            {isLoading && page > 1 && (
-              <div className="py-3 flex justify-center">
-                <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
-              </div>
-            )}
-            {!hasMore && results.length > 0 && (
-              <div className="py-2 text-center text-xs text-muted-foreground">
-                No more results available
-              </div>
-            )}
-          </div>
-        )}
-      </ScrollArea>
+                  </a>
+                </Card>
+              ))}
+              {isLoading && page > 1 && (
+                <div className="py-3 flex justify-center">
+                  <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
+                </div>
+              )}
+              {!hasMore && results.length > 0 && (
+                <div className="py-2 text-center text-xs text-muted-foreground">
+                  No more results available
+                </div>
+              )}
+            </div>
+          )}
+        </ScrollArea>
+      </div>
     </div>
   );
 };
