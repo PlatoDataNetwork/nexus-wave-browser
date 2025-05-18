@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, RefreshCw, Globe, AlertCircle, SidebarClose } from "lucide-react";
+import { Loader2, RefreshCw, Globe, AlertCircle, SidebarClose, SidebarOpen } from "lucide-react";
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
@@ -128,7 +129,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         return nextPage;
       });
     }
-  }, [isLoading, hasMore]); // Remove page from dependency array as we're using functional updates
+  }, [isLoading, hasMore]); 
 
   // Add scroll event listener
   useEffect(() => {

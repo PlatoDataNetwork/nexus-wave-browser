@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen } from "lucide-react";
+import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen, SidebarClose } from "lucide-react";
 import { toast } from "sonner";
 import ConversationMessage from './ConversationMessage';
 import WebSearchSidebar from './WebSearchSidebar';
@@ -348,8 +348,19 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel defaultSize={70} minSize={50} className="h-full">
+        <ResizablePanel defaultSize={70} minSize={50} className="h-full overflow-hidden">
           <div className="flex flex-col h-full">
+            <div className="p-3 flex items-center justify-between border-b">
+              <h3 className="text-sm font-medium">Nexus Chat</h3>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8"
+                onClick={toggleSidebar}
+              >
+                {showSidebar ? <SidebarClose className="h-4 w-4" /> : <SidebarOpen className="h-4 w-4" />}
+              </Button>
+            </div>
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4 pb-4">
                 {messages.length === 0 ? (
@@ -461,18 +472,6 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                       <Send className="h-4 w-4" />
                     )}
                   </Button>
-                  
-                  {messages.length > 0 && !showSidebar && (
-                    <Button 
-                      type="button" 
-                      size="icon"
-                      variant="outline"
-                      className="h-8 w-8 lg:hidden"
-                      onClick={toggleSidebar}
-                    >
-                      <SidebarOpen className="h-4 w-4" />
-                    </Button>
-                  )}
                 </div>
               </form>
             </div>
@@ -482,7 +481,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         {showSidebar && (
           <>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={30} minSize={20}>
+            <ResizablePanel defaultSize={30} minSize={20} className="overflow-hidden">
               <WebSearchSidebar 
                 currentQuery={currentQuery} 
                 conversations={messages}
