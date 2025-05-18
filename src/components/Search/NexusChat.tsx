@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -348,7 +349,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel defaultSize={70} minSize={50} className="h-full overflow-hidden">
+        <ResizablePanel defaultSize={70} minSize={50} className="h-full overflow-hidden isolate">
           <div className="flex flex-col h-full">
             <div className="p-3 flex items-center justify-between border-b">
               <h3 className="text-sm font-medium">Nexus Chat</h3>
@@ -481,7 +482,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         {showSidebar && (
           <>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={30} minSize={20} className="overflow-hidden">
+            <ResizablePanel defaultSize={30} minSize={20} className="overflow-hidden isolate">
               <WebSearchSidebar 
                 currentQuery={currentQuery} 
                 conversations={messages}

@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, RefreshCw, Globe, AlertCircle, SidebarClose, SidebarOpen } from "lucide-react";
+import { Loader2, RefreshCw, Globe, AlertCircle } from "lucide-react";
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
@@ -112,7 +111,10 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   }, [currentQuery]);
 
   // Handle scroll events to implement infinite scroll
-  const handleScroll = useCallback(() => {
+  const handleScroll = useCallback((e: Event) => {
+    // Stop event propagation to prevent affecting other scroll areas
+    e.stopPropagation();
+    
     if (!scrollAreaRef.current || isLoading || !hasMore) return;
     
     const scrollableArea = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]");
@@ -131,11 +133,11 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     }
   }, [isLoading, hasMore]); 
 
-  // Add scroll event listener
+  // Add scroll event listener with proper isolation
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      scrollableArea.addEventListener('scroll', handleScroll);
+      scrollableArea.addEventListener('scroll', handleScroll, { passive: true });
       return () => scrollableArea.removeEventListener('scroll', handleScroll);
     }
   }, [handleScroll]);
@@ -166,7 +168,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col isolate">
       <div className="p-3 flex items-center justify-between border-b">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-nexus-purple" />
@@ -180,14 +182,6 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
             onClick={handleRefresh}
           >
             <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-8 w-8"
-            onClick={onClose}
-          >
-            <SidebarClose className="h-4 w-4" />
           </Button>
         </div>
       </div>
