@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,13 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  const INITIAL_PAGE_SIZE = 30;
+  const ADDITIONAL_PAGE_SIZE = 10;
 
   // Build context-aware search query based on conversation history
   const buildContextualQuery = () => {
@@ -56,21 +62,30 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   // Fetch search results
-  const fetchSearchResults = async () => {
+  const fetchSearchResults = async (pageNum: number, isLoadMore: boolean = false) => {
     const query = buildContextualQuery();
     if (!query) return;
     
     setIsLoading(true);
-    setError(null);
+    if (!isLoadMore) setError(null);
     
     try {
-      const response = await searchWithSerper(query, "search", true, 5);
+      const pageSize = pageNum === 1 ? INITIAL_PAGE_SIZE : ADDITIONAL_PAGE_SIZE;
+      const response = await searchWithSerper(query, "search", true, pageSize);
       
       if (response.error) {
         setError(response.error);
       }
       
-      setResults(response.results || []);
+      // If loading more results, append to existing results
+      if (isLoadMore && pageNum > 1) {
+        setResults(prevResults => [...prevResults, ...(response.results || [])]);
+      } else {
+        setResults(response.results || []);
+      }
+      
+      // Determine if there are more results to load
+      setHasMore(Boolean(response.results?.length === pageSize));
       
       // Log the query and results for debugging
       console.log("Search query:", query);
@@ -91,12 +106,38 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   // Fetch results when the current query changes
   useEffect(() => {
     if (currentQuery) {
-      fetchSearchResults();
+      setPage(1);
+      fetchSearchResults(1);
     }
   }, [currentQuery]);
 
+  // Handle scroll events to implement infinite scroll
+  const handleScroll = useCallback(() => {
+    if (!scrollAreaRef.current || isLoading || !hasMore) return;
+    
+    const scrollableArea = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]");
+    if (!scrollableArea) return;
+    
+    // Check if scrolled to bottom
+    const { scrollTop, scrollHeight, clientHeight } = scrollableArea as HTMLDivElement;
+    if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
+      setPage(prevPage => prevPage + 1);
+      fetchSearchResults(page + 1, true);
+    }
+  }, [isLoading, hasMore, page]);
+
+  // Add scroll event listener
+  useEffect(() => {
+    const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
+    if (scrollableArea) {
+      scrollableArea.addEventListener('scroll', handleScroll);
+      return () => scrollableArea.removeEventListener('scroll', handleScroll);
+    }
+  }, [handleScroll]);
+
   const handleRefresh = () => {
-    fetchSearchResults();
+    setPage(1);
+    fetchSearchResults(1);
     toast({
       title: "Refreshing results",
       description: "Getting the latest search results"
@@ -138,12 +179,12 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         )}
       </div>
       
-      <ScrollArea className="flex-1">
-        {isLoading ? (
+      <ScrollArea className="flex-1" ref={scrollAreaRef}>
+        {isLoading && page === 1 ? (
           <div className="h-32 flex items-center justify-center">
             <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
           </div>
-        ) : error ? (
+        ) : error && page === 1 ? (
           <div className="p-4">
             <Card className="p-4 flex items-center gap-2 bg-red-500/10">
               <AlertCircle className="h-5 w-5 text-red-500" />
@@ -171,6 +212,16 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
                 </a>
               </Card>
             ))}
+            {isLoading && page > 1 && (
+              <div className="py-3 flex justify-center">
+                <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
+              </div>
+            )}
+            {!hasMore && results.length > 0 && (
+              <div className="py-2 text-center text-xs text-muted-foreground">
+                No more results available
+              </div>
+            )}
           </div>
         )}
       </ScrollArea>
