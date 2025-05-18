@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -128,34 +127,65 @@ export interface SearchAPIResponse {
 // Provider API key
 const SERPER_API_KEY = "a84ace3f3a07c30b70a5cdfb487c85aa14688444"; // This is a sample key
 
+// Create a cached promise for API key fetching to avoid redundant calls
+let apiKeyPromise: Promise<string> | null = null;
+
 // Function to get API key from Supabase if available
 const getApiKey = async (): Promise<string> => {
-  // If Supabase is available, try to get keys from there
-  try {
-    // Check if user is authenticated first to avoid the UUID error
-    const authResponse = await supabase.auth.getUser();
-    if (!authResponse.data.user?.id) {
-      // If no authenticated user, return sample key
+  // Use cached promise if available
+  if (apiKeyPromise) {
+    return apiKeyPromise;
+  }
+  
+  apiKeyPromise = (async () => {
+    // If Supabase is available, try to get keys from there
+    try {
+      // Check if user is authenticated first to avoid the UUID error
+      const authResponse = await supabase.auth.getUser();
+      if (!authResponse.data.user?.id) {
+        // If no authenticated user, return sample key
+        return SERPER_API_KEY;
+      }
+      
+      const { data: keys, error } = await supabase
+        .from("search_api_keys")
+        .select("provider, api_key")
+        .eq("user_id", authResponse.data.user.id)
+        .eq("provider", "serper");
+  
+      if (error) {
+        throw error;
+      }
+  
+      const serperKeyObj = keys?.find(k => k.provider === "serper");
+      return serperKeyObj?.api_key || SERPER_API_KEY;
+    } catch (error) {
+      console.error("Error fetching API key:", error);
+      // Fallback to sample key
       return SERPER_API_KEY;
     }
-    
-    const { data: keys, error } = await supabase
-      .from("search_api_keys")
-      .select("provider, api_key")
-      .eq("user_id", authResponse.data.user.id)
-      .eq("provider", "serper");
+  })();
+  
+  return apiKeyPromise;
+};
 
-    if (error) {
-      throw error;
-    }
+// Cache for search results to avoid redundant API calls
+const searchCache = new Map<string, {
+  timestamp: number;
+  response: SearchAPIResponse;
+}>();
 
-    const serperKeyObj = keys?.find(k => k.provider === "serper");
-    return serperKeyObj?.api_key || SERPER_API_KEY;
-  } catch (error) {
-    console.error("Error fetching API key:", error);
-    // Fallback to sample key
-    return SERPER_API_KEY;
-  }
+// Search cache TTL in milliseconds (5 minutes)
+const CACHE_TTL = 5 * 60 * 1000;
+
+// Generate cache key from search parameters
+const generateCacheKey = (
+  query: string,
+  type: string,
+  safeSearch: boolean,
+  recencyFilter: string
+): string => {
+  return `${query}|${type}|${safeSearch}|${recencyFilter}`;
 };
 
 // Search using Serper API with result count and recency parameter
@@ -170,7 +200,18 @@ export const searchWithSerper = async (
     return { results: [], provider: "serper" };
   }
 
+  // Check cache first
+  const cacheKey = generateCacheKey(query, type, safeSearch, recencyFilter);
+  const cachedResult = searchCache.get(cacheKey);
+  
+  // Use cached result if it's still valid
+  if (cachedResult && (Date.now() - cachedResult.timestamp) < CACHE_TTL) {
+    console.log("Using cached search results for:", query);
+    return cachedResult.response;
+  }
+
   try {
+    console.time('serper-api-call');
     const apiKey = await getApiKey();
 
     const myHeaders = new Headers();
@@ -219,6 +260,7 @@ export const searchWithSerper = async (
     }
 
     const data: SerperSearchResponse = await response.json();
+    console.timeEnd('serper-api-call');
     
     // Handle different response formats based on search type
     let results: SearchResultItem[] = [];
@@ -289,6 +331,12 @@ export const searchWithSerper = async (
     if (data.knowledgeGraph) {
       mappedResponse.knowledgeGraph = data.knowledgeGraph;
     }
+    
+    // Cache the result
+    searchCache.set(cacheKey, {
+      timestamp: Date.now(),
+      response: mappedResponse
+    });
 
     return mappedResponse;
   } catch (error) {

@@ -2,27 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar, Zap } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchResultItem } from '@/services/searchApi';
 import { toast } from "sonner";
 import SearchSidebar from './SearchSidebar';
-
-interface ConversationMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-  sources?: {
-    title: string;
-    url: string;
-  }[];
-}
-
-interface ConversationalSearchProps {
-  onSearch?: (query: string) => void;
-}
+import { getChatGPTResponse } from '@/utils/openai';
 
 // OpenAI API key
 const OPENAI_API_KEY = "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";
@@ -87,52 +73,38 @@ const getSearchResults = async (
   }
 };
 
-// Function to get AI response using ChatGPT API with conversation history
-const getChatGPTResponse = async (
+// Optimized ChatGPT response function with performance enhancements
+const getChatGPTResponseOptimized = async (
   message: string, 
   conversationHistory: { role: "user" | "assistant"; content: string }[]
 ): Promise<string> => {
+  console.time('chatgpt-response');
   try {
-    const systemPrompt = 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.';
-    
-    // Construct messages array with system prompt, conversation history, and current message
-    const messages = [
-      {
-        role: 'system',
-        content: systemPrompt
-      },
-      ...conversationHistory,
-      {
-        role: 'user',
-        content: message
-      }
-    ];
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 500
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.choices[0].message.content;
+    // Use our optimized function from openai.ts
+    const response = await getChatGPTResponse(message, conversationHistory);
+    console.timeEnd('chatgpt-response');
+    return response;
   } catch (error) {
     console.error("Error fetching AI response:", error);
+    console.timeEnd('chatgpt-response');
     throw error;
   }
 };
+
+interface ConversationMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+  sources?: {
+    title: string;
+    url: string;
+  }[];
+}
+
+interface ConversationalSearchProps {
+  onSearch?: (query: string) => void;
+}
 
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
@@ -150,6 +122,9 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
 
+  // State to track if we're using cached results
+  const [usingCachedResults, setUsingCachedResults] = useState(false);
+  
   // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -184,10 +159,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     setIsLoading(true);
     setSearchError("");
     
+    // Start performance timing
+    const startTime = performance.now();
+    
     try {
       // 1. Fetch search results for the sidebar from You.com API
       setSearchLoading(true);
       setLastSearchQuery(messageToSearch);
+      setUsingCachedResults(false);
       
       try {
         // Try to get search results with recency filter
@@ -195,6 +174,16 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
         const results = await getSearchResults(messageToSearch, safeSearch, recencyFilter);
         setSearchResults(results);
         setSearchError("");
+        
+        // Check if we got results quickly (likely cached)
+        const searchTime = performance.now() - startTime;
+        if (searchTime < 200) { // Less than 200ms usually indicates cached results
+          setUsingCachedResults(true);
+          toast("Using cached search results", { 
+            icon: <Zap className="h-4 w-4 text-amber-500" />,
+            duration: 1500
+          });
+        }
       } catch (error) {
         console.error("Search API error:", error);
         setSearchResults([]);
@@ -206,11 +195,17 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       // 2. Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
+      // Use a loading toast to show activity while waiting for AI response
+      const loadingToast = toast.loading("Generating AI response...");
+      
       // 3. Generate AI response using ChatGPT API with conversation history
-      const aiResponseContent = await getChatGPTResponse(
+      const aiResponseContent = await getChatGPTResponseOptimized(
         messageToSearch, 
         updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
       );
+      
+      // Dismiss the loading toast
+      toast.dismiss(loadingToast);
       
       // 4. Update conversation history with assistant response
       setConversationHistory([
@@ -237,6 +232,18 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       };
       
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Calculate and show total response time
+      const totalTime = performance.now() - startTime;
+      console.log(`Total response time: ${totalTime.toFixed(0)}ms`);
+      
+      // Show a toast with the response time if it's fast
+      if (totalTime < 3000) {
+        toast(`Response generated in ${(totalTime/1000).toFixed(1)}s`, {
+          icon: <Zap className="h-4 w-4 text-green-500" />,
+          duration: 1500
+        });
+      }
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
