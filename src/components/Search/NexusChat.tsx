@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -128,14 +127,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Step 1: Classify the query to determine if it needs real-time data
       setIsClassifying(true);
       let realTimeData = null;
-      let needsRealTimeData = false;
+      let shouldFetchRealTimeData = false;
       
       try {
         const classification = await classifyQuery(messageToSearch);
-        needsRealTimeData = classification.needsRealTimeData;
+        shouldFetchRealTimeData = classification.needsRealTimeData || false;
         
         // Step 2: If needed, fetch real-time data from the web
-        if (needsRealTimeData) {
+        if (shouldFetchRealTimeData) {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           

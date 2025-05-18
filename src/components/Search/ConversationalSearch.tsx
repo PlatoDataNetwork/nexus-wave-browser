@@ -17,7 +17,7 @@ import { getRealTimeData } from '@/utils/realTimeData';
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
   topics: ['general'],
   suggestedSearchTerms: [],
-  queryType: 'informational' // This is now allowed with the updated interface
+  queryType: 'informational'
 };
 
 /**
@@ -362,7 +362,8 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     try {
       // Get a new response with a diversity prompt
       const newContent = await getChatGPTResponse(
-        userMessage.content + "\n\nPlease provide a different perspective or approach in your response."
+        userMessage.content + "\n\nPlease provide a different perspective or approach in your response.",
+        updatedConversationHistory
       );
       
       // Update the message with the new content

@@ -1,7 +1,15 @@
+
 import OpenAI from 'openai';
 
 // OpenAI API key
 const OPENAI_API_KEY = "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";
+
+// Define the RealTimeData interface
+export interface RealTimeData {
+  content: string;
+  timestamp: Date;
+  sources: { title: string; url: string }[];
+}
 
 // Create a single instance of the OpenAI client
 export const openai = new OpenAI({
@@ -44,8 +52,11 @@ export async function getStreamingResponse(
     
     // Create messages array with system prompt and conversation history
     const messages = [
-      { role: "system", content: systemPrompt },
-      ...conversationHistory
+      { role: "system" as const, content: systemPrompt },
+      ...conversationHistory.map(msg => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content
+      }))
     ];
     
     // Stream the response
@@ -111,12 +122,15 @@ export async function getChatGPTResponseWithRealTimeData(
     // Construct messages array with system prompt, conversation history, and current message
     const messages = [
       {
-        role: 'system',
+        role: 'system' as const,
         content: systemPrompt
       },
-      ...prunedHistory,
+      ...prunedHistory.map(msg => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content
+      })),
       {
-        role: 'user',
+        role: 'user' as const,
         content: message
       }
     ];
@@ -127,7 +141,7 @@ export async function getChatGPTResponseWithRealTimeData(
     // Request with optimized parameters for faster responses
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Using mini for faster responses
-      messages: messages as any,
+      messages: messages,
       temperature: temperature,
       max_tokens: 600, // Reduced for faster response times
       presence_penalty: 0.3, // Slight penalty to discourage repetition
@@ -149,7 +163,7 @@ export async function getChatGPTResponseWithRealTimeData(
  */
 export async function getChatGPTResponse(
   message: string, 
-  conversationHistory: { role: "user" | "assistant"; content: string }[]
+  conversationHistory: { role: "user" | "assistant"; content: string }[] = []
 ): Promise<string> {
   try {
     console.time('gpt-simple-response-time');
@@ -169,19 +183,22 @@ export async function getChatGPTResponse(
     // Construct messages array with system prompt, conversation history, and current message
     const messages = [
       {
-        role: 'system',
+        role: 'system' as const,
         content: systemPrompt
       },
-      ...prunedHistory,
+      ...prunedHistory.map(msg => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content
+      })),
       {
-        role: 'user',
+        role: 'user' as const,
         content: message
       }
     ];
     
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
-      messages: messages as any,
+      messages: messages,
       temperature: 0.5,
       max_tokens: 500,
       presence_penalty: 0.3,

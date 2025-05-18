@@ -73,7 +73,7 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     }
   }, [visibleText]);
   
-  // Create loading and typing indicator components to fix the type error issues
+  // Create loading and typing indicator components for JSX
   const loadingIndicator = (
     <span className="inline-flex items-center">
       <Loader2 className="h-3 w-3 animate-spin ml-1 mr-1" />

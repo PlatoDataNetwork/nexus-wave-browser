@@ -1,3 +1,4 @@
+
 import { openai } from './openai';
 
 /**
@@ -6,7 +7,9 @@ import { openai } from './openai';
 export interface ClassificationResult {
   topics: string[];
   suggestedSearchTerms: string[];
-  queryType?: string; // Making queryType optional to match existing usage
+  queryType?: string;
+  needsRealTimeData?: boolean;
+  confidence?: number;
 }
 
 /**
