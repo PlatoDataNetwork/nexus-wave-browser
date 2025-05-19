@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 
 /**
@@ -8,9 +7,8 @@ export interface ScrapedContent {
   title: string;
   content: string;
   url: string;
+  isPartial?: boolean;
   date?: string;
-  author?: string;
-  isPartial: boolean;
 }
 
 /**

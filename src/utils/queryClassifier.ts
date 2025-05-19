@@ -1,4 +1,3 @@
-
 import { openai } from './openai';
 
 export interface ClassificationResult {
@@ -6,6 +5,7 @@ export interface ClassificationResult {
   confidence: number; // 0-1
   topics: string[]; // e.g., "weather", "exchange rate", "news", etc.
   suggestedSearchTerms: string[]; // optimized search terms for web scraping
+  queryType?: string; // Adding this property to fix the error
 }
 
 /**

@@ -127,13 +127,13 @@ const MessageStream: React.FC<MessageStreamProps> = ({
         }}
       >
         {visibleText || ' '} 
-        {isTyping && <span className="typing-cursor">|</span>}
-        {isLoading && (
-          <span className="inline-flex items-center">
-            <Loader2 className="h-3 w-3 animate-spin ml-1 mr-1" />
-          </span>
-        )}
       </ReactMarkdown>
+      {isTyping && <span className="typing-cursor">|</span>}
+      {isLoading && (
+        <span className="inline-flex items-center">
+          <Loader2 className="h-3 w-3 animate-spin ml-1 mr-1" />
+        </span>
+      )}
     </div>
   );
 };

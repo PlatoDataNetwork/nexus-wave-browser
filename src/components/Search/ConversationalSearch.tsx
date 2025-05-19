@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +15,8 @@ import { getRealTimeData } from '@/utils/realTimeData';
 // Default classification for simple queries
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
   topics: ['general'],
-  queryType: 'informational',
+  needsRealTimeData: false,
+  confidence: 0.5,
   suggestedSearchTerms: []
 };
 

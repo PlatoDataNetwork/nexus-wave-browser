@@ -1,4 +1,3 @@
-
 import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
 import { searchWithSerper } from '../services/searchApi';
@@ -184,7 +183,7 @@ export async function getRealTimeData(
       url: content.url,
       content: content.content.substring(0, 2000), // Limit each content to 2000 chars
       isPartial: content.isPartial,
-      date: content.date || 'Unknown'
+      date: 'date' in content ? content.date : 'Unknown'
     }));
     
     const response = await openai.chat.completions.create({
