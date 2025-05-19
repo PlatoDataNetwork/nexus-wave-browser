@@ -9,6 +9,7 @@ export interface ScrapedContent {
   url: string;
   isPartial?: boolean;
   date?: string;
+  author?: string;
 }
 
 /**
