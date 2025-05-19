@@ -7,8 +7,7 @@ import {
   Globe, 
   FileSearch,
   Zap,
-  MessageSquare,
-  Activity
+  MessageSquare
 } from "lucide-react";
 
 export type ProcessStage = 
@@ -17,7 +16,6 @@ export type ProcessStage =
   | 'searching' 
   | 'processing' 
   | 'generating'
-  | 'streaming'
   | 'complete';
 
 interface ProcessingStatusProps {
@@ -32,7 +30,6 @@ const ProcessingStatus: React.FC<ProcessingStatusProps> = ({ stage }) => {
     searching: 40,
     processing: 60,
     generating: 80,
-    streaming: 90,
     complete: 100
   };
 
@@ -43,7 +40,6 @@ const ProcessingStatus: React.FC<ProcessingStatusProps> = ({ stage }) => {
     searching: "Searching the web for real-time data...",
     processing: "Processing information from sources...",
     generating: "Creating your personalized response...",
-    streaming: "Streaming response...",
     complete: "Response ready"
   };
 
@@ -58,8 +54,6 @@ const ProcessingStatus: React.FC<ProcessingStatusProps> = ({ stage }) => {
         return <FileSearch className="h-4 w-4 animate-pulse text-green-500" />;
       case 'generating':
         return <Zap className="h-4 w-4 animate-pulse text-purple-500" />;
-      case 'streaming':
-        return <Activity className="h-4 w-4 animate-pulse text-indigo-500" />;
       case 'complete':
         return <MessageSquare className="h-4 w-4 text-nexus-purple" />;
       default:

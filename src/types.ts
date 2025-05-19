@@ -19,5 +19,4 @@ export interface ChatMessage {
   alternativeResponses?: string[];
   currentResponseIndex?: number;
   relatedQuestions?: string[];
-  isStreaming?: boolean;
 }

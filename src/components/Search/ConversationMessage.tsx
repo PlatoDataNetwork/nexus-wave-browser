@@ -38,7 +38,6 @@ interface ConversationMessageProps {
   onSelectAlternative?: (index: number) => void;
   relatedQuestions?: string[];
   onRelatedQuestionClick?: (question: string) => void;
-  isStreaming?: boolean;
 }
 
 // Define a proper type for the code component props
