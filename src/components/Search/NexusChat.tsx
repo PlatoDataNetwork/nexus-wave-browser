@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen, SidebarClose } from "lucide-react";
+import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen, SidebarClose, Activity } from "lucide-react";
 import { toast } from "sonner";
 import ConversationMessage from './ConversationMessage';
 import WebSearchSidebar from './WebSearchSidebar';
 import ProcessingStatus, { ProcessStage } from './ProcessingStatus';
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
-import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
+import { getChatGPTResponseWithRealTimeData, streamChatGPTResponse } from '@/utils/openai';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { ChatMessage } from '@/types';
 
@@ -25,6 +25,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [currentQuery, setCurrentQuery] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // State for streaming responses
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedContent, setStreamedContent] = useState("");
+  const [currentStreamingMessageId, setCurrentStreamingMessageId] = useState<string | null>(null);
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
@@ -164,50 +169,98 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
+      // Create a placeholder message for streaming
+      const placeholderMessageId = Date.now().toString();
+      const placeholderMessage: ChatMessage = {
+        id: placeholderMessageId,
+        role: "assistant",
+        content: "",
+        timestamp: new Date(),
+        sources: realTimeData?.sources,
+        hasRealTimeData: !!realTimeData,
+        alternativeResponses: [],
+        currentResponseIndex: 0,
+        isStreaming: true
+      };
+      
+      // Add the placeholder message to the UI
+      setMessages(prev => [...prev, placeholderMessage]);
+      setCurrentStreamingMessageId(placeholderMessageId);
+      
       // Move to generating response stage
       setProcessStage('generating');
+      setIsStreaming(true);
+      setStreamedContent("");
       
-      // Generate AI response using ChatGPT API with conversation history and real-time data if available
-      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
+      // Set up the streaming handler
+      const handleChunk = (chunk: string) => {
+        setStreamedContent(prev => prev + chunk);
+        
+        // Update the placeholder message with the streaming content
+        setMessages(prevMessages => {
+          return prevMessages.map(msg => {
+            if (msg.id === placeholderMessageId) {
+              return {
+                ...msg,
+                content: msg.content + chunk
+              };
+            }
+            return msg;
+          });
+        });
+      };
+      
+      // Change to streaming stage once we start receiving content
+      setTimeout(() => {
+        setProcessStage('streaming');
+      }, 500);
+      
+      // Generate AI response using streaming
+      await streamChatGPTResponse(
         messageToSearch, 
         updatedHistory,
-        realTimeData
+        realTimeData,
+        undefined, // No diversity prompt for initial responses
+        handleChunk
       );
+      
+      // Streaming complete - finalize the message
+      const finalContent = streamedContent || "I apologize, but I couldn't generate a response.";
       
       // Update conversation history with assistant response
       setConversationHistory([
         ...updatedHistory,
-        { role: "assistant" as const, content: aiResponseContent }
+        { role: "assistant" as const, content: finalContent }
       ]);
       
-      // Create sources from real-time data for citation
-      const sources = realTimeData?.sources || [];
-      
       // Generate related questions
-      const relatedQuestions = await generateRelatedQuestions(messageToSearch, aiResponseContent);
+      const relatedQuestions = await generateRelatedQuestions(messageToSearch, finalContent);
       
-      // Add AI response to conversation UI
-      const aiResponse: ChatMessage = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: aiResponseContent,
-        timestamp: new Date(),
-        sources: sources.length > 0 ? sources : undefined,
-        hasRealTimeData: !!realTimeData,
-        alternativeResponses: [],
-        currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
-      };
+      // Update the streaming message to final state
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => {
+          if (msg.id === placeholderMessageId) {
+            return {
+              ...msg,
+              content: finalContent,
+              isStreaming: false,
+              relatedQuestions: relatedQuestions
+            };
+          }
+          return msg;
+        });
+      });
       
       // Complete the process
       setProcessStage('complete');
-      
-      setMessages(prev => [...prev, aiResponse]);
+      setIsStreaming(false);
+      setCurrentStreamingMessageId(null);
       
       // Reset process stage after a short delay
       setTimeout(() => {
         setProcessStage('idle');
       }, 1000);
+      
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
@@ -219,8 +272,19 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, fallbackResponse]);
+      
+      setMessages(prev => {
+        // If there was a streaming message, replace it
+        if (currentStreamingMessageId) {
+          return prev.map(msg => msg.id === currentStreamingMessageId ? fallbackResponse : msg);
+        }
+        // Otherwise add the fallback
+        return [...prev, fallbackResponse];
+      });
+      
       setProcessStage('idle');
+      setIsStreaming(false);
+      setCurrentStreamingMessageId(null);
     } finally {
       setIsLoading(false);
     }
@@ -278,61 +342,120 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       setProcessStage('generating');
       
-      // Generate new response with diversity prompt
-      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
-        userMessage.content,
-        conversationHistory.slice(0, -1), // Exclude the last assistant response
-        realTimeData,
-        diversityPrompt // Pass the diversity prompt
-      );
-      
-      // Create sources from real-time data for citation
-      const sources = realTimeData?.sources || [];
-      
       // Store the current response in alternatives
       const alternatives = [
         ...currentAssistantMessage.alternativeResponses || [],
         currentAssistantMessage.content
       ];
       
-      // Generate new related questions for this regenerated response
-      const relatedQuestions = await generateRelatedQuestions(userMessage.content, aiResponseContent);
+      // Mark the message as streaming for UI updates
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => {
+          if (msg.id === messageId) {
+            return {
+              ...msg,
+              content: "",
+              isStreaming: true
+            };
+          }
+          return msg;
+        });
+      });
       
-      // Create new AI response
-      const regeneratedResponse: ChatMessage = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: aiResponseContent,
-        timestamp: new Date(),
-        sources: sources.length > 0 ? sources : currentAssistantMessage.sources,
-        hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
-        alternativeResponses: alternatives,
-        currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
+      setCurrentStreamingMessageId(messageId);
+      setIsStreaming(true);
+      setStreamedContent("");
+      
+      // Set up streaming handler
+      let streamedResponseContent = "";
+      const handleChunk = (chunk: string) => {
+        streamedResponseContent += chunk;
+        
+        // Update the existing message with streaming content
+        setMessages(prevMessages => {
+          return prevMessages.map(msg => {
+            if (msg.id === messageId) {
+              return {
+                ...msg,
+                content: streamedResponseContent
+              };
+            }
+            return msg;
+          });
+        });
       };
       
-      // Replace the old message with the new one
-      const updatedMessages = [...messages];
-      updatedMessages[messageIndex] = regeneratedResponse;
+      // Change to streaming stage
+      setTimeout(() => {
+        setProcessStage('streaming');
+      }, 500);
       
-      setMessages(updatedMessages);
+      // Generate new response with diversity prompt using streaming
+      await streamChatGPTResponse(
+        userMessage.content,
+        conversationHistory.slice(0, -1), // Exclude the last assistant response
+        realTimeData,
+        diversityPrompt, // Pass the diversity prompt
+        handleChunk
+      );
+      
+      // Generate new related questions for this regenerated response
+      const relatedQuestions = await generateRelatedQuestions(userMessage.content, streamedResponseContent);
+      
+      // Update the message with final content
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => {
+          if (msg.id === messageId) {
+            return {
+              ...msg,
+              content: streamedResponseContent,
+              sources: msg.sources,
+              hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
+              alternativeResponses: alternatives,
+              currentResponseIndex: 0,
+              relatedQuestions: relatedQuestions,
+              isStreaming: false
+            };
+          }
+          return msg;
+        });
+      });
       
       // Update conversation history
       const updatedHistory = [...conversationHistory];
-      updatedHistory.splice(-1, 1, { role: "assistant", content: aiResponseContent });
+      updatedHistory.splice(-1, 1, { role: "assistant", content: streamedResponseContent });
       setConversationHistory(updatedHistory);
       
       toast.success("Response regenerated");
       
       // Complete the process
       setProcessStage('complete');
+      setIsStreaming(false);
+      setCurrentStreamingMessageId(null);
+      
       setTimeout(() => {
         setProcessStage('idle');
       }, 1000);
     } catch (error) {
       console.error("Error regenerating response:", error);
       toast.error("Failed to regenerate response");
+      
+      // Reset the message to its original state
+      setMessages(prevMessages => {
+        return prevMessages.map(msg => {
+          if (msg.id === messageId) {
+            return {
+              ...currentAssistantMessage,
+              isStreaming: false
+            };
+          }
+          return msg;
+        });
+      });
+      
       setProcessStage('idle');
+      setIsStreaming(false);
+      setCurrentStreamingMessageId(null);
     } finally {
       setIsLoading(false);
     }
@@ -442,6 +565,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                       onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
                       relatedQuestions={message.relatedQuestions}
                       onRelatedQuestionClick={handleRelatedQuestionClick}
+                      isStreaming={message.isStreaming}
                     />
                   ))
                 )}
@@ -450,7 +574,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </ScrollArea>
             
             {/* Add processing status component */}
-            {isLoading && (
+            {(isLoading || isStreaming) && (
               <div className="px-4 py-2 border-t border-border">
                 <ProcessingStatus stage={processStage} />
               </div>
@@ -474,7 +598,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   <Button 
                     type="submit" 
                     className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-                    disabled={isLoading}
+                    disabled={isLoading || isStreaming}
                   >
                     {isLoading ? (
                       <div className="flex items-center gap-1">
@@ -536,6 +660,13 @@ function getProcessStageIcon(stage: ProcessStage) {
         <>
           <Loader2 className="h-4 w-4 animate-spin" />
           <span className="text-xs">Generating</span>
+        </>
+      );
+    case 'streaming':
+      return (
+        <>
+          <Activity className="h-4 w-4 animate-pulse" />
+          <span className="text-xs">Streaming</span>
         </>
       );
     default:
