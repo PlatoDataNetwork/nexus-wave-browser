@@ -101,6 +101,48 @@
     isolation: isolate;
   }
 
+  /* Fix for fixed positioning in scrollable areas */
+  .fixed-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background-color: hsl(var(--background));
+  }
+  
+  /* Add shadow to fixed elements for better visual hierarchy */
+  .shadow-up {
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Improved scrollable container for chat applications */
+  .chat-scrollable-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .chat-scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: var(--input-height, 4rem);
+  }
+  
+  .chat-input-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background-color: hsl(var(--background));
+    border-top: 1px solid hsl(var(--border));
+    padding: 1rem;
+  }
+  
+  /* Scroll anchor for auto-scrolling */
+  .scroll-anchor {
+    height: 1px;
+    margin-bottom: 1rem;
+  }
+
   .nexus-gradient-bg {
     background: linear-gradient(135deg, #0A0B12 0%, #121824 100%);
   }

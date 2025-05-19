@@ -24,7 +24,7 @@ const ResizablePanel = ({
 }: React.ComponentProps<typeof ResizablePrimitive.Panel>) => (
   <ResizablePrimitive.Panel
     className={cn("relative", className)}
-    style={{ isolation: 'isolate' }}
+    style={{ isolation: 'isolate', overscrollBehavior: 'contain' }}
     {...props}
   />
 )

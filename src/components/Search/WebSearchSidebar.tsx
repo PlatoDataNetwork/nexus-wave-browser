@@ -170,7 +170,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-3 flex items-center justify-between border-b">
+      {/* Fixed header */}
+      <div className="p-3 flex items-center justify-between border-b sticky top-0 z-10 bg-background">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-nexus-purple" />
           <h3 className="text-sm font-medium">Web Results</h3>
@@ -187,17 +188,18 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         </div>
       </div>
       
-      <div className="p-3">
+      {/* Search query label, also sticky */}
+      <div className="p-3 sticky top-[53px] z-10 bg-background">
         {currentQuery && (
-          <Badge variant="outline" className="bg-nexus-purple/10 text-xs mb-3">
+          <Badge variant="outline" className="bg-nexus-purple/10 text-xs">
             Searching for: {currentQuery}
           </Badge>
         )}
       </div>
       
-      {/* Use overscroll-behavior-contain for scroll isolation */}
-      <div className="flex-grow overflow-hidden">
-        <ScrollArea className="h-full overscroll-contain" ref={scrollAreaRef} style={{ overscrollBehavior: 'contain' }}>
+      {/* Scrollable content area */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full overscroll-contain" ref={scrollAreaRef}>
           {isLoading && page === 1 ? (
             <div className="h-32 flex items-center justify-center">
               <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />

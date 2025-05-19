@@ -66,10 +66,15 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     };
   }, [streamingText, isLoading, visibleText, onStreamingComplete]);
   
-  // Scroll to bottom when new content is added
+  // Scroll to bottom when new content is added - improved with better timing
   useEffect(() => {
     if (contentRef.current) {
-      contentRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      // Use a small timeout to ensure the DOM has updated
+      const scrollTimeout = setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
+      
+      return () => clearTimeout(scrollTimeout);
     }
   }, [visibleText]);
   
