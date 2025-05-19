@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, RefreshCw, Globe, AlertCircle } from "lucide-react";
+import { Loader2, RefreshCw, Globe, AlertCircle, X } from "lucide-react";
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
@@ -169,7 +168,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col h-full">
       {/* Fixed header */}
       <div className="p-3 flex items-center justify-between border-b sticky top-0 z-10 bg-background">
         <div className="flex items-center gap-2">
@@ -185,11 +184,19 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
           >
             <RefreshCw className="h-4 w-4" />
           </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
       </div>
       
-      {/* Search query label, also sticky */}
-      <div className="p-3 sticky top-[53px] z-10 bg-background">
+      {/* Search query label, also fixed/sticky under the header */}
+      <div className="p-3 bg-background sticky top-[49px] z-10">
         {currentQuery && (
           <Badge variant="outline" className="bg-nexus-purple/10 text-xs">
             Searching for: {currentQuery}
@@ -199,7 +206,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
       
       {/* Scrollable content area */}
       <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full overscroll-contain" ref={scrollAreaRef}>
+        <ScrollArea className="h-full" ref={scrollAreaRef}>
           {isLoading && page === 1 ? (
             <div className="h-32 flex items-center justify-center">
               <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
