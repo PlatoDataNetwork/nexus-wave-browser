@@ -19,8 +19,12 @@ export interface ChatMessage {
   alternativeResponses?: string[];
   currentResponseIndex?: number;
   relatedQuestions?: string[];
-  // New progress tracking properties
+  // Progress tracking properties
   processingStage?: 'classifying' | 'searching' | 'processing' | 'generating' | 'complete'; 
   progressPercentage?: number;
   stageDetails?: string;
+  // Additional streaming and loading state properties
+  isLoading?: boolean;
+  isStreaming?: boolean;
+  streamProgress?: number;
 }
