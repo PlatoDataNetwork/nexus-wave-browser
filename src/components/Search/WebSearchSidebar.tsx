@@ -1,12 +1,11 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, RefreshCw, Globe, AlertCircle, X } from "lucide-react";
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
+import SearchSidebarHeader from './SearchSidebarHeader';
+import SearchResultsList from './SearchResultsList';
 
 interface WebSearchSidebarProps {
   currentQuery: string;
@@ -130,7 +129,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         return nextPage;
       });
     }
-  }, [isLoading, hasMore, fetchSearchResults]); 
+  }, [isLoading, hasMore]); 
 
   // Add scroll event listener with improved isolation using capture phase
   useEffect(() => {
@@ -151,116 +150,25 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     });
   };
 
-  // Extract domain from URL for display and favicon
-  const extractDomain = (url: string) => {
-    try {
-      const domain = new URL(url).hostname.replace(/^www\./, '');
-      return domain;
-    } catch (e) {
-      return url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
-    }
-  };
-
-  // Generate favicon URL
-  const getFaviconUrl = (url: string) => {
-    const domain = extractDomain(url);
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-  };
-
   return (
     <div className="flex flex-col h-full">
-      {/* Fixed header */}
-      <div className="p-3 flex items-center justify-between border-b sticky top-0 z-10 bg-background">
-        <div className="flex items-center gap-2">
-          <Globe className="h-4 w-4 text-nexus-purple" />
-          <h3 className="text-sm font-medium">Web Results</h3>
-        </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-8 w-8"
-            onClick={handleRefresh}
-          >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-8 w-8"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
-      
-      {/* Search query label, also fixed/sticky under the header */}
-      <div className="p-3 bg-background sticky top-[49px] z-10">
-        {currentQuery && (
-          <Badge variant="outline" className="bg-nexus-purple/10 text-xs">
-            Searching for: {currentQuery}
-          </Badge>
-        )}
-      </div>
+      <SearchSidebarHeader 
+        currentQuery={currentQuery}
+        onRefresh={handleRefresh}
+        onClose={onClose}
+      />
       
       {/* Scrollable content area */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full" ref={scrollAreaRef}>
-          {isLoading && page === 1 ? (
-            <div className="h-32 flex items-center justify-center">
-              <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
-            </div>
-          ) : error && page === 1 ? (
-            <div className="p-4">
-              <Card className="p-4 flex items-center gap-2 bg-red-500/10">
-                <AlertCircle className="h-5 w-5 text-red-500" />
-                <p className="text-sm">{error}</p>
-              </Card>
-            </div>
-          ) : results.length === 0 ? (
-            <div className="p-4 text-center text-muted-foreground">
-              {currentQuery ? 'No results found' : 'Start a conversation to see web results'}
-            </div>
-          ) : (
-            <div className="p-4 space-y-3">
-              {results.map((result, index) => (
-                <Card key={index} className="p-3 hover:shadow-md transition-all">
-                  <a href={result.url} target="_blank" rel="noopener noreferrer" className="block">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <img 
-                          src={getFaviconUrl(result.url)} 
-                          alt={`${extractDomain(result.url)} favicon`}
-                          className="h-4 w-4"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' fill='%23F0F0F0' /%3E%3Ctext x='8' y='12' font-size='12' text-anchor='middle' fill='%23666666'%3E?%3C/text%3E%3C/svg%3E";
-                          }}
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        <h4 className="text-sm font-medium line-clamp-2 hover:text-nexus-purple">{result.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{result.description}</p>
-                        <div className="text-xs text-muted-foreground mt-1 truncate flex items-center gap-1">
-                          <span className="font-medium text-muted-foreground/70">{extractDomain(result.url)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </Card>
-              ))}
-              {isLoading && page > 1 && (
-                <div className="py-3 flex justify-center">
-                  <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
-                </div>
-              )}
-              {!hasMore && results.length > 0 && (
-                <div className="py-2 text-center text-xs text-muted-foreground">
-                  No more results available
-                </div>
-              )}
-            </div>
-          )}
+          <SearchResultsList 
+            results={results}
+            error={error}
+            isLoading={isLoading}
+            page={page}
+            hasMore={hasMore}
+            currentQuery={currentQuery}
+          />
         </ScrollArea>
       </div>
     </div>
