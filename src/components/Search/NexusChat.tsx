@@ -1,16 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen, SidebarClose } from "lucide-react";
 import { toast } from "sonner";
-import ConversationMessage from './ConversationMessage';
 import WebSearchSidebar from './WebSearchSidebar';
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { ChatMessage } from '@/types';
+import ConversationDisplay from './ConversationDisplay';
+import ChatInput from './ChatInput';
 
 interface NexusChatProps {
   onSearch?: (query: string) => void;
@@ -24,17 +23,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [currentQuery, setCurrentQuery] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
-
-  // Scroll to bottom when messages update
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
 
   // Generate related questions based on the conversation context
   const generateRelatedQuestions = async (userMessage: string, aiResponse: string): Promise<string[]> => {
@@ -143,7 +134,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           // Show loading toast for real-time data
           toast("Fetching real-time data...", {
             duration: 3000,
-            icon: <Globe className="h-4 w-4" />
+            icon: <span className="h-4 w-4" />
           });
           
           realTimeData = await getRealTimeData(messageToSearch, classification);
@@ -151,7 +142,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           if (realTimeData) {
             toast("Found real-time information", {
               duration: 2000,
-              icon: <Zap className="h-4 w-4 text-nexus-purple" />
+              icon: <span className="h-4 w-4 text-nexus-purple" />
             });
           }
         }
@@ -243,7 +234,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     // Show regenerating toast
     toast("Regenerating response...", {
       duration: 3000,
-      icon: <Loader2 className="h-4 w-4 animate-spin" />
+      icon: <span className="h-4 w-4 animate-spin" />
     });
     
     setIsLoading(true);
@@ -365,121 +356,23 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           </div>
           
           {/* Messages area - takes available space minus headers and input area */}
-          <div className="flex-grow overflow-hidden relative">
-            <ScrollArea className="h-full pb-24"> {/* Add padding at bottom for input area */}
-              <div className="p-4 space-y-4">
-                {messages.length === 0 ? (
-                  <div className="text-center py-10">
-                    <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
-                      <MessageCircle className="h-8 w-8 text-nexus-purple" />
-                    </div>
-                    <h2 className="text-xl font-medium mb-2">Welcome to Nexus AI</h2>
-                    <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                      Ask me anything and I'll provide helpful information and answers to your questions.
-                    </p>
-                    <div className="flex gap-2 flex-wrap justify-center max-w-lg mx-auto">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setCurrentMessage("What's the weather in New York today?")}
-                        className="flex items-center gap-1"
-                      >
-                        <Globe className="h-3 w-3" /> Weather in New York
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setCurrentMessage("Current USD to EUR exchange rate")}
-                        className="flex items-center gap-1"
-                      >
-                        <Zap className="h-3 w-3" /> USD to EUR rate
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setCurrentMessage("Latest news about SpaceX")}
-                        className="flex items-center gap-1"
-                      >
-                        <Globe className="h-3 w-3" /> SpaceX news
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setCurrentMessage("Show me a chart of Bitcoin price trends")}
-                        className="flex items-center gap-1"
-                      >
-                        <Zap className="h-3 w-3" /> Bitcoin price chart
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  messages.map((message) => (
-                    <ConversationMessage 
-                      key={message.id}
-                      role={message.role}
-                      content={message.content}
-                      sources={message.sources}
-                      hasRealTimeData={message.hasRealTimeData}
-                      messageId={message.id}
-                      onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
-                      alternativeResponses={message.alternativeResponses || []}
-                      currentResponseIndex={message.currentResponseIndex || 0}
-                      onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
-                      relatedQuestions={message.relatedQuestions}
-                      onRelatedQuestionClick={handleRelatedQuestionClick}
-                    />
-                  ))
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-            </ScrollArea>
-          </div>
+          <ConversationDisplay 
+            messages={messages}
+            setCurrentMessage={setCurrentMessage}
+            handleRegenerateMessage={handleRegenerateMessage}
+            handleSelectAlternative={handleSelectAlternative}
+            handleRelatedQuestionClick={handleRelatedQuestionClick}
+          />
           
           {/* Fixed input area at the bottom */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background/95 backdrop-blur-sm shadow-md z-10">
-            <form onSubmit={handleSubmit} className="flex gap-2">
-              <Textarea
-                placeholder="Ask Nexus anything..."
-                value={currentMessage}
-                onChange={(e) => setCurrentMessage(e.target.value)}
-                className="flex-1 min-h-12 resize-none"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-              />
-              <Button 
-                type="submit" 
-                className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-1">
-                    {isClassifying ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="text-xs">Analyzing</span>
-                      </>
-                    ) : isFetchingRealTimeData ? (
-                      <>
-                        <Globe className="h-4 w-4 animate-pulse" />
-                        <span className="text-xs">Searching</span>
-                      </>
-                    ) : (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="text-xs">Thinking</span>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <Send className="h-4 w-4" />
-                )}
-              </Button>
-            </form>
-          </div>
+          <ChatInput 
+            currentMessage={currentMessage}
+            setCurrentMessage={setCurrentMessage}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            isClassifying={isClassifying}
+            isFetchingRealTimeData={isFetchingRealTimeData}
+          />
         </ResizablePanel>
         
         {showSidebar && (
