@@ -10,6 +10,67 @@ export const openai = new OpenAI({
   dangerouslyAllowBrowser: true // Normally in production, API calls should go through a backend
 });
 
+// Stream the response from ChatGPT
+export async function streamChatGPTResponse(
+  message: string,
+  conversationHistory: { role: "user" | "assistant"; content: string }[],
+  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null,
+  diversityPrompt?: string,
+  onChunk?: (chunk: string) => void
+): Promise<void> {
+  try {
+    // Base system prompt
+    let systemPrompt = 'You are Nexus Wave\'s helpful assistant answering questions for users. Your responses should be well-formatted with proper markdown, especially for code blocks. When showing code examples, use triple backticks with the language name, e.g. ```javascript. Be concise but informative.';
+    
+    // Add diversity prompt if provided (for regeneration requests)
+    if (diversityPrompt) {
+      systemPrompt += `\n\n${diversityPrompt}`;
+    }
+    
+    // Enhance the system prompt with real-time data if available
+    if (realTimeData) {
+      const formattedTime = realTimeData.timestamp.toLocaleString();
+      systemPrompt += `\n\nIMPORTANT: I'm providing you with real-time information from web searches performed at ${formattedTime}. Use this information to enhance your response when answering the user's question. The following is real-time data from the web:\n\n${realTimeData.content}\n\nIncorporate this information naturally in your response when relevant, but still maintain your helpful assistant personality. If the web data appears incomplete or irrelevant, use your own knowledge to supplement it.`;
+    }
+    
+    // Construct messages array with system prompt, conversation history, and current message
+    const messages = [
+      {
+        role: 'system' as const,
+        content: systemPrompt
+      },
+      ...conversationHistory,
+      {
+        role: 'user' as const,
+        content: message
+      }
+    ];
+    
+    // Increase temperature for regeneration requests to get more varied responses
+    const temperature = diversityPrompt ? 0.9 : 0.7;
+    
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages,
+      temperature,
+      max_tokens: 800,
+      stream: true
+    });
+    
+    // Process the stream
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content && onChunk) {
+        onChunk(content);
+      }
+    }
+    
+  } catch (error) {
+    console.error("Error streaming AI response:", error);
+    throw error;
+  }
+}
+
 /**
  * Get an AI response using the ChatGPT API with conversation history and real-time data
  */

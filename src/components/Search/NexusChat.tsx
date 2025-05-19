@@ -6,6 +6,7 @@ import { Loader2, Send, MessageCircle, Zap, Globe, SidebarOpen, SidebarClose } f
 import { toast } from "sonner";
 import ConversationMessage from './ConversationMessage';
 import WebSearchSidebar from './WebSearchSidebar';
+import ProcessingStatus, { ProcessStage } from './ProcessingStatus';
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
@@ -20,8 +21,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isClassifying, setIsClassifying] = useState(false);
-  const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
+  const [processStage, setProcessStage] = useState<ProcessStage>('idle');
   const [showSidebar, setShowSidebar] = useState(false);
   const [currentQuery, setCurrentQuery] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -122,10 +122,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     const messageToSearch = currentMessage;
     setCurrentMessage("");
     setIsLoading(true);
+    setProcessStage('classifying');
     
     try {
       // Step 1: Classify the query to determine if it needs real-time data
-      setIsClassifying(true);
       let realTimeData = null;
       let needsRealTimeData = false;
       
@@ -135,8 +135,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         
         // Step 2: If needed, fetch real-time data from the web
         if (needsRealTimeData) {
-          setIsClassifying(false);
-          setIsFetchingRealTimeData(true);
+          setProcessStage('searching');
           
           // Show loading toast for real-time data
           toast("Fetching real-time data...", {
@@ -159,12 +158,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
           duration: 2000
         });
       } finally {
-        setIsClassifying(false);
-        setIsFetchingRealTimeData(false);
+        setProcessStage('processing');
       }
       
       // Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
+      
+      // Move to generating response stage
+      setProcessStage('generating');
       
       // Generate AI response using ChatGPT API with conversation history and real-time data if available
       const aiResponseContent = await getChatGPTResponseWithRealTimeData(
@@ -198,7 +199,15 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         relatedQuestions: relatedQuestions
       };
       
+      // Complete the process
+      setProcessStage('complete');
+      
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Reset process stage after a short delay
+      setTimeout(() => {
+        setProcessStage('idle');
+      }, 1000);
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
@@ -211,6 +220,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackResponse]);
+      setProcessStage('idle');
     } finally {
       setIsLoading(false);
     }
@@ -245,6 +255,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     });
     
     setIsLoading(true);
+    setProcessStage('classifying');
     
     try {
       // Get real-time data if the original response had it
@@ -252,18 +263,20 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       
       if (currentAssistantMessage.hasRealTimeData) {
         try {
-          setIsFetchingRealTimeData(true);
+          setProcessStage('searching');
           const classification = await classifyQuery(userMessage.content);
           realTimeData = await getRealTimeData(userMessage.content, classification);
         } catch (error) {
           console.error("Error fetching real-time data for regeneration:", error);
         } finally {
-          setIsFetchingRealTimeData(false);
+          setProcessStage('processing');
         }
       }
       
       // Modified system prompt to ensure variety in responses
       const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
+      
+      setProcessStage('generating');
       
       // Generate new response with diversity prompt
       const aiResponseContent = await getChatGPTResponseWithRealTimeData(
@@ -310,9 +323,16 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       setConversationHistory(updatedHistory);
       
       toast.success("Response regenerated");
+      
+      // Complete the process
+      setProcessStage('complete');
+      setTimeout(() => {
+        setProcessStage('idle');
+      }, 1000);
     } catch (error) {
       console.error("Error regenerating response:", error);
       toast.error("Failed to regenerate response");
+      setProcessStage('idle');
     } finally {
       setIsLoading(false);
     }
@@ -429,6 +449,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               </div>
             </ScrollArea>
             
+            {/* Add processing status component */}
+            {isLoading && (
+              <div className="px-4 py-2 border-t border-border">
+                <ProcessingStatus stage={processStage} />
+              </div>
+            )}
+            
             <div className="p-4 border-t border-border mt-auto">
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Textarea
@@ -451,22 +478,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                   >
                     {isLoading ? (
                       <div className="flex items-center gap-1">
-                        {isClassifying ? (
-                          <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span className="text-xs">Analyzing</span>
-                          </>
-                        ) : isFetchingRealTimeData ? (
-                          <>
-                            <Globe className="h-4 w-4 animate-pulse" />
-                            <span className="text-xs">Searching</span>
-                          </>
-                        ) : (
-                          <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span className="text-xs">Thinking</span>
-                          </>
-                        )}
+                        {getProcessStageIcon(processStage)}
                       </div>
                     ) : (
                       <Send className="h-4 w-4" />
@@ -494,5 +506,46 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     </div>
   );
 };
+
+// Helper function to get the appropriate icon for each processing stage
+function getProcessStageIcon(stage: ProcessStage) {
+  switch (stage) {
+    case 'classifying':
+      return (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Analyzing</span>
+        </>
+      );
+    case 'searching':
+      return (
+        <>
+          <Globe className="h-4 w-4 animate-pulse" />
+          <span className="text-xs">Searching</span>
+        </>
+      );
+    case 'processing':
+      return (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Processing</span>
+        </>
+      );
+    case 'generating':
+      return (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Generating</span>
+        </>
+      );
+    default:
+      return (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-xs">Thinking</span>
+        </>
+      );
+  }
+}
 
 export default NexusChat;
