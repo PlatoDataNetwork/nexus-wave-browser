@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -341,7 +342,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
-        {/* Chat panel - main content area with proper layout */}
+        {/* Chat panel - main content area with flexbox layout */}
         <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full">
           <div className="p-3 flex items-center justify-between border-b bg-background">
             <h3 className="text-sm font-medium">Nexus Chat</h3>
@@ -355,9 +356,10 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </Button>
           </div>
           
-          <div className="flex flex-col flex-grow overflow-hidden">
-            {/* Messages area with proper flexbox layout */}
-            <div className="flex-grow overflow-hidden relative">
+          {/* Restructured content area with strict flex layout */}
+          <div className="flex flex-col flex-grow h-full overflow-hidden">
+            {/* Messages area - takes all available space but allows for input at bottom */}
+            <div className="flex-grow overflow-hidden min-h-0">
               <ConversationDisplay 
                 messages={messages}
                 setCurrentMessage={setCurrentMessage}
@@ -367,8 +369,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
               />
             </div>
             
-            {/* Input area with fixed position at bottom */}
-            <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur-sm shadow-md z-10">
+            {/* Input area - fixed at bottom with shadow and z-index */}
+            <div className="flex-shrink-0 z-10 shadow-md">
               <ChatInput 
                 currentMessage={currentMessage}
                 setCurrentMessage={setCurrentMessage}
@@ -384,8 +386,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
         {showSidebar && (
           <>
             <ResizableHandle withHandle />
-            {/* Sidebar panel - completely self-contained */}
-            <ResizablePanel defaultSize={30} minSize={20} className="h-full">
+            {/* Sidebar panel - contained and isolated */}
+            <ResizablePanel defaultSize={30} minSize={20} className="h-full overflow-hidden isolate">
               <WebSearchSidebar 
                 currentQuery={currentQuery} 
                 conversations={messages}

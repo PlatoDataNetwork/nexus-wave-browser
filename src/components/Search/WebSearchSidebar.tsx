@@ -110,15 +110,18 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     }
   }, [currentQuery]);
 
-  // Enhanced scroll handler with better isolation
-  const handleScroll = useCallback(() => {
+  // Improved scroll handler with better isolation and propagation control
+  const handleScroll = useCallback((e: Event) => {
+    // Prevent event propagation to parent elements
+    e.stopPropagation();
+    
     if (!scrollAreaRef.current || isLoading || !hasMore || isLoadingMore.current) return;
     
-    const scrollableArea = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]");
+    const scrollableArea = e.currentTarget as HTMLDivElement;
     if (!scrollableArea) return;
     
     // Check if scrolled to bottom
-    const { scrollTop, scrollHeight, clientHeight } = scrollableArea as HTMLDivElement;
+    const { scrollTop, scrollHeight, clientHeight } = scrollableArea;
     if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
       isLoadingMore.current = true;
       setPage(prevPage => {
@@ -135,10 +138,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      // Pass the handler directly to avoid event propagation issues
-      const scrollHandler = () => handleScroll();
-      scrollableArea.addEventListener('scroll', scrollHandler);
-      return () => scrollableArea.removeEventListener('scroll', scrollHandler);
+      scrollableArea.addEventListener('scroll', handleScroll as EventListener, { passive: true });
+      return () => scrollableArea.removeEventListener('scroll', handleScroll as EventListener);
     }
   }, [handleScroll]);
 
@@ -152,27 +153,29 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full overscroll-none">
+    <div className="flex flex-col h-full isolate">
       <SearchSidebarHeader 
         currentQuery={currentQuery}
         onRefresh={handleRefresh}
         onClose={onClose}
       />
       
-      {/* Scrollable content area with overscroll-none to prevent chaining */}
-      <div className="flex-1 overflow-hidden overscroll-none">
+      {/* Scrollable content area with improved isolation */}
+      <div className="flex-1 overflow-hidden isolate">
         <ScrollArea 
           className="h-full overscroll-none" 
           ref={scrollAreaRef}
         >
-          <SearchResultsList 
-            results={results}
-            error={error}
-            isLoading={isLoading}
-            page={page}
-            hasMore={hasMore}
-            currentQuery={currentQuery}
-          />
+          <div className="overscroll-none" onClick={e => e.stopPropagation()}>
+            <SearchResultsList 
+              results={results}
+              error={error}
+              isLoading={isLoading}
+              page={page}
+              hasMore={hasMore}
+              currentQuery={currentQuery}
+            />
+          </div>
         </ScrollArea>
       </div>
     </div>
