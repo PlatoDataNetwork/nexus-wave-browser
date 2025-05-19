@@ -22,7 +22,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isFetchingRealTimeData,
 }) => {
   return (
-    <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background/95 backdrop-blur-sm shadow-md z-10">
+    <div className="p-4">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Textarea
           placeholder="Ask Nexus anything..."

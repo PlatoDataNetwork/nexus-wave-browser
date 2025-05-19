@@ -25,6 +25,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const isLoadingMore = useRef(false);
 
   const INITIAL_PAGE_SIZE = 30;
   const ADDITIONAL_PAGE_SIZE = 10;
@@ -110,12 +111,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   }, [currentQuery]);
 
   // Enhanced scroll handler with better isolation
-  const handleScroll = useCallback((e: Event) => {
-    // Prevent default behavior and stop propagation completely
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (!scrollAreaRef.current || isLoading || !hasMore) return;
+  const handleScroll = useCallback(() => {
+    if (!scrollAreaRef.current || isLoading || !hasMore || isLoadingMore.current) return;
     
     const scrollableArea = scrollAreaRef.current.querySelector("[data-radix-scroll-area-viewport]");
     if (!scrollableArea) return;
@@ -123,21 +120,25 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     // Check if scrolled to bottom
     const { scrollTop, scrollHeight, clientHeight } = scrollableArea as HTMLDivElement;
     if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
+      isLoadingMore.current = true;
       setPage(prevPage => {
         const nextPage = prevPage + 1;
-        fetchSearchResults(nextPage, true);
+        fetchSearchResults(nextPage, true).finally(() => {
+          isLoadingMore.current = false;
+        });
         return nextPage;
       });
     }
   }, [isLoading, hasMore]); 
 
-  // Add scroll event listener with improved isolation using capture phase
+  // Add scroll event listener with improved isolation
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      // Use capture phase to intercept events before they bubble up
-      scrollableArea.addEventListener('scroll', handleScroll, { passive: false, capture: true });
-      return () => scrollableArea.removeEventListener('scroll', handleScroll, { capture: true });
+      // Pass the handler directly to avoid event propagation issues
+      const scrollHandler = () => handleScroll();
+      scrollableArea.addEventListener('scroll', scrollHandler);
+      return () => scrollableArea.removeEventListener('scroll', scrollHandler);
     }
   }, [handleScroll]);
 
@@ -151,16 +152,19 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overscroll-none">
       <SearchSidebarHeader 
         currentQuery={currentQuery}
         onRefresh={handleRefresh}
         onClose={onClose}
       />
       
-      {/* Scrollable content area */}
-      <div className="flex-1 overflow-hidden">
-        <ScrollArea className="h-full" ref={scrollAreaRef}>
+      {/* Scrollable content area with overscroll-none to prevent chaining */}
+      <div className="flex-1 overflow-hidden overscroll-none">
+        <ScrollArea 
+          className="h-full overscroll-none" 
+          ref={scrollAreaRef}
+        >
           <SearchResultsList 
             results={results}
             error={error}

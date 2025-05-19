@@ -342,7 +342,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
         {/* Chat panel - main content area with proper layout */}
-        <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full relative">
+        <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full">
           <div className="p-3 flex items-center justify-between border-b bg-background">
             <h3 className="text-sm font-medium">Nexus Chat</h3>
             <Button 
@@ -355,24 +355,30 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </Button>
           </div>
           
-          {/* Messages area - takes available space minus headers and input area */}
-          <ConversationDisplay 
-            messages={messages}
-            setCurrentMessage={setCurrentMessage}
-            handleRegenerateMessage={handleRegenerateMessage}
-            handleSelectAlternative={handleSelectAlternative}
-            handleRelatedQuestionClick={handleRelatedQuestionClick}
-          />
-          
-          {/* Fixed input area at the bottom */}
-          <ChatInput 
-            currentMessage={currentMessage}
-            setCurrentMessage={setCurrentMessage}
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-            isClassifying={isClassifying}
-            isFetchingRealTimeData={isFetchingRealTimeData}
-          />
+          <div className="flex flex-col flex-grow overflow-hidden">
+            {/* Messages area with proper flexbox layout */}
+            <div className="flex-grow overflow-hidden relative">
+              <ConversationDisplay 
+                messages={messages}
+                setCurrentMessage={setCurrentMessage}
+                handleRegenerateMessage={handleRegenerateMessage}
+                handleSelectAlternative={handleSelectAlternative}
+                handleRelatedQuestionClick={handleRelatedQuestionClick}
+              />
+            </div>
+            
+            {/* Input area with fixed position at bottom */}
+            <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur-sm shadow-md z-10">
+              <ChatInput 
+                currentMessage={currentMessage}
+                setCurrentMessage={setCurrentMessage}
+                handleSubmit={handleSubmit}
+                isLoading={isLoading}
+                isClassifying={isClassifying}
+                isFetchingRealTimeData={isFetchingRealTimeData}
+              />
+            </div>
+          </div>
         </ResizablePanel>
         
         {showSidebar && (
