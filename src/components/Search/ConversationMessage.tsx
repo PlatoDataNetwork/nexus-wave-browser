@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -22,6 +21,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import MessageStream from './MessageStream';
+import ResponseProgress from './ResponseProgress';
 
 interface Source {
   title: string;
@@ -43,6 +43,9 @@ interface ConversationMessageProps {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
+  processingStage?: 'classifying' | 'searching' | 'processing' | 'generating' | 'complete';
+  progressPercentage?: number;
+  stageDetails?: string;
 }
 
 // Define a proper type for the code component props
@@ -68,7 +71,10 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   onRelatedQuestionClick,
   isLoading = false,
   isStreaming = false,
-  streamProgress = 0
+  streamProgress = 0,
+  processingStage = 'classifying',
+  progressPercentage = 0,
+  stageDetails
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -176,6 +182,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
   };
   
+  // Determine if we should show the progress indicator
+  const showProgressIndicator = isLoading && role === "assistant" && processingStage !== 'complete';
+  
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
       <div
@@ -193,6 +202,17 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               <div className="mb-3 text-xs flex items-center gap-1 text-nexus-purple">
                 <Globe className="h-3 w-3" />
                 <span>Enhanced with real-time web data</span>
+              </div>
+            )}
+            
+            {/* Show progress indicator when loading */}
+            {showProgressIndicator && (
+              <div className="mb-4">
+                <ResponseProgress 
+                  stage={processingStage} 
+                  percentage={progressPercentage}
+                  showDetails={true}
+                />
               </div>
             )}
             
@@ -414,8 +434,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
-            {/* Display loading state */}
-            {isLoading && !isStreaming && (
+            {/* Display loading state - show only if not streaming and not showing progress indicator */}
+            {isLoading && !isStreaming && !showProgressIndicator && (
               <div className="flex items-center justify-center gap-2 py-6">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Generating response...</span>

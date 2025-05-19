@@ -50,6 +50,12 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                 onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
                 relatedQuestions={message.relatedQuestions}
                 onRelatedQuestionClick={handleRelatedQuestionClick}
+                isLoading={message.isLoading}
+                isStreaming={message.isStreaming}
+                streamProgress={message.streamProgress}
+                processingStage={message.processingStage}
+                progressPercentage={message.progressPercentage}
+                stageDetails={message.stageDetails}
               />
             ))
           )}

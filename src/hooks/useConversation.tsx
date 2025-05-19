@@ -106,6 +106,21 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
     setCurrentMessage("");
     setIsLoading(true);
     
+    // Create placeholder for assistant response
+    const assistantMessageId = `asst-${Date.now().toString()}`;
+    const assistantMessage: ChatMessage = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+      isLoading: true,
+      processingStage: 'classifying',
+      progressPercentage: 10,
+      stageDetails: "Analyzing your query..."
+    };
+    
+    setMessages(prevMessages => [...prevMessages, assistantMessage]);
+    
     try {
       // Step 1: Classify the query to determine if it needs real-time data
       setIsClassifying(true);
@@ -113,6 +128,20 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       let needsRealTimeData = false;
       
       try {
+        // Update progress
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  processingStage: 'classifying',
+                  progressPercentage: 20,
+                  stageDetails: "Determining information needs..."
+                }
+              : msg
+          )
+        );
+        
         const classification = await classifyQuery(messageToSearch);
         needsRealTimeData = classification.needsRealTimeData;
         
@@ -121,6 +150,20 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           
+          // Update progress
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              msg.id === assistantMessageId
+                ? { 
+                    ...msg, 
+                    processingStage: 'searching',
+                    progressPercentage: 40,
+                    stageDetails: "Searching the web for real-time data..."
+                  }
+                : msg
+            )
+          );
+          
           // Show loading toast for real-time data
           toast("Fetching real-time data...", {
             duration: 3000,
@@ -128,6 +171,20 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
           });
           
           realTimeData = await getRealTimeData(messageToSearch, classification);
+          
+          // Update progress
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              msg.id === assistantMessageId
+                ? { 
+                    ...msg, 
+                    processingStage: 'processing',
+                    progressPercentage: 60,
+                    stageDetails: "Processing web information..."
+                  }
+                : msg
+            )
+          );
           
           if (realTimeData) {
             toast("Found real-time information", {
@@ -144,6 +201,20 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       } finally {
         setIsClassifying(false);
         setIsFetchingRealTimeData(false);
+        
+        // Update progress
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  processingStage: 'generating',
+                  progressPercentage: 75,
+                  stageDetails: "Crafting your response..."
+                }
+              : msg
+          )
+        );
       }
       
       // Update conversation history with the new user message
@@ -154,6 +225,20 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
         messageToSearch, 
         updatedHistory,
         realTimeData
+      );
+      
+      // Update progress to complete
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === assistantMessageId
+            ? { 
+                ...msg, 
+                processingStage: 'complete',
+                progressPercentage: 100,
+                stageDetails: "Response completed"
+              }
+            : msg
+        )
       );
       
       // Update conversation history with assistant response
@@ -170,7 +255,7 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       
       // Add AI response to conversation UI
       const aiResponse: ChatMessage = {
-        id: Date.now().toString(),
+        id: assistantMessageId,
         role: "assistant",
         content: aiResponseContent,
         timestamp: new Date(),
@@ -178,22 +263,31 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
         hasRealTimeData: !!realTimeData,
         alternativeResponses: [],
         currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
+        relatedQuestions: relatedQuestions,
+        processingStage: 'complete',
+        progressPercentage: 100
       };
       
-      setMessages(prev => [...prev, aiResponse]);
+      setMessages(prev => 
+        prev.map(msg => msg.id === assistantMessageId ? aiResponse : msg)
+      );
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
       
       // Add a fallback response
       const fallbackResponse: ChatMessage = {
-        id: Date.now().toString(),
+        id: assistantMessageId,
         role: "assistant",
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
-        timestamp: new Date()
+        timestamp: new Date(),
+        processingStage: 'complete',
+        progressPercentage: 100
       };
-      setMessages(prev => [...prev, fallbackResponse]);
+      
+      setMessages(prev => 
+        prev.map(msg => msg.id === assistantMessageId ? fallbackResponse : msg)
+      );
     } finally {
       setIsLoading(false);
     }
@@ -229,6 +323,22 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
     
     setIsLoading(true);
     
+    // Update message to show processing state
+    setMessages(prevMessages => 
+      prevMessages.map(msg => 
+        msg.id === messageId
+          ? { 
+              ...msg, 
+              isLoading: true,
+              content: "Regenerating response...",
+              processingStage: 'classifying',
+              progressPercentage: 15,
+              stageDetails: "Starting regeneration process..."
+            }
+          : msg
+      )
+    );
+    
     try {
       // Get real-time data if the original response had it
       let realTimeData = null;
@@ -236,14 +346,57 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       if (currentAssistantMessage.hasRealTimeData) {
         try {
           setIsFetchingRealTimeData(true);
+          
+          // Update progress
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              msg.id === messageId
+                ? { 
+                    ...msg, 
+                    processingStage: 'searching',
+                    progressPercentage: 40,
+                    stageDetails: "Refreshing real-time information..."
+                  }
+                : msg
+            )
+          );
+          
           const classification = await classifyQuery(userMessage.content);
           realTimeData = await getRealTimeData(userMessage.content, classification);
+          
+          // Update progress
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              msg.id === messageId
+                ? { 
+                    ...msg, 
+                    processingStage: 'processing',
+                    progressPercentage: 60,
+                    stageDetails: "Processing updated information..."
+                  }
+                : msg
+            )
+          );
         } catch (error) {
           console.error("Error fetching real-time data for regeneration:", error);
         } finally {
           setIsFetchingRealTimeData(false);
         }
       }
+      
+      // Update progress
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === messageId
+            ? { 
+                ...msg, 
+                processingStage: 'generating',
+                progressPercentage: 75,
+                stageDetails: "Creating alternative response..."
+              }
+            : msg
+        )
+      );
       
       // Modified system prompt to ensure variety in responses
       const diversityPrompt = `Please provide a different perspective or approach than previous responses. Use different examples, phrasing, and structure. If this is a regeneration request, avoid repeating the same content or examples from previous responses. Temperature has been increased to encourage creativity.`;
@@ -268,9 +421,23 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       // Generate new related questions for this regenerated response
       const relatedQuestions = await generateRelatedQuestions(userMessage.content, aiResponseContent);
       
+      // Update progress to complete
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === messageId
+            ? { 
+                ...msg, 
+                processingStage: 'complete',
+                progressPercentage: 100,
+                stageDetails: "Regeneration complete"
+              }
+            : msg
+        )
+      );
+      
       // Create new AI response
       const regeneratedResponse: ChatMessage = {
-        id: Date.now().toString(),
+        id: messageId,
         role: "assistant",
         content: aiResponseContent,
         timestamp: new Date(),
@@ -278,7 +445,10 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
         hasRealTimeData: !!realTimeData || currentAssistantMessage.hasRealTimeData,
         alternativeResponses: alternatives,
         currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions
+        relatedQuestions: relatedQuestions,
+        processingStage: 'complete',
+        progressPercentage: 100,
+        isLoading: false
       };
       
       // Replace the old message with the new one
@@ -295,6 +465,22 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       toast.success("Response regenerated");
     } catch (error) {
       console.error("Error regenerating response:", error);
+      
+      // Update the message to show error
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === messageId
+            ? { 
+                ...msg, 
+                isLoading: false,
+                content: "Failed to regenerate response. Please try again.",
+                processingStage: 'complete',
+                progressPercentage: 100
+              }
+            : msg
+        )
+      );
+      
       toast.error("Failed to regenerate response");
     } finally {
       setIsLoading(false);
