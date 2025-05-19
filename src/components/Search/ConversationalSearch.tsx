@@ -1,14 +1,28 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar, Zap } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchResultItem } from '@/services/searchApi';
 import { toast } from "sonner";
 import SearchSidebar from './SearchSidebar';
+import { getChatGPTResponse, getStreamingResponse } from '@/utils/openai';
+import { ClassificationResult } from '@/utils/queryClassifier';
+import { getRealTimeData } from '@/utils/realTimeData';
 
+// Default classification for simple queries
+const DEFAULT_CLASSIFICATION: ClassificationResult = {
+  topics: ['general'],
+  queryType: 'informational',
+  suggestedSearchTerms: []
+};
+
+/**
+ * Define the message interface with support for streaming
+ */
 interface ConversationMessage {
   id: string;
   role: "user" | "assistant";
@@ -18,121 +32,15 @@ interface ConversationMessage {
     title: string;
     url: string;
   }[];
+  isLoading?: boolean;
+  isStreaming?: boolean;
+  streamProgress?: number;
+  hasRealTimeData?: boolean;
 }
 
 interface ConversationalSearchProps {
   onSearch?: (query: string) => void;
 }
-
-// OpenAI API key
-const OPENAI_API_KEY = "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";
-
-// You.com API key
-const YOU_API_KEY = "b4a7675d-d49a-4a31-a3ce-2dbf61cb935e<__>1P6A8vETU8N2v5f4IL9xcte2";
-
-// Function to get search results from You.com API
-const getSearchResults = async (
-  query: string,
-  safeSearch: boolean = true,
-  recencyFilter: "day" | "week" | "month" | "any" = "day"
-): Promise<SearchResultItem[]> => {
-  try {
-    // Add parameters to query URL
-    let queryParams = new URLSearchParams();
-    queryParams.append("query", query);
-    
-    // Add safe search parameter if enabled
-    if (safeSearch) {
-      queryParams.append("safesearch", "on");
-    }
-    
-    // Add recency parameter based on filter
-    if (recencyFilter !== "any") {
-      queryParams.append("freshness", recencyFilter);
-    }
-    
-    // Add count parameter - request 10 results
-    queryParams.append("num_web_results", "10");
-    
-    const endpoint = `https://api.ydc-index.io/search?${queryParams.toString()}`;
-    
-    const response = await fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        'X-API-Key': YOU_API_KEY
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`You.com API returned ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    // Map the response to our common format
-    const results: SearchResultItem[] = data.hits.map((item: any, index: number) => ({
-      id: `you-${index}`,
-      title: item.title,
-      url: item.url,
-      description: item.description,
-      type: "web",
-      imageUrl: item.thumbnail_url,
-      snippets: item.snippets
-    }));
-
-    return results;
-  } catch (error) {
-    console.error("Error searching with You.com:", error);
-    throw error;
-  }
-};
-
-// Function to get AI response using ChatGPT API with conversation history
-const getChatGPTResponse = async (
-  message: string, 
-  conversationHistory: { role: "user" | "assistant"; content: string }[]
-): Promise<string> => {
-  try {
-    const systemPrompt = 'You are a helpful assistant answering questions for a web browser search interface. Be concise but informative. When asked about real-time data like current events, news, weather, or financial information, acknowledge that your information may not be up-to-date and suggest reliable sources.';
-    
-    // Construct messages array with system prompt, conversation history, and current message
-    const messages = [
-      {
-        role: 'system',
-        content: systemPrompt
-      },
-      ...conversationHistory,
-      {
-        role: 'user',
-        content: message
-      }
-    ];
-    
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 500
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error("Error fetching AI response:", error);
-    throw error;
-  }
-};
 
 const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch }) => {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
@@ -145,16 +53,23 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [searchLoading, setSearchLoading] = useState(false);
   const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
   const [searchError, setSearchError] = useState<string>("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
 
+  // State to track if we're using cached results
+  const [usingCachedResults, setUsingCachedResults] = useState(false);
+  
   // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  /**
+   * Handle user message submission with streaming response
+   */
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
@@ -162,6 +77,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     }
     
     if (!currentMessage.trim()) return;
+    
+    // Reset state
+    setIsLoading(true);
+    setSearchError("");
+    setIsStreaming(true);
     
     // Add user message to conversation
     const userMessage: ConversationMessage = {
@@ -175,48 +95,111 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     
     // Call onSearch without updating URL - just inform parent component
     if (onSearch) {
-      // Don't update URL, just call the callback
       onSearch(currentMessage);
     }
     
     const messageToSearch = currentMessage;
     setCurrentMessage("");
-    setIsLoading(true);
-    setSearchError("");
+    
+    // Create placeholder for assistant response with streaming indication
+    const assistantMessageId = `asst-${Date.now().toString()}`;
+    const assistantMessage: ConversationMessage = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+      isLoading: true,
+      isStreaming: true,
+      streamProgress: 0
+    };
+    
+    setMessages(prevMessages => [...prevMessages, assistantMessage]);
+    
+    // Start performance timing
+    const startTime = performance.now();
     
     try {
-      // 1. Fetch search results for the sidebar from You.com API
-      setSearchLoading(true);
-      setLastSearchQuery(messageToSearch);
-      
-      try {
-        // Try to get search results with recency filter
-        console.log(`Fetching search results from You.com for "${messageToSearch}" with filter: ${recencyFilter}`);
-        const results = await getSearchResults(messageToSearch, safeSearch, recencyFilter);
-        setSearchResults(results);
-        setSearchError("");
-      } catch (error) {
-        console.error("Search API error:", error);
-        setSearchResults([]);
-        setSearchError("Couldn't fetch search results from You.com API");
-        toast("Search API unavailable");
-      }
-      setSearchLoading(false);
+      // 1. Start search for the sidebar - do this first to parallelize
+      const searchPromise = (async () => {
+        setSearchLoading(true);
+        setLastSearchQuery(messageToSearch);
+        setUsingCachedResults(false);
+        
+        try {
+          // Import search function dynamically to reduce initial load time
+          const { searchWithSerper } = await import('@/services/searchApi');
+          
+          console.log(`Fetching search results for "${messageToSearch}" with filter: ${recencyFilter}`);
+          const results = await searchWithSerper(messageToSearch, 'search', safeSearch, 10, recencyFilter);
+          setSearchResults(results?.results || []);
+          setSearchError("");
+          
+          // Check if we got results quickly (likely cached)
+          const searchTime = performance.now() - startTime;
+          if (searchTime < 200) { // Less than 200ms usually indicates cached results
+            setUsingCachedResults(true);
+            toast("Using cached search results", { 
+              icon: <Zap className="h-4 w-4 text-amber-500" />,
+              duration: 1500
+            });
+          }
+        } catch (error) {
+          console.error("Search API error:", error);
+          setSearchResults([]);
+          setSearchError("Couldn't fetch search results");
+          toast("Search API unavailable");
+        } finally {
+          setSearchLoading(false);
+        }
+      })();
       
       // 2. Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
-      // 3. Generate AI response using ChatGPT API with conversation history
-      const aiResponseContent = await getChatGPTResponse(
-        messageToSearch, 
-        updatedHistory.slice(0, -1) // Exclude current message as it's passed separately
+      // 3. Get real-time data in parallel
+      // Dynamically import query classifier to reduce initial load
+      const { classifyQuery } = await import('@/utils/queryClassifier');
+      const classification = await classifyQuery(messageToSearch).catch(() => DEFAULT_CLASSIFICATION);
+      
+      // Get real-time data if available - this runs in parallel
+      const realTimeDataPromise = getRealTimeData(messageToSearch, classification);
+      
+      // 4. Create a streaming response that updates in real-time
+      let streamedContent = "";
+      let streamingProgress = 0;
+      
+      // Function to handle each token as it arrives
+      const handleToken = (token: string) => {
+        streamedContent += token;
+        streamingProgress += 1;
+        
+        // Update the assistant message with the new content
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  content: streamedContent,
+                  streamProgress: Math.min(95, streamingProgress) // Cap at 95% until complete
+                }
+              : msg
+          )
+        );
+      };
+      
+      // Wait for real-time data to be available
+      const realTimeData = await realTimeDataPromise;
+      
+      // Start streaming response
+      await getStreamingResponse(
+        messageToSearch,
+        updatedHistory,
+        handleToken,
+        realTimeData || undefined
       );
       
-      // 4. Update conversation history with assistant response
-      setConversationHistory([
-        ...updatedHistory,
-        { role: "assistant" as const, content: aiResponseContent }
-      ]);
+      // Wait for search to complete
+      await searchPromise;
       
       // Create sources from search results for citation
       let sources = [];
@@ -227,30 +210,65 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
         }));
       }
       
-      // Add AI response to conversation UI
-      const aiResponse: ConversationMessage = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: aiResponseContent,
-        timestamp: new Date(),
-        sources: sources.length > 0 ? sources : undefined
-      };
+      // If we have real-time data, use its sources instead
+      if (realTimeData?.sources && realTimeData.sources.length > 0) {
+        sources = realTimeData.sources;
+      }
       
-      setMessages(prev => [...prev, aiResponse]);
+      // Update assistant message when streaming is complete
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === assistantMessageId
+            ? { 
+                ...msg, 
+                content: streamedContent,
+                isLoading: false,
+                isStreaming: false,
+                streamProgress: 100,
+                sources,
+                hasRealTimeData: !!realTimeData
+              }
+            : msg
+        )
+      );
+      
+      // 5. Update conversation history with assistant response
+      setConversationHistory([
+        ...updatedHistory,
+        { role: "assistant" as const, content: streamedContent }
+      ]);
+      
+      // Calculate and show total response time
+      const totalTime = performance.now() - startTime;
+      console.log(`Total response time: ${totalTime.toFixed(0)}ms`);
+      
+      // Show a toast with the response time if it's fast
+      if (totalTime < 4000) {
+        toast(`Response generated in ${(totalTime/1000).toFixed(1)}s`, {
+          icon: <Zap className="h-4 w-4 text-green-500" />,
+          duration: 1500
+        });
+      }
     } catch (error) {
       console.error("AI error:", error);
-      toast("Failed to fetch response. Please try again later.");
+      toast.error("Failed to fetch response. Please try again later.");
       
-      // Add a fallback response
-      const fallbackResponse: ConversationMessage = {
-        id: Date.now().toString(),
-        role: "assistant",
-        content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, fallbackResponse]);
+      // Update the message to show the error
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === assistantMessageId
+            ? { 
+                ...msg, 
+                content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
+                isLoading: false,
+                isStreaming: false
+              }
+            : msg
+        )
+      );
     } finally {
       setIsLoading(false);
+      setIsStreaming(false);
     }
   };
 
@@ -293,18 +311,93 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     toast("Refreshing search results...");
     
     try {
+      // Import search function dynamically
+      const { searchWithSerper } = await import('@/services/searchApi');
+      
       console.log(`Refreshing search results for "${lastSearchQuery}" with filter: ${recencyFilter}`);
-      const results = await getSearchResults(lastSearchQuery, safeSearch, recencyFilter);
-      setSearchResults(results);
-      toast("Data refreshed with latest information");
-      setSearchError("");
+      const results = await searchWithSerper(lastSearchQuery, 'search', safeSearch, 10, recencyFilter);
+      setSearchResults(results?.results || []);
+      toast.success("Data refreshed with latest information");
     } catch (error) {
       console.error("Error refreshing search:", error);
       setSearchResults([]);
       setSearchError("Search data connection failed");
-      toast("Search data unavailable");
+      toast.error("Search data unavailable");
     } finally {
       setSearchLoading(false);
+    }
+  };
+
+  // Handle related question click
+  const handleRelatedQuestionClick = (question: string) => {
+    setCurrentMessage(question);
+    setTimeout(() => {
+      handleSubmit();
+    }, 100);
+  };
+
+  // Regenerate a response
+  const handleRegenerateMessage = async (messageId: string) => {
+    // Find the message to regenerate and its corresponding user message
+    const messageIndex = messages.findIndex(msg => msg.id === messageId);
+    if (messageIndex <= 0 || messages[messageIndex].role !== 'assistant') {
+      return;
+    }
+    
+    // The user message comes before the assistant message
+    const userMessage = messages[messageIndex - 1];
+    
+    // Create a new version of the conversation without the last assistant response
+    const updatedConversationHistory = conversationHistory.slice(0, -1);
+    
+    // Set the message to loading state
+    setMessages(prevMessages => 
+      prevMessages.map(msg => 
+        msg.id === messageId
+          ? { ...msg, isLoading: true, content: "Regenerating response..." }
+          : msg
+      )
+    );
+    
+    try {
+      // Get a new response with a diversity prompt
+      const newContent = await getChatGPTResponse(
+        userMessage.content + "\n\nPlease provide a different perspective or approach in your response."
+      );
+      
+      // Update the message with the new content
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === messageId
+            ? { ...msg, isLoading: false, content: newContent }
+            : msg
+        )
+      );
+      
+      // Update conversation history
+      setConversationHistory([
+        ...updatedConversationHistory,
+        { role: "assistant" as const, content: newContent }
+      ]);
+      
+      toast.success("Response regenerated with a new perspective");
+    } catch (error) {
+      console.error("Error regenerating response:", error);
+      
+      // Update the message to show the error
+      setMessages(prevMessages => 
+        prevMessages.map(msg => 
+          msg.id === messageId
+            ? { 
+                ...msg, 
+                isLoading: false, 
+                content: "Failed to regenerate response. Please try again."
+              }
+            : msg
+        )
+      );
+      
+      toast.error("Failed to regenerate response");
     }
   };
 
@@ -366,9 +459,16 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
               messages.map((message) => (
                 <ConversationMessage 
                   key={message.id}
+                  messageId={message.id}
                   role={message.role}
                   content={message.content}
                   sources={message.sources}
+                  hasRealTimeData={message.hasRealTimeData}
+                  isLoading={message.isLoading}
+                  isStreaming={message.isStreaming}
+                  streamProgress={message.streamProgress}
+                  onRegenerateMessage={handleRegenerateMessage}
+                  onRelatedQuestionClick={handleRelatedQuestionClick}
                 />
               ))
             )}
@@ -389,11 +489,12 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
                   handleSubmit();
                 }
               }}
+              disabled={isLoading}
             />
             <Button 
               type="submit" 
               className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
-              disabled={isLoading}
+              disabled={isLoading || !currentMessage.trim()}
             >
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </Button>
