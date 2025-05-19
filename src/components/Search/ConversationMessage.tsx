@@ -205,7 +205,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
-            {/* Show progress indicator when loading */}
+            {/* Show improved progress indicator when loading */}
             {showProgressIndicator && (
               <div className="mb-4">
                 <ResponseProgress 
@@ -216,12 +216,13 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
+            {/* Improved streaming display */}
             {isStreaming ? (
               <div>
                 <MessageStream isLoading={isLoading} streamingText={content} />
                 
                 {isLoading && streamProgress > 0 && (
-                  <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 mt-2 text-xs text-nexus-purple">
                     <Zap className="h-3 w-3 animate-pulse" />
                     <span>Generating response {streamProgress.toFixed(0)}%</span>
                   </div>
@@ -434,11 +435,11 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
-            {/* Display loading state - show only if not streaming and not showing progress indicator */}
+            {/* Display improved loading state - show only if not streaming and not showing progress indicator */}
             {isLoading && !isStreaming && !showProgressIndicator && (
-              <div className="flex items-center justify-center gap-2 py-6">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Generating response...</span>
+              <div className="flex items-center justify-center gap-2 py-6 text-nexus-purple">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span className="animate-pulse-glow">Generating response...</span>
               </div>
             )}
           </div>
