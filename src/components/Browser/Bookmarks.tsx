@@ -102,6 +102,13 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
         color: getColorFromName("Alek Bot")
       },
+      // Add DefiX to favorites
+      {
+        id: "defix",
+        title: "DefiX",
+        url: "https://web3-vercel-nexus.vercel.app/",
+        color: getColorFromName("DefiX")
+      },
       // Include top protocols
       ...topProtocols.map(protocol => ({
         id: protocol.id,
