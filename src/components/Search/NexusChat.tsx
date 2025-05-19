@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -342,7 +341,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
-        {/* Chat panel - main content area with flexbox layout */}
+        {/* Chat panel - main content area with absolute positioning for fixed elements */}
         <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full">
           <div className="p-3 flex items-center justify-between border-b bg-background">
             <h3 className="text-sm font-medium">Nexus Chat</h3>
@@ -356,38 +355,34 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             </Button>
           </div>
           
-          {/* Restructured content area with strict flex layout */}
-          <div className="flex flex-col flex-grow h-full overflow-hidden">
-            {/* Messages area - takes all available space but allows for input at bottom */}
-            <div className="flex-grow overflow-hidden min-h-0">
-              <ConversationDisplay 
-                messages={messages}
-                setCurrentMessage={setCurrentMessage}
-                handleRegenerateMessage={handleRegenerateMessage}
-                handleSelectAlternative={handleSelectAlternative}
-                handleRelatedQuestionClick={handleRelatedQuestionClick}
-              />
-            </div>
+          {/* Content area with relative positioning to contain absolute elements */}
+          <div className="flex-grow relative overflow-hidden">
+            {/* Messages area fills the space with padding for the fixed input */}
+            <ConversationDisplay 
+              messages={messages}
+              setCurrentMessage={setCurrentMessage}
+              handleRegenerateMessage={handleRegenerateMessage}
+              handleSelectAlternative={handleSelectAlternative}
+              handleRelatedQuestionClick={handleRelatedQuestionClick}
+            />
             
-            {/* Input area - fixed at bottom with shadow and z-index */}
-            <div className="flex-shrink-0 z-10 shadow-md">
-              <ChatInput 
-                currentMessage={currentMessage}
-                setCurrentMessage={setCurrentMessage}
-                handleSubmit={handleSubmit}
-                isLoading={isLoading}
-                isClassifying={isClassifying}
-                isFetchingRealTimeData={isFetchingRealTimeData}
-              />
-            </div>
+            {/* Input area - absolutely positioned at the bottom */}
+            <ChatInput 
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+              isClassifying={isClassifying}
+              isFetchingRealTimeData={isFetchingRealTimeData}
+            />
           </div>
         </ResizablePanel>
         
         {showSidebar && (
           <>
             <ResizableHandle withHandle />
-            {/* Sidebar panel - contained and isolated */}
-            <ResizablePanel defaultSize={30} minSize={20} className="h-full overflow-hidden isolate">
+            {/* Sidebar panel - isolated scrolling context */}
+            <ResizablePanel defaultSize={30} minSize={20} className="h-full overflow-hidden">
               <WebSearchSidebar 
                 currentQuery={currentQuery} 
                 conversations={messages}

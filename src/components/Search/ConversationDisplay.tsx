@@ -30,9 +30,9 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   }, [messages]);
 
   return (
-    <div className="h-full flex flex-col">
-      <ScrollArea className="h-full overflow-hidden overscroll-none" style={{ overscrollBehavior: 'contain' }}> 
-        <div className="p-4 space-y-4 pb-20">
+    <div className="h-full overflow-hidden">
+      <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
+        <div className="p-4 space-y-4 pb-32">
           {messages.length === 0 ? (
             <WelcomeMessage setCurrentMessage={setCurrentMessage} />
           ) : (

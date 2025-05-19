@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
@@ -25,25 +25,20 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const isLoadingMore = useRef(false);
 
   const INITIAL_PAGE_SIZE = 30;
   const ADDITIONAL_PAGE_SIZE = 10;
 
   // Build context-aware search query based on conversation history
   const buildContextualQuery = () => {
-    // Start with the current query
     if (!currentQuery) return '';
     
-    // Get the last 2 user messages for context (excluding the current one)
     const recentUserMessages = conversations
       .filter(msg => msg.role === "user")
       .slice(-3, -1)
       .map(msg => msg.content);
       
-    // If we have context, enhance the query
     if (recentUserMessages.length > 0) {
-      // Extract key topics/entities from the conversation
       const keyTerms = recentUserMessages.join(' ')
         .split(' ')
         .filter(word => 
@@ -53,7 +48,6 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         .slice(0, 5)
         .join(' ');
         
-      // Combine current query with context
       return `${currentQuery} ${keyTerms ? `context: ${keyTerms}` : ''}`.trim();
     }
     
@@ -76,19 +70,13 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         setError(response.error);
       }
       
-      // If loading more results, append to existing results
       if (isLoadMore && pageNum > 1) {
         setResults(prevResults => [...prevResults, ...(response.results || [])]);
       } else {
         setResults(response.results || []);
       }
       
-      // Determine if there are more results to load
       setHasMore(Boolean(response.results?.length === pageSize));
-      
-      // Log the query and results for debugging
-      console.log("Search query:", query);
-      console.log("Search results:", response.results);
     } catch (err) {
       console.error("Error fetching results:", err);
       setError("Failed to fetch search results");
@@ -110,42 +98,48 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     }
   }, [currentQuery]);
 
-  // Improved scroll handler with better isolation and propagation control
-  const handleScroll = useCallback((e: Event) => {
-    // Prevent any default browser behavior
-    e.preventDefault();
-    
-    // Prevent event propagation to parent elements
-    e.stopPropagation();
-    
-    if (!scrollAreaRef.current || isLoading || !hasMore || isLoadingMore.current) return;
-    
-    const scrollableArea = e.currentTarget as HTMLDivElement;
-    if (!scrollableArea) return;
-    
-    // Check if scrolled to bottom
-    const { scrollTop, scrollHeight, clientHeight } = scrollableArea;
-    if (scrollHeight - scrollTop - clientHeight < 50) { // 50px threshold
-      isLoadingMore.current = true;
-      setPage(prevPage => {
-        const nextPage = prevPage + 1;
-        fetchSearchResults(nextPage, true).finally(() => {
-          isLoadingMore.current = false;
-        });
-        return nextPage;
-      });
-    }
-  }, [isLoading, hasMore]); 
-
-  // Add scroll event listener with improved isolation
+  // Add scroll detection for infinite loading with proper isolation
   useEffect(() => {
-    const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
-    if (scrollableArea) {
-      scrollableArea.addEventListener('scroll', handleScroll as EventListener, { passive: false });
-      return () => scrollableArea.removeEventListener('scroll', handleScroll as EventListener);
+    const scrollableElement = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
+    
+    if (!scrollableElement) return;
+    
+    // Create an Intersection Observer to detect when near bottom
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !isLoading && hasMore) {
+          setPage(prevPage => {
+            const nextPage = prevPage + 1;
+            fetchSearchResults(nextPage, true);
+            return nextPage;
+          });
+        }
+      },
+      { root: scrollableElement, threshold: 0.1, rootMargin: '100px' }
+    );
+    
+    // Create a sentinel element to observe
+    const sentinel = document.createElement('div');
+    sentinel.style.height = '10px';
+    sentinel.style.width = '100%';
+    sentinel.id = 'scroll-sentinel';
+    
+    // Add sentinel to DOM and observe it
+    const resultsContainer = scrollableElement.querySelector('div');
+    if (resultsContainer) {
+      resultsContainer.appendChild(sentinel);
+      observer.observe(sentinel);
     }
-  }, [handleScroll]);
+    
+    // Cleanup
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
+    };
+  }, [isLoading, hasMore, results]);
 
+  // Handle refresh action
   const handleRefresh = () => {
     setPage(1);
     fetchSearchResults(1);
@@ -155,26 +149,50 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     });
   };
 
+  // Prevent scroll propagation on all touch and wheel events
+  useEffect(() => {
+    const preventPropagation = (e: Event) => {
+      e.stopPropagation();
+    };
+    
+    const element = scrollAreaRef.current;
+    if (element) {
+      // Capture these events at the earliest possible phase
+      element.addEventListener('wheel', preventPropagation, { capture: true });
+      element.addEventListener('touchstart', preventPropagation, { capture: true });
+      element.addEventListener('touchmove', preventPropagation, { capture: true });
+      element.addEventListener('touchend', preventPropagation, { capture: true });
+      
+      return () => {
+        element.removeEventListener('wheel', preventPropagation, { capture: true });
+        element.removeEventListener('touchstart', preventPropagation, { capture: true });
+        element.removeEventListener('touchmove', preventPropagation, { capture: true });
+        element.removeEventListener('touchend', preventPropagation, { capture: true });
+      };
+    }
+  }, []);
+
   return (
-    <div className="flex flex-col h-full isolate" style={{ touchAction: 'none' }}>
+    <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>
       <SearchSidebarHeader 
         currentQuery={currentQuery}
         onRefresh={handleRefresh}
         onClose={onClose}
       />
       
-      {/* Scrollable content area with improved isolation */}
-      <div className="flex-1 overflow-hidden isolate" style={{ overscrollBehavior: 'contain' }}>
+      <div 
+        className="flex-1 relative overflow-hidden"
+        style={{ 
+          isolation: 'isolate', 
+          touchAction: 'none', 
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         <ScrollArea 
-          className="h-full overscroll-none" 
+          className="absolute inset-0" 
           ref={scrollAreaRef}
-          style={{ overscrollBehavior: 'contain' }}
         >
-          <div 
-            className="overscroll-none" 
-            onClick={e => e.stopPropagation()}
-            style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
-          >
+          <div className="p-4">
             <SearchResultsList 
               results={results}
               error={error}
