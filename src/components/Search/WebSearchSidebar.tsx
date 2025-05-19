@@ -112,6 +112,9 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
 
   // Improved scroll handler with better isolation and propagation control
   const handleScroll = useCallback((e: Event) => {
+    // Prevent any default browser behavior
+    e.preventDefault();
+    
     // Prevent event propagation to parent elements
     e.stopPropagation();
     
@@ -138,7 +141,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   useEffect(() => {
     const scrollableArea = scrollAreaRef.current?.querySelector("[data-radix-scroll-area-viewport]");
     if (scrollableArea) {
-      scrollableArea.addEventListener('scroll', handleScroll as EventListener, { passive: true });
+      scrollableArea.addEventListener('scroll', handleScroll as EventListener, { passive: false });
       return () => scrollableArea.removeEventListener('scroll', handleScroll as EventListener);
     }
   }, [handleScroll]);
@@ -153,7 +156,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full isolate">
+    <div className="flex flex-col h-full isolate" style={{ touchAction: 'none' }}>
       <SearchSidebarHeader 
         currentQuery={currentQuery}
         onRefresh={handleRefresh}
@@ -161,12 +164,17 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
       />
       
       {/* Scrollable content area with improved isolation */}
-      <div className="flex-1 overflow-hidden isolate">
+      <div className="flex-1 overflow-hidden isolate" style={{ overscrollBehavior: 'contain' }}>
         <ScrollArea 
           className="h-full overscroll-none" 
           ref={scrollAreaRef}
+          style={{ overscrollBehavior: 'contain' }}
         >
-          <div className="overscroll-none" onClick={e => e.stopPropagation()}>
+          <div 
+            className="overscroll-none" 
+            onClick={e => e.stopPropagation()}
+            style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+          >
             <SearchResultsList 
               results={results}
               error={error}
