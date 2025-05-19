@@ -1,165 +1,153 @@
 
-// realTimeData.ts - This file will be implemented without breaking changes to existing functionality
-import { classifyQuery, ClassificationResult } from './queryClassifier';
+import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
-import { scrapeContent, ScrapedContent } from './contentScraper';
+import { searchWithSerper } from '../services/searchApi';
+import { openai } from './openai';
 
-interface RealTimeData {
+export interface RealTimeData {
   content: string;
+  sources: Array<{ title: string; url: string }>;
   timestamp: Date;
-  sources: { title: string; url: string }[];
 }
 
 /**
- * Get real-time data based on query
- * @param query The user query
- * @param classification The query classification
+ * Fetches real-time data by scraping web results
  */
 export async function getRealTimeData(
-  query: string,
+  query: string, 
   classification: ClassificationResult
 ): Promise<RealTimeData | null> {
   try {
-    // Check if we have a recent cached result for this query
-    const cachedData = dataCache.get(query);
+    // Check cache first
+    const cacheKey = query.toLowerCase();
+    const cachedData = dataCache.get(cacheKey);
+    
     if (cachedData) {
-      console.info('Using cached data for query:', query);
-      // Fix: Convert CachedItem to RealTimeData structure
       return {
         content: cachedData.data,
-        timestamp: new Date(cachedData.timestamp),
-        sources: cachedData.sources || []
+        sources: cachedData.sources,
+        timestamp: new Date(cachedData.timestamp)
       };
     }
     
-    // If classification doesn't indicate a need for real-time data, return null
-    const needsRealTimeData = classification.needsRealTimeData || false;
+    // Not in cache, fetch fresh data
+    const contentType = classification.topics[0] || 'general';
     
-    if (!needsRealTimeData && (classification.confidence || 0) > 0.7) {
-      console.info('Query classified as not needing real-time data:', query);
+    // Choose the best search terms - prioritize recency
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+    
+    // Create search terms that emphasize recency
+    const searchTerms = [
+      `${query} ${currentYear}`, 
+      `${query} ${currentMonth} ${currentYear}`,
+      `latest ${query}`,
+      `current ${query}`,
+      ...classification.suggestedSearchTerms
+    ];
+    
+    // Try different search terms until we get results
+    let searchResponse = null;
+    for (const term of searchTerms) {
+      console.log(`Trying search term: ${term}`);
+      
+      // Get search results using searchWithSerper
+      searchResponse = await searchWithSerper(
+        term, 
+        'search',  // use web search type
+        true,      // Safe search on
+        5,         // Limit to 5 results to get more diverse sources
+        'day'      // Recent results (last 24 hours)
+      );
+      
+      if (searchResponse && searchResponse.results.length > 0) {
+        console.log(`Found results using term: ${term}`);
+        break;
+      }
+    }
+    
+    // If we still don't have results, try with a longer time window
+    if (!searchResponse || searchResponse.results.length === 0) {
+      console.log("No day-recent results, trying week-recent results");
+      searchResponse = await searchWithSerper(
+        searchTerms[0], 
+        'search',
+        true,
+        5,
+        'week'  // Recent results (last week)
+      );
+    }
+    
+    if (!searchResponse || searchResponse.results.length === 0) {
+      console.log("No search results found for any search terms");
       return null;
     }
     
-    // Load search API dynamically to reduce initial code bundle size
-    const searchModule = await import('@/services/searchApi');
+    // Get top relevant results
+    const topResults = searchResponse.results.slice(0, 5);
     
-    // Get search terms from classification, or fall back to the original query
-    const searchTerms = classification.suggestedSearchTerms && classification.suggestedSearchTerms.length > 0
-      ? classification.suggestedSearchTerms.slice(0, 3)
-      : [query, `latest ${query}`, `current ${query} information`];
+    // Extract content from search results
+    const extractedContent = topResults.map(result => ({
+      title: result.title,
+      url: result.url,
+      description: result.description,
+      snippets: result.type === 'web' ? [result.description] : [],
+      date: result.date || 'Unknown'
+    }));
     
-    // Use the first search term for primary search
-    const primarySearchTerm = searchTerms[0];
-    console.log(`Fetching real-time data for: ${primarySearchTerm}`);
+    // Use GPT to synthesize the information with emphasis on recency
+    const systemPrompt = `You are an expert data extractor. Given search results about a query, extract and summarize the most relevant REAL-TIME information.
+       
+       IMPORTANT INSTRUCTIONS:
+       1. Focus on extracting the MOST CURRENT information available, especially dates, versions, prices, statistics.
+       2. EXPLICITLY MENTION the recency of the data (today, this week, this month, etc.)
+       3. INCLUDE specific dates and times when available
+       4. FORMAT your response to be clear, concise, and factual
+       5. Make it OBVIOUS when data is from today/this week vs. older data
+       6. Include NUMERICAL data whenever relevant (prices, percentages, statistics)
+       7. DO NOT make up or assume information
+       8. If the search results don't have recent information, CLEARLY STATE that the data may not be current
+       9. If information seems outdated or contradictory, acknowledge this in your response
+       
+       The user's query is about "${query}" and they specifically want the LATEST information.`;
     
-    // Perform search with primary term
-    const searchResults = await searchModule.searchWithSerper(primarySearchTerm, 'search', true, 5);
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt
+        },
+        {
+          role: "user",
+          content: `Original query: "${query}"
+            
+            Search results:
+            ${JSON.stringify(extractedContent, null, 2)}
+            
+            Extract and summarize the most up-to-date information from these results, emphasizing when the data is from.`
+        }
+      ]
+    });
     
-    if (!searchResults || !searchResults.results || searchResults.results.length === 0) {
-      console.info('No search results found for:', primarySearchTerm);
-      return null;
-    }
+    const extractedData = response.choices[0].message.content || '';
     
-    // Extract the top 3 most relevant search results
-    const topResults = searchResults.results.slice(0, 3);
-    
-    // Prepare sources information
+    // Create sources for citation
     const sources = topResults.map(result => ({
       title: result.title,
       url: result.url
     }));
     
-    // For each result, try to scrape more detailed content asynchronously
-    const scrapePromises = topResults.map(async (result) => {
-      try {
-        // Try to fetch and scrape the page
-        const scrapedContent = await scrapeContent(result.url);
-        
-        if (scrapedContent && scrapedContent.content && scrapedContent.content.length > 100) {
-          // If we got good content, use it
-          return {
-            ...scrapedContent,
-            isPartial: false
-          };
-        }
-      } catch (error) {
-        console.error(`Error scraping ${result.url}:`, error);
-      }
-      
-      // Fallback to snippet if scraping fails or content is too short
-      return {
-        title: result.title,
-        content: result.snippets ? result.snippets : "No content available",
-        url: result.url,
-        isPartial: true
-      };
-    });
+    // Cache the results
+    dataCache.set(cacheKey, extractedData, sources, contentType);
     
-    // Wait for all scraping attempts to complete
-    const scrapedResults = await Promise.allSettled(scrapePromises);
-    
-    // Extract content from scraping results
-    const contentBlocks = scrapedResults
-      .filter(result => result.status === 'fulfilled')
-      .map((result, index) => {
-        if (result.status === 'fulfilled') {
-          const data = result.value;
-          const sourceName = sources[index].title;
-          
-          return {
-            title: data.title || sourceName,
-            content: data.content || '',
-            source: sourceName,
-            url: sources[index].url
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-    
-    // If no content was successfully scraped, return simplified data
-    if (contentBlocks.length === 0) {
-      const simpleContent = topResults.map(result => 
-        `[${result.title}]: ${result.snippets ? result.snippets : "No snippet available"}`
-      ).join('\n\n');
-      
-      const realTimeData = {
-        content: simpleContent,
-        timestamp: new Date(),
-        sources
-      };
-      
-      // Fix: Add required parameters to dataCache.set() call
-      dataCache.set(query, simpleContent, sources, 'text');
-      return realTimeData;
-    }
-    
-    // Create a rich consolidated content from all scraped sources
-    // Format the content to make it easy to read and use by LLMs
-    const consolidatedContent = contentBlocks.map(block => {
-      // Fix: Ensure content is a string before calling substring
-      const blockContent = typeof block.content === 'string' 
-        ? block.content.substring(0, 1000) + (block.content.length > 1000 ? '...' : '')
-        : Array.isArray(block.content)
-          ? block.content.join(' ').slice(0, 1000) + (block.content.join(' ').length > 1000 ? '...' : '')
-          : 'Content unavailable';
-          
-      return `## ${block.title}\n${blockContent}\n*Source: ${block.source}*`;
-    }).join('\n\n---\n\n');
-    
-    // Create real-time data package
-    const realTimeData = {
-      content: consolidatedContent,
-      timestamp: new Date(),
-      sources
+    return {
+      content: extractedData,
+      sources,
+      timestamp: new Date()
     };
-    
-    // Fix: Add required parameters to dataCache.set() call
-    dataCache.set(query, consolidatedContent, sources, 'markdown');
-    
-    return realTimeData;
   } catch (error) {
-    console.error('Error fetching real-time data:', error);
+    console.error("Error fetching real-time data:", error);
     return null;
   }
 }

@@ -127,14 +127,14 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
       // Step 1: Classify the query to determine if it needs real-time data
       setIsClassifying(true);
       let realTimeData = null;
-      let shouldFetchRealTimeData = false;
+      let needsRealTimeData = false;
       
       try {
         const classification = await classifyQuery(messageToSearch);
-        shouldFetchRealTimeData = classification.needsRealTimeData || false;
+        needsRealTimeData = classification.needsRealTimeData;
         
         // Step 2: If needed, fetch real-time data from the web
-        if (shouldFetchRealTimeData) {
+        if (needsRealTimeData) {
           setIsClassifying(false);
           setIsFetchingRealTimeData(true);
           
@@ -348,23 +348,20 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
-        {/* Chat panel - completely self-contained with its own scroll area */}
-        <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full">
-          <div className="p-3 flex items-center justify-between border-b">
-            <h3 className="text-sm font-medium">Nexus Chat</h3>
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="h-8 w-8"
-              onClick={toggleSidebar}
-            >
-              {showSidebar ? <SidebarClose className="h-4 w-4" /> : <SidebarOpen className="h-4 w-4" />}
-            </Button>
-          </div>
-          
-          {/* Chat messages in a scroll area */}
-          <div className="flex-grow overflow-hidden">
-            <ScrollArea className="h-full p-4">
+        <ResizablePanel defaultSize={70} minSize={50} className="h-full overflow-hidden">
+          <div className="flex flex-col h-full">
+            <div className="p-3 flex items-center justify-between border-b">
+              <h3 className="text-sm font-medium">Nexus Chat</h3>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-8 w-8"
+                onClick={toggleSidebar}
+              >
+                {showSidebar ? <SidebarClose className="h-4 w-4" /> : <SidebarOpen className="h-4 w-4" />}
+              </Button>
+            </div>
+            <ScrollArea className="flex-1 p-4">
               <div className="space-y-4 pb-4">
                 {messages.length === 0 ? (
                   <div className="text-center py-10">
@@ -431,62 +428,60 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
                 <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
-          </div>
-          
-          {/* Input area */}
-          <div className="p-4 border-t border-border mt-auto">
-            <form onSubmit={handleSubmit} className="flex gap-2">
-              <Textarea
-                placeholder="Ask Nexus anything..."
-                value={currentMessage}
-                onChange={(e) => setCurrentMessage(e.target.value)}
-                className="flex-1 min-h-12 resize-none"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-              />
-              <div className="flex flex-col gap-2">
-                <Button 
-                  type="submit" 
-                  className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <div className="flex items-center gap-1">
-                      {isClassifying ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <span className="text-xs">Analyzing</span>
-                        </>
-                      ) : isFetchingRealTimeData ? (
-                        <>
-                          <Globe className="h-4 w-4 animate-pulse" />
-                          <span className="text-xs">Searching</span>
-                        </>
-                      ) : (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <span className="text-xs">Thinking</span>
-                        </>
-                      )}
-                    </div>
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            </form>
+            
+            <div className="p-4 border-t border-border mt-auto">
+              <form onSubmit={handleSubmit} className="flex gap-2">
+                <Textarea
+                  placeholder="Ask Nexus anything..."
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  className="flex-1 min-h-12 resize-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSubmit();
+                    }
+                  }}
+                />
+                <div className="flex flex-col gap-2">
+                  <Button 
+                    type="submit" 
+                    className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-1">
+                        {isClassifying ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-xs">Analyzing</span>
+                          </>
+                        ) : isFetchingRealTimeData ? (
+                          <>
+                            <Globe className="h-4 w-4 animate-pulse" />
+                            <span className="text-xs">Searching</span>
+                          </>
+                        ) : (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-xs">Thinking</span>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         </ResizablePanel>
         
         {showSidebar && (
           <>
             <ResizableHandle withHandle />
-            {/* Sidebar panel - completely self-contained */}
-            <ResizablePanel defaultSize={30} minSize={20} className="h-full">
+            <ResizablePanel defaultSize={30} minSize={20} className="overflow-hidden">
               <WebSearchSidebar 
                 currentQuery={currentQuery} 
                 conversations={messages}

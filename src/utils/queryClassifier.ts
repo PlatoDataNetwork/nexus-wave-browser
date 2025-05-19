@@ -1,15 +1,11 @@
 
 import { openai } from './openai';
 
-/**
- * Interface for classification result
- */
 export interface ClassificationResult {
-  topics: string[];
-  suggestedSearchTerms: string[];
-  queryType?: string;
-  needsRealTimeData?: boolean;
-  confidence?: number;
+  needsRealTimeData: boolean;
+  confidence: number; // 0-1
+  topics: string[]; // e.g., "weather", "exchange rate", "news", etc.
+  suggestedSearchTerms: string[]; // optimized search terms for web scraping
 }
 
 /**

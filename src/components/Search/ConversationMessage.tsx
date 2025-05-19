@@ -14,14 +14,12 @@ import {
   ArrowLeft, 
   ArrowRight,
   ExternalLink,
-  MessageSquarePlus,
-  Loader2,
-  Zap
+  MessageSquarePlus
 } from 'lucide-react';
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import MessageStream from './MessageStream';
+import { Avatar } from '@/components/ui/avatar';
 
 interface Source {
   title: string;
@@ -40,9 +38,6 @@ interface ConversationMessageProps {
   onSelectAlternative?: (index: number) => void;
   relatedQuestions?: string[];
   onRelatedQuestionClick?: (question: string) => void;
-  isLoading?: boolean;
-  isStreaming?: boolean;
-  streamProgress?: number;
 }
 
 // Define a proper type for the code component props
@@ -65,10 +60,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   currentResponseIndex = 0,
   onSelectAlternative,
   relatedQuestions = [],
-  onRelatedQuestionClick,
-  isLoading = false,
-  isStreaming = false,
-  streamProgress = 0
+  onRelatedQuestionClick
 }) => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
@@ -196,54 +188,40 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
-            {isStreaming ? (
-              <div>
-                <MessageStream isLoading={isLoading} streamingText={content} />
-                
-                {isLoading && streamProgress > 0 && (
-                  <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                    <Zap className="h-3 w-3 animate-pulse" />
-                    <span>Generating response {streamProgress.toFixed(0)}%</span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <ReactMarkdown
-                components={{
-                  code: ({ node, inline, className, children, ...props }: CodeProps) => {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        language={match[1]}
-                        style={atomDark}
-                        PreTag="div"
-                        className="rounded-md my-2"
-                        {...props}
-                      >
-                        {String(children).replace(/\n$/, '')}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className="bg-gray-800 text-gray-200 px-1 py-0.5 rounded" {...props}>
-                        {children}
-                      </code>
-                    )
-                  },
-                  p: ({children}) => <p className="mb-2">{children}</p>,
-                  ul: ({children}) => <ul className="list-disc ml-6 mb-3">{children}</ul>,
-                  ol: ({children}) => <ol className="list-decimal ml-6 mb-3">{children}</ol>,
-                  li: ({children}) => <li className="mb-1">{children}</li>,
-                  h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
-                  h2: ({children}) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-md font-bold mb-2">{children}</h3>,
-                  a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-nexus-purple underline hover:text-nexus-deep-purple">{children}</a>,
-                  img: ({src, alt}) => <img src={src} alt={alt || ''} className="max-w-full h-auto rounded-md my-2" />
-                }}
-              >
-                {content}
-              </ReactMarkdown>
-            )}
+            <ReactMarkdown
+              components={{
+                code: ({ node, inline, className, children, ...props }: CodeProps) => {
+                  const match = /language-(\w+)/.exec(className || '');
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      language={match[1]}
+                      style={atomDark}
+                      PreTag="div"
+                      className="rounded-md my-2"
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  ) : (
+                    <code className="bg-gray-800 text-gray-200 px-1 py-0.5 rounded" {...props}>
+                      {children}
+                    </code>
+                  )
+                },
+                p: ({children}) => <p className="mb-2">{children}</p>,
+                ul: ({children}) => <ul className="list-disc ml-6 mb-3">{children}</ul>,
+                ol: ({children}) => <ol className="list-decimal ml-6 mb-3">{children}</ol>,
+                li: ({children}) => <li className="mb-1">{children}</li>,
+                h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+                h2: ({children}) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+                h3: ({children}) => <h3 className="text-md font-bold mb-2">{children}</h3>,
+                a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-nexus-purple underline hover:text-nexus-deep-purple">{children}</a>,
+                img: ({src, alt}) => <img src={src} alt={alt || ''} className="max-w-full h-auto rounded-md my-2" />
+              }}
+            >
+              {content}
+            </ReactMarkdown>
             
-            {/* Sources section */}
             {sources && sources.length > 0 && (
               <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-1 text-xs font-medium mb-2">
@@ -296,131 +274,117 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               </div>
             )}
             
-            {/* Message controls - only show when not loading */}
-            {!isLoading && (
-              <div className="flex flex-col gap-2 mt-4 pt-2 border-t border-border">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 px-2 text-xs"
-                      onClick={handleCopy}
-                    >
-                      <Copy className="h-3 w-3 mr-1" />
-                      Copy
-                    </Button>
-                    
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 px-2 text-xs"
-                        >
-                          <Download className="h-3 w-3 mr-1" />
-                          Download
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-2" align="end">
-                        <div className="flex flex-col gap-1">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="justify-start h-7 px-2 text-xs"
-                            onClick={handleDownloadText}
-                          >
-                            As Text (.txt)
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="justify-start h-7 px-2 text-xs"
-                            onClick={handleDownloadWord}
-                          >
-                            As Word (.doc)
-                          </Button>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+            <div className="flex flex-col gap-2 mt-4 pt-2 border-t border-border">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 px-2 text-xs"
+                    onClick={handleCopy}
+                  >
+                    <Copy className="h-3 w-3 mr-1" />
+                    Copy
+                  </Button>
                   
-                  <div className="flex items-center gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className={`h-7 px-2 text-xs ${liked ? 'text-green-500' : ''}`}
-                      onClick={handleLike}
-                      disabled={isStreaming || isLoading}
-                    >
-                      <ThumbsUp className="h-3 w-3 mr-1" />
-                      Helpful
-                    </Button>
-                    
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className={`h-7 px-2 text-xs ${disliked ? 'text-red-500' : ''}`}
-                      onClick={handleDislike}
-                      disabled={isStreaming || isLoading}
-                    >
-                      <ThumbsDown className="h-3 w-3 mr-1" />
-                      Not helpful
-                    </Button>
-                    
-                    {onRegenerateMessage && messageId && (
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <Button
                         size="sm"
                         variant="ghost"
                         className="h-7 px-2 text-xs"
-                        onClick={handleRegenerate}
-                        disabled={isStreaming || isLoading}
                       >
-                        <RefreshCw className="h-3 w-3 mr-1" />
-                        Regenerate
+                        <Download className="h-3 w-3 mr-1" />
+                        Download
                       </Button>
-                    )}
-                  </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-2" align="end">
+                      <div className="flex flex-col gap-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="justify-start h-7 px-2 text-xs"
+                          onClick={handleDownloadText}
+                        >
+                          As Text (.txt)
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="justify-start h-7 px-2 text-xs"
+                          onClick={handleDownloadWord}
+                        >
+                          As Word (.doc)
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 
-                {/* Navigation controls for alternative responses moved to bottom */}
-                {hasAlternatives && (
-                  <div className="flex items-center justify-center gap-3 mt-1">
+                <div className="flex items-center gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className={`h-7 px-2 text-xs ${liked ? 'text-green-500' : ''}`}
+                    onClick={handleLike}
+                  >
+                    <ThumbsUp className="h-3 w-3 mr-1" />
+                    Helpful
+                  </Button>
+                  
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className={`h-7 px-2 text-xs ${disliked ? 'text-red-500' : ''}`}
+                    onClick={handleDislike}
+                  >
+                    <ThumbsDown className="h-3 w-3 mr-1" />
+                    Not helpful
+                  </Button>
+                  
+                  {onRegenerateMessage && messageId && (
                     <Button
                       size="sm"
-                      variant="outline"
-                      className="h-7 w-7 p-0 rounded-full"
-                      onClick={handlePreviousResponse}
-                      disabled={!canGoBack || isStreaming || isLoading}
+                      variant="ghost"
+                      className="h-7 px-2 text-xs"
+                      onClick={handleRegenerate}
                     >
-                      <ArrowLeft className="h-3 w-3" />
+                      <RefreshCw className="h-3 w-3 mr-1" />
+                      Regenerate
                     </Button>
-                    
-                    <span className="text-xs text-muted-foreground">
-                      Response {currentResponseIndex + 1} of {alternativeResponses.length + 1}
-                    </span>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 w-7 p-0 rounded-full"
-                      onClick={handleNextResponse}
-                      disabled={!canGoForward || isStreaming || isLoading}
-                    >
-                      <ArrowRight className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            )}
-            
-            {/* Display loading state */}
-            {isLoading && !isStreaming && (
-              <div className="flex items-center justify-center gap-2 py-6">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Generating response...</span>
-              </div>
-            )}
+              
+              {/* Navigation controls for alternative responses moved to bottom */}
+              {hasAlternatives && (
+                <div className="flex items-center justify-center gap-3 mt-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 w-7 p-0 rounded-full"
+                    onClick={handlePreviousResponse}
+                    disabled={!canGoBack}
+                  >
+                    <ArrowLeft className="h-3 w-3" />
+                  </Button>
+                  
+                  <span className="text-xs text-muted-foreground">
+                    Response {currentResponseIndex + 1} of {alternativeResponses.length + 1}
+                  </span>
+                  
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 w-7 p-0 rounded-full"
+                    onClick={handleNextResponse}
+                    disabled={!canGoForward}
+                  >
+                    <ArrowRight className="h-3 w-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
