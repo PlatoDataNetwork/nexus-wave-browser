@@ -29,16 +29,18 @@ const SettingsDocumentation: React.FC = () => {
     } else {
       setActiveSection("settings");
     }
-  }, [searchParams]);
+  }, []);
 
-  // Change URL when section changes
-  useEffect(() => {
-    if (activeSection === "documentation") {
-      setSearchParams({ tab: "documentation" });
-    } else {
-      setSearchParams({});
-    }
-  }, [activeSection, setSearchParams]);
+  // Change tab without triggering a full page reload
+  const handleSectionChange = (value: string) => {
+    setActiveSection(value);
+    setSearchParams({ tab: value === "documentation" ? "documentation" : "" }, { replace: true });
+  };
+
+  // Change settings tab without triggering a full page reload
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   // Documentation section content
   const renderDocumentationContent = () => (
@@ -130,7 +132,7 @@ const SettingsDocumentation: React.FC = () => {
             <Tabs 
               defaultValue={activeSection} 
               value={activeSection}
-              onValueChange={setActiveSection} 
+              onValueChange={handleSectionChange} 
               className="w-full mb-4"
             >
               <TabsList className="grid w-full grid-cols-2">
@@ -153,7 +155,7 @@ const SettingsDocumentation: React.FC = () => {
               <Tabs 
                 defaultValue={activeTab} 
                 value={activeTab}
-                onValueChange={setActiveTab}
+                onValueChange={handleTabChange}
                 orientation="vertical" 
                 className="w-full"
               >
@@ -218,7 +220,10 @@ const SettingsDocumentation: React.FC = () => {
               </Tabs>
             ) : (
               <div className="flex flex-col space-y-1">
-                <button className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-accent">
+                <button 
+                  className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-accent"
+                  onClick={() => {}}
+                >
                   <span className="text-sm">Getting Started</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </button>

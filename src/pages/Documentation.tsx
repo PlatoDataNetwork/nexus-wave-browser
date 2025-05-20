@@ -1,10 +1,11 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, BookText, Search, ArrowLeft, Apple, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -17,6 +18,26 @@ import {
 const Documentation: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [activeTab, setActiveTab] = React.useState("overview");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Set initial tab based on URL search params
+  React.useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && ["overview", "getting-started", "features", "installation", "web3", "privacy", "settings", "shortcuts", "troubleshooting"].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
+
+  // Update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setSearchParams({ tab: value });
+  };
+
+  // Handle sidebar section selection
+  const handleSectionClick = (section: string) => {
+    handleTabChange(section);
+  };
 
   return (
     <div className="flex flex-col bg-background" style={{ height: "calc(100vh - 48px)" }}>
@@ -46,7 +67,7 @@ const Documentation: React.FC = () => {
             <Tabs 
               defaultValue={activeTab} 
               value={activeTab}
-              onValueChange={setActiveTab}
+              onValueChange={handleTabChange}
               orientation="vertical" 
               className="w-full"
             >

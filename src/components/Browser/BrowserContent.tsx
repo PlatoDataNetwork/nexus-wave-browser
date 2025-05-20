@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import SettingsDocumentation from "@/pages/SettingsDocumentation";
+import Documentation from "@/pages/Documentation";
 import ExtensionStore from "@/pages/ExtensionStore";
 import HistoryPage from "@/pages/History";
 import Search from "@/pages/Search";
@@ -84,6 +85,14 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       return (
         <ScrollArea className="h-full w-full">
           <SettingsDocumentation />
+        </ScrollArea>
+      );
+    }
+
+    if (currentUrl === '/documentation' || currentUrl.includes('/documentation')) {
+      return (
+        <ScrollArea className="h-full w-full">
+          <Documentation />
         </ScrollArea>
       );
     }
