@@ -1,8 +1,9 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { searchWithSerper } from '@/services/searchApi';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
+import { dataCache } from '@/utils/dataCache';
 
 export const useWebSearch = (currentQuery: string, conversations: ChatMessage[]) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,12 +12,16 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { toast } = useToast();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const INITIAL_PAGE_SIZE = 30;
+  const INITIAL_PAGE_SIZE = 20; // Reduced from 30 for faster initial results
   const ADDITIONAL_PAGE_SIZE = 10;
+  
+  // Cache key for this query
+  const cacheKey = useRef<string>('');
 
   // Build context-aware search query based on conversation history
-  const buildContextualQuery = () => {
+  const buildContextualQuery = useCallback(() => {
     if (!currentQuery) return '';
     
     const recentUserMessages = conversations
@@ -38,15 +43,52 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     }
     
     return currentQuery;
-  };
+  }, [currentQuery, conversations]);
+
+  // Check cache before fetching
+  const checkCache = useCallback((query: string): any[] | null => {
+    const normalizedQuery = query.toLowerCase().trim();
+    cacheKey.current = `search_${normalizedQuery}_${page}`;
+    
+    // Try to get from cache
+    const cachedItem = dataCache.get(cacheKey.current);
+    if (cachedItem) {
+      console.log('Using cached search results');
+      return JSON.parse(cachedItem.data);
+    }
+    
+    return null;
+  }, [page]);
 
   // Fetch search results
-  const fetchSearchResults = async (pageNum: number, isLoadMore: boolean = false) => {
+  const fetchSearchResults = useCallback(async (pageNum: number, isLoadMore: boolean = false) => {
     const query = buildContextualQuery();
     if (!query) return;
     
+    // Cancel any in-flight requests
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+    
     setIsLoading(true);
     if (!isLoadMore) setError(null);
+    
+    // Check cache first
+    const cachedResults = checkCache(query);
+    if (cachedResults) {
+      if (isLoadMore && pageNum > 1) {
+        setResults(prevResults => [...prevResults, ...cachedResults]);
+      } else {
+        setResults(cachedResults);
+      }
+      setHasMore(Boolean(cachedResults.length === (pageNum === 1 ? INITIAL_PAGE_SIZE : ADDITIONAL_PAGE_SIZE)));
+      setIsLoading(false);
+      return;
+    }
+    
+    // Performance measurement
+    const startTime = performance.now();
     
     try {
       const pageSize = pageNum === 1 ? INITIAL_PAGE_SIZE : ADDITIONAL_PAGE_SIZE;
@@ -56,44 +98,63 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
         setError(response.error);
       }
       
+      const searchResults = response.results || [];
+      
+      // Store in cache
+      dataCache.set(
+        cacheKey.current,
+        JSON.stringify(searchResults),
+        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.url })),
+        'search_results'
+      );
+      
       if (isLoadMore && pageNum > 1) {
-        setResults(prevResults => [...prevResults, ...(response.results || [])]);
+        setResults(prevResults => [...prevResults, ...searchResults]);
       } else {
-        setResults(response.results || []);
+        setResults(searchResults);
       }
       
-      setHasMore(Boolean(response.results?.length === pageSize));
+      setHasMore(Boolean(searchResults.length === pageSize));
+      
+      // Log performance metrics
+      const endTime = performance.now();
+      console.log(`Search fetch completed in ${(endTime - startTime).toFixed(0)}ms`);
     } catch (err) {
-      console.error("Error fetching results:", err);
-      setError("Failed to fetch search results");
-      toast({
-        title: "Search Error",
-        description: "Failed to fetch web search results",
-        variant: "destructive"
-      });
+      // Only set error if this request wasn't aborted
+      if (err.name !== 'AbortError') {
+        console.error("Error fetching results:", err);
+        setError("Failed to fetch search results");
+        toast({
+          title: "Search Error",
+          description: "Failed to fetch web search results",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [buildContextualQuery, checkCache, toast]);
 
   // Handle refresh action
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     setPage(1);
+    // Force skip cache by adding timestamp
+    cacheKey.current = `search_${buildContextualQuery()}_${Date.now()}`;
     fetchSearchResults(1);
     toast({
       title: "Refreshing results",
       description: "Getting the latest search results"
     });
-  };
+  }, [buildContextualQuery, fetchSearchResults, toast]);
 
   // Load more results
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {
       const nextPage = page + 1;
       setPage(nextPage);
       fetchSearchResults(nextPage, true);
     }
-  };
+  }, [fetchSearchResults, hasMore, isLoading, page]);
 
   // Fetch results when the current query changes
   useEffect(() => {
@@ -101,7 +162,14 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       setPage(1);
       fetchSearchResults(1);
     }
-  }, [currentQuery]);
+    
+    // Cleanup function to abort any in-flight requests when component unmounts
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [currentQuery, fetchSearchResults]);
 
   return {
     isLoading,

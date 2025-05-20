@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { toast } from "sonner";
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
-import { getChatGPTResponseWithRealTimeData } from '@/utils/openai';
+import { getChatGPTResponseWithRealTimeData, getStreamingResponse } from '@/utils/openai';
 import { ChatMessage } from '@/types';
 
 interface UseConversationProps {
@@ -17,42 +17,42 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [currentQuery, setCurrentQuery] = useState("");
   
+  // Reference to track ongoing requests that can be canceled
+  const activeRequestsRef = useRef<AbortController | null>(null);
+  
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
 
-  // Generate related questions based on the conversation context
-  const generateRelatedQuestions = async (userMessage: string, aiResponse: string): Promise<string[]> => {
+  // Generate related questions in parallel
+  const generateRelatedQuestions = useCallback(async (userMessage: string, aiResponse: string): Promise<string[]> => {
     try {
+      // Skip related questions if we're currently handling another request
+      if (isLoading) return [];
+      
       // Create a prompt specifically for related questions
       const relatedQuestionsPrompt = 
-        "Based on the user's original query and your response, " +
-        "generate exactly 3 follow-up questions that the user might want to ask next. " +
-        "These should be natural continuations of the conversation, exploring related topics or " +
-        "deeper aspects of the current topic. Return ONLY the questions as a JSON array with no additional text. " +
-        "Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
+        "Based on the user's query and your response, generate 3 follow-up questions. " +
+        "Return ONLY a JSON array with no additional text. Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
       
       // Include just enough context for good question generation
       const contextForQuestions = [
         { role: "user" as const, content: userMessage },
-        { role: "assistant" as const, content: aiResponse },
+        { role: "assistant" as const, content: aiResponse.substring(0, 500) }, // Use only the first part of the response
         { role: "user" as const, content: relatedQuestionsPrompt }
       ];
       
       const questionsResponse = await getChatGPTResponseWithRealTimeData(
         relatedQuestionsPrompt,
         contextForQuestions,
-        null,
-        "Generate diverse, specific, and engaging questions the user might want to ask next"
+        null
       );
       
       // Parse the response to get the questions array
       try {
-        // The AI might return just the JSON array or it might include explanatory text,
-        // so we need to extract just the array part
         const jsonMatch = questionsResponse.match(/\[\s*"[^"]+(?:",\s*"[^"]+")*\s*\]/);
         if (jsonMatch) {
           const questionsArray = JSON.parse(jsonMatch[0]);
-          return questionsArray.slice(0, 3); // Ensure we only have 3 questions
+          return questionsArray.slice(0, 3);
         }
         
         // Fallback method if the regex doesn't match
@@ -61,7 +61,7 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
         return Array.isArray(questions) ? questions.slice(0, 3) : [];
       } catch (error) {
         console.error("Failed to parse related questions:", error);
-        // If parsing fails, extract questions using simple heuristics
+        // Extract questions using simple heuristics as fallback
         const questionRegex = /(?:^|\n)["']?([^"'\n]+\?)/g;
         const questions = [];
         let match;
@@ -74,15 +74,25 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       console.error("Error generating related questions:", error);
       return [];
     }
-  };
+  }, [isLoading]);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     
     if (!currentMessage.trim()) return;
+    
+    // Cancel any in-flight requests
+    if (activeRequestsRef.current) {
+      activeRequestsRef.current.abort();
+    }
+    activeRequestsRef.current = new AbortController();
+    
+    // Performance tracking
+    const startTime = performance.now();
+    console.time('total-response-time');
     
     // Add user message to conversation
     const userMessage: ChatMessage = {
@@ -114,118 +124,170 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       content: "",
       timestamp: new Date(),
       isLoading: true,
-      processingStage: 'classifying',
-      progressPercentage: 10,
-      stageDetails: "Analyzing your query..."
+      processingStage: 'initializing',
+      progressPercentage: 5,
+      stageDetails: "Preparing your response...",
+      isStreaming: true
     };
     
     setMessages(prevMessages => [...prevMessages, assistantMessage]);
     
     try {
-      // Step 1: Classify the query to determine if it needs real-time data
+      // Start ALL processes in parallel
+      
+      // 1. PARALLEL: Start classification
       setIsClassifying(true);
-      let realTimeData = null;
-      let needsRealTimeData = false;
-      
-      try {
-        // Update progress
-        setMessages(prevMessages => 
-          prevMessages.map(msg => 
-            msg.id === assistantMessageId
-              ? { 
-                  ...msg, 
-                  processingStage: 'classifying',
-                  progressPercentage: 20,
-                  stageDetails: "Determining information needs..."
-                }
-              : msg
-          )
-        );
-        
-        const classification = await classifyQuery(messageToSearch);
-        needsRealTimeData = classification.needsRealTimeData;
-        
-        // Step 2: If needed, fetch real-time data from the web
-        if (needsRealTimeData) {
+      const classificationPromise = classifyQuery(messageToSearch)
+        .then(classification => {
+          setMessages(prevMessages => 
+            prevMessages.map(msg => 
+              msg.id === assistantMessageId
+                ? { 
+                    ...msg, 
+                    processingStage: 'classifying',
+                    progressPercentage: 25,
+                    stageDetails: "Analyzing your query..."
+                  }
+                : msg
+            )
+          );
+          return classification;
+        })
+        .catch(error => {
+          console.error("Classification error:", error);
+          // Return default classification on error
+          return {
+            needsRealTimeData: false,
+            confidence: 0.5,
+            topics: [],
+            suggestedSearchTerms: [messageToSearch]
+          };
+        })
+        .finally(() => {
           setIsClassifying(false);
-          setIsFetchingRealTimeData(true);
-          
-          // Update progress
-          setMessages(prevMessages => 
-            prevMessages.map(msg => 
-              msg.id === assistantMessageId
-                ? { 
-                    ...msg, 
-                    processingStage: 'searching',
-                    progressPercentage: 40,
-                    stageDetails: "Searching the web for real-time data..."
-                  }
-                : msg
-            )
-          );
-          
-          // Show loading toast for real-time data
-          toast("Fetching real-time data...", {
-            duration: 3000,
-            icon: <span className="h-4 w-4" />
-          });
-          
-          realTimeData = await getRealTimeData(messageToSearch, classification);
-          
-          // Update progress
-          setMessages(prevMessages => 
-            prevMessages.map(msg => 
-              msg.id === assistantMessageId
-                ? { 
-                    ...msg, 
-                    processingStage: 'processing',
-                    progressPercentage: 60,
-                    stageDetails: "Processing web information..."
-                  }
-                : msg
-            )
-          );
-          
-          if (realTimeData) {
-            toast("Found real-time information", {
-              duration: 2000,
-              icon: <span className="h-4 w-4 text-nexus-purple" />
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error during classification or data fetching:", error);
-        toast("Couldn't analyze query for real-time needs", {
-          duration: 2000
         });
-      } finally {
-        setIsClassifying(false);
-        setIsFetchingRealTimeData(false);
-        
-        // Update progress
-        setMessages(prevMessages => 
-          prevMessages.map(msg => 
-            msg.id === assistantMessageId
-              ? { 
-                  ...msg, 
-                  processingStage: 'generating',
-                  progressPercentage: 75,
-                  stageDetails: "Crafting your response..."
-                }
-              : msg
-          )
-        );
-      }
       
-      // Update conversation history with the new user message
+      // 2. PARALLEL: Update conversation history with the new user message
       const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToSearch }];
       
-      // Generate AI response using ChatGPT API with conversation history and real-time data if available
-      const aiResponseContent = await getChatGPTResponseWithRealTimeData(
-        messageToSearch, 
+      // 3. Start showing the streaming response immediately while we wait for classification
+      // Set up a callback to handle streaming tokens
+      let streamedContent = '';
+      
+      const handleToken = (token: string) => {
+        streamedContent += token;
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  content: streamedContent,
+                  processingStage: 'streaming',
+                  progressPercentage: 40 + (streamedContent.length / 10), // Incremental progress
+                  stageDetails: "Generating your response..."
+                }
+              : msg
+          )
+        );
+      };
+      
+      // 4. PARALLEL: Start initial streaming response without real-time data
+      // This gives immediate feedback while we wait for classification and data fetching
+      const initialStreamPromise = getStreamingResponse(
+        messageToSearch,
         updatedHistory,
-        realTimeData
-      );
+        handleToken
+      ).catch(error => {
+        console.error("Initial streaming error:", error);
+      });
+      
+      // 5. Wait for classification to complete
+      const classification = await classificationPromise;
+      
+      // 6. CONDITIONAL PARALLEL: If needed, fetch real-time data
+      let realTimeData = null;
+      if (classification.needsRealTimeData) {
+        setIsFetchingRealTimeData(true);
+        
+        // Update progress
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  processingStage: 'searching',
+                  progressPercentage: 60,
+                  stageDetails: "Searching for real-time data..."
+                }
+              : msg
+          )
+        );
+        
+        // Show loading toast for real-time data
+        toast("Fetching real-time data...", {
+          duration: 2000,
+          icon: <span className="h-4 w-4" />
+        });
+        
+        // Fetch real-time data
+        realTimeData = await getRealTimeData(messageToSearch, classification)
+          .catch(error => {
+            console.error("Real-time data error:", error);
+            return null;
+          })
+          .finally(() => {
+            setIsFetchingRealTimeData(false);
+          });
+        
+        // Update progress
+        setMessages(prevMessages => 
+          prevMessages.map(msg => 
+            msg.id === assistantMessageId
+              ? { 
+                  ...msg, 
+                  processingStage: 'processing',
+                  progressPercentage: 70,
+                  stageDetails: "Processing information..."
+                }
+              : msg
+          )
+        );
+        
+        if (realTimeData) {
+          toast("Found real-time information", {
+            duration: 2000,
+            icon: <span className="h-4 w-4 text-nexus-purple" />
+          });
+          
+          // If we have real-time data, generate a more informed response
+          // But we already have a basic streaming response showing, so users see something
+          streamedContent = '';
+          const realTimeStreamPromise = getStreamingResponse(
+            messageToSearch,
+            updatedHistory,
+            handleToken,
+            realTimeData
+          ).catch(error => {
+            console.error("Real-time streaming error:", error);
+          });
+          
+          // Wait for streaming to complete
+          await realTimeStreamPromise;
+        }
+      } else {
+        // If we don't need real-time data, wait for the initial streaming to complete
+        await initialStreamPromise;
+      }
+      
+      // Create sources from real-time data for citation
+      const sources = realTimeData?.sources || [];
+      
+      // 7. PARALLEL: Generate related questions while updating the UI
+      const relatedQuestionsPromise = generateRelatedQuestions(messageToSearch, streamedContent)
+        .catch(error => {
+          console.error("Related questions error:", error);
+          return [];
+        });
       
       // Update progress to complete
       setMessages(prevMessages => 
@@ -233,44 +295,51 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
           msg.id === assistantMessageId
             ? { 
                 ...msg, 
-                processingStage: 'complete',
-                progressPercentage: 100,
-                stageDetails: "Response completed"
+                processingStage: 'finalizing',
+                progressPercentage: 90,
+                stageDetails: "Finishing up..."
               }
             : msg
         )
       );
       
+      // 8. Wait for related questions
+      const relatedQuestions = await relatedQuestionsPromise;
+      
       // Update conversation history with assistant response
       setConversationHistory([
         ...updatedHistory,
-        { role: "assistant" as const, content: aiResponseContent }
+        { role: "assistant" as const, content: streamedContent }
       ]);
       
-      // Create sources from real-time data for citation
-      const sources = realTimeData?.sources || [];
-      
-      // Generate related questions
-      const relatedQuestions = await generateRelatedQuestions(messageToSearch, aiResponseContent);
-      
-      // Add AI response to conversation UI
-      const aiResponse: ChatMessage = {
-        id: assistantMessageId,
-        role: "assistant",
-        content: aiResponseContent,
-        timestamp: new Date(),
-        sources: sources.length > 0 ? sources : undefined,
-        hasRealTimeData: !!realTimeData,
-        alternativeResponses: [],
-        currentResponseIndex: 0,
-        relatedQuestions: relatedQuestions,
-        processingStage: 'complete',
-        progressPercentage: 100
-      };
-      
+      // Add AI response to conversation UI - final version
       setMessages(prev => 
-        prev.map(msg => msg.id === assistantMessageId ? aiResponse : msg)
+        prev.map(msg => 
+          msg.id === assistantMessageId 
+            ? {
+                id: assistantMessageId,
+                role: "assistant",
+                content: streamedContent,
+                timestamp: new Date(),
+                sources: sources.length > 0 ? sources : undefined,
+                hasRealTimeData: !!realTimeData,
+                alternativeResponses: [],
+                currentResponseIndex: 0,
+                relatedQuestions: relatedQuestions,
+                processingStage: 'complete',
+                progressPercentage: 100,
+                isLoading: false,
+                isStreaming: false
+              } 
+            : msg
+        )
       );
+      
+      // Log performance metrics
+      const totalTime = performance.now() - startTime;
+      console.timeEnd('total-response-time');
+      console.log(`Total response generated in ${(totalTime/1000).toFixed(2)}s`);
+      
     } catch (error) {
       console.error("AI error:", error);
       toast("Failed to fetch response. Please try again later.");
@@ -282,7 +351,9 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date(),
         processingStage: 'complete',
-        progressPercentage: 100
+        progressPercentage: 100,
+        isLoading: false,
+        isStreaming: false
       };
       
       setMessages(prev => 
@@ -290,14 +361,15 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       );
     } finally {
       setIsLoading(false);
+      activeRequestsRef.current = null;
     }
-  };
+  }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch]);
 
-  const handleRelatedQuestionClick = (question: string) => {
+  const handleRelatedQuestionClick = useCallback((question: string) => {
     setCurrentMessage(question);
-    // Optional: automatically submit the related question
-    setTimeout(() => handleSubmit(), 100);
-  };
+    // Automatically submit after a brief delay
+    setTimeout(() => handleSubmit(), 50);
+  }, [handleSubmit]);
 
   const handleRegenerateMessage = async (messageId: string) => {
     // Find the message and its corresponding user message
@@ -486,7 +558,7 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       setIsLoading(false);
     }
   };
-  
+
   const handleSelectAlternative = (messageId: string, index: number) => {
     setMessages(prevMessages => {
       return prevMessages.map(message => {

@@ -1,3 +1,4 @@
+
 import { openai } from './openai';
 
 export interface ClassificationResult {
@@ -10,6 +11,7 @@ export interface ClassificationResult {
 
 /**
  * Classifies a query to determine if it needs real-time data
+ * Optimized with client-side pattern matching to avoid API calls for common cases
  */
 export async function classifyQuery(query: string): Promise<ClassificationResult> {
   try {
@@ -51,8 +53,9 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
     const versionPattern = /\b(version|release|update|latest|newest|current)\b/i;
     const hasVersionQuery = versionPattern.test(query);
     
-    // For simple cases, we can avoid calling GPT
+    // For simple cases, we can avoid calling GPT completely
     if ((hasTimePattern && detectedTopics.length > 0) || hasVersionQuery || hasComparison) {
+      console.log('Fast path: Using regex classification');
       return {
         needsRealTimeData: true,
         confidence: 0.9,
@@ -66,34 +69,78 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
       };
     }
     
-    // For more complex cases, use GPT to classify
+    // Detect fact-based questions that likely need real-time data
+    const factPatterns = [
+      /\bwhat\s+is\s+(?:the|a)\s+(?!difference|reason|cause|purpose)/i, // "What is the capital of" etc.
+      /\bhow\s+(?:much|many)/i, // "How much does", "How many people"
+      /\bwhere\s+(?:is|are)/i, // "Where is", "Where are"
+      /\bwhen\s+(?:is|was|will)/i, // "When is", "When was", "When will"
+    ];
+    
+    const isFactQuestion = factPatterns.some(pattern => pattern.test(query));
+    
+    // Check for "how to" questions that less likely need real-time data
+    const howToPattern = /\bhow\s+to\b/i;
+    const isHowToQuestion = howToPattern.test(query);
+    
+    // Check if the query is conceptual/theoretical (less likely to need real-time data)
+    const conceptualPatterns = [
+      /\bdefinition\b/i,
+      /\bmeaning\b/i,
+      /\bconcept\b/i,
+      /\bexplain\b/i,
+      /\btheory\b/i,
+      /\bwhy\s+(?:is|are|does|do|did)/i,
+    ];
+    
+    const isConceptualQuestion = conceptualPatterns.some(pattern => pattern.test(query));
+    
+    // For fact questions, we can avoid GPT and use a lightweight classification
+    if (isFactQuestion && !isConceptualQuestion) {
+      console.log('Fast path: Classified as fact question');
+      return {
+        needsRealTimeData: true,
+        confidence: 0.8,
+        topics: ['factual'],
+        suggestedSearchTerms: [query]
+      };
+    }
+    
+    // For "how to" questions that are less likely to need real-time data
+    if (isHowToQuestion && !hasTimePattern) {
+      console.log('Fast path: Classified as how-to question');
+      return {
+        needsRealTimeData: false,
+        confidence: 0.7,
+        topics: ['instructional'],
+        suggestedSearchTerms: [query]
+      };
+    }
+    
+    // For conceptual/theoretical questions
+    if (isConceptualQuestion && !hasTimePattern) {
+      console.log('Fast path: Classified as conceptual question');
+      return {
+        needsRealTimeData: false,
+        confidence: 0.7,
+        topics: ['conceptual'],
+        suggestedSearchTerms: [query]
+      };
+    }
+    
+    // For more complex cases, use GPT to classify but with shorter context
+    console.log('Falling back to GPT classification');
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-mini", // Using smaller model for speed
       messages: [
         {
           role: "system",
-          content: `You are an expert query classifier that determines if a user question requires real-time or up-to-date information. 
-            Analyze the query and decide if it would benefit from web search to get the latest information.
-            Be very sensitive to queries that might need current information - assume by default that users want the most recent data.
-            For any comparisons (like "A vs B"), product details, prices, versions, or statistics, assume real-time data is needed.
-            
-            Respond with a JSON object with the following fields:
-            - needsRealTimeData: boolean (true if the query requires recent information)
-            - confidence: float between 0 and 1 (how confident you are in this classification)
-            - topics: array of strings (categories of information needed, e.g., "weather", "finance", "news", "technology", "software", "products")
-            - suggestedSearchTerms: array of strings (optimized search terms for web scraping)
-            
-            Examples of queries needing real-time data:
-            - "What's the weather in Paris today?" 
-            - "Current gold price per ounce"
-            - "Latest news about the SpaceX launch"
-            - "USD to EUR exchange rate"
-            - "Who won the Liverpool game yesterday"
-            - "AAPL vs MSFT stock performance"
-            - "Latest version of Laravel"
-            - "Current price of iPhone 15"
-            - "Best laptop for programming 2024"
-          `
+          content: `Analyze if this query needs real-time data from the web. 
+            Respond only with a JSON object with these fields:
+            - needsRealTimeData: boolean
+            - confidence: float between 0 and 1
+            - topics: array of strings (e.g., "weather", "finance", "news")
+            - suggestedSearchTerms: array of 1-3 search terms`
         },
         {
           role: "user",
@@ -109,11 +156,7 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
         needsRealTimeData: result.needsRealTimeData,
         confidence: result.confidence,
         topics: result.topics || [],
-        suggestedSearchTerms: result.suggestedSearchTerms || [
-          query,
-          `latest ${query}`,
-          `current ${query} ${new Date().getFullYear()}`
-        ]
+        suggestedSearchTerms: result.suggestedSearchTerms || [query]
       };
     } catch (e) {
       console.error("Error parsing GPT response:", e);
@@ -122,11 +165,7 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
         needsRealTimeData: hasTimePattern || hasVersionQuery || hasComparison,
         confidence: 0.6,
         topics: detectedTopics.length > 0 ? detectedTopics : ["general"],
-        suggestedSearchTerms: [
-          query,
-          `latest ${query}`,
-          `current ${query} ${new Date().getFullYear()}`
-        ]
+        suggestedSearchTerms: [query]
       };
     }
   } catch (error) {

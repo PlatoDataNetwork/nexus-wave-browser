@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { MessageSquarePlus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +8,8 @@ interface RelatedQuestionsProps {
   onQuestionClick?: (question: string) => void;
 }
 
-const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({ questions, onQuestionClick }) => {
+// Using memo to prevent unnecessary re-renders
+const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQuestionClick }) => {
   if (!questions || questions.length === 0) {
     return null;
   }
@@ -34,6 +35,9 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({ questions, onQuesti
       </div>
     </div>
   );
-};
+});
+
+// Add display name for React Dev Tools
+RelatedQuestions.displayName = 'RelatedQuestions';
 
 export default RelatedQuestions;
