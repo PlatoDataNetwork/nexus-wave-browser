@@ -4,22 +4,23 @@ import { Loader2 } from 'lucide-react';
 
 interface MessageStreamProps {
   content: string;
-  isLoading?: boolean; // Added isLoading prop
+  isLoading?: boolean;
   isStreaming: boolean;
   progress?: number;
-  streamingText?: string; // Added streamingText prop to support the MessageContent usage
+  streamingText?: string;
 }
 
 const MessageStream: React.FC<MessageStreamProps> = ({ 
   content, 
-  isLoading = false, // Default value
+  isLoading = false,
   isStreaming,
   progress = 0,
-  streamingText = '' // Default value 
+  streamingText = ''
 }) => {
   const [displayText, setDisplayText] = useState('');
   const [cursor, setCursor] = useState(true);
   const cursorTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const previousContentRef = useRef<string>('');
   
   // Blink cursor effect
   useEffect(() => {
@@ -40,15 +41,39 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   
   // Handle content updates - prioritize streamingText if provided
   useEffect(() => {
-    setDisplayText(streamingText || content);
+    // Only update if content/streamingText has changed to avoid unnecessary re-renders
+    if (streamingText && streamingText !== previousContentRef.current) {
+      setDisplayText(streamingText);
+      previousContentRef.current = streamingText;
+    } else if (content && content !== previousContentRef.current) {
+      setDisplayText(content);
+      previousContentRef.current = content;
+    }
   }, [content, streamingText]);
+  
+  // When streaming stops or component unmounts, clear the cursor timer
+  useEffect(() => {
+    return () => {
+      if (cursorTimerRef.current) {
+        clearInterval(cursorTimerRef.current);
+        cursorTimerRef.current = null;
+      }
+    };
+  }, []);
+  
+  // Reset the display text when switching to a new streaming session
+  useEffect(() => {
+    if (!isStreaming) {
+      previousContentRef.current = content;
+    }
+  }, [isStreaming, content]);
   
   if (!displayText && !isStreaming && !isLoading) {
     return null;
   }
   
   return (
-    <div className="relative">
+    <div className="relative whitespace-pre-wrap break-words">
       {displayText}
       {isStreaming && (
         <span className={`inline-block h-4 w-1 ml-0.5 bg-current ${cursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>

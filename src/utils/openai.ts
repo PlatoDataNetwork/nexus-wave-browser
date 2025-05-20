@@ -1,4 +1,3 @@
-
 import OpenAI from 'openai';
 
 // OpenAI API key
@@ -20,7 +19,7 @@ const SYSTEM_PROMPTS = {
   REALTIME: 'You are a fast and efficient information synthesizer. Keep responses under 200 words. Focus on key points.',
   DIVERSITY: 'Provide a different perspective than previous responses. Be concise.',
   STREAMING: 'You are a real-time assistant. Focus on the most important details first and keep responses brief.',
-  RELATED_QUESTIONS: 'You are generating follow-up questions that a user might want to ask based on their previous question and the response. These should always be from the user\'s perspective (first-person) and be phrased as complete questions ending with question marks.'
+  RELATED_QUESTIONS: 'You are generating follow-up questions that a user might want to ask based on their previous question and the response. These should always be from the user\'s perspective (first-person) and be phrased as complete questions ending with question marks. Return EXACTLY 3 questions. Format your response as a JSON array like this: ["Question 1?", "Question 2?", "Question 3?"]'
 };
 
 /**
@@ -42,10 +41,10 @@ export async function getStreamingResponse(
       console.log('Using cached response');
       const cachedResponse = responseCache.get(cacheKey);
       // Simulate streaming for cached responses
-      const chunks = cachedResponse.split(/\b/);
+      const chunks = cachedResponse.split(' ');
       for (const chunk of chunks) {
-        await new Promise(resolve => setTimeout(resolve, 5));
-        onToken(chunk);
+        await new Promise(resolve => setTimeout(resolve, 10));
+        onToken(chunk + ' ');
       }
       return;
     }
@@ -79,7 +78,6 @@ export async function getStreamingResponse(
     ];
     
     // Request with optimized parameters for fastest possible first token
-    // Removed timeout parameter since it's not supported in the API
     const stream = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Using mini for faster responses
       messages: messages as any,
@@ -90,18 +88,23 @@ export async function getStreamingResponse(
     });
     
     let fullResponse = '';
+    let isFirstToken = true;
     
     // Process the stream
     for await (const chunk of stream) {
       if (chunk.choices[0]?.delta?.content) {
         const token = chunk.choices[0].delta.content;
-        fullResponse += token;
+        
+        // For first token, make sure we start with a clean state
+        if (isFirstToken) {
+          fullResponse = token;
+          isFirstToken = false;
+          console.timeEnd('streaming-first-token');
+        } else {
+          fullResponse += token;
+        }
+        
         onToken(token);
-      }
-      
-      // Record time to first token
-      if (fullResponse.length > 0 && fullResponse.length <= 20) {
-        console.timeEnd('streaming-first-token');
       }
     }
     
@@ -185,7 +188,6 @@ export async function getChatGPTResponseWithRealTimeData(
     const temperature = diversityPrompt ? 0.8 : 0.5;
     
     // Request with optimized parameters for faster responses
-    // Removed timeout parameter since it's not supported in the API
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Using mini for faster responses
       messages: messages as any,

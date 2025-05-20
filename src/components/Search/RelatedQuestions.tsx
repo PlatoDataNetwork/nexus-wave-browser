@@ -1,6 +1,6 @@
 
-import React, { memo } from 'react';
-import { MessageSquarePlus } from 'lucide-react';
+import React, { memo, useState } from 'react';
+import { MessageSquarePlus, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 interface RelatedQuestionsProps {
@@ -10,9 +10,24 @@ interface RelatedQuestionsProps {
 
 // Using memo to prevent unnecessary re-renders
 const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQuestionClick }) => {
+  const [clickedQuestionIndex, setClickedQuestionIndex] = useState<number | null>(null);
+  
   if (!questions || questions.length === 0) {
     return null;
   }
+
+  const handleQuestionClick = (question: string, index: number) => {
+    setClickedQuestionIndex(index);
+    
+    // Add a small delay to ensure clean state transition before invoking the callback
+    setTimeout(() => {
+      if (onQuestionClick) {
+        onQuestionClick(question);
+      }
+      // Reset the clicked state after a brief period
+      setTimeout(() => setClickedQuestionIndex(null), 1000);
+    }, 100);
+  };
 
   return (
     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
@@ -27,9 +42,17 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQ
             variant="outline"
             size="sm"
             className="justify-start text-xs h-auto py-1.5 text-left hover:bg-nexus-purple/10"
-            onClick={() => onQuestionClick && onQuestionClick(question)}
+            onClick={() => handleQuestionClick(question, index)}
+            disabled={clickedQuestionIndex !== null}
           >
-            {question}
+            {clickedQuestionIndex === index ? (
+              <div className="flex items-center gap-1.5">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span>Processing...</span>
+              </div>
+            ) : (
+              question
+            )}
           </Button>
         ))}
       </div>
