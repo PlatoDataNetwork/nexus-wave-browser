@@ -5,8 +5,6 @@ import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import WalletConnect from "@/components/Browser/WalletConnect";
-import LeftMenu from "@/components/Browser/LeftMenu";
-import { useSidebarToggle } from "@/hooks/useSidebarToggle";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -15,7 +13,6 @@ interface IndexProps {
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(true);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
-  const { showSidebar } = useSidebarToggle(true);
   
   const { 
     tabs, 
@@ -68,41 +65,31 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
         </div>
       </div>
       
-      {/* Browser interface with left menu */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Menu */}
-        {showSidebar && (
-          <div className="w-64 flex-shrink-0">
-            <LeftMenu onNavigate={navigateToUrl} />
-          </div>
-        )}
+      {/* Browser interface */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <BrowserHeader
+          tabs={tabs}
+          currentUrl={currentUrl}
+          onAddTab={addTab}
+          onCloseTab={closeTab}
+          onActivateTab={activateTab}
+          onNavigate={navigateToUrl}
+          onGoBack={goBack}
+          onGoForward={goForward}
+          onRefresh={refreshPage}
+          canGoBack={canGoBack()}
+          canGoForward={canGoForward()}
+          bookmarksBarState={bookmarksBarState}
+          onToggleBookmarksBar={toggleBookmarksBarState}
+        />
         
-        {/* Main content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <BrowserHeader
-            tabs={tabs}
-            currentUrl={currentUrl}
-            onAddTab={addTab}
-            onCloseTab={closeTab}
-            onActivateTab={activateTab}
-            onNavigate={navigateToUrl}
-            onGoBack={goBack}
-            onGoForward={goForward}
-            onRefresh={refreshPage}
-            canGoBack={canGoBack()}
-            canGoForward={canGoForward()}
-            bookmarksBarState={bookmarksBarState}
-            onToggleBookmarksBar={toggleBookmarksBarState}
-          />
-          
-          <BrowserContent 
-            currentUrl={currentUrl} 
-            onNavigate={navigateToUrl}
-          />
-          
-          {/* Nexus Wave Bridge overlay - centered in the browser */}
-          {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
-        </div>
+        <BrowserContent 
+          currentUrl={currentUrl} 
+          onNavigate={navigateToUrl}
+        />
+        
+        {/* Nexus Wave Bridge overlay - centered in the browser */}
+        {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
       </div>
       
       <CustomToaster position="bottom-right" />
