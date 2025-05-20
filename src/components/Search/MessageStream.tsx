@@ -21,6 +21,7 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   const [cursor, setCursor] = useState(true);
   const cursorTimerRef = useRef<NodeJS.Timeout | null>(null);
   const previousContentRef = useRef<string>('');
+  const contentContainerRef = useRef<HTMLDivElement>(null);
   
   // Blink cursor effect
   useEffect(() => {
@@ -42,14 +43,15 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   // Handle content updates - prioritize streamingText if provided
   useEffect(() => {
     // Only update if content/streamingText has changed to avoid unnecessary re-renders
-    if (streamingText && streamingText !== previousContentRef.current) {
+    if (isStreaming && streamingText && streamingText !== previousContentRef.current) {
       setDisplayText(streamingText);
       previousContentRef.current = streamingText;
     } else if (content && content !== previousContentRef.current) {
+      // When we have final content and we're no longer streaming
       setDisplayText(content);
       previousContentRef.current = content;
     }
-  }, [content, streamingText]);
+  }, [content, streamingText, isStreaming]);
   
   // When streaming stops or component unmounts, clear the cursor timer
   useEffect(() => {
@@ -63,17 +65,28 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   
   // Reset the display text when switching to a new streaming session
   useEffect(() => {
-    if (!isStreaming) {
+    if (!isStreaming && content) {
       previousContentRef.current = content;
+      setDisplayText(content);
     }
   }, [isStreaming, content]);
+  
+  // Auto-scroll to bottom during streaming
+  useEffect(() => {
+    if (isStreaming && contentContainerRef.current) {
+      contentContainerRef.current.scrollTop = contentContainerRef.current.scrollHeight;
+    }
+  }, [displayText, isStreaming]);
   
   if (!displayText && !isStreaming && !isLoading) {
     return null;
   }
   
   return (
-    <div className="relative whitespace-pre-wrap break-words">
+    <div 
+      className="relative whitespace-pre-wrap break-words"
+      ref={contentContainerRef}
+    >
       {displayText}
       {isStreaming && (
         <span className={`inline-block h-4 w-1 ml-0.5 bg-current ${cursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>

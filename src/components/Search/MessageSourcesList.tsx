@@ -22,6 +22,7 @@ const MessageSourcesList: React.FC<MessageSourcesListProps> = ({ sources }) => {
       const parsedUrl = new URL(url);
       return parsedUrl.hostname;
     } catch (e) {
+      console.error("Error parsing URL:", url, e);
       return url.split('/')[0];
     }
   };
@@ -39,6 +40,11 @@ const MessageSourcesList: React.FC<MessageSourcesListProps> = ({ sources }) => {
       </div>
       <div className="flex flex-wrap gap-2">
         {sources.map((source, index) => {
+          if (!source.url) {
+            console.warn("Source missing URL:", source);
+            return null;
+          }
+          
           const domain = getDomainFromUrl(source.url);
           const faviconUrl = getFaviconUrl(domain);
           
@@ -48,10 +54,19 @@ const MessageSourcesList: React.FC<MessageSourcesListProps> = ({ sources }) => {
               href={source.url} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="flex items-center gap-1 px-2 py-1 bg-background rounded-full text-xs hover:bg-muted transition-colors group"
+              className="flex items-center gap-1 px-2 py-1 bg-background rounded-full text-xs hover:bg-muted transition-colors group border border-border"
             >
-              <img src={faviconUrl} alt={domain} className="h-4 w-4 rounded-full" />
-              <span className="truncate max-w-[150px]">{domain}</span>
+              <img 
+                src={faviconUrl} 
+                alt={domain} 
+                className="h-4 w-4 rounded-full"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+              <span className="truncate max-w-[150px]">
+                {source.title || domain}
+              </span>
               <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
           );

@@ -55,6 +55,13 @@ export async function getStreamingResponse(
     // Add real-time data if available (but keep it minimal for faster processing)
     if (realTimeData) {
       systemPrompt += `\n\nUse this data:\n${realTimeData.content.substring(0, 500)}${realTimeData.content.length > 500 ? '...' : ''}`;
+      
+      // Include source information in system prompt
+      if (realTimeData.sources && realTimeData.sources.length > 0) {
+        systemPrompt += `\n\nSources:\n${realTimeData.sources.map(source => 
+          `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
+        ).join('\n')}`;
+      }
     }
     
     // Keep history minimal for faster processing

@@ -30,7 +30,7 @@ export async function getRealTimeData(
       console.log("Cache hit for query:", query);
       return {
         content: cachedData.data,
-        sources: cachedData.sources,
+        sources: cachedData.sources || [],
         timestamp: new Date(cachedData.timestamp)
       };
     }
@@ -121,8 +121,8 @@ export async function getRealTimeData(
         console.error(`Failed to scrape ${result.url}:`, error);
         // Return a basic result with just the description from search
         return {
-          title: result.title,
-          content: result.description,
+          title: result.title || "Unknown source",
+          content: result.description || "",
           url: result.url,
           isPartial: true
         } as ScrapedContent;
@@ -140,8 +140,8 @@ export async function getRealTimeData(
           // Fallback for failed requests
           const searchResult = selectedResults[index];
           return {
-            title: searchResult.title,
-            content: searchResult.description,
+            title: searchResult.title || "Unknown source",
+            content: searchResult.description || "",
             url: searchResult.url,
             isPartial: true
           };
@@ -211,11 +211,16 @@ export async function getRealTimeData(
     
     const extractedData = response.choices[0].message.content || '';
     
-    // Create sources for citation
-    const sources = selectedResults.map(result => ({
-      title: result.title,
-      url: result.url
-    }));
+    // Create sources for citation with validation
+    const sources = selectedResults
+      .filter(result => result && result.url && result.title)
+      .map(result => ({
+        title: result.title || getDomainFromUrl(result.url),
+        url: result.url
+      }));
+
+    // Log the sources to help with debugging
+    console.log("Sources being saved to cache:", sources);
     
     // Cache the results
     dataCache.set(cacheKey, extractedData, sources, contentType);
@@ -358,3 +363,13 @@ function selectDiverseSources(scoredResults: any[], count: number): any[] {
   
   return selectedResults;
 }
+
+// Helper function for domain extraction
+const getDomainFromUrl = (url: string): string => {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.hostname;
+  } catch (e) {
+    return url.split('/')[0];
+  }
+};

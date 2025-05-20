@@ -86,7 +86,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               progressPercentage={progressPercentage}
             />
             
-            <MessageSourcesList sources={sources || []} />
+            {sources && sources.length > 0 && (
+              <MessageSourcesList sources={sources} />
+            )}
             
             <RelatedQuestions 
               questions={relatedQuestions || []} 
