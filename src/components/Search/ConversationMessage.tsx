@@ -26,7 +26,7 @@ interface ConversationMessageProps {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
-  processingStage?: 'classifying' | 'searching' | 'processing' | 'generating' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
 }
