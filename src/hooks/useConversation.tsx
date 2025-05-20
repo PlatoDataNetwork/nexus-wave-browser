@@ -31,7 +31,9 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       
       // Create a prompt specifically for related questions
       const relatedQuestionsPrompt = 
-        "Based on the user's query and your response, generate 3 follow-up questions. " +
+        "Based on the user's query and your response, generate 3 follow-up questions that the USER might want to ask next. " +
+        "These should be phrased from the user's perspective (first person), be relevant to continuing the conversation, " +
+        "and provide natural next steps in the conversation. " +
         "Return ONLY a JSON array with no additional text. Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
       
       // Include just enough context for good question generation

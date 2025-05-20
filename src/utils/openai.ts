@@ -19,7 +19,8 @@ const SYSTEM_PROMPTS = {
   DEFAULT: 'You are Nexus Wave\'s helpful assistant answering questions. Be concise but informative.',
   REALTIME: 'You are a fast and efficient information synthesizer. Keep responses under 200 words. Focus on key points.',
   DIVERSITY: 'Provide a different perspective than previous responses. Be concise.',
-  STREAMING: 'You are a real-time assistant. Focus on the most important details first and keep responses brief.'
+  STREAMING: 'You are a real-time assistant. Focus on the most important details first and keep responses brief.',
+  RELATED_QUESTIONS: 'You are generating follow-up questions that a user might want to ask based on their previous question and the response. These should always be from the user\'s perspective (first-person) and be phrased as complete questions ending with question marks.'
 };
 
 /**
@@ -144,8 +145,12 @@ export async function getChatGPTResponseWithRealTimeData(
     // Base system prompt - kept concise for faster processing
     let systemPrompt = SYSTEM_PROMPTS.DEFAULT;
     
+    // Check if this is a related questions request
+    if (message.includes("follow-up questions that the USER might want to ask")) {
+      systemPrompt = SYSTEM_PROMPTS.RELATED_QUESTIONS;
+    } 
     // Add diversity prompt if provided (for regeneration requests)
-    if (diversityPrompt) {
+    else if (diversityPrompt) {
       systemPrompt = SYSTEM_PROMPTS.DIVERSITY;
     }
     

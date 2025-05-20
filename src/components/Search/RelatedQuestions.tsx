@@ -18,7 +18,7 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQ
     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-1 text-xs font-medium mb-2">
         <MessageSquarePlus className="h-3 w-3" />
-        <span>Related Questions:</span>
+        <span>Ask follow-up questions:</span>
       </div>
       <div className="flex flex-col gap-2">
         {questions.map((question, index) => (
@@ -26,7 +26,7 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQ
             key={index}
             variant="outline"
             size="sm"
-            className="justify-start text-xs h-auto py-1.5 text-left"
+            className="justify-start text-xs h-auto py-1.5 text-left hover:bg-nexus-purple/10"
             onClick={() => onQuestionClick && onQuestionClick(question)}
           >
             {question}
