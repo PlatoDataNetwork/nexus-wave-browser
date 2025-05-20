@@ -4,14 +4,18 @@ import { Loader2 } from 'lucide-react';
 
 interface MessageStreamProps {
   content: string;
+  isLoading?: boolean; // Added isLoading prop
   isStreaming: boolean;
   progress?: number;
+  streamingText?: string; // Added streamingText prop to support the MessageContent usage
 }
 
 const MessageStream: React.FC<MessageStreamProps> = ({ 
   content, 
+  isLoading = false, // Default value
   isStreaming,
-  progress = 0 
+  progress = 0,
+  streamingText = '' // Default value 
 }) => {
   const [displayText, setDisplayText] = useState('');
   const [cursor, setCursor] = useState(true);
@@ -34,12 +38,12 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     };
   }, [isStreaming]);
   
-  // Handle content updates
+  // Handle content updates - prioritize streamingText if provided
   useEffect(() => {
-    setDisplayText(content);
-  }, [content]);
+    setDisplayText(streamingText || content);
+  }, [content, streamingText]);
   
-  if (!content && !isStreaming) {
+  if (!displayText && !isStreaming && !isLoading) {
     return null;
   }
   

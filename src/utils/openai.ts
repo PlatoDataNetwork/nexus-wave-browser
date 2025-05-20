@@ -1,3 +1,4 @@
+
 import OpenAI from 'openai';
 
 // OpenAI API key
@@ -77,14 +78,14 @@ export async function getStreamingResponse(
     ];
     
     // Request with optimized parameters for fastest possible first token
+    // Removed timeout parameter since it's not supported in the API
     const stream = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Using mini for faster responses
       messages: messages as any,
       temperature: 0.5,
       max_tokens: 600, // Reduced for faster responses
       stream: true, // Enable streaming
-      frequency_penalty: 0.3,
-      timeout: 8000 // 8 second timeout to fail faster
+      frequency_penalty: 0.3
     });
     
     let fullResponse = '';
@@ -179,14 +180,14 @@ export async function getChatGPTResponseWithRealTimeData(
     const temperature = diversityPrompt ? 0.8 : 0.5;
     
     // Request with optimized parameters for faster responses
+    // Removed timeout parameter since it's not supported in the API
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Using mini for faster responses
       messages: messages as any,
       temperature: temperature,
       max_tokens: 500, // Reduced for faster response times
       presence_penalty: 0.3, // Slight penalty to discourage repetition
-      frequency_penalty: 0.5, // Higher value to further reduce token usage
-      timeout: 8000 // 8 second timeout to fail faster
+      frequency_penalty: 0.5 // Higher value to further reduce token usage
     });
     
     const responseText = response.choices[0].message.content;
@@ -248,14 +249,14 @@ export async function getChatGPTResponse(
       }
     ];
     
+    // Removed timeout parameter since it's not supported in the API
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: messages as any,
       temperature: 0.5,
       max_tokens: 400, // Reduced for faster responses
       presence_penalty: 0.3,
-      frequency_penalty: 0.5,
-      timeout: 5000 // 5 second timeout to fail faster
+      frequency_penalty: 0.5
     });
     
     const responseText = response.choices[0].message.content;

@@ -20,7 +20,7 @@ export interface ChatMessage {
   currentResponseIndex?: number;
   relatedQuestions?: string[];
   // Progress tracking properties
-  processingStage?: 'classifying' | 'searching' | 'processing' | 'generating' | 'complete'; 
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete'; 
   progressPercentage?: number;
   stageDetails?: string;
   // Additional streaming and loading state properties

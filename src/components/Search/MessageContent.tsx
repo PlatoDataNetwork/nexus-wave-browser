@@ -22,7 +22,7 @@ interface MessageContentProps {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
-  processingStage?: 'classifying' | 'searching' | 'processing' | 'generating' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
 }
 
@@ -61,7 +61,12 @@ const MessageContent: React.FC<MessageContentProps> = ({
       {/* Improved streaming display */}
       {isStreaming ? (
         <div>
-          <MessageStream isLoading={isLoading} streamingText={content} />
+          <MessageStream 
+            isStreaming={isStreaming} 
+            content={content} 
+            isLoading={isLoading} 
+            progress={streamProgress}
+          />
           
           {isLoading && streamProgress > 0 && (
             <div className="flex items-center gap-2 mt-2 text-xs text-nexus-purple">
