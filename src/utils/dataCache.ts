@@ -10,18 +10,30 @@ interface CachedItem {
   timestamp: number; // Timestamp in milliseconds
   accessCount: number; // Track how many times this item was accessed
   lastAccessed: number; // Timestamp of last access
+  expiresAt: number; // Explicit expiration timestamp
 }
 
 class DataCache {
   private cache: Map<string, CachedItem>;
-  private readonly TTL_MS: number; // Time-to-live in milliseconds
+  private readonly DEFAULT_TTL_MINUTES: number; // Default time-to-live in minutes
   private readonly MAX_ITEMS: number; // Maximum number of items in cache
   private readonly AUTOMATIC_CLEANUP_INTERVAL_MS: number; // Auto cleanup interval
   private cleanupInterval: NodeJS.Timeout | null = null;
   
-  constructor(ttlMinutes: number = 30, maxItems: number = 200) {
+  // TTL values for different content types (in minutes)
+  private readonly CONTENT_TYPE_TTL = {
+    weather: 10,       // Weather data expires quickly
+    news: 15,          // News updates reasonably often
+    sports: 15,        // Sports scores change frequently
+    stock: 10,         // Stock prices change quickly
+    search_results: 20, // Search results are somewhat static
+    general: 30,       // General information stays relevant longer
+    default: 30        // Default TTL
+  };
+  
+  constructor(defaultTtlMinutes: number = 30, maxItems: number = 200) {
     this.cache = new Map<string, CachedItem>();
-    this.TTL_MS = ttlMinutes * 60 * 1000;
+    this.DEFAULT_TTL_MINUTES = defaultTtlMinutes;
     this.MAX_ITEMS = maxItems;
     this.AUTOMATIC_CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
     
@@ -37,6 +49,10 @@ class DataCache {
         }
       });
     }
+    
+    // Clear the cache on initialization to remove stale data
+    this.clear();
+    console.log("Data cache cleared on initialization to remove stale data");
   }
   
   /**
@@ -54,8 +70,15 @@ class DataCache {
   
   /**
    * Store data in the cache with optimized memory usage
+   * @param overrideTtlMinutes Override the default TTL - useful for time-sensitive data
    */
-  set(key: string, data: string, sources: Array<{ title: string; url: string }>, contentType: string): void {
+  set(
+    key: string, 
+    data: string, 
+    sources: Array<{ title: string; url: string }>, 
+    contentType: string,
+    overrideTtlMinutes?: number
+  ): void {
     // If we're at capacity, remove items according to our eviction policy
     if (this.cache.size >= this.MAX_ITEMS) {
       this.evictItems();
@@ -63,16 +86,36 @@ class DataCache {
     
     const normalizedKey = this.normalizeKey(key);
     
+    // Determine TTL based on content type or override
+    let ttlMinutes = overrideTtlMinutes;
+    
+    if (ttlMinutes === undefined) {
+      // Use content-specific TTL if available, otherwise use default
+      ttlMinutes = this.CONTENT_TYPE_TTL[contentType as keyof typeof this.CONTENT_TYPE_TTL] 
+        || this.CONTENT_TYPE_TTL.default;
+      
+      // Detect weather and news-related queries for shorter TTL
+      if (/weather|forecast|temperature|rain|snow|storm|alert|warning/i.test(normalizedKey)) {
+        ttlMinutes = this.CONTENT_TYPE_TTL.weather;
+      } else if (/news|latest|update|report|today|breaking/i.test(normalizedKey)) {
+        ttlMinutes = this.CONTENT_TYPE_TTL.news;
+      }
+    }
+    
+    // Calculate expiration time
+    const expiresAt = Date.now() + (ttlMinutes * 60 * 1000);
+    
     this.cache.set(normalizedKey, {
       data,
       sources,
       contentType,
       timestamp: Date.now(),
       accessCount: 0,
-      lastAccessed: Date.now()
+      lastAccessed: Date.now(),
+      expiresAt
     });
     
-    console.log(`Cache: stored "${normalizedKey}" (${contentType}) with ${sources.length} sources`);
+    console.log(`Cache: stored "${normalizedKey}" (${contentType}) with ${sources.length} sources, expires in ${ttlMinutes} mins`);
   }
   
   /**
@@ -82,8 +125,8 @@ class DataCache {
     const normalizedKey = this.normalizeKey(key);
     const item = this.cache.get(normalizedKey);
     
-    // If item doesn't exist or is expired
-    if (!item || Date.now() - item.timestamp > this.TTL_MS) {
+    // If item doesn't exist or is expired based on explicit expiration time
+    if (!item || Date.now() > item.expiresAt) {
       if (item) {
         console.log(`Cache: found "${normalizedKey}" but it was expired`);
         // Remove expired item
@@ -98,7 +141,7 @@ class DataCache {
     item.accessCount += 1;
     item.lastAccessed = Date.now();
     
-    console.log(`Cache: hit for "${normalizedKey}" (${item.contentType}), access count: ${item.accessCount}`);
+    console.log(`Cache: hit for "${normalizedKey}" (${item.contentType}), access count: ${item.accessCount}, expires in ${Math.round((item.expiresAt - Date.now()) / 1000 / 60)} mins`);
     return item;
   }
   
@@ -110,7 +153,7 @@ class DataCache {
     let expiredCount = 0;
     
     this.cache.forEach((item, key) => {
-      if (now - item.timestamp > this.TTL_MS) {
+      if (now > item.expiresAt) {
         this.cache.delete(key);
         expiredCount++;
       }
@@ -135,7 +178,7 @@ class DataCache {
     this.cache.forEach((item, key) => {
       // Score formula: (access count) * (recency factor)
       // Recency factor: 1.0 for very recent access, decreases with time
-      const recencyFactor = Math.max(0.1, 1 - (now - item.lastAccessed) / this.TTL_MS);
+      const recencyFactor = Math.max(0.1, 1 - (now - item.lastAccessed) / (this.DEFAULT_TTL_MINUTES * 60 * 1000));
       const score = item.accessCount * recencyFactor;
       
       scoredItems.push({ key, score });
@@ -198,7 +241,7 @@ class DataCache {
     return {
       size: this.cache.size,
       maxSize: this.MAX_ITEMS,
-      ttlMinutes: this.TTL_MS / (60 * 1000),
+      ttlMinutes: this.DEFAULT_TTL_MINUTES,
       hitRate
     };
   }

@@ -1,3 +1,4 @@
+
 import { ClassificationResult } from './queryClassifier';
 import { dataCache } from './dataCache';
 import { searchWithSerper } from '../services/searchApi';
@@ -8,6 +9,32 @@ export interface RealTimeData {
   content: string;
   sources: Array<{ title: string; url: string }>;
   timestamp: Date;
+}
+
+// Define time-sensitive topics
+const TIME_SENSITIVE_TOPICS = [
+  'weather', 'news', 'current events', 'forecast', 'stock', 'price',
+  'sports', 'score', 'election', 'vote', 'emergency', 'alert', 'warning'
+];
+
+/**
+ * Check if a query is likely to be time-sensitive and needs the most current data
+ */
+function isTimeSensitiveQuery(query: string, classification: ClassificationResult): boolean {
+  const queryLower = query.toLowerCase();
+  
+  // Check if any time-sensitive keywords are in the query
+  const hasTimeKeywords = TIME_SENSITIVE_TOPICS.some(topic => 
+    queryLower.includes(topic)
+  );
+  
+  // Check if the classification indicates real-time data need
+  const needsRealTimeData = classification.needsRealTimeData;
+  
+  // Check for time indicators in the query
+  const hasTimeIndicators = /today|current|now|latest|right now|this (morning|afternoon|evening)|tonight/i.test(queryLower);
+  
+  return hasTimeKeywords || needsRealTimeData || hasTimeIndicators;
 }
 
 /**
@@ -22,32 +49,52 @@ export async function getRealTimeData(
     // Measure performance
     console.time('realtime-data-total');
     
-    // Check cache first for faster responses
-    const cacheKey = query.toLowerCase();
-    const cachedData = dataCache.get(cacheKey);
+    // Check if this is a time-sensitive query
+    const isTimeSensitive = isTimeSensitiveQuery(query, classification);
     
-    if (cachedData) {
-      console.log("Cache hit for query:", query);
-      return {
-        content: cachedData.data,
-        sources: cachedData.sources || [],
-        timestamp: new Date(cachedData.timestamp)
-      };
+    // For time-sensitive queries, always bypass cache
+    if (!isTimeSensitive) {
+      // Check cache first for faster responses on non-time-sensitive queries
+      const cacheKey = query.toLowerCase();
+      const cachedData = dataCache.get(cacheKey);
+      
+      if (cachedData) {
+        // Only use cached data if it's fresh (less than 30 minutes for non-time-sensitive)
+        const dataAge = Date.now() - cachedData.timestamp;
+        const CACHE_MAX_AGE = 30 * 60 * 1000; // 30 minutes
+        
+        if (dataAge < CACHE_MAX_AGE) {
+          console.log("Cache hit for query:", query);
+          return {
+            content: cachedData.data,
+            sources: cachedData.sources || [],
+            timestamp: new Date(cachedData.timestamp)
+          };
+        } else {
+          console.log("Cache expired for query:", query);
+        }
+      }
+    } else {
+      console.log(`Time-sensitive query detected: "${query}" - bypassing cache`);
     }
     
-    // Not in cache, fetch fresh data
+    // Not in cache or time-sensitive, fetch fresh data
     const contentType = classification.topics[0] || 'general';
     
-    // Choose the best search terms - prioritize recency
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+    // Get current date/time information for search terms
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+    const currentDay = currentDate.getDate();
+    const formattedToday = `${currentMonth} ${currentDay}, ${currentYear}`;
     
     // Create search terms that emphasize recency
     const searchTerms = [
-      `${query} ${currentYear}`, 
-      `${query} ${currentMonth} ${currentYear}`,
-      `latest ${query}`,
-      `current ${query} news`,
+      `${query} ${formattedToday}`, // Add today's exact date
+      `${query} today ${currentYear}`,
+      `${query} ${currentMonth} ${currentDay}`,
+      `latest ${query} today`,
+      `current ${query} now`,
       ...classification.suggestedSearchTerms
     ];
     
@@ -160,22 +207,23 @@ export async function getRealTimeData(
     // Use GPT to synthesize the information with emphasis on recency and performance
     console.time('gpt-synthesis');
     
-    // Create a detailed but streamlined system prompt
+    // Create a detailed but streamlined system prompt with explicit date information
     const systemPrompt = `You are an expert data synthesizer focused on SPEED and ACCURACY. Given scraped content about a query, extract and summarize the most relevant REAL-TIME information.
        
        IMPORTANT INSTRUCTIONS:
-       1. Focus on extracting the MOST CURRENT information available, especially dates, versions, prices, statistics.
-       2. EXPLICITLY MENTION the recency of the data (today, this week, this month, etc.)
-       3. INCLUDE specific dates and times when available
-       4. FORMAT your response to be clear, concise, and factual - aim for BREVITY
-       5. Make it OBVIOUS when data is from today/this week vs. older data
-       6. Include NUMERICAL data whenever relevant (prices, percentages, statistics)
-       7. DO NOT make up or assume information
-       8. Clearly indicate which source provided which information
-       9. If information seems outdated or contradictory, acknowledge this in your response
-       10. Keep your response short and to the point - under 300 words
+       1. Today's date is ${formattedToday}. ALWAYS include this date in your response.
+       2. Focus on extracting the MOST CURRENT information available, especially dates, versions, prices, statistics.
+       3. EXPLICITLY MENTION the recency of the data (today, this week, this month, etc.)
+       4. INCLUDE specific dates and times when available
+       5. FORMAT your response to be clear, concise, and factual - aim for BREVITY
+       6. Make it OBVIOUS when data is from today vs. older data
+       7. Include NUMERICAL data whenever relevant (prices, percentages, statistics)
+       8. DO NOT make up or assume information
+       9. Clearly indicate which source provided which information
+       10. If information seems outdated or contradictory, acknowledge this in your response
+       11. Keep your response short and to the point - under 300 words
        
-       The user's query is about "${query}" and they specifically want the LATEST information.`;
+       The user's query is about "${query}" and they specifically want the LATEST information as of ${formattedToday}.`;
     
     // Prepare the content for GPT - make it concise to reduce tokens
     const contentForGPT = extractedContent.map(content => ({
@@ -200,7 +248,7 @@ export async function getRealTimeData(
             Scraped content from sources:
             ${JSON.stringify(contentForGPT, null, 2)}
             
-            Extract and synthesize the most up-to-date information, emphasizing when the data is from. Be CONCISE.`
+            Extract and synthesize the most up-to-date information (as of ${formattedToday}), emphasizing when the data is from. Be CONCISE.`
         }
       ],
       temperature: 0.3, // Lower temperature for more factual responses
@@ -222,8 +270,9 @@ export async function getRealTimeData(
     // Log the sources to help with debugging
     console.log("Sources being saved to cache:", sources);
     
-    // Cache the results
-    dataCache.set(cacheKey, extractedData, sources, contentType);
+    // Cache the results with shorter TTL for time-sensitive topics
+    const cacheTTL = isTimeSensitive ? 10 : 30; // 10 or 30 minutes
+    dataCache.set(query.toLowerCase(), extractedData, sources, contentType, cacheTTL);
     
     console.timeEnd('realtime-data-total');
     
@@ -303,7 +352,8 @@ function scoreAndRankResults(results: any[]): any[] {
         const authorityDomains = [
           'bloomberg.com', 'reuters.com', 'ap.org', 'nytimes.com', 'wsj.com',
           'bbc.com', 'bbc.co.uk', 'cnn.com', 'theguardian.com', 'ft.com',
-          'forbes.com', 'economist.com', 'gov', 'edu', 'un.org', 'who.int'
+          'forbes.com', 'economist.com', 'gov', 'edu', 'un.org', 'who.int',
+          'weather.gov', 'accuweather.com', 'weather.com', 'noaa.gov'
         ];
         
         // Check if domain ends with or contains any of the authority domains

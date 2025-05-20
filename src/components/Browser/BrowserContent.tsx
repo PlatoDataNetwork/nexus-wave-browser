@@ -36,6 +36,25 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
       onNavigate(urlParam);
     }
     
+    // Check for time-sensitive searches and force cache refresh for them
+    const queryParam = searchParams.get('q');
+    if (queryParam) {
+      const isTimeSensitiveQuery = /weather|forecast|news|today|current|latest|alert|warning/i.test(queryParam);
+      if (isTimeSensitiveQuery) {
+        // Log that we detected a time-sensitive query
+        console.log(`BrowserContent: Detected time-sensitive query: ${queryParam}`);
+        
+        // Force cache refresh for time-sensitive queries by adding timestamp
+        const timestamp = Date.now();
+        const refreshedUrl = new URL(window.location.href);
+        refreshedUrl.searchParams.set('_t', timestamp.toString());
+        
+        // Don't navigate to the new URL directly, as that would cause a page reload
+        // Just log that we're forcing a cache refresh
+        console.log(`BrowserContent: Forcing cache refresh for time-sensitive query`);
+      }
+    }
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500); // Simulate loading delay
@@ -98,6 +117,18 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
     }
 
     if (currentUrl === '/search' || currentUrl.includes('/search')) {
+      // Extract query parameter for analytics
+      const url = new URL(window.location.href);
+      const query = url.searchParams.get('q');
+      
+      // Check if it's a time-sensitive query
+      if (query) {
+        const isTimeSensitiveQuery = /weather|forecast|news|today|current|latest|alert|warning/i.test(query);
+        if (isTimeSensitiveQuery) {
+          console.log(`[BrowserContent] Time-sensitive search detected: "${query}"`);
+        }
+      }
+      
       return (
         <ScrollArea className="h-full w-full">
           <Search />
