@@ -1,51 +1,38 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, Loader2 } from 'lucide-react';
 import { WaveMessage } from './WaveMessage';
-
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import { useWave } from '@/hooks/useWave';
 
 export const WaveChat: React.FC = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { messages, addUserMessage, addAssistantMessage, isProcessing, setIsProcessing } = useWave();
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!inputValue.trim()) return;
     
-    const userMessage: ChatMessage = {
-      role: 'user',
-      content: inputValue.trim()
-    };
-    
-    setMessages(prev => [...prev, userMessage]);
+    // Use the context to add the user message
+    addUserMessage(inputValue.trim());
     setInputValue('');
-    setIsLoading(true);
+    setIsProcessing(true);
     
     // Simulate API call with timeout
     setTimeout(() => {
-      const assistantMessage: ChatMessage = {
-        role: 'assistant',
-        content: `I received your message: "${userMessage.content}". This is a simulated response as we're still developing the Wave chat functionality.`
-      };
-      
-      setMessages(prev => [...prev, assistantMessage]);
-      setIsLoading(false);
-      
-      // Scroll to bottom after new message
-      setTimeout(scrollToBottom, 100);
+      addAssistantMessage(`I received your message: "${inputValue.trim()}". This is a simulated response as we're still developing the Wave chat functionality.`);
+      setIsProcessing(false);
     }, 1500);
   };
   
@@ -62,12 +49,12 @@ export const WaveChat: React.FC = () => {
             </div>
           </div>
         ) : (
-          messages.map((message, index) => (
-            <WaveMessage key={index} message={message} />
+          messages.map((message) => (
+            <WaveMessage key={message.id} message={message} />
           ))
         )}
         
-        {isLoading && (
+        {isProcessing && (
           <div className="flex items-center space-x-2 p-4 bg-muted/50 rounded-lg">
             <Loader2 className="h-4 w-4 animate-spin" />
             <p className="text-sm text-muted-foreground">Processing your request...</p>
@@ -91,7 +78,7 @@ export const WaveChat: React.FC = () => {
               }
             }}
           />
-          <Button type="submit" size="icon" disabled={isLoading || !inputValue.trim()}>
+          <Button type="submit" size="icon" disabled={isProcessing || !inputValue.trim()}>
             <Send className="h-4 w-4" />
           </Button>
         </form>

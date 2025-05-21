@@ -2,13 +2,13 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
 interface WaveMessageProps {
-  message: ChatMessage;
+  message: {
+    id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp?: Date;
+  };
 }
 
 export const WaveMessage: React.FC<WaveMessageProps> = ({ message }) => {

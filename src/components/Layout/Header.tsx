@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,9 +9,10 @@ const Header: React.FC = () => {
   const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
   const isHistoryRoute = location.pathname.startsWith('/history');
+  const isWaveRoute = location.pathname.startsWith('/wave');
   
-  // Don't display header on app routes that have their own browser chrome
-  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
+  // Don't display header on app routes that have their own browser chrome or wave routes
+  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute || isWaveRoute;
   
   if (shouldHideHeader) {
     return null;

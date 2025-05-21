@@ -8,7 +8,7 @@ const CategoryDetail: React.FC = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to the new Wave category detail page
+    // Redirect to the Wave category detail page
     navigate(`/wave/category/${categoryId}`);
   }, [categoryId, navigate]);
   
