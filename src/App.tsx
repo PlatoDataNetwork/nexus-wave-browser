@@ -38,7 +38,9 @@ const App = () => (
                   <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
                   <Route path="/history" element={<Index defaultUrl="/history" />} />
                   <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-                  <Route path="/search" element={<Search />} />
+                  
+                  {/* Search Routes including Category */}
+                  <Route path="/search/*" element={<Search />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/downloads" element={<Downloads />} />
                   

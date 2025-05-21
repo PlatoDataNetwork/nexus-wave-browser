@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,10 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
+import CategoryCubes, { categories } from "@/components/Search/CategoryCubes";
+import CategoryDetail from "@/components/Search/CategoryDetail";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -39,6 +42,11 @@ const Search: React.FC = () => {
   
   // Safe mode search
   const [safeSearch, setSafeSearch] = useState(true);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isNexusTab = activeTab === "nexus";
+  const isNexusCategoryView = location.pathname.includes('/search/category/');
   
   useEffect(() => {
     // Initialize search query from URL parameters if they exist
@@ -123,7 +131,13 @@ const Search: React.FC = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    if (searchQuery.trim()) {
+    
+    // Reset Nexus routing when switching away from Nexus tab
+    if (tab !== "nexus" && isNexusCategoryView) {
+      navigate("/search");
+    }
+    
+    if (searchQuery.trim() && tab !== "nexus") {
       // If there's text in the search bar, apply search when switching tabs
       handleSearch();
     }
@@ -150,6 +164,20 @@ const Search: React.FC = () => {
       setPeopleAlsoAsk([]);
       setRelatedSearches([]);
     }
+  };
+
+  // Handle chat message submission from category detail
+  const handleCategoryMessage = (message: string) => {
+    // Set the message as the search query
+    setSearchQuery(message);
+    
+    // Switch to the nexus chat tab
+    setActiveTab("nexus");
+    
+    // Navigate back to the main nexus view
+    navigate("/search");
+    
+    // The message will be used by NexusChat
   };
 
   // Render Search Result component
@@ -480,30 +508,32 @@ const Search: React.FC = () => {
         </div>
       </header>
 
-      {/* Search interface */}
+      {/* Search interface - Hide search box in Nexus tab if showing categories */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
-        <form 
-          onSubmit={handleSubmit}
-          className="flex gap-2"
-        >
-          <div className="flex-1 relative">
-            <Input
-              type="search"
-              placeholder="Search the web securely..."
-              value={searchQuery}
-              onChange={handleSearchInputChange}
-              className="h-10 pl-10 bg-background"
-            />
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          </div>
-          <Button 
-            type="submit"
-            className="bg-nexus-purple hover:bg-nexus-deep-purple" 
-            disabled={isLoading}
+        {(!isNexusTab || (isNexusTab && isNexusCategoryView)) && (
+          <form 
+            onSubmit={handleSubmit}
+            className="flex gap-2"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
-          </Button>
-        </form>
+            <div className="flex-1 relative">
+              <Input
+                type="search"
+                placeholder="Search the web securely..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                className="h-10 pl-10 bg-background"
+              />
+              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
+            <Button 
+              type="submit"
+              className="bg-nexus-purple hover:bg-nexus-deep-purple" 
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
+            </Button>
+          </form>
+        )}
 
         {/* Tabs and search controls */}
         <div className="flex items-center justify-between mt-4">
@@ -722,12 +752,17 @@ const Search: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="nexus" className="h-full flex flex-col">
-              <NexusChat onSearch={(query) => {
-                setSearchQuery(query);
-                if (!lastSearchedQuery) {
-                  setLastSearchedQuery(query);
-                }
-              }} />
+              {!isNexusCategoryView ? (
+                <CategoryCubes onCategorySelect={(category) => {
+                  navigate(`/search/category/${category.slug}`);
+                }} />
+              ) : (
+                <Routes>
+                  <Route path="/category/:slug" element={
+                    <CategoryDetail onSendMessage={handleCategoryMessage} />
+                  } />
+                </Routes>
+              )}
             </TabsContent>
           </Tabs>
         </div>
