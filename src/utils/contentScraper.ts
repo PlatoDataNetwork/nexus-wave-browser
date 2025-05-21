@@ -1,246 +1,124 @@
-import { toast } from "sonner";
 
-/**
- * Interface for scraped content
- */
+// Utility for scraping web content from URLs
 export interface ScrapedContent {
   title: string;
   content: string;
   url: string;
-  isPartial?: boolean;
   date?: string;
-  author?: string;
+  isPartial?: boolean;
 }
 
-/**
- * Cache for scraped content to avoid multiple requests to the same URL
- */
-const scrapingCache = new Map<string, {
-  timestamp: number;
-  content: ScrapedContent;
-}>();
-
-// Cache TTL in milliseconds (10 minutes)
-const CACHE_TTL = 10 * 60 * 1000;
-
-/**
- * CORS proxy URL options
- */
-const CORS_PROXIES = [
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url=',
-  'https://cors-anywhere.herokuapp.com/'
-];
-
-/**
- * Scrape content from a URL
- * @param url URL to scrape
- * @returns Scraped content or null if failed
- */
-export async function scrapeContent(url: string): Promise<ScrapedContent | null> {
+// Scrape content from a URL using a CORS proxy
+export async function scrapeContent(url: string): Promise<ScrapedContent> {
   try {
-    // Check cache first
-    const cachedContent = scrapingCache.get(url);
-    if (cachedContent && (Date.now() - cachedContent.timestamp < CACHE_TTL)) {
-      console.log(`Using cached scraped content for: ${url}`);
-      return cachedContent.content;
-    }
+    // Use AllOrigins as a CORS proxy to access content
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
     
-    console.time(`scrape-${url}`);
-    
-    // Try different CORS proxies
-    let html = null;
-    let error = null;
-    let proxyUsed = null;
-    
-    for (const proxy of CORS_PROXIES) {
-      try {
-        const proxyUrl = `${proxy}${encodeURIComponent(url)}`;
-        const response = await fetch(proxyUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-          },
-          cache: 'no-store'
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error ${response.status}`);
-        }
-        
-        html = await response.text();
-        proxyUsed = proxy;
-        break;
-      } catch (e) {
-        error = e;
-        console.warn(`CORS proxy ${proxy} failed: ${e.message}`);
-        // Try the next proxy
+    const response = await fetch(proxyUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'text/html',
       }
-    }
-    
-    if (!html) {
-      console.error(`All CORS proxies failed for ${url}: ${error?.message}`);
-      return extractPartialContent(url);
-    }
-    
-    // Parse HTML with DOMParser
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    
-    // Extract content
-    const title = doc.querySelector('title')?.textContent || '';
-    const metaDescription = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-    
-    // Find main content - use common content containers
-    const contentSelectors = [
-      'article', 'main', '.content', '.post', '.entry', '.article', 
-      '#content', '#main', '.main-content', '[role="main"]'
-    ];
-    
-    let contentElement = null;
-    for (const selector of contentSelectors) {
-      contentElement = doc.querySelector(selector);
-      if (contentElement && contentElement.textContent && contentElement.textContent.length > 200) {
-        break;
-      }
-    }
-    
-    // Fallback to body if no content container found
-    if (!contentElement || !contentElement.textContent || contentElement.textContent.length < 200) {
-      contentElement = doc.body;
-    }
-    
-    // Remove unwanted elements before extracting text
-    const unwantedSelectors = [
-      'script', 'style', 'nav', 'header', 'footer', '.comments', '.sidebar', 
-      '.nav', '.menu', '.advertisement', '.ads', '.ad-container'
-    ];
-    
-    unwantedSelectors.forEach(selector => {
-      contentElement.querySelectorAll(selector).forEach(el => el.remove());
     });
-    
-    // Extract date if available
-    let date = null;
-    const dateSelectors = [
-      'time', '[datetime]', '.date', '.published', '.post-date', 
-      'meta[property="article:published_time"]'
-    ];
-    
-    for (const selector of dateSelectors) {
-      const dateElement = doc.querySelector(selector);
-      if (dateElement) {
-        date = dateElement.getAttribute('datetime') || dateElement.textContent;
-        if (date) break;
-      }
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch content: ${response.statusText}`);
     }
+
+    const htmlContent = await response.text();
     
-    // Extract author if available
-    let author = null;
-    const authorSelectors = [
-      '.author', '[rel="author"]', '.byline', '.entry-author', 
-      'meta[name="author"]', '[itemprop="author"]'
-    ];
+    // Extract title
+    const titleMatch = htmlContent.match(/<title[^>]*>([^<]+)<\/title>/i);
+    const title = titleMatch ? titleMatch[1].trim() : extractDomainFromUrl(url);
     
-    for (const selector of authorSelectors) {
-      const authorElement = doc.querySelector(selector);
-      if (authorElement) {
-        author = authorElement.textContent || authorElement.getAttribute('content');
-        if (author) break;
-      }
-    }
+    // Basic content extraction - extract text from paragraphs
+    const textContent = extractMainContent(htmlContent);
     
-    // Clean and normalize the text
-    let contentText = contentElement.textContent || '';
-    contentText = contentText
-      .replace(/\s+/g, ' ')
-      .trim()
-      .substring(0, 8000); // Limit to 8000 chars to avoid excessive token usage
+    // Try to extract date
+    const date = extractPublicationDate(htmlContent);
     
-    // Create the result
-    const result: ScrapedContent = {
+    return {
       title,
-      content: contentText,
+      content: textContent,
       url,
-      date: date || undefined,
-      author: author || undefined,
-      isPartial: false
+      date,
+      isPartial: textContent.length < 500 // Flag if we only got a small amount of content
     };
-    
-    // Cache the result
-    scrapingCache.set(url, {
-      timestamp: Date.now(),
-      content: result
-    });
-    
-    console.timeEnd(`scrape-${url}`);
-    console.log(`Successfully scraped ${url} using ${proxyUsed}`);
-    
-    return result;
   } catch (error) {
-    console.error(`Error scraping content from ${url}:`, error);
-    return extractPartialContent(url);
-  }
-}
-
-/**
- * Extract partial content from search results when scraping fails
- */
-function extractPartialContent(url: string): ScrapedContent | null {
-  try {
-    // Parse URL to get domain and path
-    const parsedUrl = new URL(url);
-    const domain = parsedUrl.hostname.replace('www.', '');
-    
-    // Create a basic title from the URL
-    let title = parsedUrl.pathname
-      .split('/')
-      .filter(part => part.length > 0)
-      .pop() || domain;
-    
-    // Replace dashes and underscores with spaces and capitalize words
-    title = title
-      .replace(/[-_]/g, ' ')
-      .replace(/\.\w+$/, '') // Remove file extensions
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-    
-    // Return partial content notice
-    const result: ScrapedContent = {
-      title,
-      content: `Content from ${domain} could not be fully retrieved due to access restrictions. Please visit the website directly for complete information.`,
+    console.error(`Error scraping ${url}:`, error);
+    return {
+      title: extractDomainFromUrl(url),
+      content: "Could not extract content from this source.",
       url,
       isPartial: true
     };
-    
-    // Cache the partial result
-    scrapingCache.set(url, {
-      timestamp: Date.now(),
-      content: result
-    });
-    
-    return result;
-  } catch (error) {
-    console.error(`Error creating partial content for ${url}:`, error);
-    return null;
   }
 }
 
-/**
- * Clear the scraping cache
- */
-export function clearScrapingCache(): void {
-  const count = scrapingCache.size;
-  scrapingCache.clear();
-  toast.success(`Cleared scraping cache (${count} items)`);
+// Extract the main content from HTML
+function extractMainContent(html: string): string {
+  // Remove script and style elements
+  const noScriptHtml = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                           .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
+  
+  // Extract paragraphs, headings, and list items
+  const contentRegex = /<(?:p|h[1-6]|li|div)[^>]*>([\s\S]*?)<\/(?:p|h[1-6]|li|div)>/gi;
+  let contentMatches = [];
+  let match;
+  
+  while ((match = contentRegex.exec(noScriptHtml)) !== null) {
+    const text = match[1]
+      .replace(/<[^>]+>/g, ' ') // Remove HTML tags within content
+      .replace(/\s+/g, ' ')     // Normalize whitespace
+      .trim();
+    
+    if (text.length > 20) {  // Only include substantial paragraphs
+      contentMatches.push(text);
+    }
+  }
+  
+  // If we couldn't extract meaningful content, try a simpler approach
+  if (contentMatches.length === 0) {
+    const strippedHtml = noScriptHtml
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    
+    // Take a reasonable chunk of the content
+    return strippedHtml.substring(0, 5000);
+  }
+  
+  return contentMatches.join('\n\n').substring(0, 8000); // Limit to 8000 chars
 }
 
-/**
- * Get scraping cache stats
- */
-export function getScrapingCacheStats(): { size: number; ttlMinutes: number } {
-  return {
-    size: scrapingCache.size,
-    ttlMinutes: CACHE_TTL / (60 * 1000)
-  };
+// Extract publication date from HTML if available
+function extractPublicationDate(html: string): string | undefined {
+  // Try common meta tag patterns for publication date
+  const patterns = [
+    /<meta[^>]*property="article:published_time"[^>]*content="([^"]+)"/i,
+    /<meta[^>]*name="pubdate"[^>]*content="([^"]+)"/i,
+    /<meta[^>]*name="publication_date"[^>]*content="([^"]+)"/i,
+    /<meta[^>]*name="date"[^>]*content="([^"]+)"/i,
+    /<time[^>]*datetime="([^"]+)"[^>]*>/i,
+    /<time[^>]*pubdate[^>]*datetime="([^"]+)"[^>]*>/i
+  ];
+  
+  for (const pattern of patterns) {
+    const match = html.match(pattern);
+    if (match && match[1]) {
+      return match[1];
+    }
+  }
+  
+  return undefined;
+}
+
+// Extract domain from URL for fallback title
+function extractDomainFromUrl(url: string): string {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname.replace(/^www\./, '');
+  } catch {
+    return url.split('/')[2] || url;
+  }
 }

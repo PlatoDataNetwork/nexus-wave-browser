@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+import { RefreshCw, Copy, ThumbsUp, ThumbsDown, Info } from "lucide-react";
 import { toast } from 'sonner';
 
 interface MessageActionsProps {
@@ -10,6 +10,8 @@ interface MessageActionsProps {
   onRegenerateMessage?: (messageId: string) => void;
   isStreaming?: boolean;
   isLoading?: boolean;
+  showSourceDetails?: boolean;
+  onToggleSourceDetails?: () => void;
 }
 
 const MessageActions: React.FC<MessageActionsProps> = ({ 
@@ -17,7 +19,9 @@ const MessageActions: React.FC<MessageActionsProps> = ({
   messageId,
   onRegenerateMessage,
   isStreaming = false,
-  isLoading = false
+  isLoading = false,
+  showSourceDetails = false,
+  onToggleSourceDetails
 }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
@@ -58,6 +62,19 @@ const MessageActions: React.FC<MessageActionsProps> = ({
         >
           <RefreshCw className="h-3 w-3" />
           Regenerate
+        </Button>
+      )}
+      
+      {onToggleSourceDetails && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`h-7 text-xs gap-1 ${showSourceDetails ? 'bg-muted' : ''}`}
+          onClick={onToggleSourceDetails}
+          disabled={isLoading || isStreaming}
+        >
+          <Info className="h-3 w-3" />
+          {showSourceDetails ? 'Hide Sources' : 'Source Details'}
         </Button>
       )}
       

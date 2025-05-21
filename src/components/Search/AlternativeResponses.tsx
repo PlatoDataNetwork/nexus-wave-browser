@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Layers } from "lucide-react";
 
 interface AlternativeResponsesProps {
   hasAlternatives: boolean;
@@ -23,7 +23,8 @@ const AlternativeResponses: React.FC<AlternativeResponsesProps> = ({
   if (!hasAlternatives) return null;
 
   return (
-    <div className="flex items-center justify-end gap-2 mt-3">
+    <div className="flex items-center justify-end gap-2 mt-3 bg-muted/30 rounded-md p-1.5">
+      <Layers className="h-3.5 w-3.5 text-muted-foreground mr-1" />
       <div className="text-xs text-muted-foreground">
         {currentResponseIndex + 1} / {alternativeResponsesCount + 1} responses
       </div>

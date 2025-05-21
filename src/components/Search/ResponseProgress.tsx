@@ -8,65 +8,70 @@ import {
   Loader2, 
   Brain, 
   Database,
-  Globe 
+  Globe,
+  Timer
 } from 'lucide-react';
 
 interface ResponseProgressProps {
   stage: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   percentage: number;
   showDetails?: boolean;
+  stageDetails?: string;
+  timeElapsed?: number; // Time elapsed in milliseconds
 }
 
 const ResponseProgress: React.FC<ResponseProgressProps> = ({ 
   stage,
   percentage,
-  showDetails = true
+  showDetails = true,
+  stageDetails,
+  timeElapsed
 }) => {
   // Get stage description and icon
   let stageDescription = '';
   let StageIcon = Loader2;
-  let stageDetails = '';
+  let defaultStageDetails = '';
   
   switch (stage) {
     case 'initializing':
       stageDescription = 'Initializing';
       StageIcon = Loader2;
-      stageDetails = 'Setting up the response framework';
+      defaultStageDetails = 'Setting up the response framework';
       break;
     case 'classifying':
       stageDescription = 'Analyzing Query';
       StageIcon = Brain;
-      stageDetails = 'Classifying your request to determine optimal response strategy';
+      defaultStageDetails = 'Classifying your request to determine optimal response strategy';
       break;
     case 'searching':
       stageDescription = 'Gathering Data';
       StageIcon = Search;
-      stageDetails = 'Searching for real-time information from reliable sources';
+      defaultStageDetails = 'Searching for real-time information from reliable sources';
       break;
     case 'processing':
       stageDescription = 'Processing';
       StageIcon = Database;
-      stageDetails = 'Analyzing and synthesizing collected information';
+      defaultStageDetails = 'Analyzing and synthesizing collected information';
       break;
     case 'generating':
       stageDescription = 'Formulating';
       StageIcon = Zap;
-      stageDetails = 'Generating comprehensive response based on all data';
+      defaultStageDetails = 'Generating comprehensive response based on all data';
       break;
     case 'streaming':
       stageDescription = 'Responding';
       StageIcon = Network;
-      stageDetails = 'Delivering response with latest information';
+      defaultStageDetails = 'Delivering response with latest information';
       break;
     case 'finalizing':
       stageDescription = 'Finalizing';
       StageIcon = Globe;
-      stageDetails = 'Polishing response with final details and sources';
+      defaultStageDetails = 'Polishing response with final details and sources';
       break;
     case 'complete':
       stageDescription = 'Complete';
       StageIcon = Zap;
-      stageDetails = 'Response completed with all available information';
+      defaultStageDetails = 'Response completed with all available information';
       break;
   }
 
@@ -76,6 +81,14 @@ const ResponseProgress: React.FC<ResponseProgressProps> = ({
         <div className="flex items-center gap-1">
           <StageIcon className="h-3.5 w-3.5 text-nexus-purple animate-pulse" />
           <span className="font-medium">{stageDescription}</span>
+          
+          {/* Show elapsed time if provided */}
+          {timeElapsed && (
+            <div className="flex items-center gap-0.5 ml-2 text-muted-foreground">
+              <Timer className="h-3 w-3" />
+              <span>{(timeElapsed / 1000).toFixed(1)}s</span>
+            </div>
+          )}
         </div>
         <span className="text-muted-foreground">{percentage}%</span>
       </div>
@@ -83,7 +96,9 @@ const ResponseProgress: React.FC<ResponseProgressProps> = ({
       <Progress value={percentage} className="h-1.5" />
       
       {showDetails && (
-        <p className="text-xs text-muted-foreground mt-1">{stageDetails}</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          {stageDetails || defaultStageDetails}
+        </p>
       )}
     </div>
   );
