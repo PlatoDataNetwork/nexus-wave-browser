@@ -51,7 +51,8 @@ const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = (
     return <div className="p-6">Category not found</div>;
   }
 
-  const IconComponent = Icons[selectedCategory.icon as keyof typeof Icons] || Icons.HelpCircle;
+  // Dynamically get the icon component from lucide-react
+  const LucideIcon = Icons[selectedCategory.icon as keyof typeof Icons];
   
   // Get prompts for this category or use default prompts
   const prompts = categoryPrompts[slug || ''] || categoryPrompts.default;
@@ -84,7 +85,7 @@ const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = (
       
       <div className="flex items-center mb-6">
         <div className={`p-3 rounded-full ${selectedCategory.color} mr-3`}>
-          <IconComponent className="h-6 w-6 text-white" />
+          {LucideIcon && <LucideIcon className="h-6 w-6 text-white" />}
         </div>
         <h2 className="text-2xl font-bold">{selectedCategory.name}</h2>
       </div>
