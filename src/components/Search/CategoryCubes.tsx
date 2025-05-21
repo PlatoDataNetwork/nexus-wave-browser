@@ -53,8 +53,8 @@ export const categories: CategoryItem[] = [
   { name: "Patents", icon: "FileText", slug: "patents", color: "bg-neutral-500" },
   { name: "Payments", icon: "CreditCard", slug: "payments", color: "bg-emerald-700" },
   { name: "Private Equity", icon: "Briefcase", slug: "private-equity", color: "bg-blue-800" },
-  { name: "Psychedelics", icon: "BookMarked", slug: "psychedelics", color: "bg-purple-700" },
-  { name: "Quantum", icon: "AtomIcon", slug: "quantum", color: "bg-cyan-700" },
+  { name: "Psychedelics", icon: "Flask", slug: "psychedelics", color: "bg-purple-700" },
+  { name: "Quantum", icon: "Atom", slug: "quantum", color: "bg-cyan-700" },
   { name: "Real Estate", icon: "Home", slug: "real-estate", color: "bg-amber-600" },
   { name: "SaaS", icon: "Cloud", slug: "saas", color: "bg-blue-600" },
   { name: "Semiconductor", icon: "Cpu", slug: "semiconductor", color: "bg-gray-500" },
@@ -77,8 +77,8 @@ interface CategoryCubesProps {
 const CategoryCube: React.FC<{ category: CategoryItem }> = ({ category }) => {
   const navigate = useNavigate();
   
-  // Dynamically get the icon component from lucide-react
-  const LucideIcon = Icons[category.icon as keyof typeof Icons];
+  // Get the actual icon component from lucide-react
+  const IconComponent = Icons[category.icon as keyof typeof Icons] as React.ElementType;
   
   return (
     <Card 
@@ -86,7 +86,7 @@ const CategoryCube: React.FC<{ category: CategoryItem }> = ({ category }) => {
       onClick={() => navigate(`/search/category/${category.slug}`)}
     >
       <CardContent className="p-4 flex flex-col items-center justify-center h-full">
-        {LucideIcon && <LucideIcon className="h-8 w-8 text-white mb-2" />}
+        {IconComponent && <IconComponent className="h-8 w-8 text-white mb-2" />}
         <span className="text-sm font-medium text-white text-center">{category.name}</span>
       </CardContent>
     </Card>
