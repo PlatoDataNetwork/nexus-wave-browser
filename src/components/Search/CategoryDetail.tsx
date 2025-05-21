@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -534,11 +533,6 @@ const CategoryDetail: React.FC = () => {
     setTimeout(() => handleSubmit(), 50);
   };
 
-  // Toggle between prompts and conversation view
-  const toggleView = () => {
-    setShowPrompts(!showPrompts);
-  };
-
   return (
     <div className="p-6 pb-20 w-full flex flex-col h-full">
       <div className="flex items-center justify-between mb-6">
@@ -553,28 +547,6 @@ const CategoryDetail: React.FC = () => {
             <span>Back to Categories</span>
           </Button>
         </div>
-        
-        {/* Toggle button between prompts and conversation */}
-        {messages.length > 0 && (
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={toggleView} 
-            className="flex items-center gap-1"
-          >
-            {showPrompts ? (
-              <>
-                <MessageSquare className="h-4 w-4" />
-                <span>Show Conversation</span>
-              </>
-            ) : (
-              <>
-                <Grid3X3 className="h-4 w-4" />
-                <span>Show Prompts</span>
-              </>
-            )}
-          </Button>
-        )}
       </div>
       
       <div className="flex items-center mb-6">
@@ -585,7 +557,7 @@ const CategoryDetail: React.FC = () => {
       </div>
       
       <div className="flex-1 overflow-hidden relative">
-        {/* Prompt suggestions - shown only when showPrompts is true */}
+        {/* Prompt suggestions - shown when no conversation or at the beginning */}
         <div 
           className={`transition-all duration-300 ${showPrompts ? 'opacity-100' : 'opacity-0 pointer-events-none absolute'}`}
           style={{ height: showPrompts ? 'auto' : '0' }}
@@ -608,7 +580,7 @@ const CategoryDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Conversation view - shown when showPrompts is false */}
+        {/* Conversation view - shown when there are messages */}
         <div 
           className={`transition-all duration-300 flex flex-col ${showPrompts ? 'opacity-0 pointer-events-none absolute' : 'opacity-100'}`}
           style={{ height: showPrompts ? '0' : '100%' }}
