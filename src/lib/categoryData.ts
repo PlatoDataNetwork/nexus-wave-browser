@@ -9,7 +9,7 @@ import {
   Globe, Zap, BarChart3, Lightbulb, Microscope, 
   DollarSign, Percent, MonitorSmartphone, Network, PiggyBank,
   ChartBar, CircuitBoard, Dna, Radar, BookOpen,
-  Recycle, TestTube, Factory, Laptop, Factory,
+  Recycle, TestTube, Factory, Laptop, 
   Scale, WifiOff, Package, CloudRain, Shuffle,
   Award, LineChart, PenTool, HeartPulse
 } from "lucide-react";
