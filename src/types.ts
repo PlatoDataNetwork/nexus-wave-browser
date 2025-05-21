@@ -14,7 +14,6 @@ export interface ChatMessage {
   sources?: {
     title: string;
     url: string;
-    date?: string;
   }[];
   hasRealTimeData?: boolean;
   alternativeResponses?: string[];
@@ -28,20 +27,4 @@ export interface ChatMessage {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
-  // New property for tracking processing time
-  timeToProcess?: number;
-}
-
-// New interface for OpenAI streaming options
-export interface StreamingOptions {
-  systemPrompt?: string;
-  incorporateWebContent?: {
-    content: string;
-    timestamp?: Date;
-    sources?: {
-      title: string;
-      url: string;
-      date?: string;
-    }[];
-  };
 }

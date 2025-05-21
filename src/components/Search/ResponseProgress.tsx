@@ -1,104 +1,75 @@
 
 import React from 'react';
+import { Loader2, Search, Code, Zap } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
-import { 
-  Search, 
-  Zap, 
-  Network, 
-  Loader2, 
-  Brain, 
-  Database,
-  Globe,
-  Timer
-} from 'lucide-react';
 
 interface ResponseProgressProps {
   stage: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   percentage: number;
   showDetails?: boolean;
   stageDetails?: string;
-  timeElapsed?: number; // Time elapsed in milliseconds
 }
 
 const ResponseProgress: React.FC<ResponseProgressProps> = ({ 
-  stage,
+  stage, 
   percentage,
   showDetails = true,
-  stageDetails,
-  timeElapsed
+  stageDetails
 }) => {
-  // Get stage description and icon
-  let stageDescription = '';
-  let StageIcon = Loader2;
-  let defaultStageDetails = '';
-  
-  switch (stage) {
-    case 'initializing':
-      stageDescription = 'Initializing';
-      StageIcon = Loader2;
-      defaultStageDetails = 'Setting up the response framework';
-      break;
-    case 'classifying':
-      stageDescription = 'Analyzing Query';
-      StageIcon = Brain;
-      defaultStageDetails = 'Classifying your request to determine optimal response strategy';
-      break;
-    case 'searching':
-      stageDescription = 'Gathering Data';
-      StageIcon = Search;
-      defaultStageDetails = 'Searching for real-time information from reliable sources';
-      break;
-    case 'processing':
-      stageDescription = 'Processing';
-      StageIcon = Database;
-      defaultStageDetails = 'Analyzing and synthesizing collected information';
-      break;
-    case 'generating':
-      stageDescription = 'Formulating';
-      StageIcon = Zap;
-      defaultStageDetails = 'Generating comprehensive response based on all data';
-      break;
-    case 'streaming':
-      stageDescription = 'Responding';
-      StageIcon = Network;
-      defaultStageDetails = 'Delivering response with latest information';
-      break;
-    case 'finalizing':
-      stageDescription = 'Finalizing';
-      StageIcon = Globe;
-      defaultStageDetails = 'Polishing response with final details and sources';
-      break;
-    case 'complete':
-      stageDescription = 'Complete';
-      StageIcon = Zap;
-      defaultStageDetails = 'Response completed with all available information';
-      break;
-  }
+  const getStageIcon = () => {
+    switch (stage) {
+      case 'initializing':
+        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
+      case 'classifying':
+        return <Code className="h-4 w-4 animate-pulse text-nexus-purple" />;
+      case 'searching':
+        return <Search className="h-4 w-4 animate-pulse text-nexus-purple" />;
+      case 'processing':
+      case 'generating':
+        return <Zap className="h-4 w-4 animate-pulse text-nexus-purple" />;
+      case 'streaming':
+        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
+      case 'finalizing':
+        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
+      default:
+        return null;
+    }
+  };
+
+  const getStageLabel = () => {
+    if (stageDetails) return stageDetails;
+    
+    switch (stage) {
+      case 'initializing':
+        return 'Initializing...';
+      case 'classifying':
+        return 'Analyzing your query...';
+      case 'searching':
+        return 'Searching for information...';
+      case 'processing':
+        return 'Processing data...';
+      case 'generating':
+        return 'Generating response...';
+      case 'streaming':
+        return 'Streaming response...';
+      case 'finalizing':
+        return 'Finalizing...';
+      default:
+        return '';
+    }
+  };
+
+  // Don't show anything if complete
+  if (stage === 'complete') return null;
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-1">
-          <StageIcon className="h-3.5 w-3.5 text-nexus-purple animate-pulse" />
-          <span className="font-medium">{stageDescription}</span>
-          
-          {/* Show elapsed time if provided */}
-          {timeElapsed && (
-            <div className="flex items-center gap-0.5 ml-2 text-muted-foreground">
-              <Timer className="h-3 w-3" />
-              <span>{(timeElapsed / 1000).toFixed(1)}s</span>
-            </div>
-          )}
-        </div>
-        <span className="text-muted-foreground">{percentage}%</span>
-      </div>
-      
-      <Progress value={percentage} className="h-1.5" />
-      
+      <Progress value={percentage} className="h-1" />
       {showDetails && (
-        <p className="text-xs text-muted-foreground mt-1">
-          {stageDetails || defaultStageDetails}
-        </p>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          {getStageIcon()}
+          <span>{getStageLabel()}</span>
+        </div>
       )}
     </div>
   );

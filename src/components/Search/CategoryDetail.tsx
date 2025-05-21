@@ -4,19 +4,18 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { categories } from '@/lib/categoryData';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Image, Clock, Shield, Zap, Sparkles, Video } from 'lucide-react';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import PromptChatArea from './PromptChatArea';
 
 const CategoryDetail: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [userInput, setUserInput] = useState('');
-  const [showPrompts, setShowPrompts] = useState(true);
   
   const category = categories.find(cat => cat.id === categoryId);
   
@@ -42,19 +41,23 @@ const CategoryDetail: React.FC = () => {
   
   const handlePromptClick = (promptText: string) => {
     setUserInput(promptText);
-    setShowPrompts(false);
   };
   
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userInput.trim()) {
+      toast.error("Please enter a prompt");
+      return;
+    }
+    
+    toast.success("Processing your prompt");
+    // In a real implementation, this would send the prompt to an API
+    console.log("Submitted prompt:", userInput);
+  };
+
   // Navigation buttons for the top bar
   const handleTabChange = (tab: string) => {
     navigate(`/search?tab=${tab}`);
-  };
-
-  // Handle search queries
-  const handleSearch = (query: string) => {
-    toast.success(`Processing: ${query}`);
-    // In a real implementation, this would also send the prompt to an API or state management
-    console.log("Submitting query:", query);
   };
   
   return (
@@ -204,10 +207,10 @@ const CategoryDetail: React.FC = () => {
         </div>
       </div>
       
-      {/* Main content area with flexible layout */}
-      <div className="flex flex-col flex-1 overflow-hidden">
+      {/* Main content area with padding at the bottom to account for fixed input */}
+      <ScrollArea className="flex-1 p-6 pb-32 overflow-auto">
         {/* Header with Back Button and Category Info */}
-        <div className="flex items-center gap-3 p-6 border-b">
+        <div className="flex items-center gap-3 mb-6">
           <Button variant="outline" size="icon" onClick={() => navigate('/search?tab=wave')}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -217,33 +220,35 @@ const CategoryDetail: React.FC = () => {
           <h1 className="text-2xl font-bold">{category.name}</h1>
         </div>
         
-        {/* Conditional content: Either show prompts or chat area */}
-        <div className="flex-1 overflow-hidden">
-          {showPrompts ? (
-            <ScrollArea className="h-full p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                {randomPrompts.map((prompt) => (
-                  <Card 
-                    key={prompt.id} 
-                    className="cursor-pointer hover:shadow-md transition-all"
-                    onClick={() => handlePromptClick(prompt.text)}
-                  >
-                    <CardContent className="p-4">
-                      <p>{prompt.text}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </ScrollArea>
-          ) : (
-            <div className="h-full">
-              <PromptChatArea 
-                initialPrompt={userInput} 
-                onSearch={handleSearch} 
-              />
-            </div>
-          )}
+        {/* Prompts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {randomPrompts.map((prompt) => (
+            <Card 
+              key={prompt.id} 
+              className="cursor-pointer hover:shadow-md transition-all"
+              onClick={() => handlePromptClick(prompt.text)}
+            >
+              <CardContent className="p-4">
+                <p>{prompt.text}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
+      </ScrollArea>
+      
+      {/* Input Area - Fixed to bottom of screen */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t shadow-md z-50">
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex flex-col gap-3">
+          <Textarea 
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Write or select a prompt..."
+            className="min-h-[100px] resize-none"
+          />
+          <Button type="submit" className="ml-auto">
+            Submit
+          </Button>
+        </form>
       </div>
     </div>
   );

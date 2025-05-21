@@ -10,16 +10,12 @@ interface WebSearchSidebarProps {
   currentQuery: string;
   conversations: ChatMessage[];
   onClose: () => void;
-  scrapeProgress?: number;
-  processingStage?: string;
 }
 
 const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ 
   currentQuery, 
   conversations,
-  onClose,
-  scrapeProgress = 0,
-  processingStage = ''
+  onClose
 }) => {
   const {
     isLoading,
@@ -38,18 +34,6 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         onRefresh={handleRefresh}
         onClose={onClose}
       />
-      
-      {/* Show scraping progress if in progress */}
-      {scrapeProgress > 0 && scrapeProgress < 100 && (
-        <div className="px-4 py-2 bg-muted/50">
-          <ResponseProgress 
-            stage="searching"
-            percentage={scrapeProgress}
-            showDetails={true}
-            stageDetails={processingStage || "Extracting data from web sources..."}
-          />
-        </div>
-      )}
       
       <SearchSidebarContent
         isLoading={isLoading}

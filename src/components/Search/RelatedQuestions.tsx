@@ -1,38 +1,66 @@
 
-import React from 'react';
+import React, { memo, useState } from 'react';
+import { MessageSquarePlus, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 
 interface RelatedQuestionsProps {
   questions: string[];
   onQuestionClick?: (question: string) => void;
 }
 
-const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({ 
-  questions, 
-  onQuestionClick 
-}) => {
-  if (!questions || questions.length === 0) return null;
+// Using memo to prevent unnecessary re-renders
+const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({ questions, onQuestionClick }) => {
+  const [clickedQuestionIndex, setClickedQuestionIndex] = useState<number | null>(null);
+  
+  if (!questions || questions.length === 0) {
+    return null;
+  }
+
+  const handleQuestionClick = (question: string, index: number) => {
+    setClickedQuestionIndex(index);
+    
+    // Add a small delay to ensure clean state transition before invoking the callback
+    setTimeout(() => {
+      if (onQuestionClick) {
+        onQuestionClick(question);
+      }
+      // Reset the clicked state after a brief period
+      setTimeout(() => setClickedQuestionIndex(null), 1000);
+    }, 100);
+  };
 
   return (
-    <div className="mt-4 space-y-2">
-      <h4 className="text-sm font-medium text-muted-foreground">Related Questions</h4>
-      <div className="grid gap-1.5">
+    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex items-center gap-1 text-xs font-medium mb-2">
+        <MessageSquarePlus className="h-3 w-3" />
+        <span>Ask follow-up questions:</span>
+      </div>
+      <div className="flex flex-col gap-2">
         {questions.map((question, index) => (
           <Button
             key={index}
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="justify-start h-auto py-1.5 px-2 text-left text-sm font-normal hover:bg-muted hover:text-foreground transition-colors"
-            onClick={() => onQuestionClick && onQuestionClick(question)}
+            className="justify-start text-xs h-auto py-1.5 text-left hover:bg-nexus-purple/10"
+            onClick={() => handleQuestionClick(question, index)}
+            disabled={clickedQuestionIndex !== null}
           >
-            <ArrowRight className="h-3 w-3 mr-1.5 flex-shrink-0 text-nexus-purple" />
-            <span className="truncate">{question}</span>
+            {clickedQuestionIndex === index ? (
+              <div className="flex items-center gap-1.5">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span>Processing...</span>
+              </div>
+            ) : (
+              question
+            )}
           </Button>
         ))}
       </div>
     </div>
   );
-};
+});
+
+// Add display name for React Dev Tools
+RelatedQuestions.displayName = 'RelatedQuestions';
 
 export default RelatedQuestions;

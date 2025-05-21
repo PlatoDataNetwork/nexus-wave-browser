@@ -1,5 +1,4 @@
 import OpenAI from 'openai';
-import { StreamingOptions } from '@/types';
 
 // OpenAI API key
 const OPENAI_API_KEY = "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";
@@ -54,19 +53,19 @@ const generateCacheKey = (message: string, realTimeData: boolean): string => {
  * Optimized for the fastest possible first token time
  */
 export async function getStreamingResponse(
-  query: string,
-  history: { role: string; content: string }[] = [],
+  message: string,
+  conversationHistory: { role: "user" | "assistant"; content: string }[],
   onToken: (token: string) => void,
-  options?: StreamingOptions
+  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null
 ): Promise<void> {
   try {
     console.time('streaming-first-token');
     
     // Generate cache key that accounts for time-sensitivity
-    const cacheKey = generateCacheKey(query, !!options?.incorporateWebContent);
+    const cacheKey = generateCacheKey(message, !!realTimeData);
     
     // Skip cache for time-sensitive queries to ensure fresh data
-    const shouldBypassCache = isTimeSensitiveQuery(query);
+    const shouldBypassCache = isTimeSensitiveQuery(message);
     
     // Check cache for exact matches to avoid redundant calls (only if not time-sensitive)
     if (!shouldBypassCache && responseCache.has(cacheKey)) {
@@ -85,18 +84,14 @@ export async function getStreamingResponse(
     let systemPrompt = SYSTEM_PROMPTS.STREAMING;
     
     // Add real-time data if available (but keep it minimal for faster processing)
-    if (options?.incorporateWebContent) {
-      // Check if incorporateWebContent is an object with content property, not just a boolean
-      if (typeof options.incorporateWebContent === 'object' && options.incorporateWebContent.content) {
-        const content = options.incorporateWebContent.content;
-        systemPrompt += `\n\nUse this data:\n${content.substring(0, 500)}${content.length > 500 ? '...' : ''}`;
-        
-        // Include source information in system prompt
-        if (options.incorporateWebContent.sources && options.incorporateWebContent.sources.length > 0) {
-          systemPrompt += `\n\nSources:\n${options.incorporateWebContent.sources.map(source => 
-            `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
-          ).join('\n')}`;
-        }
+    if (realTimeData) {
+      systemPrompt += `\n\nUse this data:\n${realTimeData.content.substring(0, 500)}${realTimeData.content.length > 500 ? '...' : ''}`;
+      
+      // Include source information in system prompt
+      if (realTimeData.sources && realTimeData.sources.length > 0) {
+        systemPrompt += `\n\nSources:\n${realTimeData.sources.map(source => 
+          `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
+        ).join('\n')}`;
       }
       
       // Add current date explicitly
@@ -104,10 +99,10 @@ export async function getStreamingResponse(
     }
     
     // Keep history minimal for faster processing
-    let prunedHistory = history;
-    if (history.length > 4) {
+    let prunedHistory = conversationHistory;
+    if (conversationHistory.length > 4) {
       // Keep only the most recent messages
-      prunedHistory = history.slice(-3);
+      prunedHistory = conversationHistory.slice(-3);
     }
     
     // Construct messages array with system prompt, conversation history, and current message
@@ -119,7 +114,7 @@ export async function getStreamingResponse(
       ...prunedHistory,
       {
         role: 'user',
-        content: query
+        content: message
       }
     ];
     
@@ -156,7 +151,7 @@ export async function getStreamingResponse(
     
     // Don't cache time-sensitive queries with a long TTL
     // For time-sensitive, keep a shorter TTL (10 minutes)
-    const isSensitive = isTimeSensitiveQuery(query);
+    const isSensitive = isTimeSensitiveQuery(message);
     
     // Cache the response for future use (limited to 50 entries)
     if (responseCache.size > 50) {

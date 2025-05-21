@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import MessageContent from './MessageContent';
 import MessageSourcesList from './MessageSourcesList';
 import RelatedQuestions from './RelatedQuestions';
@@ -9,8 +9,6 @@ import AlternativeResponses from './AlternativeResponses';
 interface Source {
   title: string;
   url: string;
-  date?: string;
-  trustScore?: number;
 }
 
 interface ConversationMessageProps {
@@ -31,7 +29,6 @@ interface ConversationMessageProps {
   processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
-  timeToProcess?: number;
 }
 
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
@@ -50,10 +47,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   isStreaming = false,
   streamProgress = 0,
   processingStage = 'classifying',
-  progressPercentage = 0,
-  timeToProcess,
+  progressPercentage = 0
 }) => {
-  const [showSourceDetails, setShowSourceDetails] = useState(false);
   const hasAlternatives = alternativeResponses.length > 0;
 
   const handlePreviousResponse = () => {
@@ -67,10 +62,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
       onSelectAlternative(currentResponseIndex + 1);
     }
   };
-
-  const handleToggleSourceDetails = () => {
-    setShowSourceDetails(prev => !prev);
-  };
   
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
@@ -78,7 +69,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         className={`max-w-3/4 rounded-lg p-4 ${
           role === "user"
             ? "bg-nexus-purple text-white"
-            : "" // Plain background for assistant
+            : "" // Removed "bg-secondary border border-border" to have plain background for assistant
         }`}
       >
         {role === "user" ? (
@@ -95,17 +86,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               progressPercentage={progressPercentage}
             />
             
-            {timeToProcess && !isLoading && !isStreaming && (
-              <div className="text-xs text-muted-foreground mt-1">
-                Response generated in {(timeToProcess / 1000).toFixed(1)}s
-              </div>
-            )}
-            
             {sources && sources.length > 0 && (
-              <MessageSourcesList 
-                sources={sources} 
-                expanded={showSourceDetails}
-              />
+              <MessageSourcesList sources={sources} />
             )}
             
             <RelatedQuestions 
@@ -122,8 +104,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
                   onRegenerateMessage={onRegenerateMessage}
                   isStreaming={isStreaming}
                   isLoading={isLoading}
-                  showSourceDetails={showSourceDetails}
-                  onToggleSourceDetails={sources && sources.length > 0 ? handleToggleSourceDetails : undefined}
                 />
                 
                 <AlternativeResponses 

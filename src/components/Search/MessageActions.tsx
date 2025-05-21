@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
+import { Copy, Download, ThumbsUp, ThumbsDown, RefreshCw } from 'lucide-react';
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Copy, ThumbsUp, ThumbsDown, Info } from "lucide-react";
-import { toast } from 'sonner';
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 interface MessageActionsProps {
   content: string;
@@ -10,93 +11,171 @@ interface MessageActionsProps {
   onRegenerateMessage?: (messageId: string) => void;
   isStreaming?: boolean;
   isLoading?: boolean;
-  showSourceDetails?: boolean;
-  onToggleSourceDetails?: () => void;
 }
 
 const MessageActions: React.FC<MessageActionsProps> = ({ 
   content, 
-  messageId,
+  messageId, 
   onRegenerateMessage,
   isStreaming = false,
-  isLoading = false,
-  showSourceDetails = false,
-  onToggleSourceDetails
+  isLoading = false
 }) => {
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(content);
-    toast.success("Copied to clipboard");
+    navigator.clipboard.writeText(content)
+      .then(() => {
+        toast.success("Content copied to clipboard");
+      })
+      .catch((error) => {
+        console.error('Failed to copy: ', error);
+        toast.error("Failed to copy content");
+      });
   };
-  
+
+  const handleDownloadText = () => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nexus-conversation-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Downloaded as text file");
+  };
+
+  const handleDownloadWord = () => {
+    const htmlContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+      <head>
+        <meta charset="utf-8">
+        <title>Nexus AI Conversation</title>
+      </head>
+      <body>
+        <div>
+          ${content.replace(/\n/g, '<br>')}
+        </div>
+      </body>
+      </html>
+    `;
+    
+    const blob = new Blob([htmlContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nexus-conversation-${new Date().toISOString().split('T')[0]}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("Downloaded as Word document");
+  };
+
+  const handleLike = () => {
+    setLiked(true);
+    setDisliked(false);
+    toast.success("Response marked as helpful");
+  };
+
+  const handleDislike = () => {
+    setLiked(false);
+    setDisliked(true);
+    toast.success("Response marked as not helpful");
+  };
+
   const handleRegenerate = () => {
     if (messageId && onRegenerateMessage) {
       onRegenerateMessage(messageId);
     }
   };
-  
-  const handleFeedback = (type: 'like' | 'dislike') => {
-    toast.success(`Thank you for your ${type === 'like' ? 'positive' : 'negative'} feedback`);
-    // In a real app, this would send the feedback to your analytics or logging system
-  };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 mt-4 text-xs">
-      <Button 
-        variant="ghost" 
-        size="sm" 
-        className="h-7 text-xs gap-1"
-        onClick={handleCopy}
-        disabled={isLoading || isStreaming}
-      >
-        <Copy className="h-3 w-3" />
-        Copy
-      </Button>
-      
-      {onRegenerateMessage && messageId && (
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-7 text-xs gap-1"
-          onClick={handleRegenerate}
-          disabled={isLoading || isStreaming}
-        >
-          <RefreshCw className="h-3 w-3" />
-          Regenerate
-        </Button>
-      )}
-      
-      {onToggleSourceDetails && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`h-7 text-xs gap-1 ${showSourceDetails ? 'bg-muted' : ''}`}
-          onClick={onToggleSourceDetails}
-          disabled={isLoading || isStreaming}
-        >
-          <Info className="h-3 w-3" />
-          {showSourceDetails ? 'Hide Sources' : 'Source Details'}
-        </Button>
-      )}
-      
-      <div className="flex items-center gap-1 ml-auto">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-7 w-7 p-0"
-          onClick={() => handleFeedback('like')}
-          disabled={isLoading || isStreaming}
-        >
-          <ThumbsUp className="h-3.5 w-3.5" />
-        </Button>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="h-7 w-7 p-0"
-          onClick={() => handleFeedback('dislike')}
-          disabled={isLoading || isStreaming}
-        >
-          <ThumbsDown className="h-3.5 w-3.5" />
-        </Button>
+    <div className="flex flex-col gap-2 mt-4 pt-2 border-t border-border">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 px-2 text-xs"
+            onClick={handleCopy}
+          >
+            <Copy className="h-3 w-3 mr-1" />
+            Copy
+          </Button>
+          
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 px-2 text-xs"
+              >
+                <Download className="h-3 w-3 mr-1" />
+                Download
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-2" align="end">
+              <div className="flex flex-col gap-1">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="justify-start h-7 px-2 text-xs"
+                  onClick={handleDownloadText}
+                >
+                  As Text (.txt)
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="justify-start h-7 px-2 text-xs"
+                  onClick={handleDownloadWord}
+                >
+                  As Word (.doc)
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+        
+        <div className="flex items-center gap-1">
+          <Button
+            size="sm"
+            variant="ghost"
+            className={`h-7 px-2 text-xs ${liked ? 'text-green-500' : ''}`}
+            onClick={handleLike}
+            disabled={isStreaming || isLoading}
+          >
+            <ThumbsUp className="h-3 w-3 mr-1" />
+            Helpful
+          </Button>
+          
+          <Button
+            size="sm"
+            variant="ghost"
+            className={`h-7 px-2 text-xs ${disliked ? 'text-red-500' : ''}`}
+            onClick={handleDislike}
+            disabled={isStreaming || isLoading}
+          >
+            <ThumbsDown className="h-3 w-3 mr-1" />
+            Not helpful
+          </Button>
+          
+          {onRegenerateMessage && messageId && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-7 px-2 text-xs"
+              onClick={handleRegenerate}
+              disabled={isStreaming || isLoading}
+            >
+              <RefreshCw className="h-3 w-3 mr-1" />
+              Regenerate
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
