@@ -1,18 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { categories } from '@/lib/categoryData';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Image, Clock, Shield, Zap, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 const CategoryDetail: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
   const [userInput, setUserInput] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
   
   const category = categories.find(cat => cat.id === categoryId);
   
@@ -29,20 +28,12 @@ const CategoryDetail: React.FC = () => {
   }
   
   const Icon = category.icon;
-  const promptsPerPage = 6;
-  const totalPages = Math.ceil(category.prompts.length / promptsPerPage);
-  const currentPrompts = category.prompts.slice(
-    currentPage * promptsPerPage, 
-    (currentPage + 1) * promptsPerPage
-  );
   
-  const handlePrevPage = () => {
-    setCurrentPage(prev => Math.max(0, prev - 1));
-  };
-  
-  const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(totalPages - 1, prev + 1));
-  };
+  // Get 6 random prompts from the category
+  const randomPrompts = useMemo(() => {
+    const shuffled = [...category.prompts].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 6);
+  }, [category.prompts]);
   
   const handlePromptClick = (promptText: string) => {
     setUserInput(promptText);
@@ -59,6 +50,11 @@ const CategoryDetail: React.FC = () => {
     // In a real implementation, this would send the prompt to an API
     console.log("Submitted prompt:", userInput);
   };
+
+  // Navigation buttons for the top bar
+  const handleTabClick = (tab: string) => {
+    navigate(`/search?tab=${tab}`);
+  };
   
   return (
     <div className="p-6 pb-32">
@@ -67,15 +63,59 @@ const CategoryDetail: React.FC = () => {
         <Button variant="outline" size="icon" onClick={() => navigate('/search?tab=wave')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div className={`p-2 rounded-full ${category.color} bg-opacity-20`}>
-          <Icon className="h-6 w-6" />
+        <div className="p-2 rounded-full bg-nexus-purple bg-opacity-20">
+          <Icon className="h-6 w-6 text-nexus-purple" />
         </div>
         <h1 className="text-2xl font-bold">{category.name}</h1>
       </div>
       
+      {/* Navigation buttons */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={() => handleTabClick('web')}
+        >
+          <Image className="h-4 w-4" /> Web
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={() => handleTabClick('images')}
+        >
+          <Image className="h-4 w-4" /> Images
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={() => handleTabClick('news')}
+        >
+          <Clock className="h-4 w-4" /> News
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1"
+          onClick={() => handleTabClick('nexus')}
+        >
+          <Zap className="h-4 w-4" /> Nexus
+        </Button>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="flex items-center gap-1 bg-nexus-purple text-white"
+          onClick={() => handleTabClick('wave')}
+        >
+          <Sparkles className="h-4 w-4" /> Wave
+        </Button>
+      </div>
+      
       {/* Prompts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {currentPrompts.map((prompt) => (
+        {randomPrompts.map((prompt) => (
           <Card 
             key={prompt.id} 
             className="cursor-pointer hover:shadow-md transition-all"
@@ -86,27 +126,6 @@ const CategoryDetail: React.FC = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
-      
-      {/* Pagination */}
-      <div className="flex justify-between items-center mb-6">
-        <Button 
-          variant="outline" 
-          onClick={handlePrevPage} 
-          disabled={currentPage === 0}
-        >
-          Previous
-        </Button>
-        <span>
-          Page {currentPage + 1} of {totalPages}
-        </span>
-        <Button 
-          variant="outline" 
-          onClick={handleNextPage} 
-          disabled={currentPage === totalPages - 1}
-        >
-          Next
-        </Button>
       </div>
       
       {/* Input Area */}

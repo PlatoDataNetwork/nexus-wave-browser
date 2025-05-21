@@ -3,7 +3,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '@/lib/categoryData';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
 const CategoryGrid: React.FC = () => {
   const navigate = useNavigate();
@@ -25,9 +24,9 @@ const CategoryGrid: React.FC = () => {
               onClick={() => handleCategoryClick(category.id)}
             >
               <CardContent className="p-0 flex flex-col items-center justify-center h-full relative">
-                <div className={`w-full h-full absolute inset-0 ${category.color} opacity-20`}></div>
+                <div className="w-full h-full absolute inset-0 bg-nexus-purple bg-opacity-20"></div>
                 <div className="z-10 flex flex-col items-center justify-center">
-                  <Icon className="h-8 w-8 mb-2" />
+                  <Icon className="h-8 w-8 mb-2 text-nexus-purple" />
                   <h3 className="font-medium text-sm text-center">{category.name}</h3>
                 </div>
               </CardContent>
