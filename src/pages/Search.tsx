@@ -44,12 +44,18 @@ const Search: React.FC = () => {
     // Initialize search query from URL parameters if they exist
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q');
+    const tab = urlParams.get('tab');
+    
     if (query) {
       setSearchQuery(query);
       handleSearch(query);
     }
+    
+    if (tab && ['web', 'images', 'videos', 'news', 'nexus', 'wave'].includes(tab)) {
+      setActiveTab(tab);
+    }
   }, []);
-
+  
   const handleSearch = async (query = searchQuery) => {
     if (!query.trim()) {
       // Clear results when search query is empty
@@ -121,9 +127,16 @@ const Search: React.FC = () => {
     }
   };
 
+  // Update the handleTabChange function
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    if (searchQuery.trim()) {
+    
+    // Update URL to reflect the tab change
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.pushState({}, '', url);
+    
+    if (searchQuery.trim() && tab !== 'wave') {
       // If there's text in the search bar, apply search when switching tabs
       handleSearch();
     }
