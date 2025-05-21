@@ -14,6 +14,12 @@ interface PromptChatAreaProps {
   onSearch: (query: string) => void;
 }
 
+// Define a properly typed conversation history interface
+type ConversationHistoryItem = {
+  role: "user" | "assistant";
+  content: string;
+};
+
 const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onSearch }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState(initialPrompt);
@@ -21,7 +27,7 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
   const [isClassifying, setIsClassifying] = useState(false);
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [showPrompts, setShowPrompts] = useState(true);
-  const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [conversationHistory, setConversationHistory] = useState<ConversationHistoryItem[]>([]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -90,7 +96,7 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
     setMessages(prevMessages => [...prevMessages, assistantMessage]);
     
     // Update conversation history with the new user message
-    const updatedHistory = [...conversationHistory, { role: "user", content: messageToProcess }];
+    const updatedHistory: ConversationHistoryItem[] = [...conversationHistory, { role: "user", content: messageToProcess }];
     
     try {
       // Set up a callback to handle streaming tokens
@@ -273,3 +279,4 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
 };
 
 export default PromptChatArea;
+
