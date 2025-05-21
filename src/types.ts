@@ -35,5 +35,13 @@ export interface ChatMessage {
 // New interface for OpenAI streaming options
 export interface StreamingOptions {
   systemPrompt?: string;
-  incorporateWebContent?: boolean;
+  incorporateWebContent?: {
+    content: string;
+    timestamp?: Date;
+    sources?: {
+      title: string;
+      url: string;
+      date?: string;
+    }[];
+  };
 }

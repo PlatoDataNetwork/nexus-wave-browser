@@ -11,6 +11,7 @@ import SearchSidebar from './SearchSidebar';
 import { getChatGPTResponse, getStreamingResponse } from '@/utils/openai';
 import { ClassificationResult } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
+import { ChatMessage, StreamingOptions } from '@/types';
 
 // Default classification for simple queries
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
@@ -190,12 +191,23 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       // Wait for real-time data to be available
       const realTimeData = await realTimeDataPromise;
       
+      // Create streaming options with real-time data if available
+      const streamingOptions: StreamingOptions | undefined = realTimeData 
+        ? {
+            incorporateWebContent: {
+              content: realTimeData.content,
+              sources: realTimeData.sources,
+              timestamp: realTimeData.timestamp
+            }
+          }
+        : undefined;
+      
       // Start streaming response
       await getStreamingResponse(
         messageToSearch,
         updatedHistory,
         handleToken,
-        realTimeData || undefined
+        streamingOptions
       );
       
       // Wait for search to complete

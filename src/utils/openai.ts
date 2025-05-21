@@ -86,13 +86,17 @@ export async function getStreamingResponse(
     
     // Add real-time data if available (but keep it minimal for faster processing)
     if (options?.incorporateWebContent) {
-      systemPrompt += `\n\nUse this data:\n${options?.incorporateWebContent.content.substring(0, 500)}${options?.incorporateWebContent.content.length > 500 ? '...' : ''}`;
-      
-      // Include source information in system prompt
-      if (options?.incorporateWebContent.sources && options?.incorporateWebContent.sources.length > 0) {
-        systemPrompt += `\n\nSources:\n${options?.incorporateWebContent.sources.map(source => 
-          `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
-        ).join('\n')}`;
+      // Check if incorporateWebContent is an object with content property, not just a boolean
+      if (typeof options.incorporateWebContent === 'object' && options.incorporateWebContent.content) {
+        const content = options.incorporateWebContent.content;
+        systemPrompt += `\n\nUse this data:\n${content.substring(0, 500)}${content.length > 500 ? '...' : ''}`;
+        
+        // Include source information in system prompt
+        if (options.incorporateWebContent.sources && options.incorporateWebContent.sources.length > 0) {
+          systemPrompt += `\n\nSources:\n${options.incorporateWebContent.sources.map(source => 
+            `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
+          ).join('\n')}`;
+        }
       }
       
       // Add current date explicitly

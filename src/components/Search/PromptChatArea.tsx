@@ -279,15 +279,25 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
           Here is the relevant content from web sources:
           ${JSON.stringify(contentForGPT)}`;
           
+          // Create a properly structured StreamingOptions object with the scraped content
+          const streamingOptions: StreamingOptions = {
+            systemPrompt: systemPrompt,
+            incorporateWebContent: {
+              content: JSON.stringify(contentForGPT),
+              sources: scrapedContents.map(content => ({
+                title: content.title,
+                url: content.url,
+                date: content.date
+              }))
+            }
+          };
+          
           // Start streaming response with the enhanced system prompt
           await getStreamingResponse(
             messageToProcess,
             updatedHistory,
             handleToken,
-            {
-              systemPrompt,
-              incorporateWebContent: true
-            } as StreamingOptions
+            streamingOptions
           );
           
         }
