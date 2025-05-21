@@ -182,7 +182,19 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
                 isStreaming: false,
                 processingStage: 'complete',
                 progressPercentage: 100,
-                hasRealTimeData: true
+                hasRealTimeData: true,
+                // Add sample sources for demonstration
+                sources: [
+                  { title: "Scientific Report 2024", url: "https://example.com/report" },
+                  { title: "Industry Trends", url: "https://example.com/trends" },
+                  { title: "Research Publication", url: "https://example.com/research" },
+                ],
+                // Add related questions for context continuation
+                relatedQuestions: [
+                  "How will this technology evolve in the next decade?",
+                  "What are the environmental impacts of this approach?",
+                  "Are there any alternatives currently being developed?"
+                ]
               }
             : msg
         )
@@ -219,6 +231,13 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
     }, 100);
   };
 
+  const handleRelatedQuestionClick = (question: string) => {
+    setCurrentMessage(question);
+    setTimeout(() => {
+      handleSubmit();
+    }, 100);
+  };
+
   return (
     <div className="flex flex-col h-full relative">
       <ScrollArea className="flex-1 p-4">
@@ -239,6 +258,8 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
                 processingStage={message.processingStage}
                 progressPercentage={message.progressPercentage}
                 stageDetails={message.stageDetails}
+                relatedQuestions={message.relatedQuestions}
+                onRelatedQuestionClick={handleRelatedQuestionClick}
               />
             ))
           ) : showPrompts ? (
@@ -279,4 +300,3 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
 };
 
 export default PromptChatArea;
-

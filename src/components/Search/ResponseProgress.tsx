@@ -1,75 +1,89 @@
 
 import React from 'react';
-import { Loader2, Search, Code, Zap } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
+import { 
+  Search, 
+  Zap, 
+  Network, 
+  Loader2, 
+  Brain, 
+  Database,
+  Globe 
+} from 'lucide-react';
 
 interface ResponseProgressProps {
   stage: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   percentage: number;
   showDetails?: boolean;
-  stageDetails?: string;
 }
 
 const ResponseProgress: React.FC<ResponseProgressProps> = ({ 
-  stage, 
+  stage,
   percentage,
-  showDetails = true,
-  stageDetails
+  showDetails = true
 }) => {
-  const getStageIcon = () => {
-    switch (stage) {
-      case 'initializing':
-        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
-      case 'classifying':
-        return <Code className="h-4 w-4 animate-pulse text-nexus-purple" />;
-      case 'searching':
-        return <Search className="h-4 w-4 animate-pulse text-nexus-purple" />;
-      case 'processing':
-      case 'generating':
-        return <Zap className="h-4 w-4 animate-pulse text-nexus-purple" />;
-      case 'streaming':
-        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
-      case 'finalizing':
-        return <Loader2 className="h-4 w-4 animate-spin text-nexus-purple" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStageLabel = () => {
-    if (stageDetails) return stageDetails;
-    
-    switch (stage) {
-      case 'initializing':
-        return 'Initializing...';
-      case 'classifying':
-        return 'Analyzing your query...';
-      case 'searching':
-        return 'Searching for information...';
-      case 'processing':
-        return 'Processing data...';
-      case 'generating':
-        return 'Generating response...';
-      case 'streaming':
-        return 'Streaming response...';
-      case 'finalizing':
-        return 'Finalizing...';
-      default:
-        return '';
-    }
-  };
-
-  // Don't show anything if complete
-  if (stage === 'complete') return null;
+  // Get stage description and icon
+  let stageDescription = '';
+  let StageIcon = Loader2;
+  let stageDetails = '';
+  
+  switch (stage) {
+    case 'initializing':
+      stageDescription = 'Initializing';
+      StageIcon = Loader2;
+      stageDetails = 'Setting up the response framework';
+      break;
+    case 'classifying':
+      stageDescription = 'Analyzing Query';
+      StageIcon = Brain;
+      stageDetails = 'Classifying your request to determine optimal response strategy';
+      break;
+    case 'searching':
+      stageDescription = 'Gathering Data';
+      StageIcon = Search;
+      stageDetails = 'Searching for real-time information from reliable sources';
+      break;
+    case 'processing':
+      stageDescription = 'Processing';
+      StageIcon = Database;
+      stageDetails = 'Analyzing and synthesizing collected information';
+      break;
+    case 'generating':
+      stageDescription = 'Formulating';
+      StageIcon = Zap;
+      stageDetails = 'Generating comprehensive response based on all data';
+      break;
+    case 'streaming':
+      stageDescription = 'Responding';
+      StageIcon = Network;
+      stageDetails = 'Delivering response with latest information';
+      break;
+    case 'finalizing':
+      stageDescription = 'Finalizing';
+      StageIcon = Globe;
+      stageDetails = 'Polishing response with final details and sources';
+      break;
+    case 'complete':
+      stageDescription = 'Complete';
+      StageIcon = Zap;
+      stageDetails = 'Response completed with all available information';
+      break;
+  }
 
   return (
     <div className="space-y-2">
-      <Progress value={percentage} className="h-1" />
-      {showDetails && (
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          {getStageIcon()}
-          <span>{getStageLabel()}</span>
+      <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center gap-1">
+          <StageIcon className="h-3.5 w-3.5 text-nexus-purple animate-pulse" />
+          <span className="font-medium">{stageDescription}</span>
         </div>
+        <span className="text-muted-foreground">{percentage}%</span>
+      </div>
+      
+      <Progress value={percentage} className="h-1.5" />
+      
+      {showDetails && (
+        <p className="text-xs text-muted-foreground mt-1">{stageDetails}</p>
       )}
     </div>
   );

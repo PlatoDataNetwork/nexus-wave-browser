@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface AlternativeResponsesProps {
   hasAlternatives: boolean;
@@ -9,48 +9,43 @@ interface AlternativeResponsesProps {
   alternativeResponsesCount: number;
   onPrevious: () => void;
   onNext: () => void;
-  isDisabled: boolean;
+  isDisabled?: boolean;
 }
 
-const AlternativeResponses: React.FC<AlternativeResponsesProps> = ({ 
+const AlternativeResponses: React.FC<AlternativeResponsesProps> = ({
   hasAlternatives,
   currentResponseIndex,
   alternativeResponsesCount,
   onPrevious,
   onNext,
-  isDisabled
+  isDisabled = false
 }) => {
-  if (!hasAlternatives) {
-    return null;
-  }
-
-  const canGoBack = currentResponseIndex > 0;
-  const canGoForward = currentResponseIndex < alternativeResponsesCount;
+  if (!hasAlternatives) return null;
 
   return (
-    <div className="flex items-center justify-center gap-3 mt-1">
+    <div className="flex items-center justify-end gap-2 mt-3">
+      <div className="text-xs text-muted-foreground">
+        {currentResponseIndex + 1} / {alternativeResponsesCount + 1} responses
+      </div>
+      
       <Button
-        size="sm"
         variant="outline"
-        className="h-7 w-7 p-0 rounded-full"
+        size="icon"
+        className="h-6 w-6"
+        disabled={currentResponseIndex === 0 || isDisabled}
         onClick={onPrevious}
-        disabled={!canGoBack || isDisabled}
       >
-        <ArrowLeft className="h-3 w-3" />
+        <ChevronLeft className="h-3.5 w-3.5" />
       </Button>
       
-      <span className="text-xs text-muted-foreground">
-        Response {currentResponseIndex + 1} of {alternativeResponsesCount + 1}
-      </span>
-      
       <Button
-        size="sm"
         variant="outline"
-        className="h-7 w-7 p-0 rounded-full"
+        size="icon"
+        className="h-6 w-6"
+        disabled={currentResponseIndex >= alternativeResponsesCount || isDisabled}
         onClick={onNext}
-        disabled={!canGoForward || isDisabled}
       >
-        <ArrowRight className="h-3 w-3" />
+        <ChevronRight className="h-3.5 w-3.5" />
       </Button>
     </div>
   );

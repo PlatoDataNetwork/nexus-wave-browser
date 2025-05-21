@@ -1,101 +1,84 @@
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// Define a proper type for the code component props
+interface CodeProps {
+  node: any;
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}
 
 interface MessageStreamProps {
   content: string;
-  isLoading?: boolean;
   isStreaming: boolean;
+  isLoading: boolean;
   progress?: number;
-  streamingText?: string;
 }
 
-const MessageStream: React.FC<MessageStreamProps> = ({ 
-  content, 
-  isLoading = false,
+const MessageStream: React.FC<MessageStreamProps> = ({
+  content,
   isStreaming,
-  progress = 0,
-  streamingText = ''
+  isLoading,
+  progress = 0
 }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [cursor, setCursor] = useState(true);
-  const cursorTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const previousContentRef = useRef<string>('');
-  const contentContainerRef = useRef<HTMLDivElement>(null);
+  const [cursorBlink, setCursorBlink] = useState(true);
   
-  // Blink cursor effect
+  // Blinking cursor effect
   useEffect(() => {
-    if (isStreaming) {
-      cursorTimerRef.current = setInterval(() => {
-        setCursor(prev => !prev);
-      }, 500);
-    } else {
-      setCursor(false);
-    }
+    if (!isStreaming || !isLoading) return;
     
-    return () => {
-      if (cursorTimerRef.current) {
-        clearInterval(cursorTimerRef.current);
-      }
-    };
-  }, [isStreaming]);
-  
-  // Handle content updates - prioritize streamingText if provided
-  useEffect(() => {
-    // Only update if content/streamingText has changed to avoid unnecessary re-renders
-    if (isStreaming && streamingText && streamingText !== previousContentRef.current) {
-      setDisplayText(streamingText);
-      previousContentRef.current = streamingText;
-    } else if (content && content !== previousContentRef.current) {
-      // When we have final content and we're no longer streaming
-      setDisplayText(content);
-      previousContentRef.current = content;
-    }
-  }, [content, streamingText, isStreaming]);
-  
-  // When streaming stops or component unmounts, clear the cursor timer
-  useEffect(() => {
-    return () => {
-      if (cursorTimerRef.current) {
-        clearInterval(cursorTimerRef.current);
-        cursorTimerRef.current = null;
-      }
-    };
-  }, []);
-  
-  // Reset the display text when switching to a new streaming session
-  useEffect(() => {
-    if (!isStreaming && content) {
-      previousContentRef.current = content;
-      setDisplayText(content);
-    }
-  }, [isStreaming, content]);
-  
-  // Auto-scroll to bottom during streaming
-  useEffect(() => {
-    if (isStreaming && contentContainerRef.current) {
-      contentContainerRef.current.scrollTop = contentContainerRef.current.scrollHeight;
-    }
-  }, [displayText, isStreaming]);
-  
-  if (!displayText && !isStreaming && !isLoading) {
-    return null;
-  }
+    const interval = setInterval(() => {
+      setCursorBlink(prev => !prev);
+    }, 500);
+    
+    return () => clearInterval(interval);
+  }, [isStreaming, isLoading]);
   
   return (
-    <div 
-      className="relative whitespace-pre-wrap break-words"
-      ref={contentContainerRef}
-    >
-      {displayText}
-      {isStreaming && (
-        <span className={`inline-block h-4 w-1 ml-0.5 bg-current ${cursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>
-      )}
-      {isStreaming && !displayText && (
-        <div className="flex items-center text-muted-foreground">
-          <Loader2 className="h-3 w-3 animate-spin mr-2" />
-          <span>Generating response...</span>
-        </div>
+    <div className="relative">
+      <ReactMarkdown
+        components={{
+          code: ({ node, inline, className, children, ...props }: CodeProps) => {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline && match ? (
+              <SyntaxHighlighter
+                language={match[1]}
+                style={atomDark}
+                PreTag="div"
+                className="rounded-md my-2"
+                {...props}
+              >
+                {String(children).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            ) : (
+              <code className="bg-gray-800 text-gray-200 px-1 py-0.5 rounded" {...props}>
+                {children}
+              </code>
+            )
+          },
+          p: ({children}) => <p className="mb-2">{children}</p>,
+          ul: ({children}) => <ul className="list-disc ml-6 mb-3">{children}</ul>,
+          ol: ({children}) => <ol className="list-decimal ml-6 mb-3">{children}</ol>,
+          li: ({children}) => <li className="mb-1">{children}</li>,
+          h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+          h2: ({children}) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+          h3: ({children}) => <h3 className="text-md font-bold mb-2">{children}</h3>,
+          a: ({href, children}) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-nexus-purple underline hover:text-nexus-deep-purple">{children}</a>,
+          img: ({src, alt}) => <img src={src} alt={alt || ''} className="max-w-full h-auto rounded-md my-2" />
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+      
+      {/* Show cursor only when streaming */}
+      {isStreaming && isLoading && (
+        <span className={`inline-block h-4 w-0.5 ml-1 ${cursorBlink ? 'bg-nexus-purple' : 'bg-transparent'} transition-colors duration-300`}></span>
       )}
     </div>
   );
