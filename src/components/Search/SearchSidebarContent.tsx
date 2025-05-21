@@ -1,7 +1,14 @@
-
 import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { WebSearchResult } from '@/types';
+
+interface WebSearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+  source?: string;
+  published?: string;
+  position?: number;
+}
 
 interface SearchSidebarContentProps {
   isLoading: boolean;

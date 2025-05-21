@@ -5,10 +5,19 @@ import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { dataCache } from '@/utils/dataCache';
 
+interface WebSearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+  source?: string;
+  published?: string;
+  position?: number;
+}
+
 export const useWebSearch = (currentQuery: string, conversations: ChatMessage[]) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<WebSearchResult[]>([]);
+  const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { toast } = useToast();
@@ -46,7 +55,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
   }, [currentQuery, conversations]);
 
   // Check cache before fetching
-  const checkCache = useCallback((query: string): any[] | null => {
+  const checkCache = useCallback((query: string): WebSearchResult[] | null => {
     const normalizedQuery = query.toLowerCase().trim();
     cacheKey.current = `search_${normalizedQuery}_${page}`;
     
@@ -95,7 +104,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       const response = await searchWithSerper(query, "search", true, pageSize);
       
       if (response.error) {
-        setError(response.error);
+        setError(new Error(response.error));
       }
       
       const searchResults = response.results || [];
@@ -119,11 +128,11 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       // Log performance metrics
       const endTime = performance.now();
       console.log(`Search fetch completed in ${(endTime - startTime).toFixed(0)}ms`);
-    } catch (err) {
+    } catch (err: any) {
       // Only set error if this request wasn't aborted
       if (err.name !== 'AbortError') {
         console.error("Error fetching results:", err);
-        setError("Failed to fetch search results");
+        setError(new Error("Failed to fetch search results"));
         toast({
           title: "Search Error",
           description: "Failed to fetch web search results",
