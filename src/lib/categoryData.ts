@@ -1,10 +1,10 @@
 
 import { 
-  Airplane, Bank, Database, FlaskRound, Hash, Cannabis, 
+  Airplay, Ban, Database, FlaskRound, Hash, Cannabis, 
   Leaf, FileText, Code, HandCoins, Bitcoin, Shield, ShoppingBag, 
   School, Bolt, Gamepad, TrendingUp, Atom, Cpu, Music, 
-  Image, CreditCard, Briefcase, Mushroom, Building, Browser, 
-  SolarPanel, Rocket, Truck, Airplay
+  Image, CreditCard, Briefcase, Building, Truck,
+  Sun, Rocket
 } from "lucide-react";
 import Brain from '@/components/Search/Icons/Brain';
 import Wheelchair from '@/components/Search/Icons/Wheelchair';
@@ -77,7 +77,7 @@ export const categories: Category[] = [
   { 
     id: "aviation", 
     name: "Aviation", 
-    icon: Airplane,
+    icon: Airplay, // Changed from Airplane to Airplay
     color: "bg-sky-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `aviation-${i+1}`, 
@@ -87,7 +87,7 @@ export const categories: Category[] = [
   { 
     id: "banking", 
     name: "Banking", 
-    icon: Bank,
+    icon: Ban, // Changed from Bank to Ban
     color: "bg-emerald-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `banking-${i+1}`, 
@@ -185,6 +185,26 @@ export const categories: Category[] = [
       id: `edtech-${i+1}`, 
       text: `What are ${i+1} ways technology is transforming education?` 
     }))
-  }
+  },
+  { 
+    id: "stem-cell", 
+    name: "Stem Cell", 
+    icon: Stem,
+    color: "bg-green-400", 
+    prompts: Array.from({ length: 30 }, (_, i) => ({ 
+      id: `stem-cell-${i+1}`, 
+      text: `Explain ${i+1} advances in stem cell research and therapy` 
+    }))
+  },
+  { 
+    id: "solar", 
+    name: "Solar", 
+    icon: Sun, // Changed from SolarPanel to Sun
+    color: "bg-yellow-500", 
+    prompts: Array.from({ length: 30 }, (_, i) => ({ 
+      id: `solar-${i+1}`, 
+      text: `What are ${i+1} innovations in solar energy technology?` 
+    }))
+  },
   // Add remaining categories following the same pattern
 ];
