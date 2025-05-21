@@ -17,6 +17,8 @@ import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import CategoryDetail from "./components/Search/CategoryDetail";
+import WaveSearch from "./pages/WaveSearch";
+import WaveCategoryDetail from "./components/Wave/WaveCategoryDetail";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,10 @@ const App = () => (
                   <Route path="/search/category/:categoryId" element={<CategoryDetail />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/downloads" element={<Downloads />} />
+                  
+                  {/* Wave Search Routes */}
+                  <Route path="/wave-search" element={<WaveSearch />} />
+                  <Route path="/wave-search/category/:categoryId" element={<WaveCategoryDetail />} />
                   
                   {/* Fallback route */}
                   <Route path="*" element={<NotFound />} />
