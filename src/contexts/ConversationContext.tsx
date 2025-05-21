@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useCallback, useState, useRef, useEffect, ReactNode } from 'react';
 import { toast } from "sonner";
 import { classifyQuery } from '@/utils/queryClassifier';
@@ -19,6 +20,7 @@ interface ConversationContextType {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   setCategoryContext: (category: string | null) => void;
+  categoryContext: string | null;
   clearMessages: () => void;
 }
 
