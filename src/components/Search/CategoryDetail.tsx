@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +7,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Send } from "lucide-react";
 import { categories, CategoryItem } from './CategoryCubes';
 import * as Icons from 'lucide-react';
+import { useConversation } from '@/hooks/useConversation';
+import { ChatMessage } from '@/types';
+import ConversationDisplay from './ConversationDisplay';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Sample prompts organized by category
 const categoryPrompts: Record<string, string[]> = {
@@ -39,10 +43,33 @@ const categoryPrompts: Record<string, string[]> = {
   // Add more category-specific prompts as needed
 };
 
-const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = ({ onSendMessage }) => {
+// Utility function to shuffle array
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+const CategoryDetail: React.FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
+  const [categoryPromptsOrder, setCategoryPromptsOrder] = useLocalStorage<Record<string, number[]>>('categoryPromptsOrder', {});
+  
+  // Use the conversation hook to manage chat state
+  const {
+    messages,
+    currentMessage,
+    setCurrentMessage,
+    isLoading,
+    handleSubmit: handleConversationSubmit,
+    handleRegenerateMessage,
+    handleSelectAlternative,
+    handleRelatedQuestionClick,
+  } = useConversation({});
   
   // Find the selected category
   const selectedCategory = categories.find((cat) => cat.slug === slug);
@@ -55,22 +82,57 @@ const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = (
   const IconComponent = Icons[selectedCategory.icon as keyof typeof Icons] as React.ElementType;
   
   // Get prompts for this category or use default prompts
-  const prompts = categoryPrompts[slug || ''] || categoryPrompts.default;
+  const rawPrompts = categoryPrompts[slug || ''] || categoryPrompts.default;
   
+  // Get or create the order for this category's prompts
+  useEffect(() => {
+    if (!slug) return;
+    
+    if (!categoryPromptsOrder[slug]) {
+      // Create initial shuffled order
+      const initialOrder = Array.from({ length: rawPrompts.length }, (_, i) => i);
+      const shuffledOrder = shuffleArray(initialOrder);
+      setCategoryPromptsOrder({
+        ...categoryPromptsOrder,
+        [slug]: shuffledOrder
+      });
+    }
+  }, [slug, rawPrompts.length]);
+  
+  // Get the ordered prompts based on saved order
+  const prompts = categoryPromptsOrder[slug || ''] 
+    ? categoryPromptsOrder[slug || ''].map(index => rawPrompts[index < rawPrompts.length ? index : 0])
+    : rawPrompts;
+
   const handlePromptClick = (prompt: string) => {
-    onSendMessage(prompt);
+    setCurrentMessage(prompt);
+    
+    // Rotate prompts for this category
+    if (slug && categoryPromptsOrder[slug]) {
+      const currentOrder = [...categoryPromptsOrder[slug]];
+      const rotated = [...currentOrder.slice(1), currentOrder[0]]; // Move first to end
+      
+      setCategoryPromptsOrder({
+        ...categoryPromptsOrder,
+        [slug]: rotated
+      });
+    }
+    
+    // Submit the prompt to conversation
+    handleConversationSubmit(undefined, prompt);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      onSendMessage(message);
+      setCurrentMessage(message);
+      handleConversationSubmit(e, message);
       setMessage("");
     }
   };
 
   return (
-    <div className="p-6 pb-20 w-full">
+    <div className="p-6 pb-20 w-full flex flex-col h-full">
       <div className="flex items-center gap-2 mb-6">
         <Button 
           variant="ghost" 
@@ -107,6 +169,20 @@ const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = (
         </div>
       </div>
       
+      {/* Chat conversation display */}
+      <div className="flex-1 overflow-auto mb-4 min-h-[200px]">
+        {messages.length > 0 && (
+          <ConversationDisplay 
+            messages={messages}
+            setCurrentMessage={setCurrentMessage}
+            handleRegenerateMessage={handleRegenerateMessage}
+            handleSelectAlternative={handleSelectAlternative}
+            handleRelatedQuestionClick={handleRelatedQuestionClick}
+          />
+        )}
+      </div>
+      
+      {/* Chat input at the bottom */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t">
         <form onSubmit={handleSubmit} className="flex gap-2 max-w-4xl mx-auto">
           <Textarea
@@ -124,6 +200,7 @@ const CategoryDetail: React.FC<{ onSendMessage: (message: string) => void }> = (
           <Button 
             type="submit" 
             className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
+            disabled={isLoading}
           >
             <Send className="h-4 w-4" />
           </Button>
