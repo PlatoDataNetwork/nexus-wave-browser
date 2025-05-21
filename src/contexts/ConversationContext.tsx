@@ -240,8 +240,7 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({ chil
         messageToSearch,
         updatedHistory,
         handleToken,
-        null, // No real-time data yet
-        systemContext // Pass the optional category context
+        null // No real-time data yet
       ).catch(error => {
         console.error("Initial streaming error:", error);
       });
@@ -311,8 +310,7 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({ chil
             messageToSearch,
             updatedHistory,
             handleToken,
-            realTimeData,
-            systemContext // Pass the optional category context
+            realTimeData
           ).catch(error => {
             console.error("Real-time streaming error:", error);
           });
@@ -667,3 +665,5 @@ export const useConversationContext = (): ConversationContextType => {
 
 // Re-export for backward compatibility
 export const useConversation = useConversationContext;
+
+</edits_to_apply>
