@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Github, Twitter, Mail } from "lucide-react";
@@ -11,8 +10,11 @@ const Footer: React.FC = () => {
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   
-  // If we're on the search page, don't render the footer
-  if (isSearchPage) {
+  // Also hide on category detail pages (prompts pages)
+  const isCategoryDetailPage = location.pathname.includes("/search/category/");
+  
+  // If we're on the search page or category detail page, don't render the footer
+  if (isSearchPage || isCategoryDetailPage) {
     return null;
   }
   
