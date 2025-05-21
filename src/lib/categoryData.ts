@@ -31,7 +31,7 @@ export const categories: Category[] = [
     color: "bg-purple-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `aerospace-${i+1}`, 
-      text: `Describe the latest advancements in aerospace technology ${i+1}` 
+      text: `Describe the latest advancements in aerospace technology` 
     }))
   },
   { 
@@ -41,7 +41,7 @@ export const categories: Category[] = [
     color: "bg-blue-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `ai-${i+1}`, 
-      text: `Explain ${i+1} key concepts in artificial intelligence research` 
+      text: `Explain key concepts in artificial intelligence research` 
     }))
   },
   { 
@@ -51,7 +51,7 @@ export const categories: Category[] = [
     color: "bg-green-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `ar-vr-${i+1}`, 
-      text: `What are the most innovative AR/VR applications in ${i+1} industries?` 
+      text: `What are the most innovative AR/VR applications in industries?` 
     }))
   },
   { 
@@ -61,7 +61,7 @@ export const categories: Category[] = [
     color: "bg-blue-400", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `autism-${i+1}`, 
-      text: `Describe ${i+1} strategies for supporting individuals with autism` 
+      text: `Describe strategies for supporting individuals with autism` 
     }))
   },
   { 
@@ -71,7 +71,7 @@ export const categories: Category[] = [
     color: "bg-red-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `automotive-${i+1}`, 
-      text: `What are the latest developments in automotive technology ${i+1}?` 
+      text: `What are the latest developments in automotive technology?` 
     }))
   },
   { 
@@ -81,7 +81,7 @@ export const categories: Category[] = [
     color: "bg-sky-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `aviation-${i+1}`, 
-      text: `Explain ${i+1} key innovations in modern aviation` 
+      text: `Explain key innovations in modern aviation` 
     }))
   },
   { 
@@ -91,7 +91,7 @@ export const categories: Category[] = [
     color: "bg-emerald-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `banking-${i+1}`, 
-      text: `What are ${i+1} trends shaping the future of banking?` 
+      text: `What are trends shaping the future of banking?` 
     }))
   },
   { 
@@ -101,7 +101,7 @@ export const categories: Category[] = [
     color: "bg-orange-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `big-data-${i+1}`, 
-      text: `Explain ${i+1} ways big data is transforming business analytics` 
+      text: `Explain ways big data is transforming business analytics` 
     }))
   },
   { 
@@ -111,7 +111,7 @@ export const categories: Category[] = [
     color: "bg-teal-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `biotech-${i+1}`, 
-      text: `What are ${i+1} breakthrough innovations in biotechnology?` 
+      text: `What are breakthrough innovations in biotechnology?` 
     }))
   },
   { 
@@ -121,7 +121,7 @@ export const categories: Category[] = [
     color: "bg-blue-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `blockchain-${i+1}`, 
-      text: `Explain ${i+1} practical applications of blockchain technology` 
+      text: `Explain practical applications of blockchain technology` 
     }))
   },
   // Add more categories similarly
@@ -133,7 +133,7 @@ export const categories: Category[] = [
     color: "bg-green-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `cannabis-${i+1}`, 
-      text: `Describe ${i+1} medical applications of cannabis` 
+      text: `Describe medical applications of cannabis` 
     }))
   },
   { 
@@ -143,7 +143,7 @@ export const categories: Category[] = [
     color: "bg-lime-700", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `carbon-${i+1}`, 
-      text: `What are ${i+1} carbon capture technologies in development?` 
+      text: `What are carbon capture technologies in development?` 
     }))
   },
   { 
@@ -153,7 +153,7 @@ export const categories: Category[] = [
     color: "bg-amber-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `crypto-${i+1}`, 
-      text: `Explain ${i+1} concepts in cryptocurrency technology` 
+      text: `Explain concepts in cryptocurrency technology` 
     }))
   },
   { 
@@ -163,7 +163,7 @@ export const categories: Category[] = [
     color: "bg-red-600", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `cyber-security-${i+1}`, 
-      text: `What are ${i+1} emerging threats in cybersecurity?` 
+      text: `What are emerging threats in cybersecurity?` 
     }))
   },
   { 
@@ -173,7 +173,7 @@ export const categories: Category[] = [
     color: "bg-pink-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `ecommerce-${i+1}`, 
-      text: `Describe ${i+1} innovations changing ecommerce` 
+      text: `Describe innovations changing ecommerce` 
     }))
   },
   { 
@@ -183,7 +183,7 @@ export const categories: Category[] = [
     color: "bg-indigo-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `edtech-${i+1}`, 
-      text: `What are ${i+1} ways technology is transforming education?` 
+      text: `What are ways technology is transforming education?` 
     }))
   },
   { 
@@ -193,7 +193,7 @@ export const categories: Category[] = [
     color: "bg-green-400", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `stem-cell-${i+1}`, 
-      text: `Explain ${i+1} advances in stem cell research and therapy` 
+      text: `Explain advances in stem cell research and therapy` 
     }))
   },
   { 
@@ -203,7 +203,7 @@ export const categories: Category[] = [
     color: "bg-yellow-500", 
     prompts: Array.from({ length: 30 }, (_, i) => ({ 
       id: `solar-${i+1}`, 
-      text: `What are ${i+1} innovations in solar energy technology?` 
+      text: `What are innovations in solar energy technology?` 
     }))
   },
   // Add remaining categories following the same pattern
