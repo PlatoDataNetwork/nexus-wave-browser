@@ -1,62 +1,62 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import Header from "@/components/Layout/Header";
-
-import "./App.css";
-
-// Page imports
-import LandingPage from "./pages/LandingPage";
-import BrowserContent from "./components/Browser/BrowserContent";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import PageLayout from "./components/Layout/PageLayout";
 import Search from "./pages/Search";
+import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import SettingsDocumentation from "./pages/SettingsDocumentation";
-import ExtensionStore from "./pages/ExtensionStore";
-import ExtensionAdmin from "./pages/ExtensionAdmin";
-import History from "./pages/History";
-import Documentation from "./pages/Documentation";
 import Downloads from "./pages/Downloads";
-import NotFound from "./pages/NotFound";
-import Wave from "./pages/Wave";
+import { ThemeProvider } from "./hooks/useTheme";
+import { AuthProvider } from "./hooks/useAuth";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
+import CategoryDetail from "./components/Search/CategoryDetail";
 
-function App() {
-  // Check if running in a browser environment
-  const isBrowser = typeof window !== 'undefined';
+const queryClient = new QueryClient();
 
-  // Get theme from local storage if available
-  let storedTheme = null;
-  if (isBrowser) {
-    storedTheme = localStorage.getItem("nexus-ui-theme") || 'dark';
-  }
-
-  return (
-    <Router>
-      <ThemeProvider defaultTheme={storedTheme || "dark"}>
-        <Header />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/app" element={<BrowserContent currentUrl="" onNavigate={() => {}} />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/search/category/:categoryId" element={<Search />} />
-          <Route path="/wave/*" element={<Wave />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/documentation" element={<SettingsDocumentation />} />
-          <Route path="/extensions" element={<ExtensionStore />} />
-          <Route path="/extension-admin" element={<ExtensionAdmin />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/docs" element={<Documentation />} />
-          <Route path="/downloads" element={<Downloads />} />
-          <Route path="/staking" element={<NotFound message="Staking page coming soon" />} />
-          <Route path="/token" element={<NotFound message="Token page coming soon" />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster richColors />
-      </ThemeProvider>
-    </Router>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <BrowserRouter>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <div className="flex-grow">
+                <Routes>
+                  {/* Marketing Landing Page */}
+                  <Route path="/" element={<LandingPage />} />
+                  
+                  {/* Browser Application Routes */}
+                  <Route path="/app" element={<Index defaultUrl="https://platodata.io" />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
+                  <Route path="/history" element={<Index defaultUrl="/history" />} />
+                  <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/search/category/:categoryId" element={<CategoryDetail />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/downloads" element={<Downloads />} />
+                  
+                  {/* Fallback route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+              <Footer />
+            </div>
+          </BrowserRouter>
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 
 export default App;
