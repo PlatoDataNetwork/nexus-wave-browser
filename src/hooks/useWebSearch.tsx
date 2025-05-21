@@ -1,18 +1,9 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { searchWithSerper } from '@/services/searchApi';
-import { ChatMessage } from '@/types';
+import { searchWithSerper, SearchResultItem } from '@/services/searchApi';
+import { ChatMessage, WebSearchResult } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { dataCache } from '@/utils/dataCache';
-
-interface WebSearchResult {
-  title: string;
-  link: string;
-  snippet: string;
-  source?: string;
-  published?: string;
-  position?: number;
-}
 
 export const useWebSearch = (currentQuery: string, conversations: ChatMessage[]) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +60,18 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     return null;
   }, [page]);
 
+  // Convert SearchResultItem to WebSearchResult
+  const mapToWebSearchResult = (item: SearchResultItem): WebSearchResult => {
+    return {
+      title: item.title,
+      link: item.url,
+      snippet: item.description,
+      source: item.source,
+      published: item.date,
+      position: item.position
+    };
+  };
+
   // Fetch search results
   const fetchSearchResults = useCallback(async (pageNum: number, isLoadMore: boolean = false) => {
     const query = buildContextualQuery();
@@ -107,13 +110,14 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
         setError(new Error(response.error));
       }
       
-      const searchResults = response.results || [];
+      // Map the SearchResultItem objects to WebSearchResult objects
+      const searchResults = response.results.map(mapToWebSearchResult);
       
       // Store in cache
       dataCache.set(
         cacheKey.current,
         JSON.stringify(searchResults),
-        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.url })),
+        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.link })),
         'search_results'
       );
       
@@ -142,7 +146,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     } finally {
       setIsLoading(false);
     }
-  }, [buildContextualQuery, checkCache, toast]);
+  }, [buildContextualQuery, checkCache, toast, mapToWebSearchResult]);
 
   // Handle refresh action
   const handleRefresh = useCallback(() => {
