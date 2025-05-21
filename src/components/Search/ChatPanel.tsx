@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConversationDisplay from './ConversationDisplay';
 import ChatInput from './ChatInput';
 import { ChatMessage } from '@/types';
+import PromptChatArea from './PromptChatArea';
 
 interface ChatPanelProps {
   messages: ChatMessage[];
@@ -19,6 +20,7 @@ interface ChatPanelProps {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
+  currentCategoryPrompt?: string;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -33,8 +35,20 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   toggleSidebar,
   handleRegenerateMessage,
   handleSelectAlternative,
-  handleRelatedQuestionClick
+  handleRelatedQuestionClick,
+  currentCategoryPrompt = ''
 }) => {
+  const [usePromptChat, setUsePromptChat] = useState(false);
+
+  // If we have a category prompt, use the PromptChatArea component
+  useEffect(() => {
+    if (currentCategoryPrompt) {
+      setUsePromptChat(true);
+    } else {
+      setUsePromptChat(false);
+    }
+  }, [currentCategoryPrompt]);
+
   return (
     <div className="flex flex-col h-full">
       <div className="p-3 flex items-center justify-between border-b bg-background">
@@ -51,24 +65,36 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
       
       {/* Content area with relative positioning to contain absolute elements */}
       <div className="flex-grow relative overflow-hidden">
-        {/* Messages area fills the space with padding for the fixed input */}
-        <ConversationDisplay 
-          messages={messages}
-          setCurrentMessage={setCurrentMessage}
-          handleRegenerateMessage={handleRegenerateMessage}
-          handleSelectAlternative={handleSelectAlternative}
-          handleRelatedQuestionClick={handleRelatedQuestionClick}
-        />
-        
-        {/* Input area - absolutely positioned at the bottom */}
-        <ChatInput 
-          currentMessage={currentMessage}
-          setCurrentMessage={setCurrentMessage}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-          isClassifying={isClassifying}
-          isFetchingRealTimeData={isFetchingRealTimeData}
-        />
+        {usePromptChat ? (
+          <PromptChatArea 
+            initialPrompt={currentCategoryPrompt}
+            onSearch={(query) => {
+              setCurrentMessage(query);
+              handleSubmit();
+            }}
+          />
+        ) : (
+          <>
+            {/* Messages area fills the space with padding for the fixed input */}
+            <ConversationDisplay 
+              messages={messages}
+              setCurrentMessage={setCurrentMessage}
+              handleRegenerateMessage={handleRegenerateMessage}
+              handleSelectAlternative={handleSelectAlternative}
+              handleRelatedQuestionClick={handleRelatedQuestionClick}
+            />
+            
+            {/* Input area - absolutely positioned at the bottom */}
+            <ChatInput 
+              currentMessage={currentMessage}
+              setCurrentMessage={setCurrentMessage}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+              isClassifying={isClassifying}
+              isFetchingRealTimeData={isFetchingRealTimeData}
+            />
+          </>
+        )}
       </div>
     </div>
   );

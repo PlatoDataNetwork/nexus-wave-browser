@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
 import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
+import ResponseProgress from './ResponseProgress';
 
 interface WebSearchSidebarProps {
   currentQuery: string;

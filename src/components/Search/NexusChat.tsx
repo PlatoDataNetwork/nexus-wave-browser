@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useConversation } from '@/hooks/useConversation';
 import { useSidebarToggle } from '@/hooks/useSidebarToggle';
+import { useLocation } from 'react-router-dom';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import WebSearchSidebar from './WebSearchSidebar';
 import ChatPanel from './ChatPanel';
@@ -11,6 +12,31 @@ interface NexusChatProps {
 }
 
 const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
+  const [currentCategoryPrompt, setCurrentCategoryPrompt] = useState<string>('');
+  const location = useLocation();
+
+  // Get the category from the URL if we're on a category page
+  useEffect(() => {
+    if (location.pathname.includes('/search/category/')) {
+      const categoryPath = location.pathname.split('/search/category/')[1];
+      // Format the category name from the URL path (e.g., "ar-vr" -> "AR/VR")
+      let categoryName = '';
+      
+      if (categoryPath === 'ar-vr') {
+        categoryName = 'AR/VR';
+        setCurrentCategoryPrompt('What are the most innovative AR/VR applications in industries?');
+      } else {
+        categoryName = categoryPath
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+        setCurrentCategoryPrompt(`Tell me about recent developments in ${categoryName}`);
+      }
+    } else {
+      setCurrentCategoryPrompt('');
+    }
+  }, [location.pathname]);
+
   // Custom hooks to manage state and behaviors
   const {
     messages,
@@ -46,6 +72,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
             handleRegenerateMessage={handleRegenerateMessage}
             handleSelectAlternative={handleSelectAlternative}
             handleRelatedQuestionClick={handleRelatedQuestionClick}
+            currentCategoryPrompt={currentCategoryPrompt}
           />
         </ResizablePanel>
         
