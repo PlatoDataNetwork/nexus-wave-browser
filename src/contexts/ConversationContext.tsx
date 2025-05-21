@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useCallback, useState, useRef, useEffect, ReactNode } from 'react';
 import { toast } from "sonner";
 import { classifyQuery } from '@/utils/queryClassifier';
@@ -647,6 +646,7 @@ export const ConversationProvider: React.FC<ConversationProviderProps> = ({ chil
     handleRegenerateMessage,
     handleSelectAlternative,
     setCategoryContext,
+    categoryContext,
     clearMessages
   };
 
