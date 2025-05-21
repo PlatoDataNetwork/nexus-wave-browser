@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { PageLayout } from '@/components/Layout/PageLayout';
+import PageLayout from '@/components/Layout/PageLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Image, Video, Clock, Zap, Sparkles } from 'lucide-react';
 import ConversationalSearch from '@/components/Search/ConversationalSearch';
@@ -71,7 +71,7 @@ const Search: React.FC = () => {
             <p className="p-4 text-center">Web search coming soon</p>
           </TabsContent>
           <TabsContent value="images" className="h-full m-0">
-            <ImageResults />
+            <ImageResults isLoading={false} results={[]} searchQuery="" />
           </TabsContent>
           <TabsContent value="videos" className="h-full m-0">
             <p className="p-4 text-center">Video search coming soon</p>

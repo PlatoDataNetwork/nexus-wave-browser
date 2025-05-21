@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import CategoryGrid from '@/components/Wave/CategoryGrid';
 import CategoryDetail from '@/components/Wave/CategoryDetail';
-import { PageLayout } from '@/components/Layout/PageLayout';
+import PageLayout from '@/components/Layout/PageLayout';
 
 const Wave: React.FC = () => {
   const location = useLocation();

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -100,7 +100,7 @@ const WaveChat: React.FC<WaveChatProps> = ({ initialPrompt = '', categoryName })
     setMessages(prevMessages => [...prevMessages, assistantMessage]);
     
     // Update conversation history with the new user message
-    const updatedHistory = [...conversationHistory, { role: "user", content: messageToProcess }];
+    const updatedHistory = [...conversationHistory, { role: "user" as const, content: messageToProcess }];
     
     try {
       // Set up a callback to handle streaming tokens
@@ -164,7 +164,7 @@ const WaveChat: React.FC<WaveChatProps> = ({ initialPrompt = '', categoryName })
       // Update conversation history with assistant response
       setConversationHistory([
         ...updatedHistory,
-        { role: "assistant", content: streamedContent }
+        { role: "assistant" as const, content: streamedContent }
       ]);
       
       // Update the message with completion status

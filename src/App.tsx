@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -31,10 +32,10 @@ function App() {
 
   return (
     <Router>
-      <ThemeProvider defaultTheme="dark" storageKey="nexus-ui-theme">
+      <ThemeProvider defaultTheme="dark">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/app" element={<BrowserContent />} />
+          <Route path="/app" element={<BrowserContent currentUrl="" onNavigate={() => {}} />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/category/:categoryId" element={<Search />} />
           <Route path="/wave/*" element={<Wave />} />
