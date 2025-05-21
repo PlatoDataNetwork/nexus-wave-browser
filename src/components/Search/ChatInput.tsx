@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className={`p-4 w-full bg-background/95 backdrop-blur-sm border-t fixed bottom-0 left-0 right-0 z-[100] shadow-up ${className}`}>
+    <div className={`p-4 w-full bg-background/95 backdrop-blur-sm border-t fixed bottom-0 left-0 right-0 z-[100] shadow-md ${className}`}>
       <form onSubmit={onSubmit} className="flex gap-2 max-w-7xl mx-auto">
         <Textarea
           placeholder={placeholder}

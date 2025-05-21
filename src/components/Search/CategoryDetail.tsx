@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -534,9 +535,9 @@ const CategoryDetail: React.FC = () => {
   };
 
   return (
-    <div className="p-6 pb-32 w-full flex flex-col h-full">
+    <div className="flex flex-col h-full">
       {/* Header area with improved z-index and spacing */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-background px-6 pt-6 pb-3">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background px-6 pt-6 pb-3 border-b shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <Button 
             variant="ghost" 
@@ -557,8 +558,8 @@ const CategoryDetail: React.FC = () => {
         </div>
       </div>
       
-      {/* Main content with proper spacing from header */}
-      <div className="flex-1 overflow-hidden relative mt-28">
+      {/* Main content with proper spacing from header - increased top padding */}
+      <div className="flex-1 overflow-hidden pt-36 px-6 pb-32">
         {/* Prompt suggestions - shown when no conversation or at the beginning */}
         <div 
           className={`transition-all duration-300 ${showPrompts ? 'opacity-100' : 'opacity-0 pointer-events-none absolute'}`}
@@ -567,7 +568,7 @@ const CategoryDetail: React.FC = () => {
           <h3 className="text-lg font-medium mb-3">
             Suggested Questions About {selectedCategory.name}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 pb-28">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             {prompts.slice(0, 12).map((prompt, index) => (
               <Card 
                 key={index} 
@@ -587,13 +588,13 @@ const CategoryDetail: React.FC = () => {
           className={`transition-all duration-300 flex flex-col ${showPrompts ? 'opacity-0 pointer-events-none absolute' : 'opacity-100'}`}
           style={{ height: showPrompts ? '0' : '100%' }}
         >
-          <div className="flex-1 overflow-auto min-h-[200px] relative pb-20">
+          <div className="flex-1 overflow-hidden min-h-[200px] relative">
             <ConversationDisplay />
           </div>
         </div>
       </div>
       
-      {/* No need for a container here as ChatInput is self-contained with fixed positioning */}
+      {/* Chat input will be positioned at the bottom via its own fixed positioning */}
     </div>
   );
 };
