@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import Header from "@/components/Layout/Header";
 
 import "./App.css";
 
@@ -32,7 +33,8 @@ function App() {
 
   return (
     <Router>
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme={storedTheme || "dark"}>
+        <Header />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<BrowserContent currentUrl="" onNavigate={() => {}} />} />
