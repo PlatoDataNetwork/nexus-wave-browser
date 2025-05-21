@@ -28,12 +28,12 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
         </Button>
       </div>
       
-      {/* Content area with relative positioning to contain absolute elements */}
+      {/* Content area with relative positioning */}
       <div className="flex-grow relative overflow-hidden">
-        {/* Messages area fills the space with padding for the fixed input */}
+        {/* Messages area fills the space */}
         <ConversationDisplay />
         
-        {/* Input area - fixed positioned at the bottom */}
+        {/* Input area - ChatInput component handles its own fixed positioning */}
         <ChatInput />
       </div>
     </div>

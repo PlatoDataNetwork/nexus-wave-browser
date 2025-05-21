@@ -535,8 +535,9 @@ const CategoryDetail: React.FC = () => {
 
   return (
     <div className="p-6 pb-32 w-full flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6 sticky top-0 z-10 bg-background pt-2">
-        <div className="flex items-center gap-2">
+      {/* Header area with improved z-index and spacing */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-background px-6 pt-6 pb-3">
+        <div className="flex items-center justify-between mb-4">
           <Button 
             variant="ghost" 
             size="sm" 
@@ -547,16 +548,17 @@ const CategoryDetail: React.FC = () => {
             <span>Back to Categories</span>
           </Button>
         </div>
-      </div>
-      
-      <div className="flex items-center mb-6 sticky top-14 z-10 bg-background">
-        <div className={`p-3 rounded-full bg-nexus-purple mr-3`}>
-          {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
+        
+        <div className="flex items-center mb-2">
+          <div className={`p-3 rounded-full bg-nexus-purple mr-3`}>
+            {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
+          </div>
+          <h2 className="text-2xl font-bold">{selectedCategory.name}</h2>
         </div>
-        <h2 className="text-2xl font-bold">{selectedCategory.name}</h2>
       </div>
       
-      <div className="flex-1 overflow-hidden relative">
+      {/* Main content with proper spacing from header */}
+      <div className="flex-1 overflow-hidden relative mt-28">
         {/* Prompt suggestions - shown when no conversation or at the beginning */}
         <div 
           className={`transition-all duration-300 ${showPrompts ? 'opacity-100' : 'opacity-0 pointer-events-none absolute'}`}
@@ -565,7 +567,7 @@ const CategoryDetail: React.FC = () => {
           <h3 className="text-lg font-medium mb-3">
             Suggested Questions About {selectedCategory.name}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 pb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 pb-28">
             {prompts.slice(0, 12).map((prompt, index) => (
               <Card 
                 key={index} 
@@ -585,19 +587,13 @@ const CategoryDetail: React.FC = () => {
           className={`transition-all duration-300 flex flex-col ${showPrompts ? 'opacity-0 pointer-events-none absolute' : 'opacity-100'}`}
           style={{ height: showPrompts ? '0' : '100%' }}
         >
-          <div className="flex-1 overflow-auto mb-20 min-h-[200px] relative">
+          <div className="flex-1 overflow-auto min-h-[200px] relative pb-20">
             <ConversationDisplay />
           </div>
         </div>
       </div>
       
-      {/* Fixed chat input at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-40">
-        <ChatInput 
-          placeholder={`Ask about ${selectedCategory.name}...`} 
-          onFocus={() => setShowPrompts(false)}
-        />
-      </div>
+      {/* No need for a container here as ChatInput is self-contained with fixed positioning */}
     </div>
   );
 };
