@@ -25,9 +25,16 @@ const ChatInput: React.FC<ChatInputProps> = ({
     isFetchingRealTimeData,
   } = useConversationContext();
 
+  const onSubmit = (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+    handleSubmit();
+  };
+
   return (
     <div className={`p-4 w-full bg-background/95 backdrop-blur-sm border-t absolute bottom-0 left-0 right-0 z-50 ${className}`}>
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={onSubmit} className="flex gap-2">
         <Textarea
           placeholder={placeholder}
           value={currentMessage}
@@ -36,7 +43,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              handleSubmit();
+              onSubmit();
             }
           }}
           onFocus={onFocus}

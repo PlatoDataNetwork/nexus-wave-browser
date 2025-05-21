@@ -17,7 +17,8 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
     setCurrentMessage, 
     handleRegenerateMessage, 
     handleSelectAlternative, 
-    handleRelatedQuestionClick 
+    handleRelatedQuestionClick,
+    categoryContext
   } = useConversationContext();
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,10 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-40">
               <p className="text-muted-foreground text-center">
-                No conversation started yet. Ask a question or select a prompt to begin.
+                {categoryContext ? 
+                  `No conversation about ${categoryContext} started yet. Ask a question or select a prompt to begin.` :
+                  "No conversation started yet. Ask a question or select a prompt to begin."
+                }
               </p>
             </div>
           ) : (
