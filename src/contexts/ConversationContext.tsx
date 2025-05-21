@@ -665,5 +665,3 @@ export const useConversationContext = (): ConversationContextType => {
 
 // Re-export for backward compatibility
 export const useConversation = useConversationContext;
-
-</edits_to_apply>
