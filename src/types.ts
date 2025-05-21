@@ -27,4 +27,20 @@ export interface ChatMessage {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
+  // New timing metadata
+  timeToProcess?: number; // Total processing time in milliseconds
+}
+
+// Add StreamingOptions interface for better typing
+export interface StreamingOptions {
+  systemPrompt?: string;
+  incorporateWebContent?: boolean;
+  webContent?: {
+    content: string;
+    timestamp: Date;
+    sources?: {
+      title: string;
+      url: string;
+    }[];
+  } | null;
 }
