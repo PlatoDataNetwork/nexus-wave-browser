@@ -454,7 +454,8 @@ const CategoryDetail: React.FC = () => {
     currentMessage,
     setCurrentMessage,
     handleSubmit,
-    setCategoryContext
+    setCategoryContext,
+    categoryContext
   } = useConversationContext();
   
   // Find the selected category

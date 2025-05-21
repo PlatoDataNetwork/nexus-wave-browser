@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
@@ -10,7 +10,7 @@ interface WebSearchSidebarProps {
 }
 
 const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
-  const { currentQuery, messages } = useConversationContext();
+  const { currentQuery, messages, categoryContext } = useConversationContext();
   
   const {
     isLoading,
@@ -22,10 +22,17 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
     loadMore
   } = useWebSearch(currentQuery, messages);
 
+  // Effect to refresh search when category changes
+  useEffect(() => {
+    if (categoryContext && results.length === 0) {
+      handleRefresh();
+    }
+  }, [categoryContext, handleRefresh, results.length]);
+
   return (
     <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>
       <SearchSidebarHeader 
-        currentQuery={currentQuery}
+        currentQuery={currentQuery || categoryContext || ''}
         onRefresh={handleRefresh}
         onClose={onClose}
       />
@@ -36,8 +43,9 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
         error={error}
         page={page}
         hasMore={hasMore}
-        currentQuery={currentQuery}
+        currentQuery={currentQuery || categoryContext || ''}
         onLoadMore={loadMore}
+        categoryContext={categoryContext}
       />
     </div>
   );
