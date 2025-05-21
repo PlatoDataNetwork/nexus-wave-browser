@@ -5,10 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Send } from "lucide-react";
-import { categories, CategoryItem } from './CategoryCubes';
+import { categories } from './CategoryCubes';
 import * as Icons from 'lucide-react';
 import { useConversation } from '@/hooks/useConversation';
-import { ChatMessage } from '@/types';
 import ConversationDisplay from './ConversationDisplay';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
@@ -69,7 +68,7 @@ const CategoryDetail: React.FC = () => {
     handleRegenerateMessage,
     handleSelectAlternative,
     handleRelatedQuestionClick,
-  } = useConversation({});
+  } = useConversation();
   
   // Find the selected category
   const selectedCategory = categories.find((cat) => cat.slug === slug);
@@ -119,14 +118,14 @@ const CategoryDetail: React.FC = () => {
     }
     
     // Submit the prompt to conversation
-    handleConversationSubmit(undefined, prompt);
+    handleConversationSubmit();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
       setCurrentMessage(message);
-      handleConversationSubmit(e, message);
+      handleConversationSubmit();
       setMessage("");
     }
   };
@@ -146,7 +145,7 @@ const CategoryDetail: React.FC = () => {
       </div>
       
       <div className="flex items-center mb-6">
-        <div className={`p-3 rounded-full ${selectedCategory.color} mr-3`}>
+        <div className={`p-3 rounded-full bg-nexus-purple mr-3`}>
           {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
         </div>
         <h2 className="text-2xl font-bold">{selectedCategory.name}</h2>

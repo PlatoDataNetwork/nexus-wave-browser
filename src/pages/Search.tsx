@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -759,7 +758,7 @@ const Search: React.FC = () => {
               ) : (
                 <Routes>
                   <Route path="/category/:slug" element={
-                    <CategoryDetail onSendMessage={handleCategoryMessage} />
+                    <CategoryDetail />
                   } />
                 </Routes>
               )}
