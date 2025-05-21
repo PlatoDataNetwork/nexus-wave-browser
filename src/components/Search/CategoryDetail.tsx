@@ -207,7 +207,8 @@ const CategoryDetail: React.FC = () => {
         </div>
       </div>
       
-      <ScrollArea className="flex-1 p-6 overflow-auto">
+      {/* Main content area with padding at the bottom to account for fixed input */}
+      <ScrollArea className="flex-1 p-6 pb-32 overflow-auto">
         {/* Header with Back Button and Category Info */}
         <div className="flex items-center gap-3 mb-6">
           <Button variant="outline" size="icon" onClick={() => navigate('/search?tab=wave')}>
@@ -233,22 +234,22 @@ const CategoryDetail: React.FC = () => {
             </Card>
           ))}
         </div>
-        
-        {/* Input Area - Remove the fixed positioning to make it part of the normal flow */}
-        <div className="p-4 bg-background">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex flex-col gap-3">
-            <Textarea 
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              placeholder="Write or select a prompt..."
-              className="min-h-[100px]"
-            />
-            <Button type="submit" className="ml-auto">
-              Submit
-            </Button>
-          </form>
-        </div>
       </ScrollArea>
+      
+      {/* Input Area - Fixed to bottom of screen */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t shadow-md z-50">
+        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex flex-col gap-3">
+          <Textarea 
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Write or select a prompt..."
+            className="min-h-[100px] resize-none"
+          />
+          <Button type="submit" className="ml-auto">
+            Submit
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
