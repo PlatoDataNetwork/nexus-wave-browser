@@ -12,14 +12,16 @@ import {
   Clock, 
   Shield, 
   Zap,
-  Video
+  Video,
+  Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
+import CategoryGrid from "@/components/Search/CategoryGrid";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -36,6 +38,7 @@ const Search: React.FC = () => {
   const [knowledgeGraph, setKnowledgeGraph] = useState<any | null>(null);
   const [peopleAlsoAsk, setPeopleAlsoAsk] = useState<any[]>([]);
   const [relatedSearches, setRelatedSearches] = useState<string[]>([]);
+  const navigate = useNavigate();
   
   // Safe mode search
   const [safeSearch, setSafeSearch] = useState(true);
@@ -136,7 +139,7 @@ const Search: React.FC = () => {
     url.searchParams.set('tab', tab);
     window.history.pushState({}, '', url);
     
-    if (searchQuery.trim() && tab !== 'wave') {
+    if (searchQuery.trim() && tab !== 'wave' && tab !== 'nexus') {
       // If there's text in the search bar, apply search when switching tabs
       handleSearch();
     }
@@ -538,6 +541,9 @@ const Search: React.FC = () => {
                 <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                   <Zap className="h-4 w-4 mr-1" /> Nexus Search
                 </TabsTrigger>
+                <TabsTrigger value="wave" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
+                  <Sparkles className="h-4 w-4 mr-1" /> Nexus Wave
+                </TabsTrigger>
               </TabsList>
               
               <div className="flex items-center gap-2">
@@ -741,6 +747,12 @@ const Search: React.FC = () => {
                   setLastSearchedQuery(query);
                 }
               }} />
+            </TabsContent>
+            
+            <TabsContent value="wave" className="h-full">
+              <ScrollArea className="h-full">
+                <CategoryGrid />
+              </ScrollArea>
             </TabsContent>
           </Tabs>
         </div>
