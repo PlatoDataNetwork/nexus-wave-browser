@@ -2,7 +2,6 @@
 import React, { useRef, useEffect } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
-import WelcomeMessage from './WelcomeMessage';
 import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface ConversationDisplayProps {
@@ -14,7 +13,6 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
 }) => {
   const { 
     messages, 
-    setCurrentMessage, 
     handleRegenerateMessage, 
     handleSelectAlternative, 
     handleRelatedQuestionClick,
@@ -32,8 +30,8 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
 
   return (
     <div className={`h-full overflow-hidden ${className}`}>
-      <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
-        <div className="p-4 space-y-4 pb-32">
+      <ScrollArea className="h-full pb-20" style={{ overscrollBehavior: 'contain' }}> 
+        <div className="p-4 space-y-4 pb-28">
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-40">
               <p className="text-muted-foreground text-center">

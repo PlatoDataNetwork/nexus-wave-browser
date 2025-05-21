@@ -16,7 +16,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
 }) => {
   return (
     <div className="flex flex-col h-full">
-      <div className="p-3 flex items-center justify-between border-b bg-background">
+      <div className="p-3 flex items-center justify-between border-b bg-background sticky top-0 z-10">
         <h3 className="text-sm font-medium">Nexus Chat</h3>
         <Button 
           variant="outline" 
@@ -33,7 +33,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
         {/* Messages area fills the space with padding for the fixed input */}
         <ConversationDisplay />
         
-        {/* Input area - absolutely positioned at the bottom */}
+        {/* Input area - fixed positioned at the bottom */}
         <ChatInput />
       </div>
     </div>

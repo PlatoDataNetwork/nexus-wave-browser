@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, MessageSquare, Grid3X3 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { categories } from './CategoryCubes';
 import * as Icons from 'lucide-react';
 import { useConversationContext } from '@/contexts/ConversationContext';
@@ -534,8 +534,8 @@ const CategoryDetail: React.FC = () => {
   };
 
   return (
-    <div className="p-6 pb-20 w-full flex flex-col h-full">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6 pb-32 w-full flex flex-col h-full">
+      <div className="flex items-center justify-between mb-6 sticky top-0 z-10 bg-background pt-2">
         <div className="flex items-center gap-2">
           <Button 
             variant="ghost" 
@@ -549,7 +549,7 @@ const CategoryDetail: React.FC = () => {
         </div>
       </div>
       
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-6 sticky top-14 z-10 bg-background">
         <div className={`p-3 rounded-full bg-nexus-purple mr-3`}>
           {IconComponent && <IconComponent className="h-6 w-6 text-white" />}
         </div>
@@ -565,7 +565,7 @@ const CategoryDetail: React.FC = () => {
           <h3 className="text-lg font-medium mb-3">
             Suggested Questions About {selectedCategory.name}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 pb-16">
             {prompts.slice(0, 12).map((prompt, index) => (
               <Card 
                 key={index} 
@@ -585,14 +585,14 @@ const CategoryDetail: React.FC = () => {
           className={`transition-all duration-300 flex flex-col ${showPrompts ? 'opacity-0 pointer-events-none absolute' : 'opacity-100'}`}
           style={{ height: showPrompts ? '0' : '100%' }}
         >
-          <div className="flex-1 overflow-auto mb-4 min-h-[200px] relative">
+          <div className="flex-1 overflow-auto mb-20 min-h-[200px] relative">
             <ConversationDisplay />
           </div>
         </div>
       </div>
       
       {/* Fixed chat input at bottom */}
-      <div className="absolute bottom-0 left-0 right-0">
+      <div className="fixed bottom-0 left-0 right-0 z-40">
         <ChatInput 
           placeholder={`Ask about ${selectedCategory.name}...`} 
           onFocus={() => setShowPrompts(false)}
