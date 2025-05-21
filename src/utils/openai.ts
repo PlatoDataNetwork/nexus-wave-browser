@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { StreamingOptions } from '@/types';
 
 // OpenAI API key
 const OPENAI_API_KEY = "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";
@@ -53,19 +54,19 @@ const generateCacheKey = (message: string, realTimeData: boolean): string => {
  * Optimized for the fastest possible first token time
  */
 export async function getStreamingResponse(
-  message: string,
-  conversationHistory: { role: "user" | "assistant"; content: string }[],
+  query: string,
+  history: { role: string; content: string }[] = [],
   onToken: (token: string) => void,
-  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null
+  options?: StreamingOptions
 ): Promise<void> {
   try {
     console.time('streaming-first-token');
     
     // Generate cache key that accounts for time-sensitivity
-    const cacheKey = generateCacheKey(message, !!realTimeData);
+    const cacheKey = generateCacheKey(query, !!options?.incorporateWebContent);
     
     // Skip cache for time-sensitive queries to ensure fresh data
-    const shouldBypassCache = isTimeSensitiveQuery(message);
+    const shouldBypassCache = isTimeSensitiveQuery(query);
     
     // Check cache for exact matches to avoid redundant calls (only if not time-sensitive)
     if (!shouldBypassCache && responseCache.has(cacheKey)) {
@@ -84,12 +85,12 @@ export async function getStreamingResponse(
     let systemPrompt = SYSTEM_PROMPTS.STREAMING;
     
     // Add real-time data if available (but keep it minimal for faster processing)
-    if (realTimeData) {
-      systemPrompt += `\n\nUse this data:\n${realTimeData.content.substring(0, 500)}${realTimeData.content.length > 500 ? '...' : ''}`;
+    if (options?.incorporateWebContent) {
+      systemPrompt += `\n\nUse this data:\n${options?.incorporateWebContent.content.substring(0, 500)}${options?.incorporateWebContent.content.length > 500 ? '...' : ''}`;
       
       // Include source information in system prompt
-      if (realTimeData.sources && realTimeData.sources.length > 0) {
-        systemPrompt += `\n\nSources:\n${realTimeData.sources.map(source => 
+      if (options?.incorporateWebContent.sources && options?.incorporateWebContent.sources.length > 0) {
+        systemPrompt += `\n\nSources:\n${options?.incorporateWebContent.sources.map(source => 
           `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
         ).join('\n')}`;
       }
@@ -99,10 +100,10 @@ export async function getStreamingResponse(
     }
     
     // Keep history minimal for faster processing
-    let prunedHistory = conversationHistory;
-    if (conversationHistory.length > 4) {
+    let prunedHistory = history;
+    if (history.length > 4) {
       // Keep only the most recent messages
-      prunedHistory = conversationHistory.slice(-3);
+      prunedHistory = history.slice(-3);
     }
     
     // Construct messages array with system prompt, conversation history, and current message
@@ -114,7 +115,7 @@ export async function getStreamingResponse(
       ...prunedHistory,
       {
         role: 'user',
-        content: message
+        content: query
       }
     ];
     
@@ -151,7 +152,7 @@ export async function getStreamingResponse(
     
     // Don't cache time-sensitive queries with a long TTL
     // For time-sensitive, keep a shorter TTL (10 minutes)
-    const isSensitive = isTimeSensitiveQuery(message);
+    const isSensitive = isTimeSensitiveQuery(query);
     
     // Cache the response for future use (limited to 50 entries)
     if (responseCache.size > 50) {

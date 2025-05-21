@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatInput from './ChatInput';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { ChatMessage } from '@/types';
+import { ChatMessage, StreamingOptions } from '@/types';
 import ConversationMessage from './ConversationMessage';
 import { getStreamingResponse } from '@/utils/openai';
 import ResponseProgress from './ResponseProgress';
@@ -287,7 +287,7 @@ const PromptChatArea: React.FC<PromptChatAreaProps> = ({ initialPrompt = '', onS
             {
               systemPrompt,
               incorporateWebContent: true
-            }
+            } as StreamingOptions
           );
           
         }
