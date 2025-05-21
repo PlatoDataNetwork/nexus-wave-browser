@@ -16,7 +16,6 @@ import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
-import { ConversationProvider } from "./contexts/ConversationContext";
 
 const queryClient = new QueryClient();
 
@@ -39,9 +38,7 @@ const App = () => (
                   <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
                   <Route path="/history" element={<Index defaultUrl="/history" />} />
                   <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-                  
-                  {/* Search Routes including Category */}
-                  <Route path="/search/*" element={<Search />} />
+                  <Route path="/search" element={<Search />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/downloads" element={<Downloads />} />
                   

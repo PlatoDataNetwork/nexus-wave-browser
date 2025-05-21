@@ -1,17 +1,21 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
+import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
-import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface WebSearchSidebarProps {
+  currentQuery: string;
+  conversations: ChatMessage[];
   onClose: () => void;
 }
 
-const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
-  const { currentQuery, messages, categoryContext } = useConversationContext();
-  
+const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ 
+  currentQuery, 
+  conversations,
+  onClose
+}) => {
   const {
     isLoading,
     results,
@@ -20,19 +24,12 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
     hasMore,
     handleRefresh,
     loadMore
-  } = useWebSearch(currentQuery, messages);
-
-  // Effect to refresh search when category changes
-  useEffect(() => {
-    if (categoryContext && results.length === 0) {
-      handleRefresh();
-    }
-  }, [categoryContext, handleRefresh, results.length]);
+  } = useWebSearch(currentQuery, conversations);
 
   return (
     <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>
       <SearchSidebarHeader 
-        currentQuery={currentQuery || categoryContext || ''}
+        currentQuery={currentQuery}
         onRefresh={handleRefresh}
         onClose={onClose}
       />
@@ -43,9 +40,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
         error={error}
         page={page}
         hasMore={hasMore}
-        currentQuery={currentQuery || categoryContext || ''}
+        currentQuery={currentQuery}
         onLoadMore={loadMore}
-        categoryContext={categoryContext}
       />
     </div>
   );

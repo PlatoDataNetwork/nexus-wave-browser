@@ -1,14 +1,14 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { searchWithSerper, SearchResultItem } from '@/services/searchApi';
-import { ChatMessage, WebSearchResult } from '@/types';
+import { searchWithSerper } from '@/services/searchApi';
+import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { dataCache } from '@/utils/dataCache';
 
 export const useWebSearch = (currentQuery: string, conversations: ChatMessage[]) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<WebSearchResult[]>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [results, setResults] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { toast } = useToast();
@@ -46,7 +46,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
   }, [currentQuery, conversations]);
 
   // Check cache before fetching
-  const checkCache = useCallback((query: string): WebSearchResult[] | null => {
+  const checkCache = useCallback((query: string): any[] | null => {
     const normalizedQuery = query.toLowerCase().trim();
     cacheKey.current = `search_${normalizedQuery}_${page}`;
     
@@ -59,18 +59,6 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     
     return null;
   }, [page]);
-
-  // Convert SearchResultItem to WebSearchResult
-  const mapToWebSearchResult = (item: SearchResultItem): WebSearchResult => {
-    return {
-      title: item.title,
-      link: item.url,
-      snippet: item.description,
-      source: item.source,
-      published: item.date,
-      position: item.position
-    };
-  };
 
   // Fetch search results
   const fetchSearchResults = useCallback(async (pageNum: number, isLoadMore: boolean = false) => {
@@ -107,17 +95,16 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       const response = await searchWithSerper(query, "search", true, pageSize);
       
       if (response.error) {
-        setError(new Error(response.error));
+        setError(response.error);
       }
       
-      // Map the SearchResultItem objects to WebSearchResult objects
-      const searchResults = response.results.map(mapToWebSearchResult);
+      const searchResults = response.results || [];
       
       // Store in cache
       dataCache.set(
         cacheKey.current,
         JSON.stringify(searchResults),
-        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.link })),
+        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.url })),
         'search_results'
       );
       
@@ -132,11 +119,11 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       // Log performance metrics
       const endTime = performance.now();
       console.log(`Search fetch completed in ${(endTime - startTime).toFixed(0)}ms`);
-    } catch (err: any) {
+    } catch (err) {
       // Only set error if this request wasn't aborted
       if (err.name !== 'AbortError') {
         console.error("Error fetching results:", err);
-        setError(new Error("Failed to fetch search results"));
+        setError("Failed to fetch search results");
         toast({
           title: "Search Error",
           description: "Failed to fetch web search results",
@@ -146,7 +133,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     } finally {
       setIsLoading(false);
     }
-  }, [buildContextualQuery, checkCache, toast, mapToWebSearchResult]);
+  }, [buildContextualQuery, checkCache, toast]);
 
   // Handle refresh action
   const handleRefresh = useCallback(() => {

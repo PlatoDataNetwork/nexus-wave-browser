@@ -6,15 +6,6 @@ export interface EditHistoryItem {
   content: string;
 }
 
-export interface WebSearchResult {
-  title: string;
-  link: string;
-  snippet: string;
-  source?: string;
-  published?: string;
-  position?: number;
-}
-
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
