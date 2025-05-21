@@ -8,11 +8,13 @@ import { useConversationContext } from '@/contexts/ConversationContext';
 interface ChatInputProps {
   placeholder?: string;
   className?: string;
+  onFocus?: () => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
   placeholder = "Ask Nexus anything...",
   className = "",
+  onFocus
 }) => {
   const {
     currentMessage,
@@ -37,6 +39,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
               handleSubmit();
             }
           }}
+          onFocus={onFocus}
         />
         <Button 
           type="submit" 

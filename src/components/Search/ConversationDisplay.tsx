@@ -34,7 +34,11 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
       <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
         <div className="p-4 space-y-4 pb-32">
           {messages.length === 0 ? (
-            <WelcomeMessage setCurrentMessage={setCurrentMessage} />
+            <div className="flex items-center justify-center h-40">
+              <p className="text-muted-foreground text-center">
+                No conversation started yet. Ask a question or select a prompt to begin.
+              </p>
+            </div>
           ) : (
             messages.map((message) => (
               <ConversationMessage 
