@@ -16,6 +16,7 @@ import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
+import { ConversationProvider } from "./contexts/ConversationContext";
 
 const queryClient = new QueryClient();
 

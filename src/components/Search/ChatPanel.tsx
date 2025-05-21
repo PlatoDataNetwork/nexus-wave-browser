@@ -4,36 +4,15 @@ import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConversationDisplay from './ConversationDisplay';
 import ChatInput from './ChatInput';
-import { ChatMessage } from '@/types';
 
 interface ChatPanelProps {
-  messages: ChatMessage[];
-  currentMessage: string;
-  setCurrentMessage: (message: string) => void;
-  handleSubmit: (e?: React.FormEvent) => void;
-  isLoading: boolean;
-  isClassifying: boolean;
-  isFetchingRealTimeData: boolean;
   showSidebar: boolean;
   toggleSidebar: () => void;
-  handleRegenerateMessage: (messageId: string) => void;
-  handleSelectAlternative: (messageId: string, index: number) => void;
-  handleRelatedQuestionClick: (question: string) => void;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
-  messages,
-  currentMessage,
-  setCurrentMessage,
-  handleSubmit,
-  isLoading,
-  isClassifying,
-  isFetchingRealTimeData,
   showSidebar,
-  toggleSidebar,
-  handleRegenerateMessage,
-  handleSelectAlternative,
-  handleRelatedQuestionClick
+  toggleSidebar
 }) => {
   return (
     <div className="flex flex-col h-full">
@@ -52,23 +31,10 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
       {/* Content area with relative positioning to contain absolute elements */}
       <div className="flex-grow relative overflow-hidden">
         {/* Messages area fills the space with padding for the fixed input */}
-        <ConversationDisplay 
-          messages={messages}
-          setCurrentMessage={setCurrentMessage}
-          handleRegenerateMessage={handleRegenerateMessage}
-          handleSelectAlternative={handleSelectAlternative}
-          handleRelatedQuestionClick={handleRelatedQuestionClick}
-        />
+        <ConversationDisplay />
         
         {/* Input area - absolutely positioned at the bottom */}
-        <ChatInput 
-          currentMessage={currentMessage}
-          setCurrentMessage={setCurrentMessage}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-          isClassifying={isClassifying}
-          isFetchingRealTimeData={isFetchingRealTimeData}
-        />
+        <ChatInput />
       </div>
     </div>
   );

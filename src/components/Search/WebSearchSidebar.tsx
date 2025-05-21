@@ -1,21 +1,17 @@
 
 import React from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
-import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
+import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface WebSearchSidebarProps {
-  currentQuery: string;
-  conversations: ChatMessage[];
   onClose: () => void;
 }
 
-const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ 
-  currentQuery, 
-  conversations,
-  onClose
-}) => {
+const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ onClose }) => {
+  const { currentQuery, messages } = useConversationContext();
+  
   const {
     isLoading,
     results,
@@ -24,7 +20,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     hasMore,
     handleRefresh,
     loadMore
-  } = useWebSearch(currentQuery, conversations);
+  } = useWebSearch(currentQuery, messages);
 
   return (
     <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>

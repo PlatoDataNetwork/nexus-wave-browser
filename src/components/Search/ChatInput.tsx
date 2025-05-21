@@ -3,29 +3,31 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Globe } from "lucide-react";
+import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface ChatInputProps {
-  currentMessage: string;
-  setCurrentMessage: (message: string) => void;
-  handleSubmit: (e?: React.FormEvent) => void;
-  isLoading: boolean;
-  isClassifying: boolean;
-  isFetchingRealTimeData: boolean;
+  placeholder?: string;
+  className?: string;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
-  currentMessage,
-  setCurrentMessage,
-  handleSubmit,
-  isLoading,
-  isClassifying,
-  isFetchingRealTimeData,
+  placeholder = "Ask Nexus anything...",
+  className = "",
 }) => {
+  const {
+    currentMessage,
+    setCurrentMessage,
+    handleSubmit,
+    isLoading,
+    isClassifying,
+    isFetchingRealTimeData,
+  } = useConversationContext();
+
   return (
-    <div className="p-4 w-full bg-background/95 backdrop-blur-sm border-t absolute bottom-0 left-0 right-0 z-50">
+    <div className={`p-4 w-full bg-background/95 backdrop-blur-sm border-t absolute bottom-0 left-0 right-0 z-50 ${className}`}>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Textarea
-          placeholder="Ask Nexus anything..."
+          placeholder={placeholder}
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           className="flex-1 min-h-12 resize-none"

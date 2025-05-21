@@ -18,10 +18,11 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
-import CategoryCubes, { categories } from "@/components/Search/CategoryCubes";
+import CategoryCubes from "@/components/Search/CategoryCubes";
 import CategoryDetail from "@/components/Search/CategoryDetail";
+import { ConversationProvider } from "@/contexts/ConversationContext";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -165,20 +166,12 @@ const Search: React.FC = () => {
     }
   };
 
-  // Handle chat message submission from category detail
-  const handleCategoryMessage = (message: string) => {
+  // Handle search from Nexus chat
+  const handleChatSearch = (message: string) => {
     // Set the message as the search query
     setSearchQuery(message);
-    
-    // Switch to the nexus chat tab
-    setActiveTab("nexus");
-    
-    // Navigate back to the main nexus view
-    navigate("/search");
-    
-    // The message will be used by NexusChat
   };
-
+  
   // Render Search Result component
   const renderSearchResult = (result: SearchResultItem) => {
     switch (result.type) {
@@ -752,15 +745,17 @@ const Search: React.FC = () => {
             
             <TabsContent value="nexus" className="h-full flex flex-col">
               {!isNexusCategoryView ? (
-                <CategoryCubes onCategorySelect={(category) => {
-                  navigate(`/search/category/${category.slug}`);
-                }} />
+                <ConversationProvider onSearch={handleChatSearch}>
+                  <CategoryCubes onCategorySelect={(category) => {
+                    navigate(`/search/category/${category.slug}`);
+                  }} />
+                </ConversationProvider>
               ) : (
-                <Routes>
-                  <Route path="/category/:slug" element={
-                    <CategoryDetail />
-                  } />
-                </Routes>
+                <ConversationProvider onSearch={handleChatSearch}>
+                  <Routes>
+                    <Route path="/category/:slug" element={<CategoryDetail />} />
+                  </Routes>
+                </ConversationProvider>
               )}
             </TabsContent>
           </Tabs>

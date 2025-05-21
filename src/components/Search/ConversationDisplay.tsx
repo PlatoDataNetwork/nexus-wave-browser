@@ -3,23 +3,23 @@ import React, { useRef, useEffect } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
 import WelcomeMessage from './WelcomeMessage';
-import { ChatMessage } from '@/types';
+import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface ConversationDisplayProps {
-  messages: ChatMessage[];
-  setCurrentMessage: (message: string) => void;
-  handleRegenerateMessage: (messageId: string) => void;
-  handleSelectAlternative: (messageId: string, index: number) => void;
-  handleRelatedQuestionClick: (question: string) => void;
+  className?: string;
 }
 
 const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
-  messages,
-  setCurrentMessage,
-  handleRegenerateMessage,
-  handleSelectAlternative,
-  handleRelatedQuestionClick
+  className = "",
 }) => {
+  const { 
+    messages, 
+    setCurrentMessage, 
+    handleRegenerateMessage, 
+    handleSelectAlternative, 
+    handleRelatedQuestionClick 
+  } = useConversationContext();
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -30,7 +30,7 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   }, [messages]);
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className={`h-full overflow-hidden ${className}`}>
       <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
         <div className="p-4 space-y-4 pb-32">
           {messages.length === 0 ? (

@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { categories } from './CategoryCubes';
 import * as Icons from 'lucide-react';
-import { useConversation } from '@/hooks/useConversation';
+import { useConversationContext } from '@/contexts/ConversationContext';
 import ConversationDisplay from './ConversationDisplay';
+import ChatInput from './ChatInput';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Sample prompts organized by category
@@ -53,25 +53,31 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 const CategoryDetail: React.FC = () => {
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const [categoryPromptsOrder, setCategoryPromptsOrder] = useLocalStorage<Record<string, number[]>>('categoryPromptsOrder', {});
   
-  // Use the conversation hook to manage chat state
+  // Use the shared conversation context
   const {
-    messages,
-    currentMessage,
     setCurrentMessage,
-    isLoading,
-    handleSubmit: handleConversationSubmit,
-    handleRegenerateMessage,
-    handleSelectAlternative,
-    handleRelatedQuestionClick,
-  } = useConversation();
+    handleSubmit,
+    setCategoryContext
+  } = useConversationContext();
   
   // Find the selected category
   const selectedCategory = categories.find((cat) => cat.slug === slug);
+  
+  useEffect(() => {
+    // Set the category context when component mounts
+    if (selectedCategory) {
+      setCategoryContext(selectedCategory.name);
+    }
+    
+    // Clear the category context when component unmounts
+    return () => {
+      setCategoryContext(null);
+    };
+  }, [selectedCategory, setCategoryContext]);
   
   if (!selectedCategory) {
     return <div className="p-6">Category not found</div>;
@@ -118,16 +124,7 @@ const CategoryDetail: React.FC = () => {
     }
     
     // Submit the prompt to conversation
-    handleConversationSubmit();
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim()) {
-      setCurrentMessage(message);
-      handleConversationSubmit();
-      setMessage("");
-    }
+    handleSubmit();
   };
 
   return (
@@ -169,41 +166,9 @@ const CategoryDetail: React.FC = () => {
       </div>
       
       {/* Chat conversation display */}
-      <div className="flex-1 overflow-auto mb-4 min-h-[200px]">
-        {messages.length > 0 && (
-          <ConversationDisplay 
-            messages={messages}
-            setCurrentMessage={setCurrentMessage}
-            handleRegenerateMessage={handleRegenerateMessage}
-            handleSelectAlternative={handleSelectAlternative}
-            handleRelatedQuestionClick={handleRelatedQuestionClick}
-          />
-        )}
-      </div>
-      
-      {/* Chat input at the bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t">
-        <form onSubmit={handleSubmit} className="flex gap-2 max-w-4xl mx-auto">
-          <Textarea
-            placeholder={`Ask about ${selectedCategory.name}...`}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="flex-1 min-h-12 resize-none"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e);
-              }
-            }}
-          />
-          <Button 
-            type="submit" 
-            className="h-12 bg-nexus-purple hover:bg-nexus-deep-purple flex-shrink-0"
-            disabled={isLoading}
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
+      <div className="flex-1 overflow-auto mb-4 min-h-[200px] relative">
+        <ConversationDisplay />
+        <ChatInput placeholder={`Ask about ${selectedCategory.name}...`} />
       </div>
     </div>
   );
