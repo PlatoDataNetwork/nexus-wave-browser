@@ -207,7 +207,7 @@ const CategoryDetail: React.FC = () => {
         </div>
       </div>
       
-      <ScrollArea className="flex-1 p-6 pb-32 overflow-auto">
+      <ScrollArea className="flex-1 p-6 overflow-auto">
         {/* Header with Back Button and Category Info */}
         <div className="flex items-center gap-3 mb-6">
           <Button variant="outline" size="icon" onClick={() => navigate('/search?tab=wave')}>
@@ -234,8 +234,8 @@ const CategoryDetail: React.FC = () => {
           ))}
         </div>
         
-        {/* Input Area */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t z-50">
+        {/* Input Area - Remove the fixed positioning to make it part of the normal flow */}
+        <div className="p-4 bg-background">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto flex flex-col gap-3">
             <Textarea 
               value={userInput}
