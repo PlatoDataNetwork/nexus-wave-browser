@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import SearchSidebar from './SearchSidebar';
 import { getChatGPTResponse, getStreamingResponse } from '@/utils/openai';
 import { ClassificationResult } from '@/utils/queryClassifier';
+import { getRealTimeData } from '@/utils/realTimeData';
 
 // Default classification for simple queries
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
@@ -107,8 +108,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       content: "",
       timestamp: new Date(),
       isLoading: true,
-      isStreaming: true,
-      streamProgress: 0
+      isStreaming: true
     };
     
     setMessages(prevMessages => [...prevMessages, assistantMessage]);
@@ -177,8 +177,7 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             msg.id === assistantMessageId
               ? { 
                   ...msg, 
-                  content: streamedContent,
-                  streamProgress: Math.min(95, streamingProgress) // Cap at 95% until complete
+                  content: streamedContent
                 }
               : msg
           )
@@ -222,7 +221,6 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
                 content: streamedContent,
                 isLoading: false,
                 isStreaming: false,
-                streamProgress: 100,
                 sources,
                 hasRealTimeData: !!realTimeData
               }
