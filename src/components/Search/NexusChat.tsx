@@ -31,7 +31,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     isPromptOrFollowupQuestion,
     searchResults,
     processingType,
-    needsRealTimeData,
+    needsRealTimeData, // Make sure this is destructured from useConversation
   } = useConversation({ 
     onSearch,
     initialMessage

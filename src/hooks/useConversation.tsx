@@ -21,6 +21,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   const [isPromptOrFollowupQuestion, setIsPromptOrFollowupQuestion] = useState(false);
   const [searchResults, setSearchResults] = useState<Array<{title: string, url: string, snippet: string}>>([]);
   const [processingType, setProcessingType] = useState<'individual' | 'contextual'>('individual');
+  const [needsRealTimeData, setNeedsRealTimeData] = useState<boolean>(false);
   const { toast } = useToast();
 
   // Reference to track ongoing requests that can be canceled
@@ -171,6 +172,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         .then(enhancedClassification => {
           // Update processing type based on classification
           setProcessingType(enhancedClassification.processingType);
+          
+          // Set whether this query needs real-time data
+          setNeedsRealTimeData(enhancedClassification.needsRealTimeData);
           
           // Update message to show progress and processing type
           setMessages(prevMessages => 
@@ -705,6 +709,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     handleSelectAlternative,
     isPromptOrFollowupQuestion,
     searchResults,
-    processingType
+    processingType,
+    needsRealTimeData
   };
 };

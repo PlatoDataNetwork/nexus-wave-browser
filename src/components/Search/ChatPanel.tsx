@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +23,7 @@ interface ChatPanelProps {
   processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;
+  needsRealTimeData?: boolean; // Add this prop to the interface
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -43,21 +43,26 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   processingStage = 'classifying',
   processingType = 'individual',
   searchResults = [],
-  currentQuery = ''
+  currentQuery = '',
+  needsRealTimeData = false // Set a default value
 }) => {
+  // Only show sidebar toggle when the query needs real-time data
+  const showSidebarToggle = !!currentQuery && needsRealTimeData;
   
   return (
     <div className="flex flex-col h-full">
       <div className="p-3 flex items-center justify-between border-b bg-background">
         <h3 className="text-sm font-medium">Nexus Chat</h3>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="h-8 w-8"
-          onClick={toggleSidebar}
-        >
-          {showSidebar ? <SidebarClose className="h-4 w-4" /> : <SidebarOpen className="h-4 w-4" />}
-        </Button>
+        {showSidebarToggle && (
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8"
+            onClick={toggleSidebar}
+          >
+            {showSidebar ? <SidebarClose className="h-4 w-4" /> : <SidebarOpen className="h-4 w-4" />}
+          </Button>
+        )}
       </div>
       
       {/* Content area with relative positioning to contain absolute elements */}

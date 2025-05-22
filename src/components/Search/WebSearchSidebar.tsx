@@ -1,10 +1,9 @@
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
 import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
-import { Loader2, AlertCircle } from 'lucide-react';
 
 interface WebSearchSidebarProps {
   currentQuery: string;
@@ -30,8 +29,11 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = memo(({
     loadMore,
     searchStage
   } = useWebSearch(currentQuery, conversations);
-
-  console.log('WebSearchSidebar render - query:', currentQuery, 'results:', results.length);
+  
+  useEffect(() => {
+    // Log when the component is rendered with a new query
+    console.log('WebSearchSidebar render with query:', currentQuery);
+  }, [currentQuery]);
 
   return (
     <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>
@@ -57,6 +59,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = memo(({
   );
 }, (prevProps, nextProps) => {
   // Custom comparison function to prevent unnecessary rerenders
+  // Only rerender if the currentQuery changes
   return prevProps.currentQuery === nextProps.currentQuery;
 });
 
