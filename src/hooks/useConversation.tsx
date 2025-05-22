@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { v4 as uuidv4 } from 'uuid';
-import { toast } from "sonner";
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData, getStreamingResponse } from '@/utils/openai';
@@ -230,9 +229,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         );
         
         // Show loading toast for real-time data
-        toast("Fetching real-time data...", {
+        toast({
+          title: "Fetching real-time data...",
           duration: 2000,
-          icon: <span className="h-4 w-4" />
         });
         
         // Fetch real-time data
@@ -260,9 +259,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         );
         
         if (realTimeData) {
-          toast("Found real-time information", {
+          toast({
+            title: "Found real-time information",
             duration: 2000,
-            icon: <span className="h-4 w-4 text-nexus-purple" />
           });
           
           // If we have real-time data, generate a more informed response
@@ -348,7 +347,10 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       
     } catch (error) {
       console.error("AI error:", error);
-      toast("Failed to fetch response. Please try again later.");
+      toast({
+        title: "Failed to fetch response. Please try again later.",
+        variant: "destructive",
+      });
       
       // Add a fallback response
       const fallbackResponse: ChatMessage = {
@@ -394,9 +396,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     const currentAssistantMessage = messages[messageIndex];
     
     // Show regenerating toast
-    toast("Regenerating response...", {
+    toast({
+      title: "Regenerating response...",
       duration: 3000,
-      icon: <span className="h-4 w-4 animate-spin" />
     });
     
     setIsLoading(true);
