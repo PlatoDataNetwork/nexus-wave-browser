@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
 import WelcomeMessage from './WelcomeMessage';
@@ -21,25 +21,99 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   handleRelatedQuestionClick
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Scroll to bottom when messages update
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastMessageLengthRef = useRef<number>(0);
+  const isUserScrollingRef = useRef<boolean>(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  
+  // Add debug logging
+  const debugScrollRef = useRef<boolean>(false);
+  
+  // More robust scroll handling with debounce to prevent constant jumping
+  const scrollToBottom = useCallback(() => {
+    // Clear any pending scroll timeout
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
     }
-  }, [messages]);
+    
+    // Debounce scrolling to avoid constant jumps
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (messagesEndRef.current && !isUserScrollingRef.current) {
+        // Debug first scroll event only
+        if (!debugScrollRef.current) {
+          console.log('Scrolling to bottom in ConversationDisplay');
+          debugScrollRef.current = true;
+        }
+        
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 100); // Small delay to batch scroll events
+  }, []);
+
+  // Only scroll when new messages are added or the last message content changes significantly
+  useEffect(() => {
+    const currentMessagesLength = messages.length;
+    const lastMessage = messages[messages.length - 1];
+    const lastMessageContent = lastMessage?.content || '';
+    
+    // Determine if we should scroll based on various conditions
+    const hasNewMessage = currentMessagesLength > 0 && currentMessagesLength !== lastMessageLengthRef.current;
+    const isLastMessageStreaming = lastMessage?.isStreaming;
+    const hasSignificantChange = lastMessageContent.length > lastMessageLengthRef.current + 50; // Only scroll on significant additions
+    
+    if (hasNewMessage || (isLastMessageStreaming && hasSignificantChange)) {
+      scrollToBottom();
+      lastMessageLengthRef.current = lastMessageContent.length;
+    }
+  }, [messages, scrollToBottom]);
+  
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Add event listeners to detect user scrolling
+  useEffect(() => {
+    const scrollAreaElement = scrollAreaRef.current;
+    
+    const handleScroll = () => {
+      isUserScrollingRef.current = true;
+      
+      // Reset after some inactivity to allow auto-scrolling again
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      scrollTimeoutRef.current = setTimeout(() => {
+        isUserScrollingRef.current = false;
+      }, 1000);
+    };
+    
+    if (scrollAreaElement) {
+      scrollAreaElement.addEventListener('wheel', handleScroll);
+      scrollAreaElement.addEventListener('touchmove', handleScroll);
+    }
+    
+    return () => {
+      if (scrollAreaElement) {
+        scrollAreaElement.removeEventListener('wheel', handleScroll);
+        scrollAreaElement.removeEventListener('touchmove', handleScroll);
+      }
+    };
+  }, []);
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full overflow-hidden" ref={scrollAreaRef}>
       <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
         <div className="p-4 space-y-4 pb-32">
           {messages.length === 0 ? (
             <WelcomeMessage setCurrentMessage={setCurrentMessage} />
           ) : (
             messages.map((message) => {
-              // Add debugging console log to check sources
-              console.log("Message sources:", message.id, message.sources);
-              
               return (
                 <ConversationMessage 
                   key={message.id}

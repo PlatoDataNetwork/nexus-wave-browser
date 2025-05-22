@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Globe, Brain, Zap } from "lucide-react";
@@ -24,6 +24,16 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isFetchingRealTimeData,
   isAutoSubmitEnabled = false,
 }) => {
+  // Track auto-submission to prevent duplicates
+  const hasAutoSubmittedRef = useRef<boolean>(false);
+  
+  // Reset auto-submit flag when message changes
+  useEffect(() => {
+    if (currentMessage === '') {
+      hasAutoSubmittedRef.current = false;
+    }
+  }, [currentMessage]);
+  
   // Animation variants
   const buttonVariants = {
     idle: { scale: 1 },
@@ -36,7 +46,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
       e.preventDefault();
       
       // Only auto-submit if explicitly enabled (for prompts and follow-up questions)
-      if (isAutoSubmitEnabled && currentMessage.trim()) {
+      // and we haven't already auto-submitted this message
+      if (isAutoSubmitEnabled && currentMessage.trim() && !hasAutoSubmittedRef.current) {
+        console.log('Auto-submitting via Enter key');
+        hasAutoSubmittedRef.current = true;
         handleSubmit();
       } else if (!isAutoSubmitEnabled) {
         // For regular messages, don't auto-submit on Enter, let the button handle it
@@ -52,7 +65,13 @@ const ChatInput: React.FC<ChatInputProps> = ({
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        if (!isLoading && currentMessage.trim()) {
+          console.log('Manual submit via button');
+          handleSubmit();
+        }
+      }} className="flex gap-2">
         <Textarea
           placeholder="Ask Nexus anything..."
           value={currentMessage}

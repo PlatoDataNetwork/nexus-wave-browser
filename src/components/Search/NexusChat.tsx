@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useConversation } from '@/hooks/useConversation';
 import { useSidebarToggle } from '@/hooks/useSidebarToggle';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
@@ -12,6 +12,9 @@ interface NexusChatProps {
 }
 
 const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) => {
+  // Track if we've already auto-submitted the initial message
+  const hasAutoSubmittedRef = useRef<boolean>(false);
+  
   // Custom hooks to manage state and behaviors
   const {
     messages,
@@ -33,17 +36,25 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
   
   const { showSidebar, setShowSidebar, toggleSidebar } = useSidebarToggle(false);
 
-  // Set the initial message when component mounts
-  React.useEffect(() => {
-    if (initialMessage) {
+  // Set the initial message when component mounts - with auto-submission prevention
+  useEffect(() => {
+    // Only process initialMessage if we haven't already auto-submitted
+    if (initialMessage && !hasAutoSubmittedRef.current) {
+      console.log('Setting initial message:', initialMessage);
       setCurrentMessage(initialMessage);
       
-      // Only auto-submit if it's an initial message from a prompt
+      // Only auto-submit if it's an initial message from a prompt and it's not empty
       if (initialMessage.trim() !== '') {
+        console.log('Will auto-submit initial message');
+        
         // Use a small delay to ensure the component is fully mounted
         const timer = setTimeout(() => {
+          console.log('Auto-submitting initial message');
           handleSubmit();
-        }, 100);
+          // Mark as auto-submitted to prevent multiple submissions
+          hasAutoSubmittedRef.current = true;
+        }, 300); // Increased delay for more reliability
+        
         return () => clearTimeout(timer);
       }
     }

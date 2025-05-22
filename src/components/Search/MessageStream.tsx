@@ -25,6 +25,9 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const [typingSpeed, setTypingSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   
+  // Debug auto-scrolling behavior
+  const debugRef = useRef<boolean>(false);
+  
   // Adjust typing speed based on content complexity
   useEffect(() => {
     if (isStreaming && streamingText) {
@@ -94,10 +97,22 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     }
   }, [isStreaming, content]);
   
-  // Auto-scroll to bottom during streaming
+  // Auto-scroll to bottom during streaming - only trigger on significant content changes
+  // FIXED: Only scroll when content actually changes to avoid constant jumping
   useEffect(() => {
-    if (isStreaming && contentContainerRef.current) {
-      contentContainerRef.current.scrollTop = contentContainerRef.current.scrollHeight;
+    if (isStreaming && contentContainerRef.current && displayText !== previousContentRef.current) {
+      // Log to debug auto-scroll issues
+      if (!debugRef.current) {
+        console.log("Auto-scrolling MessageStream content");
+        debugRef.current = true; // Prevent log spam
+      }
+      
+      // Use requestAnimationFrame to scroll smoothly
+      requestAnimationFrame(() => {
+        if (contentContainerRef.current) {
+          contentContainerRef.current.scrollTop = contentContainerRef.current.scrollHeight;
+        }
+      });
     }
   }, [displayText, isStreaming]);
   

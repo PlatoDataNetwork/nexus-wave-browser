@@ -24,6 +24,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   // Reference to track ongoing requests that can be canceled
   const activeRequestsRef = useRef<AbortController | null>(null);
   
+  // Track if the related question is being submitted to avoid multiple submissions
+  const isSubmittingRelatedRef = useRef<boolean>(false);
+  
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
 
@@ -34,6 +37,11 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       setIsPromptOrFollowupQuestion(false);
     }
   }, [currentMessage, initialMessage]);
+
+  // Debug log auto-submission behavior
+  useEffect(() => {
+    console.log('isPromptOrFollowupQuestion:', isPromptOrFollowupQuestion);
+  }, [isPromptOrFollowupQuestion]);
 
   // Generate related questions in parallel
   const generateRelatedQuestions = useCallback(async (userMessage: string, aiResponse: string): Promise<string[]> => {
@@ -97,6 +105,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     }
     
     if (!currentMessage.trim()) return;
+    
+    // Add debug for auto-submission tracking
+    console.log('Submitting message:', currentMessage.substring(0, 30) + '...');
     
     // Cancel any in-flight requests
     if (activeRequestsRef.current) {
@@ -383,13 +394,32 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch, toast]);
 
   const handleRelatedQuestionClick = useCallback((question: string) => {
+    // Prevent multiple submissions of the same related question
+    if (isSubmittingRelatedRef.current || isLoading) {
+      console.log('Preventing duplicate submission of related question');
+      return;
+    }
+    
+    console.log('Related question clicked:', question);
+    
     // Set the flag to indicate this is a follow-up question
     setIsPromptOrFollowupQuestion(true);
+    isSubmittingRelatedRef.current = true;
     
+    // Set the question as the current message
     setCurrentMessage(question);
+    
     // Automatically submit after a brief delay
-    setTimeout(() => handleSubmit(), 50);
-  }, [handleSubmit]);
+    setTimeout(() => {
+      console.log('Auto-submitting related question');
+      handleSubmit();
+      
+      // Reset the flag after submission
+      setTimeout(() => {
+        isSubmittingRelatedRef.current = false;
+      }, 500);
+    }, 100);
+  }, [handleSubmit, isLoading]);
 
   const handleRegenerateMessage = async (messageId: string) => {
     // Find the message and its corresponding user message
@@ -616,13 +646,10 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       // Set the flag to indicate this is an initial prompt
       setIsPromptOrFollowupQuestion(true);
       
-      const timer = setTimeout(() => {
-        handleSubmit();
-      }, 500); // Small delay to ensure component is fully mounted
-
-      return () => clearTimeout(timer);
+      // We'll let NexusChat handle the actual submission
+      console.log('Initial message in useConversation:', initialMessage);
     }
-  }, [initialMessage, handleSubmit]);
+  }, [initialMessage]);
 
   return {
     messages,
