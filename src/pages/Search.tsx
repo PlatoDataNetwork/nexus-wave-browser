@@ -13,7 +13,8 @@ import {
   Shield, 
   Zap,
   Video,
-  Play
+  Play,
+  Home
 } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

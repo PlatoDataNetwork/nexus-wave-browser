@@ -10,8 +10,8 @@ interface NexusCategoriesProps {
 const NexusCategories: React.FC<NexusCategoriesProps> = ({ onSelectCategory }) => {
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-6">Choose a Search Category</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <h2 className="text-2xl font-bold mb-6">Choose an Industry Vertical</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {searchCategories.map((category) => (
           <CategoryCube 
             key={category.id}
