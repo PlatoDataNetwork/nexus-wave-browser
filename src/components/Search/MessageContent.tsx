@@ -56,7 +56,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
           <div className="prose prose-sm prose-zinc dark:prose-invert max-w-none break-words">
             <ReactMarkdown
               components={{
-                code({ node, inline, className, children, ...props }) {
+                code({ node, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '');
                   return !inline && match ? (
                     <SyntaxHighlighter
@@ -99,9 +99,9 @@ const MessageContent: React.FC<MessageContentProps> = ({
         <div className="prose prose-sm prose-zinc dark:prose-invert max-w-none break-words">
           <ReactMarkdown
             components={{
-              code({ node, inline, className, children, ...props }) {
+              code({ node, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
-                return !inline && match ? (
+                return !props.inline && match ? (
                   <SyntaxHighlighter
                     style={vscDarkPlus}
                     language={match[1]}
@@ -145,9 +145,9 @@ const MessageContent: React.FC<MessageContentProps> = ({
       
       <ReactMarkdown
         components={{
-          code({ node, inline, className, children, ...props }) {
+          code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            return !inline && match ? (
+            return !props.inline && match ? (
               <SyntaxHighlighter
                 style={vscDarkPlus}
                 language={match[1]}
