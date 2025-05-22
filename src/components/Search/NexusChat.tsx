@@ -24,7 +24,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     handleSubmit,
     handleRelatedQuestionClick,
     handleRegenerateMessage,
-    handleSelectAlternative
+    handleSelectAlternative,
+    isPromptOrFollowupQuestion
   } = useConversation({ 
     onSearch,
     initialMessage
@@ -57,6 +58,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             handleRegenerateMessage={handleRegenerateMessage}
             handleSelectAlternative={handleSelectAlternative}
             handleRelatedQuestionClick={handleRelatedQuestionClick}
+            isAutoSubmitEnabled={isPromptOrFollowupQuestion}
           />
         </ResizablePanel>
         

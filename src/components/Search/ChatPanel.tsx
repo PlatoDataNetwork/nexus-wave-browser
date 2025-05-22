@@ -19,6 +19,7 @@ interface ChatPanelProps {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
+  isAutoSubmitEnabled?: boolean;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -33,7 +34,8 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   toggleSidebar,
   handleRegenerateMessage,
   handleSelectAlternative,
-  handleRelatedQuestionClick
+  handleRelatedQuestionClick,
+  isAutoSubmitEnabled = false
 }) => {
   return (
     <div className="flex flex-col h-full">
@@ -68,6 +70,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           isLoading={isLoading}
           isClassifying={isClassifying}
           isFetchingRealTimeData={isFetchingRealTimeData}
+          isAutoSubmitEnabled={isAutoSubmitEnabled}
         />
       </div>
     </div>

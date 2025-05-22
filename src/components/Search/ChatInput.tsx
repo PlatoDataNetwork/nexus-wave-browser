@@ -12,6 +12,7 @@ interface ChatInputProps {
   isLoading: boolean;
   isClassifying: boolean;
   isFetchingRealTimeData: boolean;
+  isAutoSubmitEnabled?: boolean;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
@@ -21,11 +22,28 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isLoading,
   isClassifying,
   isFetchingRealTimeData,
+  isAutoSubmitEnabled = false,
 }) => {
   // Animation variants
   const buttonVariants = {
     idle: { scale: 1 },
     loading: { scale: 1.05 }
+  };
+
+  // Handle key down events to prevent auto-submission on Enter
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      
+      // Only auto-submit if explicitly enabled (for prompts and follow-up questions)
+      // or if manually submitted through enter key in regular messages
+      if (isAutoSubmitEnabled) {
+        handleSubmit();
+      } else {
+        // For regular messages, don't auto-submit
+        console.log('Enter pressed, but auto-submit is disabled');
+      }
+    }
   };
 
   return (
@@ -41,12 +59,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           className="flex-1 min-h-12 resize-none focus:border-nexus-purple transition-colors"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
+          onKeyDown={handleKeyDown}
           disabled={isLoading}
         />
         <motion.div

@@ -18,6 +18,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   const [isClassifying, setIsClassifying] = useState(false);
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
+  const [isPromptOrFollowupQuestion, setIsPromptOrFollowupQuestion] = useState(false);
   const { toast } = useToast();
 
   // Reference to track ongoing requests that can be canceled
@@ -25,6 +26,14 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
+
+  // Reset the isPromptOrFollowupQuestion flag when the user types
+  useEffect(() => {
+    // If the current message is being typed by the user, it's not a prompt or follow-up
+    if (currentMessage !== initialMessage) {
+      setIsPromptOrFollowupQuestion(false);
+    }
+  }, [currentMessage, initialMessage]);
 
   // Generate related questions in parallel
   const generateRelatedQuestions = useCallback(async (userMessage: string, aiResponse: string): Promise<string[]> => {
@@ -374,6 +383,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch, toast]);
 
   const handleRelatedQuestionClick = useCallback((question: string) => {
+    // Set the flag to indicate this is a follow-up question
+    setIsPromptOrFollowupQuestion(true);
+    
     setCurrentMessage(question);
     // Automatically submit after a brief delay
     setTimeout(() => handleSubmit(), 50);
@@ -601,6 +613,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   // Handle initial message submission if provided
   useEffect(() => {
     if (initialMessage && initialMessage.trim() !== '') {
+      // Set the flag to indicate this is an initial prompt
+      setIsPromptOrFollowupQuestion(true);
+      
       const timer = setTimeout(() => {
         handleSubmit();
       }, 500); // Small delay to ensure component is fully mounted
@@ -620,6 +635,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     handleSubmit,
     handleRelatedQuestionClick,
     handleRegenerateMessage,
-    handleSelectAlternative
+    handleSelectAlternative,
+    isPromptOrFollowupQuestion
   };
 };
