@@ -44,7 +44,7 @@ const MessageSourcesList: React.FC<MessageSourcesListProps> = ({ sources }) => {
         <Clock className="h-3 w-3" />
         <span>Sources:</span>
       </div>
-      <ScrollArea className="w-full" orientation="horizontal">
+      <ScrollArea className="w-full" style={{ overflowX: 'auto' }}>
         <div className="flex gap-2 pb-1">
           {displaySources.map((source, index) => {
             if (!source.url) {
