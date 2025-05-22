@@ -26,6 +26,7 @@ interface ChatPanelProps {
   currentQuery?: string;
   needsRealTimeData?: boolean;
   clickedQuestionsHistory?: Set<string>;
+  dataTimestamp?: Date | null;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -47,7 +48,8 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   searchResults = [],
   currentQuery = '',
   needsRealTimeData = false,
-  clickedQuestionsHistory = new Set()
+  clickedQuestionsHistory = new Set(),
+  dataTimestamp = null
 }) => {
   // Only show sidebar toggle when the query needs real-time data
   const showSidebarToggle = !!currentQuery && needsRealTimeData;

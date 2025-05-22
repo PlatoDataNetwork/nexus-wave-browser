@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useCallback } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
@@ -147,6 +146,7 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                   searchQuery={message.role === "assistant" ? currentQuery : undefined}
                   webResults={message.role === "assistant" ? searchResults : undefined}
                   clickedQuestionsHistory={clickedQuestionsHistory}
+                  dataTimestamp={message.timestamp || null}
                 />
               );
             })

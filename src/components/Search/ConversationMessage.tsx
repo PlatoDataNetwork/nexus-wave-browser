@@ -35,6 +35,7 @@ interface ConversationMessageProps {
   searchQuery?: string;
   webResults?: Array<{title: string, url: string, snippet: string}>;
   clickedQuestionsHistory?: Set<string>;
+  dataTimestamp?: Date | string | null;
 }
 
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
@@ -56,7 +57,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   stageDetails,
   searchQuery,
   webResults,
-  clickedQuestionsHistory = new Set()
+  clickedQuestionsHistory = new Set(),
+  dataTimestamp = null
 }) => {
   const hasAlternatives = alternativeResponses.length > 0;
 
@@ -116,6 +118,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               stageDetails={stageDetails}
               searchQuery={searchQuery}
               webResults={webResults}
+              dataTimestamp={dataTimestamp}
             />
             
             {/* Ensure sources are displayed, even if empty array is passed */}

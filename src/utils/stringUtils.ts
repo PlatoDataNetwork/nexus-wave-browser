@@ -84,3 +84,26 @@ export function calculateWordOverlap(str1: string, str2: string): number {
   const totalUniqueWords = new Set([...words1, ...words2]).size;
   return totalUniqueWords > 0 ? overlapCount / totalUniqueWords : 0;
 }
+
+/**
+ * Enhanced similarity check that combines multiple methods
+ * to better identify duplicate questions, especially for follow-up questions
+ */
+export function isQuestionDuplicate(question1: string, question2: string): boolean {
+  // Quick exact match check
+  if (question1 === question2) return true;
+  
+  // Normalize questions
+  const q1 = question1.toLowerCase().trim().replace(/\?+$/, '');
+  const q2 = question2.toLowerCase().trim().replace(/\?+$/, '');
+  
+  // Check if one completely contains the other (for short questions)
+  if (q1.includes(q2) || q2.includes(q1)) return true;
+  
+  // For questions that might be phrased differently but have the same intent
+  const stringSimScore = isSimilarString(q1, q2, 0.75); // Higher threshold
+  const wordOverlapScore = calculateWordOverlap(q1, q2);
+  
+  // If both similarity scores are high enough, consider it duplicate
+  return stringSimScore && wordOverlapScore > 0.5;
+}
