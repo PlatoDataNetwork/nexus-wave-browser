@@ -52,6 +52,7 @@ const WaveCategoryDetail: React.FC = () => {
     }
     
     toast.success("Processing your prompt");
+    // Toggle the chat view - this was missing
     setShowChat(true);
   };
   

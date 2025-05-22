@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Loader2 } from 'lucide-react';
 import WaveMessage from './WaveMessage';
+import { toast } from 'sonner';
 
 interface WaveChatProps {
   query?: string;
@@ -58,6 +59,9 @@ const WaveChat: React.FC<WaveChatProps> = ({ query = '' }) => {
       
       setMessages(prev => [...prev, assistantMessage]);
       setIsLoading(false);
+      
+      // Show a toast when the response is ready
+      toast.success("Response ready");
     }, 1500);
   };
 
@@ -89,10 +93,13 @@ const WaveChat: React.FC<WaveChatProps> = ({ query = '' }) => {
       
       setMessages(prev => [...prev, assistantMessage]);
       setIsLoading(false);
+      
+      // Show a toast when the response is ready
+      toast.success("Response ready");
     }, 1500);
   };
 
-  // Mock response generator
+  // Mock response generator - enhanced with more context-aware responses
   const generateResponse = (input: string): string => {
     const responses = [
       `Based on your query about "${input}", I can provide you with the latest information from the blockchain. The current consensus is that distributed ledger technologies are revolutionizing traditional finance through smart contracts and decentralized applications.`,
