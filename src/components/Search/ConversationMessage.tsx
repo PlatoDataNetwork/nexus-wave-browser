@@ -32,6 +32,8 @@ interface ConversationMessageProps {
   processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
+  searchQuery?: string;
+  webResults?: Array<{title: string, url: string, snippet: string}>;
 }
 
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
@@ -51,7 +53,9 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   streamProgress = 0,
   processingStage = 'classifying',
   progressPercentage = 0,
-  stageDetails
+  stageDetails,
+  searchQuery,
+  webResults
 }) => {
   const hasAlternatives = alternativeResponses.length > 0;
 
@@ -105,6 +109,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               processingStage={processingStage}
               progressPercentage={progressPercentage}
               stageDetails={stageDetails}
+              searchQuery={searchQuery}
+              webResults={webResults}
             />
             
             {/* Ensure sources are displayed, even if empty array is passed */}

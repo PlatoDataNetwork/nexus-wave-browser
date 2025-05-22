@@ -4,6 +4,8 @@ import { useWebSearch } from '@/hooks/useWebSearch';
 import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
+import { Card } from "@/components/ui/card";
+import { Loader2, AlertCircle } from 'lucide-react';
 
 interface WebSearchSidebarProps {
   currentQuery: string;
@@ -23,7 +25,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     page,
     hasMore,
     handleRefresh,
-    loadMore
+    loadMore,
+    searchStage
   } = useWebSearch(currentQuery, conversations);
 
   return (
@@ -32,6 +35,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         currentQuery={currentQuery}
         onRefresh={handleRefresh}
         onClose={onClose}
+        searchStage={searchStage}
       />
       
       <SearchSidebarContent
@@ -42,6 +46,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         hasMore={hasMore}
         currentQuery={currentQuery}
         onLoadMore={loadMore}
+        searchStage={searchStage}
       />
     </div>
   );

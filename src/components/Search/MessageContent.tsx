@@ -3,10 +3,11 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Globe, Loader2, Zap } from 'lucide-react';
+import { Globe, Loader2, Zap, Sparkles } from 'lucide-react';
 import MessageStream from './MessageStream';
 import ResponseProgress from './ResponseProgress';
 import { motion } from 'framer-motion';
+import WebResearchCard from './WebResearchCard';
 
 // Define a proper type for the code component props
 interface CodeProps {
@@ -26,6 +27,8 @@ interface MessageContentProps {
   processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
+  searchQuery?: string;
+  webResults?: Array<{title: string, url: string, snippet: string}>;
 }
 
 const MessageContent: React.FC<MessageContentProps> = ({
@@ -36,10 +39,15 @@ const MessageContent: React.FC<MessageContentProps> = ({
   streamProgress = 0,
   processingStage = 'classifying',
   progressPercentage = 0,
-  stageDetails
+  stageDetails,
+  searchQuery,
+  webResults = []
 }) => {
   // Determine if we should show the progress indicator
   const showProgressIndicator = isLoading && processingStage !== 'complete';
+  
+  // Determine if we should show web research card
+  const showWebResearch = (processingStage === 'searching' || webResults.length > 0);
 
   // Animation variants
   const containerVariants = {
@@ -71,11 +79,25 @@ const MessageContent: React.FC<MessageContentProps> = ({
           className="mb-3 text-xs flex items-center gap-1 text-nexus-purple"
           variants={itemVariants}
         >
-          <Globe className="h-3 w-3" />
+          <Sparkles className="h-3 w-3" />
           <span className="flex items-center">
             Enhanced with real-time web data
             <Zap className="h-3 w-3 ml-1 animate-pulse" />
           </span>
+        </motion.div>
+      )}
+      
+      {/* Show web research card during search phase or when we have results */}
+      {showWebResearch && processingStage === 'searching' && (
+        <motion.div 
+          variants={itemVariants}
+          className="mb-4"
+        >
+          <WebResearchCard 
+            query={searchQuery || ''} 
+            isSearching={processingStage === 'searching'}
+            results={webResults}
+          />
         </motion.div>
       )}
       
@@ -102,6 +124,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
             content={content} 
             isLoading={isLoading} 
             progress={streamProgress}
+            streamingText={content}
           />
           
           {isLoading && streamProgress > 0 && (
@@ -184,6 +207,39 @@ const MessageContent: React.FC<MessageContentProps> = ({
           <Loader2 className="h-5 w-5 animate-spin" />
           <span className="animate-pulse-glow">Generating response...</span>
         </div>
+      )}
+      
+      {/* Show web search results at the bottom of complete messages when applicable */}
+      {!isLoading && !isStreaming && webResults.length > 0 && (
+        <motion.div 
+          variants={itemVariants}
+          className="mt-4 pt-4 border-t border-border/30"
+        >
+          <div className="text-xs text-muted-foreground mb-2 flex items-center">
+            <Globe className="h-3 w-3 mr-1 text-nexus-purple" />
+            <span>Search results used for this answer:</span>
+          </div>
+          <div className="space-y-2">
+            {webResults.slice(0, 3).map((result, idx) => (
+              <div key={idx} className="text-xs">
+                <a 
+                  href={result.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-nexus-purple hover:underline font-medium"
+                >
+                  {result.title}
+                </a>
+                <p className="text-muted-foreground line-clamp-1">{result.snippet}</p>
+              </div>
+            ))}
+            {webResults.length > 3 && (
+              <div className="text-xs text-muted-foreground">
+                + {webResults.length - 3} more sources
+              </div>
+            )}
+          </div>
+        </motion.div>
       )}
     </motion.div>
   );

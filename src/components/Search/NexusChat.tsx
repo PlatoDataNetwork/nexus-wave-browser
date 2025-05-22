@@ -28,7 +28,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     handleRelatedQuestionClick,
     handleRegenerateMessage,
     handleSelectAlternative,
-    isPromptOrFollowupQuestion
+    isPromptOrFollowupQuestion,
+    searchResults
   } = useConversation({ 
     onSearch,
     initialMessage
@@ -60,6 +61,13 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     }
   }, [initialMessage, setCurrentMessage, handleSubmit]);
 
+  // Determine current processing stage for UI feedback
+  const determineProcessingStage = () => {
+    if (isClassifying) return 'classifying';
+    if (isFetchingRealTimeData) return 'searching';
+    return 'generating';
+  };
+
   return (
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
@@ -79,6 +87,9 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             handleSelectAlternative={handleSelectAlternative}
             handleRelatedQuestionClick={handleRelatedQuestionClick}
             isAutoSubmitEnabled={isPromptOrFollowupQuestion}
+            processingStage={determineProcessingStage()}
+            searchResults={searchResults}
+            currentQuery={currentQuery}
           />
         </ResizablePanel>
         

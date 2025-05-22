@@ -20,6 +20,9 @@ interface ChatPanelProps {
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
   isAutoSubmitEnabled?: boolean;
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  searchResults?: Array<{title: string, url: string, snippet: string}>;
+  currentQuery?: string;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -35,7 +38,10 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   handleRegenerateMessage,
   handleSelectAlternative,
   handleRelatedQuestionClick,
-  isAutoSubmitEnabled = false
+  isAutoSubmitEnabled = false,
+  processingStage = 'classifying',
+  searchResults = [],
+  currentQuery = ''
 }) => {
   return (
     <div className="flex flex-col h-full">
@@ -60,6 +66,9 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           handleRegenerateMessage={handleRegenerateMessage}
           handleSelectAlternative={handleSelectAlternative}
           handleRelatedQuestionClick={handleRelatedQuestionClick}
+          processingStage={processingStage}
+          searchResults={searchResults}
+          currentQuery={currentQuery}
         />
         
         {/* Input area - absolutely positioned at the bottom */}
@@ -71,6 +80,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           isClassifying={isClassifying}
           isFetchingRealTimeData={isFetchingRealTimeData}
           isAutoSubmitEnabled={isAutoSubmitEnabled}
+          processingStage={processingStage}
         />
       </div>
     </div>

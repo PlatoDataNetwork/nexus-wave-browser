@@ -13,6 +13,7 @@ interface ChatInputProps {
   isClassifying: boolean;
   isFetchingRealTimeData: boolean;
   isAutoSubmitEnabled?: boolean;
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
@@ -23,6 +24,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isClassifying,
   isFetchingRealTimeData,
   isAutoSubmitEnabled = false,
+  processingStage = 'classifying'
 }) => {
   // Track auto-submission to prevent duplicates
   const hasAutoSubmittedRef = useRef<boolean>(false);
@@ -55,6 +57,39 @@ const ChatInput: React.FC<ChatInputProps> = ({
         // For regular messages, don't auto-submit on Enter, let the button handle it
         console.log('Enter pressed, but auto-submit is disabled');
       }
+    }
+  };
+  
+  // Helper function to render the appropriate button content based on processing stage
+  const getButtonContent = () => {
+    if (!isLoading) {
+      return <Send className="h-4 w-4" />;
+    }
+    
+    switch(processingStage) {
+      case 'classifying':
+        return (
+          <motion.div className="flex items-center gap-1">
+            <Brain className="h-4 w-4 animate-pulse" />
+            <span className="text-xs">Analyzing</span>
+          </motion.div>
+        );
+      case 'searching':
+        return (
+          <motion.div className="flex items-center gap-1">
+            <Globe className="h-4 w-4 animate-pulse" />
+            <span className="text-xs">Searching</span>
+          </motion.div>
+        );
+      case 'processing':
+      case 'generating':
+      default:
+        return (
+          <motion.div className="flex items-center gap-1">
+            <Zap className="h-4 w-4 animate-pulse" />
+            <span className="text-xs">Processing</span>
+          </motion.div>
+        );
     }
   };
 
@@ -90,33 +125,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             className={`h-12 ${isLoading ? 'bg-nexus-deep-purple' : 'bg-nexus-purple'} hover:bg-nexus-deep-purple flex-shrink-0`}
             disabled={isLoading || !currentMessage.trim()}
           >
-            {isLoading ? (
-              <motion.div 
-                className="flex items-center gap-1"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                {isClassifying ? (
-                  <>
-                    <Brain className="h-4 w-4 animate-pulse" />
-                    <span className="text-xs">Analyzing</span>
-                  </>
-                ) : isFetchingRealTimeData ? (
-                  <>
-                    <Globe className="h-4 w-4 animate-pulse" />
-                    <span className="text-xs">Searching</span>
-                  </>
-                ) : (
-                  <>
-                    <Zap className="h-4 w-4 animate-pulse" />
-                    <span className="text-xs">Processing</span>
-                  </>
-                )}
-              </motion.div>
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
+            {getButtonContent()}
           </Button>
         </motion.div>
       </form>

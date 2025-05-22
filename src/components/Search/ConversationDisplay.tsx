@@ -11,6 +11,9 @@ interface ConversationDisplayProps {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  searchResults?: Array<{title: string, url: string, snippet: string}>;
+  currentQuery?: string;
 }
 
 const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
@@ -18,7 +21,10 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   setCurrentMessage,
   handleRegenerateMessage,
   handleSelectAlternative,
-  handleRelatedQuestionClick
+  handleRelatedQuestionClick,
+  processingStage = 'classifying',
+  searchResults = [],
+  currentQuery = ''
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -131,9 +137,11 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                   isLoading={message.isLoading}
                   isStreaming={message.isStreaming}
                   streamProgress={message.streamProgress}
-                  processingStage={message.processingStage}
+                  processingStage={message.processingStage || processingStage}
                   progressPercentage={message.progressPercentage}
                   stageDetails={message.stageDetails}
+                  searchQuery={message.role === "assistant" ? currentQuery : undefined}
+                  webResults={message.role === "assistant" ? searchResults : undefined}
                 />
               );
             })

@@ -11,6 +11,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [searchStage, setSearchStage] = useState<'query' | 'searching' | 'analyzing' | 'complete'>('complete');
   const { toast } = useToast();
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -71,8 +72,16 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     }
     abortControllerRef.current = new AbortController();
     
+    // Update searchStage based on the state of the operation
+    if (!isLoadMore) {
+      setSearchStage('query');
+    }
+    
     setIsLoading(true);
     if (!isLoadMore) setError(null);
+    
+    // Short delay to allow the UI to update
+    await new Promise(resolve => setTimeout(resolve, 300));
     
     // Check cache first
     const cachedResults = checkCache(query);
@@ -84,6 +93,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
       }
       setHasMore(Boolean(cachedResults.length === (pageNum === 1 ? INITIAL_PAGE_SIZE : ADDITIONAL_PAGE_SIZE)));
       setIsLoading(false);
+      setSearchStage('complete');
       return;
     }
     
@@ -91,34 +101,59 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     const startTime = performance.now();
     
     try {
+      // Update search stage to searching
+      setSearchStage('searching');
+      
+      // Short delay to show the searching state
+      await new Promise(resolve => setTimeout(resolve, 600));
+      
       const pageSize = pageNum === 1 ? INITIAL_PAGE_SIZE : ADDITIONAL_PAGE_SIZE;
       const response = await searchWithSerper(query, "search", true, pageSize);
+      
+      // Update search stage to analyzing
+      setSearchStage('analyzing');
+      
+      // Short delay to show the analyzing state
+      await new Promise(resolve => setTimeout(resolve, 400));
       
       if (response.error) {
         setError(response.error);
       }
       
+      // Process and enhance search results with metadata
       const searchResults = response.results || [];
+      const enhancedResults = searchResults.map((result: any) => {
+        // Add calculated fields
+        return {
+          ...result,
+          publishDate: result.publishedDate || result.date,
+          isRecent: isRecentContent(result.publishedDate || result.date),
+          credibilityScore: calculateCredibilityScore(result)
+        };
+      });
       
       // Store in cache
       dataCache.set(
         cacheKey.current,
-        JSON.stringify(searchResults),
-        searchResults.slice(0, 3).map(result => ({ title: result.title, url: result.url })),
+        JSON.stringify(enhancedResults),
+        enhancedResults.slice(0, 3).map((result: any) => ({ title: result.title, url: result.url })),
         'search_results'
       );
       
       if (isLoadMore && pageNum > 1) {
-        setResults(prevResults => [...prevResults, ...searchResults]);
+        setResults(prevResults => [...prevResults, ...enhancedResults]);
       } else {
-        setResults(searchResults);
+        setResults(enhancedResults);
       }
       
-      setHasMore(Boolean(searchResults.length === pageSize));
+      setHasMore(Boolean(enhancedResults.length === pageSize));
       
       // Log performance metrics
       const endTime = performance.now();
       console.log(`Search fetch completed in ${(endTime - startTime).toFixed(0)}ms`);
+      
+      // Update search stage to complete
+      setSearchStage('complete');
     } catch (err) {
       // Only set error if this request wasn't aborted
       if (err.name !== 'AbortError') {
@@ -130,10 +165,70 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
           variant: "destructive"
         });
       }
+      setSearchStage('complete');
     } finally {
       setIsLoading(false);
     }
   }, [buildContextualQuery, checkCache, toast]);
+
+  // Check if content is recent (published within the last month)
+  const isRecentContent = (dateString?: string): boolean => {
+    if (!dateString) return false;
+    
+    try {
+      const publishDate = new Date(dateString);
+      const now = new Date();
+      // Content is recent if it's from the last month
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(now.getMonth() - 1);
+      
+      return publishDate >= oneMonthAgo;
+    } catch (e) {
+      return false;
+    }
+  };
+  
+  // Calculate a simple credibility score (0-100) based on domain and content
+  const calculateCredibilityScore = (result: any): number => {
+    let score = 50; // Start with neutral score
+    
+    // Domain authority approximation
+    if (result.url) {
+      try {
+        const domain = new URL(result.url).hostname;
+        
+        // Bonus for known authoritative sites
+        const authorityDomains = [
+          'bloomberg.com', 'reuters.com', 'ap.org', 'nytimes.com', 'wsj.com',
+          'bbc.com', 'bbc.co.uk', 'cnn.com', 'theguardian.com', 'ft.com',
+          'forbes.com', 'economist.com', 'gov', 'edu', 'un.org', 'who.int'
+        ];
+        
+        // Check if domain ends with or contains any of the authority domains
+        for (const authDomain of authorityDomains) {
+          if (domain.endsWith(authDomain) || domain.includes(authDomain)) {
+            score += 30;
+            break;
+          }
+        }
+      } catch (e) {
+        // Invalid URL format, no adjustment
+      }
+    }
+    
+    // Recency bonus
+    if (isRecentContent(result.publishedDate || result.date)) {
+      score += 15;
+    }
+    
+    // Content length approximation
+    if (result.description && result.description.length > 100) {
+      score += 5;
+    }
+    
+    // Cap at 100
+    return Math.min(score, 100);
+  };
 
   // Handle refresh action
   const handleRefresh = useCallback(() => {
@@ -178,6 +273,7 @@ export const useWebSearch = (currentQuery: string, conversations: ChatMessage[])
     page,
     hasMore,
     handleRefresh,
-    loadMore
+    loadMore,
+    searchStage
   };
 };
