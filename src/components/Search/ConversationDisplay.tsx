@@ -136,7 +136,6 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                   onRelatedQuestionClick={handleRelatedQuestionClick}
                   isLoading={message.isLoading}
                   isStreaming={message.isStreaming}
-                  streamProgress={message.streamProgress}
                   processingStage={message.processingStage || processingStage}
                   progressPercentage={message.progressPercentage}
                   stageDetails={message.stageDetails}

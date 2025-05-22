@@ -1,9 +1,10 @@
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'streaming' | 'processing' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'searching' | 'streaming' | 'processing' | 'generating' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
   isLoading?: boolean;

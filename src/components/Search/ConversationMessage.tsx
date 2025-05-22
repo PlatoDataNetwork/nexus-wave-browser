@@ -15,7 +15,7 @@ interface Source {
 }
 
 interface ConversationMessageProps {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
   sources?: Source[];
   hasRealTimeData?: boolean;
@@ -28,7 +28,6 @@ interface ConversationMessageProps {
   onRelatedQuestionClick?: (question: string) => void;
   isLoading?: boolean;
   isStreaming?: boolean;
-  streamProgress?: number;
   processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
@@ -50,7 +49,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   onRelatedQuestionClick,
   isLoading = false,
   isStreaming = false,
-  streamProgress = 0,
   processingStage = 'classifying',
   progressPercentage = 0,
   stageDetails,
@@ -77,6 +75,11 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
     animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
     exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
   };
+  
+  // Only render user and assistant messages
+  if (role === "system") {
+    return null;
+  }
   
   return (
     <motion.div 
@@ -105,7 +108,6 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               hasRealTimeData={hasRealTimeData}
               isLoading={isLoading}
               isStreaming={isStreaming}
-              streamProgress={streamProgress}
               processingStage={processingStage}
               progressPercentage={progressPercentage}
               stageDetails={stageDetails}

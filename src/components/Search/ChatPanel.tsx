@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,6 +42,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   searchResults = [],
   currentQuery = ''
 }) => {
+  
   return (
     <div className="flex flex-col h-full">
       <div className="p-3 flex items-center justify-between border-b bg-background">
