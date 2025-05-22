@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { categories } from '@/lib/categoryData';
@@ -51,9 +50,9 @@ const WaveCategoryDetail: React.FC = () => {
       return;
     }
     
+    console.log("Submitting prompt:", userInput);
     toast.success("Processing your prompt");
-    // Toggle the chat view - this was missing
-    setShowChat(true);
+    setShowChat(true); // This should show the chat view
   };
   
   return (

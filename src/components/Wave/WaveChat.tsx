@@ -22,10 +22,12 @@ const WaveChat: React.FC<WaveChatProps> = ({ query = '' }) => {
   const [currentMessage, setCurrentMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const initialQueryProcessed = useRef(false);
 
   // Initialize chat with query if provided
   useEffect(() => {
-    if (query && messages.length === 0) {
+    if (query && !initialQueryProcessed.current) {
+      initialQueryProcessed.current = true;
       handleInitialQuery(query);
     }
   }, [query]);
@@ -37,6 +39,7 @@ const WaveChat: React.FC<WaveChatProps> = ({ query = '' }) => {
 
   // Handle the initial search query
   const handleInitialQuery = async (queryText: string) => {
+    console.log("Processing initial query:", queryText);
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
