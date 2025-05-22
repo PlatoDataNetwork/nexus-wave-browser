@@ -1,10 +1,9 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { useWebSearch } from '@/hooks/useWebSearch';
 import { ChatMessage } from '@/types';
 import SearchSidebarHeader from './SearchSidebarHeader';
 import SearchSidebarContent from './SearchSidebarContent';
-import { Card } from "@/components/ui/card";
 import { Loader2, AlertCircle } from 'lucide-react';
 
 interface WebSearchSidebarProps {
@@ -14,7 +13,8 @@ interface WebSearchSidebarProps {
   processingType?: 'individual' | 'contextual';
 }
 
-const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ 
+// Create a memoized version of the component to prevent unnecessary rerenders
+const WebSearchSidebar: React.FC<WebSearchSidebarProps> = memo(({ 
   currentQuery, 
   conversations,
   onClose,
@@ -30,6 +30,8 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
     loadMore,
     searchStage
   } = useWebSearch(currentQuery, conversations);
+
+  console.log('WebSearchSidebar render - query:', currentQuery, 'results:', results.length);
 
   return (
     <div className="flex flex-col h-full" style={{ isolation: 'isolate', touchAction: 'none' }}>
@@ -53,6 +55,11 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
       />
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Custom comparison function to prevent unnecessary rerenders
+  return prevProps.currentQuery === nextProps.currentQuery;
+});
+
+WebSearchSidebar.displayName = 'WebSearchSidebar';
 
 export default WebSearchSidebar;

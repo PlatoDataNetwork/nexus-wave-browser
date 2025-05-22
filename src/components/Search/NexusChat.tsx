@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { useConversation } from '@/hooks/useConversation';
 import { useSidebarToggle } from '@/hooks/useSidebarToggle';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
@@ -30,14 +30,35 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     handleSelectAlternative,
     isPromptOrFollowupQuestion,
     searchResults,
-    processingType
+    processingType,
+    needsRealTimeData,
   } = useConversation({ 
     onSearch,
     initialMessage
   });
   
-  const { showSidebar, setShowSidebar, toggleSidebar } = useSidebarToggle(false);
+  const { 
+    showSidebar, 
+    setShowSidebar, 
+    toggleSidebar 
+  } = useSidebarToggle(false);
 
+  // Determine if we should show the sidebar based on query type and user preference
+  const shouldShowSidebar = useMemo(() => {
+    // Only show if:
+    // 1. User has toggled it on OR this is a query that needs real-time data
+    // 2. We actually have a current query
+    return (showSidebar || needsRealTimeData) && Boolean(currentQuery);
+  }, [showSidebar, needsRealTimeData, currentQuery]);
+  
+  // Effect to show sidebar for real-time data queries
+  useEffect(() => {
+    if (needsRealTimeData && currentQuery && !showSidebar) {
+      console.log('Auto-showing sidebar for real-time data query');
+      setShowSidebar(true);
+    }
+  }, [needsRealTimeData, currentQuery, showSidebar, setShowSidebar]);
+  
   // Set the initial message when component mounts - with auto-submission prevention
   useEffect(() => {
     // Only process initialMessage if we haven't already auto-submitted
@@ -73,7 +94,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     <div className="flex flex-col h-full">
       <ResizablePanelGroup direction="horizontal" className="h-full">
         {/* Chat panel - main content area with absolute positioning for fixed elements */}
-        <ResizablePanel defaultSize={70} minSize={50} className="flex flex-col h-full">
+        <ResizablePanel 
+          defaultSize={shouldShowSidebar ? 70 : 100} 
+          minSize={50} 
+          className="flex flex-col h-full"
+        >
           <ChatPanel
             messages={messages}
             currentMessage={currentMessage}
@@ -82,7 +107,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             isLoading={isLoading}
             isClassifying={isClassifying}
             isFetchingRealTimeData={isFetchingRealTimeData}
-            showSidebar={showSidebar}
+            showSidebar={shouldShowSidebar}
             toggleSidebar={toggleSidebar}
             handleRegenerateMessage={handleRegenerateMessage}
             handleSelectAlternative={handleSelectAlternative}
@@ -92,10 +117,11 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             processingType={processingType}
             searchResults={searchResults}
             currentQuery={currentQuery}
+            needsRealTimeData={needsRealTimeData}
           />
         </ResizablePanel>
         
-        {showSidebar && (
+        {shouldShowSidebar && (
           <>
             <ResizableHandle withHandle />
             {/* Sidebar panel - isolated scrolling context */}
