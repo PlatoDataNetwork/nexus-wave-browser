@@ -36,6 +36,10 @@ const WaveCategoryDetail: React.FC = () => {
   // Get 6 random prompts from the category
   const randomPrompts = [...category.prompts].sort(() => 0.5 - Math.random()).slice(0, 6);
   
+  // Split prompts into rows
+  const firstRow = randomPrompts.slice(0, 3);
+  const secondRow = randomPrompts.slice(3, 6);
+  
   const handlePromptClick = (promptText: string) => {
     setUserInput(promptText);
   };
@@ -256,19 +260,37 @@ const WaveCategoryDetail: React.FC = () => {
             <h1 className="text-2xl font-bold">{category.name}</h1>
           </div>
           
-          {/* Prompts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            {randomPrompts.map((prompt) => (
-              <Card 
-                key={prompt.id} 
-                className="cursor-pointer hover:shadow-md transition-all"
-                onClick={() => handlePromptClick(prompt.text)}
-              >
-                <CardContent className="p-4">
-                  <p>{prompt.text}</p>
-                </CardContent>
-              </Card>
-            ))}
+          {/* Prompts Grid - Modified to show two rows with fixed width cards */}
+          <div className="max-w-6xl mx-auto">
+            {/* First row */}
+            <div className="flex justify-center gap-4 mb-4">
+              {firstRow.map((prompt) => (
+                <Card 
+                  key={prompt.id} 
+                  className="w-[300px] cursor-pointer hover:shadow-md transition-all"
+                  onClick={() => handlePromptClick(prompt.text)}
+                >
+                  <CardContent className="p-4">
+                    <p>{prompt.text}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {/* Second row */}
+            <div className="flex justify-center gap-4">
+              {secondRow.map((prompt) => (
+                <Card 
+                  key={prompt.id} 
+                  className="w-[300px] cursor-pointer hover:shadow-md transition-all"
+                  onClick={() => handlePromptClick(prompt.text)}
+                >
+                  <CardContent className="p-4">
+                    <p>{prompt.text}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
           
           {/* Input Area - Fixed to bottom of screen */}
