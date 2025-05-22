@@ -19,6 +19,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
   const [isPromptOrFollowupQuestion, setIsPromptOrFollowupQuestion] = useState(false);
+  const [searchResults, setSearchResults] = useState<Array<{title: string, url: string, snippet: string}>>([]);
   const { toast } = useToast();
 
   // Reference to track ongoing requests that can be canceled
@@ -651,6 +652,21 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     }
   }, [initialMessage]);
 
+  // Add the search results to the state when getting real-time data
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.role === 'assistant' && lastMessage.sources) {
+        const formattedResults = lastMessage.sources.map(source => ({
+          title: source.title || '',
+          url: source.url || '',
+          snippet: source.snippet || ''
+        }));
+        setSearchResults(formattedResults);
+      }
+    }
+  }, [messages]);
+
   return {
     messages,
     currentMessage,
@@ -663,6 +679,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     handleRelatedQuestionClick,
     handleRegenerateMessage,
     handleSelectAlternative,
-    isPromptOrFollowupQuestion
+    isPromptOrFollowupQuestion,
+    searchResults
   };
 };

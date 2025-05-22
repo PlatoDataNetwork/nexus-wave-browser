@@ -12,6 +12,7 @@ interface SearchSidebarContentProps {
   hasMore: boolean;
   currentQuery: string;
   onLoadMore: () => void;
+  searchStage?: 'query' | 'searching' | 'analyzing' | 'complete';
 }
 
 const SearchSidebarContent: React.FC<SearchSidebarContentProps> = ({
@@ -21,7 +22,8 @@ const SearchSidebarContent: React.FC<SearchSidebarContentProps> = ({
   page,
   hasMore,
   currentQuery,
-  onLoadMore
+  onLoadMore,
+  searchStage = 'complete'
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
