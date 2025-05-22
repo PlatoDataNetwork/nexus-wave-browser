@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useCallback } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
@@ -11,7 +10,7 @@ interface ConversationDisplayProps {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
-  processingStage?: 'initializing' | 'classifying' | 'analyzing' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete' | 'context-analysis';
+  processingStage?: 'initializing' | 'classifying' | 'context-analysis' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;

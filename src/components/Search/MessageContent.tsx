@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -24,7 +23,7 @@ interface MessageContentProps {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'context-analysis' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
   progressPercentage?: number;
   stageDetails?: string;
   searchQuery?: string;
@@ -108,9 +107,8 @@ const MessageContent: React.FC<MessageContentProps> = ({
           variants={itemVariants}
         >
           <ResponseProgress 
-            stage={processingStage} 
-            percentage={progressPercentage}
-            showDetails={true}
+            processingStage={processingStage} 
+            progressPercentage={progressPercentage}
             stageDetails={stageDetails}
           />
         </motion.div>
