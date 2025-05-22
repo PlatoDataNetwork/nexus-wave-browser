@@ -57,6 +57,7 @@ const SearchSidebarContent: React.FC<SearchSidebarContentProps> = ({
             page={page}
             hasMore={hasMore}
             currentQuery={currentQuery}
+            searchStage={searchStage}
           />
           
           {results.length > 0 && hasMore && (

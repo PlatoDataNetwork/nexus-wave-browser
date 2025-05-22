@@ -76,28 +76,46 @@ const ResponseProgress: React.FC<ResponseProgressProps> = ({
     }
   };
 
-  // Calculate estimated step percentage
+  // Calculate estimated step percentage and ensure it never exceeds 100%
   const getStepPercentage = () => {
+    let calculatedPercentage;
     switch(stage) {
       case 'initializing':
-        return 5 + (percentage * 0.1);
+        calculatedPercentage = 5 + (percentage * 0.1);
+        break;
       case 'classifying':
-        return 10 + (percentage * 0.1);
+        calculatedPercentage = 10 + (percentage * 0.1);
+        break;
       case 'searching':
-        return 20 + (percentage * 0.3);
+        calculatedPercentage = 20 + (percentage * 0.3);
+        break;
       case 'processing':
-        return 50 + (percentage * 0.2);
+        calculatedPercentage = 50 + (percentage * 0.2);
+        break;
       case 'generating':
-        return 70 + (percentage * 0.25);
+        calculatedPercentage = 70 + (percentage * 0.25);
+        break;
       case 'streaming':
-        return 95 + (percentage * 0.05);
+        calculatedPercentage = 95 + (percentage * 0.05);
+        break;
       case 'finalizing':
-        return 100;
+        calculatedPercentage = 99;
+        break;
       case 'complete':
-        return 100;
+        calculatedPercentage = 100;
+        break;
       default:
-        return percentage;
+        calculatedPercentage = percentage;
     }
+    
+    // Cap the percentage at 100%
+    return Math.min(100, calculatedPercentage);
+  };
+
+  // Determine if we should show the percentage number
+  const shouldShowPercentage = () => {
+    // Hide percentage during streaming to avoid confusion
+    return stage !== 'streaming' && stage !== 'finalizing';
   };
 
   return (
@@ -112,7 +130,9 @@ const ResponseProgress: React.FC<ResponseProgressProps> = ({
           {getIcon()}
           <span>{getStageName()}</span>
         </div>
-        <span className="text-muted-foreground">{Math.round(getStepPercentage())}%</span>
+        {shouldShowPercentage() && (
+          <span className="text-muted-foreground">{Math.round(getStepPercentage())}%</span>
+        )}
       </div>
       
       <Progress value={getStepPercentage()} max={100} className="h-1.5" indicatorClassName={getProgressClass()} />

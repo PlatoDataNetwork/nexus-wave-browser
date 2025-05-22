@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { Card } from "@/components/ui/card";
-import { Loader2, AlertCircle } from 'lucide-react';
-import SearchResultItem from './SearchResultItem';
+import { Loader2, AlertCircle, Globe } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface SearchResultsListProps {
   results: any[];
@@ -11,6 +10,7 @@ interface SearchResultsListProps {
   page: number;
   hasMore: boolean;
   currentQuery: string;
+  searchStage?: 'query' | 'searching' | 'analyzing' | 'complete';
 }
 
 const SearchResultsList: React.FC<SearchResultsListProps> = ({
@@ -19,53 +19,69 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
   isLoading,
   page,
   hasMore,
-  currentQuery
+  currentQuery,
+  searchStage = 'complete'
 }) => {
-  // Loading indicator for initial load
-  if (isLoading && page === 1 && results.length === 0) {
+  // Show appropriate loading states based on search stage
+  if (isLoading && page === 1) {
     return (
-      <Card className="p-4 flex flex-col items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple mb-3" />
-        <p className="text-center text-sm text-muted-foreground">Searching for results...</p>
-      </Card>
+      <div className="flex flex-col items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-nexus-purple mb-2" />
+        <p className="text-sm text-muted-foreground text-center">
+          {searchStage === 'searching' ? 'Searching the web...' : 
+           searchStage === 'analyzing' ? 'Analyzing results...' : 
+           'Loading results...'}
+        </p>
+      </div>
     );
   }
 
-  // Error state
   if (error) {
     return (
-      <Card className="p-4 border-red-200">
-        <div className="flex items-center text-red-600 mb-2">
-          <AlertCircle className="h-5 w-5 mr-2" />
-          <h3 className="font-medium">Error</h3>
-        </div>
-        <p className="text-sm text-muted-foreground">{error}</p>
-      </Card>
+      <div className="flex flex-col items-center justify-center py-8">
+        <AlertCircle className="h-8 w-8 text-amber-500 mb-2" />
+        <p className="text-sm text-muted-foreground text-center">
+          {error}
+        </p>
+      </div>
     );
   }
 
-  // No results state
   if (results.length === 0 && !isLoading) {
     return (
-      <Card className="p-4">
-        <p className="text-center text-sm text-muted-foreground">
-          No results found for <span className="font-medium">"{currentQuery}"</span>
+      <div className="flex flex-col items-center justify-center py-8">
+        <Globe className="h-8 w-8 text-muted-foreground mb-2" />
+        <p className="text-sm text-muted-foreground text-center">
+          {currentQuery ? `No results found for "${currentQuery}"` : 'Enter a search query to see results'}
         </p>
-      </Card>
+      </div>
     );
   }
 
-  // Results display
   return (
     <div className="space-y-3">
       {results.map((result, index) => (
-        <SearchResultItem key={`${result.url}-${index}`} result={result} />
+        <Card key={index} className="hover:shadow-sm transition-all">
+          <CardContent className="p-3">
+            <a 
+              href={result.url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <h4 className="text-sm font-medium line-clamp-2 hover:text-nexus-purple">{result.title}</h4>
+              <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{result.snippet || result.description}</p>
+              <div className="text-xs text-muted-foreground mt-1 truncate">
+                {result.url && result.url.replace(/^https?:\/\/(www\.)?/, '')}
+              </div>
+            </a>
+          </CardContent>
+        </Card>
       ))}
       
-      {/* Loading indicator for "load more" */}
       {isLoading && page > 1 && (
-        <div className="flex justify-center py-3">
-          <Loader2 className="h-6 w-6 animate-spin text-nexus-purple" />
+        <div className="flex justify-center py-2">
+          <Loader2 className="h-5 w-5 animate-spin text-nexus-purple" />
         </div>
       )}
     </div>
