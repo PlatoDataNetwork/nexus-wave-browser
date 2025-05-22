@@ -1,3 +1,4 @@
+
 import { 
   Rocket, 
   Brain, 
@@ -15,7 +16,6 @@ import {
   Workflow,
   Code,
   Users,
-  School,
   ShoppingCart,
   Lightbulb,
   Zap,
@@ -26,7 +26,7 @@ import {
   TrendingUp,
   Gamepad2,
   CircuitBoard,
-  Music,
+  Music as MusicIcon,
   Microscope,
   Image,
   Gavel,
@@ -48,10 +48,23 @@ import {
   Trash2,
   Globe,
   Cloud,
+  Shield as ShieldCheck,
+  School as GraduationCap,
+  Wallet as DollarSign,
+  LineChart as AreaChart,
+  BadgeDollarSign as PiggyBank,
+  BadgeDollarSign as Banknote,
+  Zap as BatteryCharging,
+  Computer as Laptop,
+  Headphones as HeadphonesIcon,
+  FileText as ScrollText,
+  FileText as Pill,
+  Building as BuildingIcon,
+  BatteryFull as BatteryFullIcon,
+  ArrowUpDown as MoveVertical,
+  Package as Warehouse,
   type LucideIcon
 } from "lucide-react";
-
-import { getCategoryById } from "@/utils/categoryUtils";
 
 export interface SearchPrompt {
   id: string;
