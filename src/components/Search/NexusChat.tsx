@@ -37,8 +37,17 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
   React.useEffect(() => {
     if (initialMessage) {
       setCurrentMessage(initialMessage);
+      
+      // Only auto-submit if it's an initial message from a prompt
+      if (initialMessage.trim() !== '') {
+        // Use a small delay to ensure the component is fully mounted
+        const timer = setTimeout(() => {
+          handleSubmit();
+        }, 100);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [initialMessage, setCurrentMessage]);
+  }, [initialMessage, setCurrentMessage, handleSubmit]);
 
   return (
     <div className="flex flex-col h-full">

@@ -30,17 +30,16 @@ const ChatInput: React.FC<ChatInputProps> = ({
     loading: { scale: 1.05 }
   };
 
-  // Handle key down events to prevent auto-submission on Enter
+  // Handle key down events for Enter key submission
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       
       // Only auto-submit if explicitly enabled (for prompts and follow-up questions)
-      // or if manually submitted through enter key in regular messages
-      if (isAutoSubmitEnabled) {
+      if (isAutoSubmitEnabled && currentMessage.trim()) {
         handleSubmit();
-      } else {
-        // For regular messages, don't auto-submit
+      } else if (!isAutoSubmitEnabled) {
+        // For regular messages, don't auto-submit on Enter, let the button handle it
         console.log('Enter pressed, but auto-submit is disabled');
       }
     }
