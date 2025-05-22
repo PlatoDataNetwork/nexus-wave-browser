@@ -3,38 +3,50 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Globe } from "lucide-react";
+import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface ChatInputProps {
-  currentMessage: string;
-  setCurrentMessage: (message: string) => void;
-  handleSubmit: (e?: React.FormEvent) => void;
-  isLoading: boolean;
-  isClassifying: boolean;
-  isFetchingRealTimeData: boolean;
+  placeholder?: string;
+  className?: string;
+  onFocus?: () => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
-  currentMessage,
-  setCurrentMessage,
-  handleSubmit,
-  isLoading,
-  isClassifying,
-  isFetchingRealTimeData,
+  placeholder = "Ask Nexus anything...",
+  className = "",
+  onFocus
 }) => {
+  const {
+    currentMessage,
+    setCurrentMessage,
+    handleSubmit,
+    isLoading,
+    isClassifying,
+    isFetchingRealTimeData,
+  } = useConversationContext();
+
+  const onSubmit = (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+    handleSubmit();
+  };
+
   return (
-    <div className="p-4 w-full bg-background/95 backdrop-blur-sm border-t absolute bottom-0 left-0 right-0 z-50">
-      <form onSubmit={handleSubmit} className="flex gap-2">
+    <div className={`p-4 w-full bg-background/95 backdrop-blur-sm border-t fixed bottom-0 left-0 right-0 z-[100] shadow-md ${className}`}>
+      <form onSubmit={onSubmit} className="flex gap-2 max-w-7xl mx-auto">
         <Textarea
-          placeholder="Ask Nexus anything..."
+          placeholder={placeholder}
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           className="flex-1 min-h-12 resize-none"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
-              handleSubmit();
+              onSubmit();
             }
           }}
+          onFocus={onFocus}
         />
         <Button 
           type="submit" 

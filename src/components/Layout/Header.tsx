@@ -2,18 +2,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download, Sparkles } from "lucide-react";
+import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
-  const isWaveSearchRoute = location.pathname.startsWith('/wave-search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
   const isHistoryRoute = location.pathname.startsWith('/history');
   
   // Don't display header on app routes that have their own browser chrome
-  const shouldHideHeader = isAppRoute || isSearchRoute || isWaveSearchRoute || isExtensionStoreRoute || isHistoryRoute;
+  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
   
   if (shouldHideHeader) {
     return null;
@@ -44,7 +43,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation - Updated menu items with Wave Search added */}
+        {/* Main Navigation - Updated menu items with Downloads removed */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             <li>
@@ -56,18 +55,6 @@ const Header: React.FC = () => {
                 >
                   <Search className="mr-1 h-4 w-4" />
                   <span className="hidden sm:inline">Search</span>
-                </Button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/wave-search">
-                <Button
-                  variant={isActive('/wave-search') ? "secondary" : "ghost"}
-                  size="sm"
-                  className="text-white"
-                >
-                  <Sparkles className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Wave</span>
                 </Button>
               </Link>
             </li>

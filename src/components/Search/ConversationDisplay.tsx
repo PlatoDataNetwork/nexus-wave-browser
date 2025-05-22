@@ -2,24 +2,23 @@
 import React, { useRef, useEffect } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
-import WelcomeMessage from './WelcomeMessage';
-import { ChatMessage } from '@/types';
+import { useConversationContext } from '@/contexts/ConversationContext';
 
 interface ConversationDisplayProps {
-  messages: ChatMessage[];
-  setCurrentMessage: (message: string) => void;
-  handleRegenerateMessage: (messageId: string) => void;
-  handleSelectAlternative: (messageId: string, index: number) => void;
-  handleRelatedQuestionClick: (question: string) => void;
+  className?: string;
 }
 
 const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
-  messages,
-  setCurrentMessage,
-  handleRegenerateMessage,
-  handleSelectAlternative,
-  handleRelatedQuestionClick
+  className = "",
 }) => {
+  const { 
+    messages, 
+    handleRegenerateMessage, 
+    handleSelectAlternative, 
+    handleRelatedQuestionClick,
+    categoryContext
+  } = useConversationContext();
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages update
@@ -30,11 +29,18 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   }, [messages]);
 
   return (
-    <div className="h-full overflow-hidden">
-      <ScrollArea className="h-full" style={{ overscrollBehavior: 'contain' }}> 
-        <div className="p-4 space-y-4 pb-32">
+    <div className={`h-full overflow-hidden ${className}`}>
+      <ScrollArea className="h-full pb-20" style={{ overscrollBehavior: 'contain' }}> 
+        <div className="p-4 space-y-4 pb-44">
           {messages.length === 0 ? (
-            <WelcomeMessage setCurrentMessage={setCurrentMessage} />
+            <div className="flex items-center justify-center h-40">
+              <p className="text-muted-foreground text-center">
+                {categoryContext ? 
+                  `No conversation about ${categoryContext} started yet. Ask a question or select a prompt to begin.` :
+                  "No conversation started yet. Ask a question or select a prompt to begin."
+                }
+              </p>
+            </div>
           ) : (
             messages.map((message) => (
               <ConversationMessage 

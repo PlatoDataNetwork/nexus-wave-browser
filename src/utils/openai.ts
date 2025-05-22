@@ -1,4 +1,3 @@
-
 import OpenAI from 'openai';
 
 // OpenAI API key
@@ -52,28 +51,18 @@ const generateCacheKey = (message: string, realTimeData: boolean): string => {
 /**
  * Get a streaming AI response using the ChatGPT API
  * Optimized for the fastest possible first token time
- * Updated to use new StreamingOptions interface
  */
 export async function getStreamingResponse(
   message: string,
   conversationHistory: { role: "user" | "assistant"; content: string }[],
   onToken: (token: string) => void,
-  options?: {
-    systemPrompt?: string;
-    incorporateWebContent?: boolean;
-    webContent?: {
-      content: string;
-      timestamp: Date;
-      sources?: { title: string; url: string; }[];
-    } | null;
-  }
+  realTimeData?: { content: string; timestamp: Date; sources?: { title: string; url: string }[] } | null
 ): Promise<void> {
   try {
     console.time('streaming-first-token');
     
     // Generate cache key that accounts for time-sensitivity
-    const hasRealTimeData = options?.incorporateWebContent && options.webContent !== null;
-    const cacheKey = generateCacheKey(message, hasRealTimeData);
+    const cacheKey = generateCacheKey(message, !!realTimeData);
     
     // Skip cache for time-sensitive queries to ensure fresh data
     const shouldBypassCache = isTimeSensitiveQuery(message);
@@ -91,17 +80,16 @@ export async function getStreamingResponse(
       return;
     }
     
-    // Use custom system prompt if provided, otherwise use default
-    let systemPrompt = options?.systemPrompt || SYSTEM_PROMPTS.STREAMING;
+    // Enhance system prompt with current date information
+    let systemPrompt = SYSTEM_PROMPTS.STREAMING;
     
-    // Add real-time data if available and requested
-    if (options?.incorporateWebContent && options.webContent) {
-      const webContent = options.webContent;
-      systemPrompt += `\n\nUse this data:\n${webContent.content.substring(0, 500)}${webContent.content.length > 500 ? '...' : ''}`;
+    // Add real-time data if available (but keep it minimal for faster processing)
+    if (realTimeData) {
+      systemPrompt += `\n\nUse this data:\n${realTimeData.content.substring(0, 500)}${realTimeData.content.length > 500 ? '...' : ''}`;
       
       // Include source information in system prompt
-      if (webContent.sources && webContent.sources.length > 0) {
-        systemPrompt += `\n\nSources:\n${webContent.sources.map(source => 
+      if (realTimeData.sources && realTimeData.sources.length > 0) {
+        systemPrompt += `\n\nSources:\n${realTimeData.sources.map(source => 
           `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
         ).join('\n')}`;
       }

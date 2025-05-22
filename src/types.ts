@@ -6,6 +6,15 @@ export interface EditHistoryItem {
   content: string;
 }
 
+export interface WebSearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+  source?: string;
+  published?: string;
+  position?: number;
+}
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
@@ -27,20 +36,4 @@ export interface ChatMessage {
   isLoading?: boolean;
   isStreaming?: boolean;
   streamProgress?: number;
-  // New timing metadata
-  timeToProcess?: number; // Total processing time in milliseconds
-}
-
-// Add StreamingOptions interface for better typing
-export interface StreamingOptions {
-  systemPrompt?: string;
-  incorporateWebContent?: boolean;
-  webContent?: {
-    content: string;
-    timestamp: Date;
-    sources?: {
-      title: string;
-      url: string;
-    }[];
-  } | null;
 }

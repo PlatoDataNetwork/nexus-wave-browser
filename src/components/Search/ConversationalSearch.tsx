@@ -191,20 +191,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
       const realTimeData = await realTimeDataPromise;
       
       // Start streaming response
-      // Fix: Transform realTimeData to the format expected by getStreamingResponse
-      const streamingOptions = realTimeData ? {
-        webContent: {
-          content: realTimeData.content,
-          timestamp: realTimeData.timestamp,
-          sources: realTimeData.sources
-        }
-      } : undefined;
-      
       await getStreamingResponse(
         messageToSearch,
         updatedHistory,
         handleToken,
-        streamingOptions
+        realTimeData || undefined
       );
       
       // Wait for search to complete

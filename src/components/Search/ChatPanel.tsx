@@ -1,57 +1,22 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConversationDisplay from './ConversationDisplay';
 import ChatInput from './ChatInput';
-import { ChatMessage } from '@/types';
-import PromptChatArea from './PromptChatArea';
 
 interface ChatPanelProps {
-  messages: ChatMessage[];
-  currentMessage: string;
-  setCurrentMessage: (message: string) => void;
-  handleSubmit: (e?: React.FormEvent) => void;
-  isLoading: boolean;
-  isClassifying: boolean;
-  isFetchingRealTimeData: boolean;
   showSidebar: boolean;
   toggleSidebar: () => void;
-  handleRegenerateMessage: (messageId: string) => void;
-  handleSelectAlternative: (messageId: string, index: number) => void;
-  handleRelatedQuestionClick: (question: string) => void;
-  currentCategoryPrompt?: string;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
-  messages,
-  currentMessage,
-  setCurrentMessage,
-  handleSubmit,
-  isLoading,
-  isClassifying,
-  isFetchingRealTimeData,
   showSidebar,
-  toggleSidebar,
-  handleRegenerateMessage,
-  handleSelectAlternative,
-  handleRelatedQuestionClick,
-  currentCategoryPrompt = ''
+  toggleSidebar
 }) => {
-  const [usePromptChat, setUsePromptChat] = useState(false);
-
-  // If we have a category prompt, use the PromptChatArea component
-  useEffect(() => {
-    if (currentCategoryPrompt) {
-      setUsePromptChat(true);
-    } else {
-      setUsePromptChat(false);
-    }
-  }, [currentCategoryPrompt]);
-
   return (
     <div className="flex flex-col h-full">
-      <div className="p-3 flex items-center justify-between border-b bg-background">
+      <div className="p-3 flex items-center justify-between border-b bg-background sticky top-0 z-30">
         <h3 className="text-sm font-medium">Nexus Chat</h3>
         <Button 
           variant="outline" 
@@ -63,38 +28,13 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
         </Button>
       </div>
       
-      {/* Content area with relative positioning to contain absolute elements */}
+      {/* Content area that properly accommodates fixed elements */}
       <div className="flex-grow relative overflow-hidden">
-        {usePromptChat ? (
-          <PromptChatArea 
-            initialPrompt={currentCategoryPrompt}
-            onSearch={(query) => {
-              setCurrentMessage(query);
-              handleSubmit();
-            }}
-          />
-        ) : (
-          <>
-            {/* Messages area fills the space with padding for the fixed input */}
-            <ConversationDisplay 
-              messages={messages}
-              setCurrentMessage={setCurrentMessage}
-              handleRegenerateMessage={handleRegenerateMessage}
-              handleSelectAlternative={handleSelectAlternative}
-              handleRelatedQuestionClick={handleRelatedQuestionClick}
-            />
-            
-            {/* Input area - absolutely positioned at the bottom */}
-            <ChatInput 
-              currentMessage={currentMessage}
-              setCurrentMessage={setCurrentMessage}
-              handleSubmit={handleSubmit}
-              isLoading={isLoading}
-              isClassifying={isClassifying}
-              isFetchingRealTimeData={isFetchingRealTimeData}
-            />
-          </>
-        )}
+        {/* Messages area */}
+        <ConversationDisplay />
+        
+        {/* Input is fixed positioned in its own component */}
+        <ChatInput />
       </div>
     </div>
   );
