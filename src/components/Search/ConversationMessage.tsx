@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import MessageContent from './MessageContent';
 import MessageSourcesList from './MessageSourcesList';
 import RelatedQuestions from './RelatedQuestions';
@@ -9,6 +10,8 @@ import AlternativeResponses from './AlternativeResponses';
 interface Source {
   title: string;
   url: string;
+  snippet?: string;
+  timestamp?: string;
 }
 
 interface ConversationMessageProps {
@@ -63,15 +66,31 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
       onSelectAlternative(currentResponseIndex + 1);
     }
   };
+
+  // Animation variants
+  const messageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
   
   return (
-    <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
-      <div
+    <motion.div 
+      className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={messageVariants}
+      layout
+    >
+      <motion.div
         className={`max-w-3/4 rounded-lg p-4 ${
           role === "user"
             ? "bg-nexus-purple text-white"
             : "bg-secondary border border-border"
         }`}
+        whileHover={{ scale: 1.01 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
       >
         {role === "user" ? (
           <p className="whitespace-pre-wrap">{content}</p>
@@ -85,6 +104,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               streamProgress={streamProgress}
               processingStage={processingStage}
               progressPercentage={progressPercentage}
+              stageDetails={stageDetails}
             />
             
             {/* Ensure sources are displayed, even if empty array is passed */}
@@ -118,8 +138,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             )}
           </>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

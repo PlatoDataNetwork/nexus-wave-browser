@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface MessageStreamProps {
   content: string;
@@ -22,13 +23,35 @@ const MessageStream: React.FC<MessageStreamProps> = ({
   const cursorTimerRef = useRef<NodeJS.Timeout | null>(null);
   const previousContentRef = useRef<string>('');
   const contentContainerRef = useRef<HTMLDivElement>(null);
+  const [typingSpeed, setTypingSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
+  
+  // Adjust typing speed based on content complexity
+  useEffect(() => {
+    if (isStreaming && streamingText) {
+      // Detect code blocks to slow down typing
+      if (streamingText.includes('```')) {
+        setTypingSpeed('slow');
+      } 
+      // Detect lists to use medium speed
+      else if (streamingText.includes('- ') || streamingText.includes('1. ')) {
+        setTypingSpeed('medium');
+      }
+      // Use fast speed for simple text
+      else {
+        setTypingSpeed('fast');
+      }
+    }
+  }, [isStreaming, streamingText]);
   
   // Blink cursor effect
   useEffect(() => {
     if (isStreaming) {
+      // Make cursor blink faster when typing is faster
+      const blinkInterval = typingSpeed === 'fast' ? 300 : typingSpeed === 'medium' ? 400 : 500;
+      
       cursorTimerRef.current = setInterval(() => {
         setCursor(prev => !prev);
-      }, 500);
+      }, blinkInterval);
     } else {
       setCursor(false);
     }
@@ -38,7 +61,7 @@ const MessageStream: React.FC<MessageStreamProps> = ({
         clearInterval(cursorTimerRef.current);
       }
     };
-  }, [isStreaming]);
+  }, [isStreaming, typingSpeed]);
   
   // Handle content updates - prioritize streamingText if provided
   useEffect(() => {
@@ -82,6 +105,18 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     return null;
   }
   
+  // Cursor style based on typing speed
+  const getCursorStyle = () => {
+    switch(typingSpeed) {
+      case 'fast': 
+        return "inline-block h-4 w-1 ml-0.5 bg-current animate-pulse";
+      case 'slow':
+        return "inline-block h-4 w-1.5 ml-0.5 bg-current";
+      default:
+        return "inline-block h-4 w-1 ml-0.5 bg-current";
+    }
+  };
+  
   return (
     <div 
       className="relative whitespace-pre-wrap break-words"
@@ -89,13 +124,18 @@ const MessageStream: React.FC<MessageStreamProps> = ({
     >
       {displayText}
       {isStreaming && (
-        <span className={`inline-block h-4 w-1 ml-0.5 bg-current ${cursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>
+        <span className={`${getCursorStyle()} ${cursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}></span>
       )}
       {isStreaming && !displayText && (
-        <div className="flex items-center text-muted-foreground">
+        <motion.div 
+          className="flex items-center text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
           <Loader2 className="h-3 w-3 animate-spin mr-2" />
           <span>Generating response...</span>
-        </div>
+        </motion.div>
       )}
     </div>
   );
