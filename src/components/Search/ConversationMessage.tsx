@@ -69,7 +69,7 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
         className={`max-w-3/4 rounded-lg p-4 ${
           role === "user"
             ? "bg-nexus-purple text-white"
-            : "" // Removed "bg-secondary border border-border" to have plain background for assistant
+            : "bg-secondary border border-border"
         }`}
       >
         {role === "user" ? (

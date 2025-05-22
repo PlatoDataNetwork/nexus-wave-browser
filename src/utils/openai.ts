@@ -13,39 +13,13 @@ export const openai = new OpenAI({
 // Cache for responses to avoid duplicate API calls
 const responseCache = new Map();
 
-// Define time-sensitive query indicators
-const timeSensitiveTerms = ['weather', 'forecast', 'temperature', 'today', 'current', 'now', 'latest', 'alert', 'warning'];
-
 // Optimized prompt templates for faster responses
 const SYSTEM_PROMPTS = {
-  DEFAULT: 'You are Nexus Wave\'s helpful assistant answering questions. Be concise but informative. Always include the current date in your responses when relevant.',
-  REALTIME: 'You are a fast and efficient information synthesizer. Keep responses under 200 words. Focus on key points. Today\'s date is ' + new Date().toLocaleDateString() + '. Always provide the most up-to-date information.',
+  DEFAULT: 'You are Nexus Wave\'s helpful assistant answering questions. Be concise but informative.',
+  REALTIME: 'You are a fast and efficient information synthesizer. Keep responses under 200 words. Focus on key points.',
   DIVERSITY: 'Provide a different perspective than previous responses. Be concise.',
-  STREAMING: 'You are a real-time assistant. Focus on the most important details first and keep responses brief. Today\'s date is ' + new Date().toLocaleDateString() + '. Always include this date when discussing time-sensitive information.',
+  STREAMING: 'You are a real-time assistant. Focus on the most important details first and keep responses brief.',
   RELATED_QUESTIONS: 'You are generating follow-up questions that a user might want to ask based on their previous question and the response. These should always be from the user\'s perspective (first-person) and be phrased as complete questions ending with question marks. Return EXACTLY 3 questions. Format your response as a JSON array like this: ["Question 1?", "Question 2?", "Question 3?"]'
-};
-
-/**
- * Check if a query is time-sensitive and should bypass cache
- */
-const isTimeSensitiveQuery = (message: string): boolean => {
-  const lowerMessage = message.toLowerCase();
-  return timeSensitiveTerms.some(term => lowerMessage.includes(term));
-};
-
-/**
- * Generate a cache key that includes the current date for time-sensitive queries
- */
-const generateCacheKey = (message: string, realTimeData: boolean): string => {
-  const isTimeSensitive = isTimeSensitiveQuery(message);
-  
-  // For time-sensitive queries, include the current date in the cache key
-  if (isTimeSensitive) {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    return `${message}-${realTimeData ? 'withData' : 'noData'}-${today}`;
-  }
-  
-  return `${message}-${realTimeData ? 'withData' : 'noData'}`;
 };
 
 /**
@@ -61,14 +35,9 @@ export async function getStreamingResponse(
   try {
     console.time('streaming-first-token');
     
-    // Generate cache key that accounts for time-sensitivity
-    const cacheKey = generateCacheKey(message, !!realTimeData);
-    
-    // Skip cache for time-sensitive queries to ensure fresh data
-    const shouldBypassCache = isTimeSensitiveQuery(message);
-    
-    // Check cache for exact matches to avoid redundant calls (only if not time-sensitive)
-    if (!shouldBypassCache && responseCache.has(cacheKey)) {
+    // Check cache for exact matches to avoid redundant calls
+    const cacheKey = `${message}-${realTimeData ? 'withData' : 'noData'}`;
+    if (responseCache.has(cacheKey)) {
       console.log('Using cached response');
       const cachedResponse = responseCache.get(cacheKey);
       // Simulate streaming for cached responses
@@ -80,7 +49,7 @@ export async function getStreamingResponse(
       return;
     }
     
-    // Enhance system prompt with current date information
+    // Base system prompt - kept very concise for faster first token
     let systemPrompt = SYSTEM_PROMPTS.STREAMING;
     
     // Add real-time data if available (but keep it minimal for faster processing)
@@ -93,9 +62,6 @@ export async function getStreamingResponse(
           `- ${source.title || 'Unknown'}: ${source.url || 'No URL'}`
         ).join('\n')}`;
       }
-      
-      // Add current date explicitly
-      systemPrompt += `\n\nCurrent date: ${new Date().toLocaleDateString()}. Include this date in your response when relevant.`;
     }
     
     // Keep history minimal for faster processing
@@ -149,26 +115,13 @@ export async function getStreamingResponse(
       }
     }
     
-    // Don't cache time-sensitive queries with a long TTL
-    // For time-sensitive, keep a shorter TTL (10 minutes)
-    const isSensitive = isTimeSensitiveQuery(message);
-    
     // Cache the response for future use (limited to 50 entries)
     if (responseCache.size > 50) {
       // Remove oldest entry
       const firstKey = responseCache.keys().next().value;
       responseCache.delete(firstKey);
     }
-    
     responseCache.set(cacheKey, fullResponse);
-    
-    // Set a shorter timeout for time-sensitive queries
-    if (isSensitive) {
-      setTimeout(() => {
-        responseCache.delete(cacheKey);
-        console.log(`Removed time-sensitive cache entry: ${cacheKey}`);
-      }, 10 * 60 * 1000); // 10 minutes 
-    }
     
     return;
   } catch (error) {
@@ -191,23 +144,16 @@ export async function getChatGPTResponseWithRealTimeData(
   try {
     console.time('gpt-response-time');
     
-    // Skip cache for time-sensitive queries
-    const shouldBypassCache = isTimeSensitiveQuery(message);
-    
-    // Generate a cache key that includes date for time-sensitive queries
-    const cacheKey = generateCacheKey(message, !!realTimeData) + 
-      (diversityPrompt ? '-diverse' : '-normal');
-    
-    // Check cache for exact matches, but bypass for time-sensitive queries
-    if (!shouldBypassCache && responseCache.has(cacheKey)) {
+    // Check cache for exact matches
+    const cacheKey = `${message}-${realTimeData ? 'withData' : 'noData'}-${diversityPrompt ? 'diverse' : 'normal'}`;
+    if (responseCache.has(cacheKey)) {
       console.log('Using cached response');
       console.timeEnd('gpt-response-time');
       return responseCache.get(cacheKey);
     }
     
-    // Base system prompt - include current date
-    let systemPrompt = SYSTEM_PROMPTS.DEFAULT + 
-      ` Today's date is ${new Date().toLocaleDateString()}. Include this date when answering time-sensitive questions.`;
+    // Base system prompt - kept concise for faster processing
+    let systemPrompt = SYSTEM_PROMPTS.DEFAULT;
     
     // Check if this is a related questions request
     if (message.includes("follow-up questions that the USER might want to ask")) {
@@ -215,8 +161,7 @@ export async function getChatGPTResponseWithRealTimeData(
     } 
     // Add diversity prompt if provided (for regeneration requests)
     else if (diversityPrompt) {
-      systemPrompt = SYSTEM_PROMPTS.DIVERSITY + 
-      ` Today's date is ${new Date().toLocaleDateString()}.`;
+      systemPrompt = SYSTEM_PROMPTS.DIVERSITY;
     }
     
     // Enhance the system prompt with real-time data if available
@@ -262,22 +207,13 @@ export async function getChatGPTResponseWithRealTimeData(
     const responseText = response.choices[0].message.content;
     console.timeEnd('gpt-response-time');
     
-    // Cache the response but with shorter TTL for time-sensitive queries
+    // Cache the response for future use (limited to 50 entries)
     if (responseCache.size > 50) {
       // Remove oldest entry
       const firstKey = responseCache.keys().next().value;
       responseCache.delete(firstKey);
     }
-    
     responseCache.set(cacheKey, responseText);
-    
-    // Set shorter TTL for time-sensitive queries
-    if (isTimeSensitiveQuery(message)) {
-      setTimeout(() => {
-        responseCache.delete(cacheKey);
-        console.log(`Removed time-sensitive cache entry: ${cacheKey}`);
-      }, 10 * 60 * 1000); // 10 minutes
-    }
     
     return responseText;
   } catch (error) {
@@ -297,14 +233,9 @@ export async function getChatGPTResponse(
   try {
     console.time('gpt-simple-response-time');
     
-    // Check if query is time-sensitive
-    const shouldBypassCache = isTimeSensitiveQuery(message);
-    
-    // Generate appropriate cache key
-    const cacheKey = generateCacheKey(message, false);
-    
     // Check cache for exact matches
-    if (!shouldBypassCache && responseCache.has(cacheKey)) {
+    const cacheKey = `simple-${message}`;
+    if (responseCache.has(cacheKey)) {
       console.log('Using cached response');
       console.timeEnd('gpt-simple-response-time');
       return responseCache.get(cacheKey);
@@ -317,8 +248,7 @@ export async function getChatGPTResponse(
       prunedHistory = conversationHistory.slice(-3);
     }
     
-    const systemPrompt = 'You are a helpful assistant answering questions for a web browser interface. Be concise and informative. ' +
-      `Today's date is ${new Date().toLocaleDateString()}. Include this date when answering time-sensitive questions.`;
+    const systemPrompt = 'You are a helpful assistant answering questions for a web browser interface. Be concise and informative.';
     
     // Construct messages array with system prompt, conversation history, and current message
     const messages = [
@@ -354,14 +284,6 @@ export async function getChatGPTResponse(
     }
     responseCache.set(cacheKey, responseText);
     
-    // Set shorter TTL for time-sensitive queries
-    if (isTimeSensitiveQuery(message)) {
-      setTimeout(() => {
-        responseCache.delete(cacheKey);
-        console.log(`Removed time-sensitive cache entry: ${cacheKey}`);
-      }, 10 * 60 * 1000); // 10 minutes
-    }
-    
     return responseText;
   } catch (error) {
     console.error("Error fetching AI response:", error);
@@ -374,7 +296,3 @@ setInterval(() => {
   console.log(`Clearing response cache (${responseCache.size} entries)`);
   responseCache.clear();
 }, 30 * 60 * 1000); // Clear every 30 minutes
-
-// Clear the cache immediately to remove any stale responses
-responseCache.clear();
-console.log("Response cache cleared to remove outdated information");
