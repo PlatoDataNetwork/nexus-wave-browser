@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { categories } from '@/lib/categoryData';
@@ -152,7 +153,7 @@ const WaveCategoryDetail: React.FC = () => {
 
       {/* Search interface */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
-        {/* Tabs and search controls */}
+        {/* Tabs */}
         <div className="flex items-center justify-between mt-4">
           <Tabs value="wave" className="w-full">
             <div className="flex justify-between items-center">
@@ -168,9 +169,6 @@ const WaveCategoryDetail: React.FC = () => {
                 </TabsTrigger>
                 <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                   <Clock className="h-4 w-4 mr-1" /> News
-                </TabsTrigger>
-                <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Zap className="h-4 w-4 mr-1" /> Nexus Search
                 </TabsTrigger>
                 <TabsTrigger value="wave" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                   <Sparkles className="h-4 w-4 mr-1" /> Nexus Wave

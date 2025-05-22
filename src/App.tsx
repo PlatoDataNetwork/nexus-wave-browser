@@ -7,7 +7,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PageLayout from "./components/Layout/PageLayout";
-import Search from "./pages/Search";
 import LandingPage from "./pages/LandingPage";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
@@ -16,7 +15,6 @@ import { ThemeProvider } from "./hooks/useTheme";
 import { AuthProvider } from "./hooks/useAuth";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
-import CategoryDetail from "./components/Search/CategoryDetail";
 import WaveSearch from "./pages/WaveSearch";
 import WaveCategoryDetail from "./components/Wave/WaveCategoryDetail";
 
@@ -41,14 +39,12 @@ const App = () => (
                   <Route path="/settings-docs" element={<Index defaultUrl="/settings-docs" />} />
                   <Route path="/history" element={<Index defaultUrl="/history" />} />
                   <Route path="/extension-store" element={<Index defaultUrl="/extension-store" />} />
-                  <Route path="/search" element={<Search />} />
-                  <Route path="/search/category/:categoryId" element={<CategoryDetail />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/downloads" element={<Downloads />} />
                   
                   {/* Wave Search Routes */}
                   <Route path="/wave-search" element={<WaveSearch />} />
-                  <Route path="/wave-search/category/:categoryId" element={<WaveCategoryDetail />} />
+                  <Route path="/search/category/:categoryId" element={<WaveCategoryDetail />} />
                   
                   {/* Fallback route */}
                   <Route path="*" element={<NotFound />} />

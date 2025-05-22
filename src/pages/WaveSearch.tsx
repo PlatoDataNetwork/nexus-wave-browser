@@ -23,10 +23,6 @@ const WaveSearch: React.FC = () => {
       setTimeout(() => setIsSearching(false), 1000); // Simulate search delay
     }
   };
-  
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-  };
 
   return (
     <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
@@ -52,18 +48,6 @@ const WaveSearch: React.FC = () => {
           {/* Main Navigation */}
           <nav className="flex-1">
             <ul className="flex gap-1 md:gap-2">
-              <li>
-                <Link to="/search">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="text-white"
-                  >
-                    <Search className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Search</span>
-                  </Button>
-                </Link>
-              </li>
               <li>
                 <Link to="/app">
                   <Button
@@ -151,9 +135,9 @@ const WaveSearch: React.FC = () => {
           </div>
         </form>
         
-        {/* Tabs and search controls */}
+        {/* Tabs */}
         <div className="flex items-center justify-between mt-4">
-          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <Tabs value={activeTab} className="w-full">
             <div className="flex justify-between items-center">
               <TabsList className="bg-secondary/50">
                 <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
@@ -167,9 +151,6 @@ const WaveSearch: React.FC = () => {
                 </TabsTrigger>
                 <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                   <Clock className="h-4 w-4 mr-1" /> News
-                </TabsTrigger>
-                <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Zap className="h-4 w-4 mr-1" /> Nexus Search
                 </TabsTrigger>
                 <TabsTrigger value="wave" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
                   <Sparkles className="h-4 w-4 mr-1" /> Nexus Wave
@@ -203,7 +184,7 @@ const WaveSearch: React.FC = () => {
       
       {/* Main content area */}
       <div className="flex-grow overflow-auto">
-        <TabsContent value="wave" className="h-full m-0 p-0">
+        <div className="h-full m-0 p-0">
           {searchQuery ? (
             <div className="flex h-full">
               <div className="flex-1 h-full">
@@ -219,47 +200,7 @@ const WaveSearch: React.FC = () => {
               <CategoryGrid />
             </div>
           )}
-        </TabsContent>
-        
-        <TabsContent value="web" className="m-0 p-0">
-          <div className="container py-6">
-            <div className="p-10 text-center">
-              <h3 className="text-2xl font-medium text-muted-foreground">Web Search Coming Soon</h3>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="images" className="m-0 p-0">
-          <div className="container py-6">
-            <div className="p-10 text-center">
-              <h3 className="text-2xl font-medium text-muted-foreground">Image Search Coming Soon</h3>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="videos" className="m-0 p-0">
-          <div className="container py-6">
-            <div className="p-10 text-center">
-              <h3 className="text-2xl font-medium text-muted-foreground">Video Search Coming Soon</h3>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="news" className="m-0 p-0">
-          <div className="container py-6">
-            <div className="p-10 text-center">
-              <h3 className="text-2xl font-medium text-muted-foreground">News Search Coming Soon</h3>
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="nexus" className="m-0 p-0">
-          <div className="container py-6">
-            <div className="p-10 text-center">
-              <h3 className="text-2xl font-medium text-muted-foreground">Nexus Search Coming Soon</h3>
-            </div>
-          </div>
-        </TabsContent>
+        </div>
       </div>
     </div>
   );
