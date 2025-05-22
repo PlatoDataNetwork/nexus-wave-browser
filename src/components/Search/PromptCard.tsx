@@ -16,7 +16,6 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onClick }) => {
     >
       <CardContent className="p-4">
         <h3 className="font-medium text-base mb-1">{prompt.title}</h3>
-        <p className="text-sm text-muted-foreground">{prompt.description}</p>
         <div className="mt-2 text-sm text-nexus-purple italic">
           "{prompt.prompt}..."
         </div>
