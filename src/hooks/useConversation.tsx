@@ -1,22 +1,26 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { ChatMessage } from '@/types';
+import { useToast } from "@/hooks/use-toast";
+import { v4 as uuidv4 } from 'uuid';
 import { toast } from "sonner";
 import { classifyQuery } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData, getStreamingResponse } from '@/utils/openai';
-import { ChatMessage } from '@/types';
 
 interface UseConversationProps {
   onSearch?: (query: string) => void;
+  initialMessage?: string;
 }
 
-export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
+export const useConversation = ({ onSearch, initialMessage = '' }: UseConversationProps = {}) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [currentMessage, setCurrentMessage] = useState("");
+  const [currentMessage, setCurrentMessage] = useState<string>(initialMessage || '');
   const [isLoading, setIsLoading] = useState(false);
   const [isClassifying, setIsClassifying] = useState(false);
   const [isFetchingRealTimeData, setIsFetchingRealTimeData] = useState(false);
-  const [currentQuery, setCurrentQuery] = useState("");
-  
+  const [currentQuery, setCurrentQuery] = useState('');
+  const { toast } = useToast();
+
   // Reference to track ongoing requests that can be canceled
   const activeRequestsRef = useRef<AbortController | null>(null);
   
@@ -583,6 +587,17 @@ export const useConversation = ({ onSearch }: UseConversationProps = {}) => {
       });
     });
   };
+
+  // Handle initial message submission if provided
+  useEffect(() => {
+    if (initialMessage && initialMessage.trim() !== '') {
+      const timer = setTimeout(() => {
+        handleSubmit();
+      }, 500); // Small delay to ensure component is fully mounted
+
+      return () => clearTimeout(timer);
+    }
+  }, [initialMessage]); // Only run on initial render if initialMessage is provided
 
   return {
     messages,

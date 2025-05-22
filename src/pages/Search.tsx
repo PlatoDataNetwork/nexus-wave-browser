@@ -7,7 +7,6 @@ import {
   Search as SearchIcon, 
   Globe, 
   Image, 
-  Play, 
   FileText, 
   Clock, 
   Shield, 
@@ -20,6 +19,8 @@ import ImageResults from "@/components/Search/ImageResults";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
+import NexusCategories from "@/components/Search/NexusCategories";
+import CategoryDetail from "@/components/Search/CategoryDetail";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -40,6 +41,11 @@ const Search: React.FC = () => {
   // Safe mode search
   const [safeSearch, setSafeSearch] = useState(true);
   
+  // State for Nexus Search category navigation
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [chatMessage, setChatMessage] = useState<string>("");
+  const [showChat, setShowChat] = useState(false);
+  
   useEffect(() => {
     // Initialize search query from URL parameters if they exist
     const urlParams = new URLSearchParams(window.location.search);
@@ -49,6 +55,24 @@ const Search: React.FC = () => {
       handleSearch(query);
     }
   }, []);
+
+  // Handle category selection
+  const handleSelectCategory = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setShowChat(false);
+  };
+
+  // Handle back button from category detail
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+    setShowChat(false);
+  };
+
+  // Handle prompt selection
+  const handleSelectPrompt = (promptText: string) => {
+    setChatMessage(promptText);
+    setShowChat(true);
+  };
 
   const handleSearch = async (query = searchQuery) => {
     if (!query.trim()) {
@@ -123,7 +147,14 @@ const Search: React.FC = () => {
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    if (searchQuery.trim()) {
+    
+    // Reset Nexus search state when switching to/from nexus tab
+    if (tab === "nexus") {
+      setSelectedCategory(null);
+      setShowChat(false);
+    }
+    
+    if (searchQuery.trim() && tab !== "nexus") {
       // If there's text in the search bar, apply search when switching tabs
       handleSearch();
     }
@@ -385,6 +416,26 @@ const Search: React.FC = () => {
     );
   };
 
+  // Render Nexus Search content based on state
+  const renderNexusContent = () => {
+    if (showChat) {
+      return <NexusChat onSearch={(query) => {
+        setSearchQuery(query);
+        if (!lastSearchedQuery) {
+          setLastSearchedQuery(query);
+        }
+      }} initialMessage={chatMessage} />;
+    } else if (selectedCategory) {
+      return <CategoryDetail 
+        categoryId={selectedCategory} 
+        onBack={handleBackToCategories} 
+        onSelectPrompt={handleSelectPrompt} 
+      />;
+    } else {
+      return <NexusCategories onSelectCategory={handleSelectCategory} />;
+    }
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Top navigation bar similar to the home screen */}
@@ -523,7 +574,7 @@ const Search: React.FC = () => {
                   <FileText className="h-4 w-4 mr-1" /> News
                 </TabsTrigger>
                 <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Zap className="h-4 w-4 mr-1" /> Nexus Search
+                  <Zap className="h-4 w-4 mr-1" /> Nexus AI
                 </TabsTrigger>
               </TabsList>
               
@@ -722,12 +773,7 @@ const Search: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="nexus" className="h-full flex flex-col">
-              <NexusChat onSearch={(query) => {
-                setSearchQuery(query);
-                if (!lastSearchedQuery) {
-                  setLastSearchedQuery(query);
-                }
-              }} />
+              {renderNexusContent()}
             </TabsContent>
           </Tabs>
         </div>

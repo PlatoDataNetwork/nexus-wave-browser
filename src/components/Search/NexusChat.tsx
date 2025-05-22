@@ -8,9 +8,10 @@ import ChatPanel from './ChatPanel';
 
 interface NexusChatProps {
   onSearch?: (query: string) => void;
+  initialMessage?: string;
 }
 
-const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
+const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) => {
   // Custom hooks to manage state and behaviors
   const {
     messages,
@@ -24,9 +25,19 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch }) => {
     handleRelatedQuestionClick,
     handleRegenerateMessage,
     handleSelectAlternative
-  } = useConversation({ onSearch });
+  } = useConversation({ 
+    onSearch,
+    initialMessage
+  });
   
   const { showSidebar, setShowSidebar, toggleSidebar } = useSidebarToggle(false);
+
+  // Set the initial message when component mounts
+  React.useEffect(() => {
+    if (initialMessage) {
+      setCurrentMessage(initialMessage);
+    }
+  }, [initialMessage, setCurrentMessage]);
 
   return (
     <div className="flex flex-col h-full">
