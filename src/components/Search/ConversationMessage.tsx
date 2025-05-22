@@ -47,7 +47,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   isStreaming = false,
   streamProgress = 0,
   processingStage = 'classifying',
-  progressPercentage = 0
+  progressPercentage = 0,
+  stageDetails
 }) => {
   const hasAlternatives = alternativeResponses.length > 0;
 
@@ -86,9 +87,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
               progressPercentage={progressPercentage}
             />
             
-            {sources && sources.length > 0 && (
-              <MessageSourcesList sources={sources} />
-            )}
+            {/* Ensure sources are displayed, even if empty array is passed */}
+            <MessageSourcesList sources={sources || []} />
             
             <RelatedQuestions 
               questions={relatedQuestions || []} 

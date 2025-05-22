@@ -13,6 +13,7 @@ interface MessageSourcesListProps {
 }
 
 const MessageSourcesList: React.FC<MessageSourcesListProps> = ({ sources }) => {
+  // Don't render if no sources are provided
   if (!sources || sources.length === 0) {
     return null;
   }

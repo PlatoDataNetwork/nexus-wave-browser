@@ -36,28 +36,33 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
           {messages.length === 0 ? (
             <WelcomeMessage setCurrentMessage={setCurrentMessage} />
           ) : (
-            messages.map((message) => (
-              <ConversationMessage 
-                key={message.id}
-                role={message.role}
-                content={message.content}
-                sources={message.sources}
-                hasRealTimeData={message.hasRealTimeData}
-                messageId={message.id}
-                onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
-                alternativeResponses={message.alternativeResponses || []}
-                currentResponseIndex={message.currentResponseIndex || 0}
-                onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
-                relatedQuestions={message.relatedQuestions}
-                onRelatedQuestionClick={handleRelatedQuestionClick}
-                isLoading={message.isLoading}
-                isStreaming={message.isStreaming}
-                streamProgress={message.streamProgress}
-                processingStage={message.processingStage}
-                progressPercentage={message.progressPercentage}
-                stageDetails={message.stageDetails}
-              />
-            ))
+            messages.map((message) => {
+              // Add debugging console log to check sources
+              console.log("Message sources:", message.id, message.sources);
+              
+              return (
+                <ConversationMessage 
+                  key={message.id}
+                  role={message.role}
+                  content={message.content}
+                  sources={message.sources}
+                  hasRealTimeData={message.hasRealTimeData}
+                  messageId={message.id}
+                  onRegenerateMessage={message.role === 'assistant' ? handleRegenerateMessage : undefined}
+                  alternativeResponses={message.alternativeResponses || []}
+                  currentResponseIndex={message.currentResponseIndex || 0}
+                  onSelectAlternative={(index) => handleSelectAlternative(message.id, index)}
+                  relatedQuestions={message.relatedQuestions}
+                  onRelatedQuestionClick={handleRelatedQuestionClick}
+                  isLoading={message.isLoading}
+                  isStreaming={message.isStreaming}
+                  streamProgress={message.streamProgress}
+                  processingStage={message.processingStage}
+                  progressPercentage={message.progressPercentage}
+                  stageDetails={message.stageDetails}
+                />
+              );
+            })
           )}
           <div ref={messagesEndRef} className="h-4" />
         </div>
