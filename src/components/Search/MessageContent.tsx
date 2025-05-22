@@ -58,7 +58,9 @@ const MessageContent: React.FC<MessageContentProps> = ({
               components={{
                 code({ node, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '');
-                  return !props?.inline && match ? (
+                  // Fixed: Use type checking instead of direct property access
+                  const isInline = props && 'inline' in props ? props.inline : false;
+                  return !isInline && match ? (
                     <SyntaxHighlighter
                       style={vscDarkPlus}
                       language={match[1]}
@@ -101,7 +103,9 @@ const MessageContent: React.FC<MessageContentProps> = ({
             components={{
               code({ node, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
-                return !props?.inline && match ? (
+                // Fixed: Use type checking instead of direct property access
+                const isInline = props && 'inline' in props ? props.inline : false;
+                return !isInline && match ? (
                   <SyntaxHighlighter
                     style={vscDarkPlus}
                     language={match[1]}
@@ -147,7 +151,9 @@ const MessageContent: React.FC<MessageContentProps> = ({
         components={{
           code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            return !props?.inline && match ? (
+            // Fixed: Use type checking instead of direct property access
+            const isInline = props && 'inline' in props ? props.inline : false;
+            return !isInline && match ? (
               <SyntaxHighlighter
                 style={vscDarkPlus}
                 language={match[1]}
