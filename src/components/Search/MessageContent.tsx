@@ -58,7 +58,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
               components={{
                 code({ node, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '');
-                  return !props.inline && match ? (
+                  return !props?.inline && match ? (
                     <SyntaxHighlighter
                       style={vscDarkPlus}
                       language={match[1]}
@@ -101,7 +101,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
             components={{
               code({ node, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
-                return !props.inline && match ? (
+                return !props?.inline && match ? (
                   <SyntaxHighlighter
                     style={vscDarkPlus}
                     language={match[1]}
@@ -147,7 +147,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
         components={{
           code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            return !props.inline && match ? (
+            return !props?.inline && match ? (
               <SyntaxHighlighter
                 style={vscDarkPlus}
                 language={match[1]}
