@@ -11,15 +11,15 @@ interface CategoryCubeProps {
 const CategoryCube: React.FC<CategoryCubeProps> = ({ category, onClick }) => {
   return (
     <Card 
-      className="cursor-pointer hover:shadow-md transition-all h-20"
+      className="cursor-pointer hover:shadow-lg hover:scale-105 transition-all bg-nexus-purple/20 hover:bg-nexus-purple/30"
       onClick={() => onClick(category.id)}
     >
-      <CardContent className="p-0 h-full flex flex-col items-center justify-center">
-        <div className={`${category.color} w-full h-10 flex items-center justify-center`}>
-          <category.icon className="h-6 w-6 text-white" />
+      <CardContent className="p-4 h-full flex items-center justify-start gap-3">
+        <div className="rounded-full bg-nexus-purple p-2 flex items-center justify-center">
+          <category.icon className="h-5 w-5 text-white" />
         </div>
-        <div className="p-2 h-10 w-full flex items-center justify-center">
-          <h3 className="font-medium text-xs text-center">{category.title}</h3>
+        <div className="flex-1">
+          <h3 className="font-medium text-sm text-foreground">{category.title}</h3>
         </div>
       </CardContent>
     </Card>
