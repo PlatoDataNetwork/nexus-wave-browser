@@ -58,8 +58,8 @@ const MessageContent: React.FC<MessageContentProps> = ({
               components={{
                 code({ node, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '');
-                  // Fixed: Use type checking instead of direct property access
-                  const isInline = props && 'inline' in props ? props.inline : false;
+                  // Use proper type checking for inline property
+                  const isInline = !!(props && typeof props === 'object' && 'inline' in props && props.inline);
                   return !isInline && match ? (
                     <SyntaxHighlighter
                       style={vscDarkPlus}
@@ -103,8 +103,8 @@ const MessageContent: React.FC<MessageContentProps> = ({
             components={{
               code({ node, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
-                // Fixed: Use type checking instead of direct property access
-                const isInline = props && 'inline' in props ? props.inline : false;
+                // Use proper type checking for inline property
+                const isInline = !!(props && typeof props === 'object' && 'inline' in props && props.inline);
                 return !isInline && match ? (
                   <SyntaxHighlighter
                     style={vscDarkPlus}
@@ -151,8 +151,8 @@ const MessageContent: React.FC<MessageContentProps> = ({
         components={{
           code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
-            // Fixed: Use type checking instead of direct property access
-            const isInline = props && 'inline' in props ? props.inline : false;
+            // Use proper type checking for inline property
+            const isInline = !!(props && typeof props === 'object' && 'inline' in props && props.inline);
             return !isInline && match ? (
               <SyntaxHighlighter
                 style={vscDarkPlus}

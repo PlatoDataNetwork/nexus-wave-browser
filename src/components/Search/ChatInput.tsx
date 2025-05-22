@@ -13,7 +13,7 @@ interface ChatInputProps {
   isClassifying: boolean;
   isFetchingRealTimeData: boolean;
   isAutoSubmitEnabled?: boolean;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'context-analysis' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
