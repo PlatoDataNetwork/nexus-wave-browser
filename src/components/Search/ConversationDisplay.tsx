@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useCallback } from 'react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ConversationMessage from './ConversationMessage';
@@ -14,6 +15,7 @@ interface ConversationDisplayProps {
   processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;
+  clickedQuestionsHistory?: Set<string>;
 }
 
 const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
@@ -25,7 +27,8 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   processingStage = 'classifying',
   processingType = 'individual',
   searchResults = [],
-  currentQuery = ''
+  currentQuery = '',
+  clickedQuestionsHistory = new Set()
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -143,6 +146,7 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                   stageDetails={message.stageDetails}
                   searchQuery={message.role === "assistant" ? currentQuery : undefined}
                   webResults={message.role === "assistant" ? searchResults : undefined}
+                  clickedQuestionsHistory={clickedQuestionsHistory}
                 />
               );
             })

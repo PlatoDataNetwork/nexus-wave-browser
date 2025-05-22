@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { classifyQuery, classifyQueryWithContext, shouldPerformWebSearch } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData, getStreamingResponse } from '@/utils/openai';
+import { isSimilarString } from '@/utils/stringUtils';
 
 interface UseConversationProps {
   onSearch?: (query: string) => void;
@@ -22,6 +23,9 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   const [searchResults, setSearchResults] = useState<Array<{title: string, url: string, snippet: string}>>([]);
   const [processingType, setProcessingType] = useState<'individual' | 'contextual'>('individual');
   const [needsRealTimeData, setNeedsRealTimeData] = useState<boolean>(false);
+  // New state for tracking suggested and clicked questions
+  const [suggestedQuestionsHistory, setSuggestedQuestionsHistory] = useState<Set<string>>(new Set());
+  const [clickedQuestionsHistory, setClickedQuestionsHistory] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   // Reference to track ongoing requests that can be canceled
@@ -46,23 +50,39 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     console.log('isPromptOrFollowupQuestion:', isPromptOrFollowupQuestion);
   }, [isPromptOrFollowupQuestion]);
 
-  // Generate related questions in parallel
+  // Generate related questions in parallel with improved context and deduplication
   const generateRelatedQuestions = useCallback(async (userMessage: string, aiResponse: string): Promise<string[]> => {
     try {
       // Skip related questions if we're currently handling another request
       if (isLoading) return [];
       
-      // Create a prompt specifically for related questions
+      // Get recent conversation history for better context (last 3-5 exchanges)
+      const recentConversation = conversationHistory.slice(-6); // Last 3 exchanges (3 user, 3 assistant)
+      
+      // Create a set of all previously suggested questions for deduplication
+      const allSuggestedQuestions = new Set(suggestedQuestionsHistory);
+      const allClickedQuestions = new Set(clickedQuestionsHistory);
+      
+      // Create a prompt specifically for related questions with improved instructions
       const relatedQuestionsPrompt = 
-        "Based on the user's query and your response, generate 3 follow-up questions that the USER might want to ask next. " +
-        "These should be phrased from the user's perspective (first person), be relevant to continuing the conversation, " +
-        "and provide natural next steps in the conversation. " +
+        "Based on the user's queries and your responses in this conversation, generate 3 follow-up questions " +
+        "that the USER might want to ask next. These questions should:\n" +
+        "1. Be phrased from the user's perspective (first person)\n" +
+        "2. Be relevant to continuing the conversation\n" +
+        "3. Provide natural next steps that explore new aspects of the topic\n" +
+        "4. NOT repeat or closely resemble any previously suggested questions\n" +
+        "5. Be specific and focused rather than generic\n\n" +
+        
+        `Previously suggested questions: ${Array.from(allSuggestedQuestions).join("; ")}\n` +
+        `Previously clicked questions: ${Array.from(allClickedQuestions).join("; ")}\n\n` +
+        
         "Return ONLY a JSON array with no additional text. Format: [\"Question 1?\", \"Question 2?\", \"Question 3?\"]";
       
-      // Include just enough context for good question generation
+      // Include more context for better question generation
       const contextForQuestions = [
+        ...recentConversation,
         { role: "user" as const, content: userMessage },
-        { role: "assistant" as const, content: aiResponse.substring(0, 500) }, // Use only the first part of the response
+        { role: "assistant" as const, content: aiResponse.substring(0, 800) }, // Use more of the response
         { role: "user" as const, content: relatedQuestionsPrompt }
       ];
       
@@ -77,13 +97,31 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         const jsonMatch = questionsResponse.match(/\[\s*"[^"]+(?:",\s*"[^"]+")*\s*\]/);
         if (jsonMatch) {
           const questionsArray = JSON.parse(jsonMatch[0]);
-          return questionsArray.slice(0, 3);
+          const filteredQuestions = deduplicateQuestions(questionsArray);
+          
+          // Update suggested questions history
+          setSuggestedQuestionsHistory(prev => {
+            const newSet = new Set(prev);
+            filteredQuestions.forEach(q => newSet.add(q));
+            return newSet;
+          });
+          
+          return filteredQuestions;
         }
         
         // Fallback method if the regex doesn't match
         const cleanedResponse = questionsResponse.replace(/^```json\s*|\s*```$/g, '');
         const questions = JSON.parse(cleanedResponse);
-        return Array.isArray(questions) ? questions.slice(0, 3) : [];
+        const filteredQuestions = deduplicateQuestions(Array.isArray(questions) ? questions : []);
+        
+        // Update suggested questions history
+        setSuggestedQuestionsHistory(prev => {
+          const newSet = new Set(prev);
+          filteredQuestions.forEach(q => newSet.add(q));
+          return newSet;
+        });
+        
+        return filteredQuestions;
       } catch (error) {
         console.error("Failed to parse related questions:", error);
         // Extract questions using simple heuristics as fallback
@@ -93,13 +131,71 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         while ((match = questionRegex.exec(questionsResponse)) !== null && questions.length < 3) {
           questions.push(match[1]);
         }
-        return questions.length > 0 ? questions : [];
+        
+        const filteredQuestions = deduplicateQuestions(questions);
+        
+        // Update suggested questions history
+        setSuggestedQuestionsHistory(prev => {
+          const newSet = new Set(prev);
+          filteredQuestions.forEach(q => newSet.add(q));
+          return newSet;
+        });
+        
+        return filteredQuestions;
       }
     } catch (error) {
       console.error("Error generating related questions:", error);
       return [];
     }
-  }, [isLoading]);
+  }, [isLoading, conversationHistory, suggestedQuestionsHistory, clickedQuestionsHistory]);
+
+  // Helper function to deduplicate questions
+  const deduplicateQuestions = useCallback((questions: string[]): string[] => {
+    // Filter out questions that are too similar to previously suggested or clicked questions
+    const result: string[] = [];
+    const allPreviousQuestions = new Set([
+      ...Array.from(suggestedQuestionsHistory), 
+      ...Array.from(clickedQuestionsHistory)
+    ]);
+    
+    // First pass: filter out exact matches and very similar questions
+    for (const question of questions) {
+      // Skip if this is an exact match to a previous question
+      if (allPreviousQuestions.has(question)) continue;
+      
+      // Check for similarity with previous questions
+      let isTooSimilar = false;
+      for (const prevQuestion of allPreviousQuestions) {
+        if (isSimilarString(question, prevQuestion, 0.8)) {
+          console.log(`Skipping similar question: "${question}" (too similar to "${prevQuestion}")`);
+          isTooSimilar = true;
+          break;
+        }
+      }
+      
+      if (!isTooSimilar) {
+        result.push(question);
+      }
+    }
+    
+    // Second pass: ensure questions are different from each other
+    const finalQuestions: string[] = [];
+    for (const question of result) {
+      let isDuplicate = false;
+      for (const addedQuestion of finalQuestions) {
+        if (isSimilarString(question, addedQuestion, 0.7)) {
+          isDuplicate = true;
+          break;
+        }
+      }
+      
+      if (!isDuplicate) {
+        finalQuestions.push(question);
+      }
+    }
+    
+    return finalQuestions.slice(0, 3); // Limit to 3 questions
+  }, [suggestedQuestionsHistory, clickedQuestionsHistory]);
 
   const handleSubmit = useCallback(async (e?: React.FormEvent) => {
     if (e) {
@@ -334,7 +430,8 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       // Create sources from real-time data for citation
       const sources = realTimeData?.sources || [];
       
-      // 8. PARALLEL: Generate related questions while updating the UI
+      // 8. PARALLEL: Generate related questions with our improved implementation
+      // Pass more context to avoid duplicates
       const relatedQuestionsPromise = generateRelatedQuestions(messageToSearch, streamedContent)
         .catch(error => {
           console.error("Related questions error:", error);
@@ -434,6 +531,13 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     // Set the flag to indicate this is a follow-up question
     setIsPromptOrFollowupQuestion(true);
     isSubmittingRelatedRef.current = true;
+    
+    // Add to clicked questions history
+    setClickedQuestionsHistory(prev => {
+      const newSet = new Set(prev);
+      newSet.add(question);
+      return newSet;
+    });
     
     // Set the question as the current message
     setCurrentMessage(question);
@@ -710,6 +814,8 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     isPromptOrFollowupQuestion,
     searchResults,
     processingType,
-    needsRealTimeData
+    needsRealTimeData,
+    suggestedQuestionsHistory,
+    clickedQuestionsHistory
   };
 };

@@ -31,7 +31,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     isPromptOrFollowupQuestion,
     searchResults,
     processingType,
-    needsRealTimeData, // Make sure this is destructured from useConversation
+    needsRealTimeData,
+    clickedQuestionsHistory
   } = useConversation({ 
     onSearch,
     initialMessage
@@ -118,6 +119,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             searchResults={searchResults}
             currentQuery={currentQuery}
             needsRealTimeData={needsRealTimeData}
+            clickedQuestionsHistory={clickedQuestionsHistory}
           />
         </ResizablePanel>
         

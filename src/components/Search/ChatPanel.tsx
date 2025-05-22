@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,8 @@ interface ChatPanelProps {
   processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;
-  needsRealTimeData?: boolean; // Add this prop to the interface
+  needsRealTimeData?: boolean;
+  clickedQuestionsHistory?: Set<string>;
 }
 
 const ChatPanel: React.FC<ChatPanelProps> = ({
@@ -44,7 +46,8 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   processingType = 'individual',
   searchResults = [],
   currentQuery = '',
-  needsRealTimeData = false // Set a default value
+  needsRealTimeData = false,
+  clickedQuestionsHistory = new Set()
 }) => {
   // Only show sidebar toggle when the query needs real-time data
   const showSidebarToggle = !!currentQuery && needsRealTimeData;
@@ -78,6 +81,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           processingType={processingType}
           searchResults={searchResults}
           currentQuery={currentQuery}
+          clickedQuestionsHistory={clickedQuestionsHistory}
         />
         
         {/* Input area - absolutely positioned at the bottom */}

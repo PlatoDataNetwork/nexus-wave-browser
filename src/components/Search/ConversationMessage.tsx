@@ -34,6 +34,7 @@ interface ConversationMessageProps {
   stageDetails?: string;
   searchQuery?: string;
   webResults?: Array<{title: string, url: string, snippet: string}>;
+  clickedQuestionsHistory?: Set<string>;
 }
 
 const ConversationMessage: React.FC<ConversationMessageProps> = ({ 
@@ -54,7 +55,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
   progressPercentage = 0,
   stageDetails,
   searchQuery,
-  webResults
+  webResults,
+  clickedQuestionsHistory = new Set()
 }) => {
   const hasAlternatives = alternativeResponses.length > 0;
 
@@ -121,7 +123,8 @@ const ConversationMessage: React.FC<ConversationMessageProps> = ({
             
             <RelatedQuestions 
               questions={relatedQuestions || []} 
-              onQuestionClick={onRelatedQuestionClick} 
+              onQuestionClick={onRelatedQuestionClick}
+              alreadyClickedQuestions={clickedQuestionsHistory}
             />
             
             {/* Message controls - only show when not loading */}
