@@ -371,7 +371,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       setIsLoading(false);
       activeRequestsRef.current = null;
     }
-  }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch]);
+  }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch, toast]);
 
   const handleRelatedQuestionClick = useCallback((question: string) => {
     setCurrentMessage(question);
@@ -542,7 +542,11 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       updatedHistory.splice(-1, 1, { role: "assistant", content: aiResponseContent });
       setConversationHistory(updatedHistory);
       
-      toast.success("Response regenerated");
+      // Success toast - Fix the toast.success call
+      toast({
+        title: "Response regenerated",
+        variant: "default",
+      });
     } catch (error) {
       console.error("Error regenerating response:", error);
       
@@ -561,7 +565,11 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         )
       );
       
-      toast.error("Failed to regenerate response");
+      // Error toast - Fix the toast.error call
+      toast({
+        title: "Failed to regenerate response",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -599,7 +607,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
 
       return () => clearTimeout(timer);
     }
-  }, [initialMessage]); // Only run on initial render if initialMessage is provided
+  }, [initialMessage, handleSubmit]);
 
   return {
     messages,
