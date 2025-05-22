@@ -28,7 +28,8 @@ interface ConversationMessageProps {
   onRelatedQuestionClick?: (question: string) => void;
   isLoading?: boolean;
   isStreaming?: boolean;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'context-analysis' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingType?: 'individual' | 'contextual';
   progressPercentage?: number;
   stageDetails?: string;
   searchQuery?: string;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -110,6 +111,7 @@ const MessageContent: React.FC<MessageContentProps> = ({
             processingStage={processingStage} 
             progressPercentage={progressPercentage}
             stageDetails={stageDetails}
+            processingType="individual"
           />
         </motion.div>
       )}
