@@ -1,4 +1,3 @@
-
 import { 
   Rocket, 
   Brain, 
@@ -26,7 +25,7 @@ import {
   TrendingUp,
   Gamepad2,
   CircuitBoard,
-  Music as MusicIcon,
+  Music,
   Microscope,
   Image,
   Gavel,
@@ -48,21 +47,14 @@ import {
   Trash2,
   Globe,
   Cloud,
-  Shield as ShieldCheck,
-  School as GraduationCap,
-  Wallet as DollarSign,
-  LineChart as AreaChart,
-  BadgeDollarSign as PiggyBank,
-  BadgeDollarSign as Banknote,
-  Zap as BatteryCharging,
-  Computer as Laptop,
-  Headphones as HeadphonesIcon,
-  FileText as ScrollText,
-  FileText as Pill,
-  Building as BuildingIcon,
-  BatteryFull as BatteryFullIcon,
-  ArrowUpDown as MoveVertical,
-  Package as Warehouse,
+  Shield,
+  School,
+  Battery,
+  Headphones,
+  FileText,
+  Building,
+  Package,
+  Computer,
   type LucideIcon
 } from "lucide-react";
 
@@ -524,7 +516,7 @@ export const searchCategories: SearchCategory[] = [
     id: "cybersecurity",
     title: "Cyber Security",
     description: "Digital security and threat protection",
-    icon: ShieldCheck,
+    icon: Shield,
     color: "bg-red-600",
     prompts: [
       {
@@ -563,7 +555,7 @@ export const searchCategories: SearchCategory[] = [
     id: "defense",
     title: "Defense",
     description: "Military technology and security systems",
-    icon: ShieldCheck,
+    icon: Shield,
     color: "bg-slate-700",
     prompts: [
       {
@@ -992,7 +984,7 @@ export const searchCategories: SearchCategory[] = [
     id: "hydrogen",
     title: "Hydrogen",
     description: "Hydrogen energy and fuel technology",
-    icon: BatteryCharging,
+    icon: Battery,
     color: "bg-cyan-500",
     prompts: [
       {
@@ -1577,7 +1569,7 @@ export const searchCategories: SearchCategory[] = [
     id: "solar",
     title: "Solar",
     description: "Solar energy and photovoltaic technology",
-    icon: BatteryFull,
+    icon: Battery,
     color: "bg-yellow-500",
     prompts: [
       {
