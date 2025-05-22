@@ -1,16 +1,62 @@
-
-import { LucideIcon } from "lucide-react";
 import { 
-  Search, FileText, Globe, Video, Image, Zap, 
-  Plane, Brain, Camera, Heart, Bitcoin, DollarSign, GraduationCap, 
-  Code, Laptop, Cloud, Leaf, Music, Car, Truck, Database,
-  PiggyBank, Rocket, Webcam, BookText, Stethoscope, 
-  Banknote, BatteryCharging, Parkplus, MoveVertical, Building,
-  Headphones, CircuitBoard, Factory, ScrollText, BadgeDollarSign,
-  Microscope, FlaskConical, Cherry, Wine, BatteryFull, Lock,
-  ShieldCheck, ShoppingCart, School, Fuel, LineChart, Gamepad2,
-  Hammer, Medical, Pill, AreaChart, FileCode, PlusSquare, Warehouse 
+  Rocket, 
+  Brain, 
+  Glasses, 
+  Car, 
+  PlaneTakeoff,
+  Building2, 
+  BarChart4,
+  Dna, 
+  Bitcoin, 
+  Leaf,
+  Stethoscope, 
+  Activity,
+  Database,
+  Workflow,
+  Code,
+  Users,
+  School,
+  ShoppingCart,
+  Lightbulb,
+  Zap,
+  Trophy,
+  PieChart,
+  Newspaper,
+  Wallet,
+  TrendingUp,
+  Gamepad2,
+  CircuitBoard,
+  Music,
+  Microscope,
+  Image,
+  Gavel,
+  CreditCard,
+  BadgeDollarSign,
+  Footprints,
+  Atom,
+  Home,
+  LineChart,
+  Binary,
+  Search,
+  SunMedium,
+  Presentation,
+  Layers,
+  FlaskConical,
+  Truck,
+  ArrowUpDown,
+  BadgePercent,
+  Trash2,
+  Globe,
+  type LucideIcon
 } from "lucide-react";
+
+import { getCategoryById } from "@/utils/categoryUtils";
+
+export interface SearchPrompt {
+  id: string;
+  title: string;
+  prompt: string;
+}
 
 export interface SearchCategory {
   id: string;
@@ -21,192 +67,56 @@ export interface SearchCategory {
   prompts: SearchPrompt[];
 }
 
-export interface SearchPrompt {
-  id: string;
-  title: string;
-  description: string;
-  prompt: string;
-}
+// Function to get a category by ID
+export const getCategoryById = (id: string): SearchCategory | undefined => {
+  return searchCategories.find(category => category.id === id);
+};
 
+// Define all search categories
 export const searchCategories: SearchCategory[] = [
   {
     id: "aerospace",
     title: "Aerospace",
-    description: "Explore space and aviation technology",
-    icon: Plane,
+    description: "Space exploration and aerospace technology",
+    icon: Rocket,
     color: "bg-blue-600",
     prompts: [
-      {
-        id: "aerospace-1",
-        title: "Space Exploration",
-        description: "Learn about the latest space missions and discoveries",
-        prompt: "What are the recent developments in space exploration regarding",
-      },
-      {
-        id: "aerospace-2",
-        title: "Aviation Technology",
-        description: "Research advancements in aircraft design and systems",
-        prompt: "Explain the latest innovations in aviation technology for",
-      },
-      {
-        id: "aerospace-3",
-        title: "Satellite Systems",
-        description: "Information about satellite technologies and applications",
-        prompt: "How are satellites being used for",
-      },
-      {
-        id: "aerospace-4",
-        title: "Rocket Propulsion",
-        description: "Technical details about rocket engines and propulsion",
-        prompt: "What are the advances in rocket propulsion systems for",
-      },
-      {
-        id: "aerospace-5",
-        title: "Defense Applications",
-        description: "Military and defense uses of aerospace technology",
-        prompt: "How is aerospace technology applied in defense systems for",
-      },
-      {
-        id: "aerospace-6",
-        title: "Commercial Space",
-        description: "Information about the commercial space industry",
-        prompt: "What are the business opportunities in space industry regarding",
-      }
+      { id: "aerospace-1", title: "Space Tech Innovations", prompt: "What are the latest innovations in space technology?" },
+      { id: "aerospace-2", title: "Satellite Systems", prompt: "Explain how satellite communication systems work" },
+      { id: "aerospace-3", title: "Space Missions", prompt: "What are the upcoming space missions in the next 5 years?" },
+      { id: "aerospace-4", title: "Aerospace Materials", prompt: "What advanced materials are used in aerospace engineering?" },
+      { id: "aerospace-5", title: "Propulsion Systems", prompt: "Compare different spacecraft propulsion systems" },
+      { id: "aerospace-6", title: "Space Industry", prompt: "How is the commercial space industry evolving?" }
     ]
   },
   {
     id: "ai",
     title: "AI",
-    description: "Artificial intelligence research and applications",
+    description: "Artificial intelligence and machine learning",
     icon: Brain,
     color: "bg-purple-600",
     prompts: [
-      {
-        id: "ai-1",
-        title: "Machine Learning",
-        description: "Information about ML algorithms and applications",
-        prompt: "Explain how machine learning is being used for",
-      },
-      {
-        id: "ai-2",
-        title: "Neural Networks",
-        description: "Technical details about neural network architectures",
-        prompt: "How do neural networks approach problems in",
-      },
-      {
-        id: "ai-3",
-        title: "Natural Language Processing",
-        description: "NLP technologies and implementations",
-        prompt: "What are the latest advancements in NLP for",
-      },
-      {
-        id: "ai-4",
-        title: "Computer Vision",
-        description: "AI systems that process and analyze visual data",
-        prompt: "How is computer vision transforming",
-      },
-      {
-        id: "ai-5",
-        title: "AI Ethics",
-        description: "Ethical considerations in AI development",
-        prompt: "What are the ethical concerns surrounding AI in",
-      },
-      {
-        id: "ai-6",
-        title: "AI Research",
-        description: "Current research trends and breakthroughs",
-        prompt: "What are researchers discovering about AI for",
-      }
+      { id: "ai-1", title: "AI Ethics", prompt: "What are the key ethical considerations in AI development?" },
+      { id: "ai-2", title: "Machine Learning", prompt: "Explain the difference between supervised and unsupervised learning" },
+      { id: "ai-3", title: "Neural Networks", prompt: "How do neural networks mimic human brain function?" },
+      { id: "ai-4", title: "AI Applications", prompt: "What are practical applications of AI in healthcare?" },
+      { id: "ai-5", title: "Future of AI", prompt: "How might AI evolve over the next decade?" },
+      { id: "ai-6", title: "AI Limitations", prompt: "What are the current limitations of artificial intelligence?" }
     ]
   },
   {
     id: "arvr",
     title: "AR/VR",
     description: "Augmented and virtual reality technologies",
-    icon: Webcam,
+    icon: Glasses,
     color: "bg-indigo-500",
     prompts: [
-      {
-        id: "arvr-1",
-        title: "VR Applications",
-        description: "Virtual reality use cases across industries",
-        prompt: "How is virtual reality being applied in",
-      },
-      {
-        id: "arvr-2",
-        title: "AR Development",
-        description: "Tools and frameworks for augmented reality",
-        prompt: "What technologies enable augmented reality for",
-      },
-      {
-        id: "arvr-3",
-        title: "Mixed Reality",
-        description: "Blending physical and digital environments",
-        prompt: "How is mixed reality changing the way we",
-      },
-      {
-        id: "arvr-4",
-        title: "Immersive Experiences",
-        description: "Creating engaging VR/AR experiences",
-        prompt: "What makes immersive experiences effective for",
-      },
-      {
-        id: "arvr-5",
-        title: "Hardware Innovations",
-        description: "Latest AR/VR devices and equipment",
-        prompt: "What are the latest hardware innovations in AR/VR for",
-      },
-      {
-        id: "arvr-6",
-        title: "Extended Reality (XR)",
-        description: "The convergence of AR, VR and MR technologies",
-        prompt: "How is extended reality (XR) transforming",
-      }
-    ]
-  },
-  {
-    id: "autism",
-    title: "Autism",
-    description: "Autism research and support technologies",
-    icon: Brain,
-    color: "bg-blue-400",
-    prompts: [
-      {
-        id: "autism-1",
-        title: "Research",
-        description: "Latest findings in autism research",
-        prompt: "What are the latest discoveries in autism research regarding",
-      },
-      {
-        id: "autism-2",
-        title: "Therapies",
-        description: "Therapeutic approaches for autism",
-        prompt: "Which therapeutic approaches are effective for",
-      },
-      {
-        id: "autism-3",
-        title: "Technology",
-        description: "Tech tools for autism support",
-        prompt: "How is technology helping individuals with autism to",
-      },
-      {
-        id: "autism-4",
-        title: "Education",
-        description: "Educational strategies for autistic students",
-        prompt: "What educational approaches best support students with autism in",
-      },
-      {
-        id: "autism-5",
-        title: "Early Intervention",
-        description: "Early detection and intervention strategies",
-        prompt: "What early intervention methods are effective for",
-      },
-      {
-        id: "autism-6",
-        title: "Support Services",
-        description: "Resources and support for autism",
-        prompt: "What support services are available for families dealing with",
-      }
+      { id: "arvr-1", title: "VR Applications", prompt: "What are innovative applications of virtual reality beyond gaming?" },
+      { id: "arvr-2", title: "AR Technology", prompt: "How does augmented reality technology work?" },
+      { id: "arvr-3", title: "Mixed Reality", prompt: "What is mixed reality and how does it differ from AR and VR?" },
+      { id: "arvr-4", title: "Immersive Learning", prompt: "How is VR being used in education and training?" },
+      { id: "arvr-5", title: "Hardware Trends", prompt: "What are the latest trends in AR/VR hardware?" },
+      { id: "arvr-6", title: "Future Developments", prompt: "How might AR/VR reshape human-computer interaction?" }
     ]
   },
   {
@@ -214,224 +124,74 @@ export const searchCategories: SearchCategory[] = [
     title: "Automotive",
     description: "Automotive industry and vehicle technology",
     icon: Car,
-    color: "bg-red-500",
+    color: "bg-red-600",
     prompts: [
-      {
-        id: "automotive-1",
-        title: "Electric Vehicles",
-        description: "EV technology and market trends",
-        prompt: "What advances are happening in electric vehicles for",
-      },
-      {
-        id: "automotive-2",
-        title: "Autonomous Driving",
-        description: "Self-driving vehicle development",
-        prompt: "How is autonomous driving technology progressing for",
-      },
-      {
-        id: "automotive-3",
-        title: "Manufacturing",
-        description: "Automotive production innovations",
-        prompt: "What manufacturing innovations are changing how cars are built for",
-      },
-      {
-        id: "automotive-4",
-        title: "Vehicle Design",
-        description: "Car design trends and techniques",
-        prompt: "What are the latest design trends in automotive for",
-      },
-      {
-        id: "automotive-5",
-        title: "Alternative Fuels",
-        description: "Beyond gasoline and diesel",
-        prompt: "Which alternative fuels are viable for automotive applications in",
-      },
-      {
-        id: "automotive-6",
-        title: "Smart Cars",
-        description: "Connected vehicle technologies",
-        prompt: "How are smart, connected technologies changing vehicles for",
-      }
+      { id: "auto-1", title: "Electric Vehicles", prompt: "Compare the latest electric vehicle technologies" },
+      { id: "auto-2", title: "Autonomous Driving", prompt: "What are the levels of autonomous driving technology?" },
+      { id: "auto-3", title: "Battery Technology", prompt: "How are EV batteries evolving for longer range?" },
+      { id: "auto-4", title: "Sustainability", prompt: "How is the automotive industry addressing sustainability?" },
+      { id: "auto-5", title: "Connected Cars", prompt: "What are the features of connected car technology?" },
+      { id: "auto-6", title: "Market Trends", prompt: "What are current trends in the global automotive market?" }
     ]
   },
   {
     id: "aviation",
     title: "Aviation",
-    description: "Aircraft and airline industry technology",
-    icon: Plane,
-    color: "bg-sky-500",
+    description: "Aircraft and aviation industry",
+    icon: PlaneTakeoff,
+    color: "bg-blue-400",
     prompts: [
-      {
-        id: "aviation-1",
-        title: "Commercial Aircraft",
-        description: "Passenger plane technology",
-        prompt: "What innovations are changing commercial aircraft for",
-      },
-      {
-        id: "aviation-2",
-        title: "Air Traffic Control",
-        description: "Systems for managing air traffic",
-        prompt: "How is air traffic control technology evolving to handle",
-      },
-      {
-        id: "aviation-3",
-        title: "Aviation Safety",
-        description: "Safety improvements and technologies",
-        prompt: "What safety innovations are reducing risks in aviation for",
-      },
-      {
-        id: "aviation-4",
-        title: "Sustainable Flight",
-        description: "Environmental improvements in aviation",
-        prompt: "How is the aviation industry addressing sustainability challenges like",
-      },
-      {
-        id: "aviation-5",
-        title: "Urban Air Mobility",
-        description: "Air taxis and urban flight",
-        prompt: "What developments are enabling urban air mobility solutions for",
-      },
-      {
-        id: "aviation-6",
-        title: "Aviation Technology",
-        description: "Technological advances in aircraft",
-        prompt: "Which technologies are transforming aircraft capabilities for",
-      }
+      { id: "aviation-1", title: "Commercial Aviation", prompt: "What are recent developments in commercial aviation?" },
+      { id: "aviation-2", title: "Electric Aircraft", prompt: "How are electric aircraft developing?" },
+      { id: "aviation-3", title: "Aviation Safety", prompt: "What technologies are improving aviation safety?" },
+      { id: "aviation-4", title: "Air Traffic Control", prompt: "How is air traffic control being modernized?" },
+      { id: "aviation-5", title: "Sustainable Aviation", prompt: "What are sustainable aviation fuel alternatives?" },
+      { id: "aviation-6", title: "Future of Flight", prompt: "How might commercial air travel change in the next 20 years?" }
     ]
   },
   {
     id: "banking",
     title: "Banking",
-    description: "Banking services and financial technology",
-    icon: Building,
-    color: "bg-emerald-600",
+    description: "Banking industry and financial services",
+    icon: Building2,
+    color: "bg-emerald-700",
     prompts: [
-      {
-        id: "banking-1",
-        title: "Digital Banking",
-        description: "Online and mobile banking services",
-        prompt: "How is digital banking changing customer experience in",
-      },
-      {
-        id: "banking-2",
-        title: "Banking Security",
-        description: "Protecting financial assets and data",
-        prompt: "What security measures are banks implementing to protect against",
-      },
-      {
-        id: "banking-3",
-        title: "Banking Regulation",
-        description: "Regulatory frameworks for banks",
-        prompt: "How are banking regulations evolving in response to",
-      },
-      {
-        id: "banking-4",
-        title: "Banking Services",
-        description: "Products and services offered by banks",
-        prompt: "What new banking services are addressing needs related to",
-      },
-      {
-        id: "banking-5",
-        title: "Open Banking",
-        description: "API-based financial services",
-        prompt: "How is open banking transforming financial services for",
-      },
-      {
-        id: "banking-6",
-        title: "Banking Innovation",
-        description: "New approaches in banking",
-        prompt: "What innovations are banks implementing to address",
-      }
+      { id: "banking-1", title: "Digital Banking", prompt: "How is digital banking transforming the industry?" },
+      { id: "banking-2", title: "Open Banking", prompt: "What is open banking and its implications?" },
+      { id: "banking-3", title: "Banking Security", prompt: "What cybersecurity challenges do banks face?" },
+      { id: "banking-4", title: "Central Banks", prompt: "How do central banks influence national economies?" },
+      { id: "banking-5", title: "Banking Regulations", prompt: "What are key global banking regulations?" },
+      { id: "banking-6", title: "Future of Banking", prompt: "How might banking evolve in the next decade?" }
     ]
   },
   {
     id: "bigdata",
     title: "Big Data",
-    description: "Data analytics and large-scale information processing",
-    icon: Database,
-    color: "bg-blue-500",
+    description: "Big data analytics and management",
+    icon: BarChart4,
+    color: "bg-blue-800",
     prompts: [
-      {
-        id: "bigdata-1",
-        title: "Data Analytics",
-        description: "Techniques for analyzing large datasets",
-        prompt: "What analytics techniques are effective for processing",
-      },
-      {
-        id: "bigdata-2",
-        title: "Data Infrastructure",
-        description: "Systems for storing and processing data",
-        prompt: "What infrastructure supports big data processing for",
-      },
-      {
-        id: "bigdata-3",
-        title: "Data Visualization",
-        description: "Presenting complex data insights",
-        prompt: "Which data visualization approaches effectively communicate",
-      },
-      {
-        id: "bigdata-4",
-        title: "Predictive Analytics",
-        description: "Using data to forecast trends",
-        prompt: "How is predictive analytics being applied to",
-      },
-      {
-        id: "bigdata-5",
-        title: "Data Ethics",
-        description: "Ethical considerations in big data",
-        prompt: "What ethical frameworks guide big data usage in",
-      },
-      {
-        id: "bigdata-6",
-        title: "Data Management",
-        description: "Handling and governing data assets",
-        prompt: "What data management practices are essential for",
-      }
+      { id: "bigdata-1", title: "Data Analytics", prompt: "What are advanced techniques in big data analytics?" },
+      { id: "bigdata-2", title: "Data Storage", prompt: "Compare different big data storage solutions" },
+      { id: "bigdata-3", title: "Data Privacy", prompt: "How do organizations balance data utility with privacy?" },
+      { id: "bigdata-4", title: "Real-time Processing", prompt: "What technologies enable real-time data processing?" },
+      { id: "bigdata-5", title: "Industry Applications", prompt: "How is big data transforming healthcare?" },
+      { id: "bigdata-6", title: "Future Trends", prompt: "What emerging trends will shape big data in the next 5 years?" }
     ]
   },
   {
     id: "biotech",
     title: "Biotech",
-    description: "Biological technology and innovation",
-    icon: Microscope,
+    description: "Biotechnology and genetic engineering",
+    icon: Dna,
     color: "bg-green-600",
     prompts: [
-      {
-        id: "biotech-1",
-        title: "Genomics",
-        description: "Gene sequencing and genetic technology",
-        prompt: "What are the latest developments in genomics for",
-      },
-      {
-        id: "biotech-2",
-        title: "Biopharmaceuticals",
-        description: "Biological medical products and therapies",
-        prompt: "How are biopharmaceuticals advancing treatment for",
-      },
-      {
-        id: "biotech-3",
-        title: "Synthetic Biology",
-        description: "Engineering biological components and systems",
-        prompt: "What innovations in synthetic biology are addressing",
-      },
-      {
-        id: "biotech-4",
-        title: "CRISPR Technology",
-        description: "Gene editing applications and research",
-        prompt: "How is CRISPR technology being used to address",
-      },
-      {
-        id: "biotech-5",
-        title: "Agricultural Biotech",
-        description: "Biotechnology in farming and agriculture",
-        prompt: "What biotech solutions are improving agriculture for",
-      },
-      {
-        id: "biotech-6",
-        title: "Bioinformatics",
-        description: "Computational analysis of biological data",
-        prompt: "How is bioinformatics accelerating research on",
-      }
+      { id: "biotech-1", title: "CRISPR Technology", prompt: "Explain how CRISPR gene editing works" },
+      { id: "biotech-2", title: "Synthetic Biology", prompt: "What are applications of synthetic biology?" },
+      { id: "biotech-3", title: "Biotech in Medicine", prompt: "How is biotechnology revolutionizing medicine?" },
+      { id: "biotech-4", title: "Agricultural Biotech", prompt: "What are the benefits and concerns of GMO crops?" },
+      { id: "biotech-5", title: "Bio-manufacturing", prompt: "How are biologics manufactured at scale?" },
+      { id: "biotech-6", title: "Ethical Concerns", prompt: "What are ethical challenges in biotechnology?" }
     ]
   },
   {
@@ -2460,7 +2220,3 @@ export const searchCategories: SearchCategory[] = [
     ]
   }
 ];
-
-export const getCategoryById = (id: string): SearchCategory | undefined => {
-  return searchCategories.find(category => category.id === id);
-};
