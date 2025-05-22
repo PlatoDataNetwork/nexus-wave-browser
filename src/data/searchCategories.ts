@@ -55,6 +55,16 @@ import {
   Building,
   Package,
   Computer,
+  GraduationCap,
+  DollarSign,
+  AreaChart,
+  PiggyBank,
+  Banknote,
+  Laptop,
+  ScrollText,
+  Pill,
+  MoveVertical,
+  Warehouse,
   type LucideIcon
 } from "lucide-react";
 
