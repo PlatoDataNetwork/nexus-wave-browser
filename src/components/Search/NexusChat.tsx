@@ -29,7 +29,8 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
     handleRegenerateMessage,
     handleSelectAlternative,
     isPromptOrFollowupQuestion,
-    searchResults
+    searchResults,
+    processingType
   } = useConversation({ 
     onSearch,
     initialMessage
@@ -88,6 +89,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
             handleRelatedQuestionClick={handleRelatedQuestionClick}
             isAutoSubmitEnabled={isPromptOrFollowupQuestion}
             processingStage={determineProcessingStage()}
+            processingType={processingType}
             searchResults={searchResults}
             currentQuery={currentQuery}
           />
@@ -102,6 +104,7 @@ const NexusChat: React.FC<NexusChatProps> = ({ onSearch, initialMessage = '' }) 
                 currentQuery={currentQuery} 
                 conversations={messages}
                 onClose={() => setShowSidebar(false)}
+                processingType={processingType}
               />
             </ResizablePanel>
           </>

@@ -11,12 +11,14 @@ interface WebSearchSidebarProps {
   currentQuery: string;
   conversations: ChatMessage[];
   onClose: () => void;
+  processingType?: 'individual' | 'contextual';
 }
 
 const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({ 
   currentQuery, 
   conversations,
-  onClose
+  onClose,
+  processingType = 'individual'
 }) => {
   const {
     isLoading,
@@ -36,6 +38,7 @@ const WebSearchSidebar: React.FC<WebSearchSidebarProps> = ({
         onRefresh={handleRefresh}
         onClose={onClose}
         searchStage={searchStage}
+        processingType={processingType}
       />
       
       <SearchSidebarContent

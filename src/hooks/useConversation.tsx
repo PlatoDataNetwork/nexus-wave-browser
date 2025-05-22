@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChatMessage } from '@/types';
 import { useToast } from "@/hooks/use-toast";
 import { v4 as uuidv4 } from 'uuid';
-import { classifyQuery } from '@/utils/queryClassifier';
+import { classifyQuery, classifyQueryWithContext, shouldPerformWebSearch } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
 import { getChatGPTResponseWithRealTimeData, getStreamingResponse } from '@/utils/openai';
 
@@ -20,6 +20,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
   const [currentQuery, setCurrentQuery] = useState('');
   const [isPromptOrFollowupQuestion, setIsPromptOrFollowupQuestion] = useState(false);
   const [searchResults, setSearchResults] = useState<Array<{title: string, url: string, snippet: string}>>([]);
+  const [processingType, setProcessingType] = useState<'individual' | 'contextual'>('individual');
   const { toast } = useToast();
 
   // Reference to track ongoing requests that can be canceled
@@ -151,6 +152,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       timestamp: new Date(),
       isLoading: true,
       processingStage: 'initializing',
+      processingType: 'individual', // Default, will be updated
       progressPercentage: 5,
       stageDetails: "Preparing your response...",
       isStreaming: true
@@ -161,32 +163,45 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     try {
       // Start ALL processes in parallel
       
-      // 1. PARALLEL: Start classification
+      // 1. PARALLEL: Start enhanced classification with context awareness
       setIsClassifying(true);
-      const classificationPromise = classifyQuery(messageToSearch)
-        .then(classification => {
+      
+      // Convert messages to format needed for classification
+      const classificationPromise = classifyQueryWithContext(messageToSearch, messages)
+        .then(enhancedClassification => {
+          // Update processing type based on classification
+          setProcessingType(enhancedClassification.processingType);
+          
+          // Update message to show progress and processing type
           setMessages(prevMessages => 
             prevMessages.map(msg => 
               msg.id === assistantMessageId
                 ? { 
                     ...msg, 
-                    processingStage: 'classifying',
+                    processingStage: 'context-analysis',
+                    processingType: enhancedClassification.processingType,
                     progressPercentage: 25,
-                    stageDetails: "Analyzing your query..."
+                    stageDetails: enhancedClassification.processingType === 'contextual' 
+                      ? "Analyzing conversation context..." 
+                      : "Analyzing your query..."
                   }
                 : msg
             )
           );
-          return classification;
+          
+          return enhancedClassification;
         })
         .catch(error => {
-          console.error("Classification error:", error);
+          console.error("Enhanced classification error:", error);
           // Return default classification on error
           return {
             needsRealTimeData: false,
             confidence: 0.5,
             topics: [],
-            suggestedSearchTerms: [messageToSearch]
+            suggestedSearchTerms: [messageToSearch],
+            processingType: 'individual' as const,
+            requiresWebSearch: false,
+            relevantContextIndices: []
           };
         })
         .finally(() => {
@@ -227,12 +242,19 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         console.error("Initial streaming error:", error);
       });
       
-      // 5. Wait for classification to complete
-      const classification = await classificationPromise;
+      // 5. Wait for enhanced classification to complete
+      const enhancedClassification = await classificationPromise;
       
-      // 6. CONDITIONAL PARALLEL: If needed, fetch real-time data
+      // 6. Determine if web search is needed based on the enhanced classification
+      const needsWebSearch = shouldPerformWebSearch(
+        messageToSearch, 
+        enhancedClassification, 
+        messages.slice(-6) // Pass recent messages for context
+      );
+      
+      // 7. CONDITIONAL PARALLEL: If needed, fetch real-time data
       let realTimeData = null;
-      if (classification.needsRealTimeData) {
+      if (needsWebSearch) {
         setIsFetchingRealTimeData(true);
         
         // Update progress
@@ -255,8 +277,8 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
           duration: 2000,
         });
         
-        // Fetch real-time data
-        realTimeData = await getRealTimeData(messageToSearch, classification)
+        // Use the classification result for better search terms
+        realTimeData = await getRealTimeData(messageToSearch, enhancedClassification)
           .catch(error => {
             console.error("Real-time data error:", error);
             return null;
@@ -308,7 +330,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       // Create sources from real-time data for citation
       const sources = realTimeData?.sources || [];
       
-      // 7. PARALLEL: Generate related questions while updating the UI
+      // 8. PARALLEL: Generate related questions while updating the UI
       const relatedQuestionsPromise = generateRelatedQuestions(messageToSearch, streamedContent)
         .catch(error => {
           console.error("Related questions error:", error);
@@ -329,7 +351,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         )
       );
       
-      // 8. Wait for related questions
+      // 9. Wait for related questions
       const relatedQuestions = await relatedQuestionsPromise;
       
       // Update conversation history with assistant response
@@ -353,6 +375,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
                 currentResponseIndex: 0,
                 relatedQuestions: relatedQuestions,
                 processingStage: 'complete',
+                processingType: enhancedClassification.processingType,
                 progressPercentage: 100,
                 isLoading: false,
                 isStreaming: false
@@ -380,6 +403,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
         content: "I'm sorry, but I encountered an issue while processing your request. Please try again later.",
         timestamp: new Date(),
         processingStage: 'complete',
+        processingType: 'individual',
         progressPercentage: 100,
         isLoading: false,
         isStreaming: false
@@ -392,7 +416,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
       setIsLoading(false);
       activeRequestsRef.current = null;
     }
-  }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch, toast]);
+  }, [conversationHistory, currentMessage, generateRelatedQuestions, onSearch, toast, messages]);
 
   const handleRelatedQuestionClick = useCallback((question: string) => {
     // Prevent multiple submissions of the same related question
@@ -680,6 +704,7 @@ export const useConversation = ({ onSearch, initialMessage = '' }: UseConversati
     handleRegenerateMessage,
     handleSelectAlternative,
     isPromptOrFollowupQuestion,
-    searchResults
+    searchResults,
+    processingType
   };
 };

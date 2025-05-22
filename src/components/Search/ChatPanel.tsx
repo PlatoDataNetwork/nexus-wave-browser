@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,8 @@ interface ChatPanelProps {
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
   isAutoSubmitEnabled?: boolean;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'context-analysis' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;
 }
@@ -39,6 +41,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   handleRelatedQuestionClick,
   isAutoSubmitEnabled = false,
   processingStage = 'classifying',
+  processingType = 'individual',
   searchResults = [],
   currentQuery = ''
 }) => {
@@ -67,6 +70,7 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
           handleSelectAlternative={handleSelectAlternative}
           handleRelatedQuestionClick={handleRelatedQuestionClick}
           processingStage={processingStage}
+          processingType={processingType}
           searchResults={searchResults}
           currentQuery={currentQuery}
         />

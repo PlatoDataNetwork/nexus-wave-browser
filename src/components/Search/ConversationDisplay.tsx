@@ -11,7 +11,8 @@ interface ConversationDisplayProps {
   handleRegenerateMessage: (messageId: string) => void;
   handleSelectAlternative: (messageId: string, index: number) => void;
   handleRelatedQuestionClick: (question: string) => void;
-  processingStage?: 'initializing' | 'classifying' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete';
+  processingStage?: 'initializing' | 'classifying' | 'analyzing' | 'searching' | 'processing' | 'generating' | 'streaming' | 'finalizing' | 'complete' | 'context-analysis';
+  processingType?: 'individual' | 'contextual';
   searchResults?: Array<{title: string, url: string, snippet: string}>;
   currentQuery?: string;
 }
@@ -23,6 +24,7 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
   handleSelectAlternative,
   handleRelatedQuestionClick,
   processingStage = 'classifying',
+  processingType = 'individual',
   searchResults = [],
   currentQuery = ''
 }) => {
@@ -137,6 +139,7 @@ const ConversationDisplay: React.FC<ConversationDisplayProps> = ({
                   isLoading={message.isLoading}
                   isStreaming={message.isStreaming}
                   processingStage={message.processingStage || processingStage}
+                  processingType={message.processingType || processingType}
                   progressPercentage={message.progressPercentage}
                   stageDetails={message.stageDetails}
                   searchQuery={message.role === "assistant" ? currentQuery : undefined}
