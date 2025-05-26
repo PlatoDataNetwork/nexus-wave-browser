@@ -26,7 +26,7 @@ const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQ
   if (!searchQuery) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
-        <h2 className="text-xl font-medium mb-2">{t('results.enterSearchTerm', { type: 'images' })}</h2>
+        <h2 className="text-xl font-medium mb-2">{t('results.enterSearchTerm', { type: t('tabs.images').toLowerCase() })}</h2>
         <p className="text-muted-foreground">{t('results.highQualityImages')}</p>
       </div>
     );
@@ -45,7 +45,7 @@ const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQ
     <div>
       <p className="text-sm text-muted-foreground mb-4">
         {t('results.aboutTime', { 
-          count: results.length.toLocaleString(), 
+          count: results.length, 
           time: (Math.random() * 0.5 + 0.1).toFixed(2) 
         })}
       </p>
