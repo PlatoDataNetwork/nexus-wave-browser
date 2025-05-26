@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const { t } = useTranslation('common');
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
