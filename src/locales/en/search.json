@@ -51,8 +51,20 @@
     "bitcoinPrompt": "Bitcoin price chart"
   },
   "categories": {
-    "title": "Nexus AI Categories",
-    "subtitle": "Choose a category to get started with specialized prompts"
+    "title": "Choose an Industry Vertical",
+    "subtitle": "Choose a category to get started with specialized prompts",
+    "finance": "Finance",
+    "healthcare": "Healthcare",
+    "technology": "Technology",
+    "education": "Education",
+    "marketing": "Marketing",
+    "legal": "Legal",
+    "realEstate": "Real Estate",
+    "manufacturing": "Manufacturing",
+    "retail": "Retail",
+    "consulting": "Consulting",
+    "entertainment": "Entertainment",
+    "agriculture": "Agriculture"
   },
   "errors": {
     "searchFailed": "Search failed",

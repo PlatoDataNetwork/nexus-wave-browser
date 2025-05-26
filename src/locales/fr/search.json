@@ -51,8 +51,20 @@
     "bitcoinPrompt": "Graphique prix Bitcoin"
   },
   "categories": {
-    "title": "Catégories Nexus AI",
-    "subtitle": "Choisissez une catégorie pour commencer avec des prompts spécialisés"
+    "title": "Choisir un Secteur d'Activité",
+    "subtitle": "Choisissez une catégorie pour commencer avec des prompts spécialisés",
+    "finance": "Finance",
+    "healthcare": "Santé",
+    "technology": "Technologie",
+    "education": "Éducation",
+    "marketing": "Marketing",
+    "legal": "Juridique",
+    "realEstate": "Immobilier",
+    "manufacturing": "Fabrication",
+    "retail": "Commerce de Détail",
+    "consulting": "Conseil",
+    "entertainment": "Divertissement",
+    "agriculture": "Agriculture"
   },
   "errors": {
     "searchFailed": "Échec de la recherche",

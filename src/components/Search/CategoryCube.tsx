@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { SearchCategory } from "@/data/searchCategories";
+import { useTranslation } from 'react-i18next';
 
 interface CategoryCubeProps {
   category: SearchCategory;
@@ -9,6 +10,8 @@ interface CategoryCubeProps {
 }
 
 const CategoryCube: React.FC<CategoryCubeProps> = ({ category, onClick }) => {
+  const { t } = useTranslation('search');
+
   return (
     <Card 
       className="cursor-pointer hover:shadow-lg hover:scale-105 transition-all bg-nexus-purple/20 hover:bg-nexus-purple/30"
@@ -19,7 +22,7 @@ const CategoryCube: React.FC<CategoryCubeProps> = ({ category, onClick }) => {
           <category.icon className="h-5 w-5 text-white" />
         </div>
         <div className="flex-1">
-          <h3 className="font-medium text-sm text-foreground">{category.title}</h3>
+          <h3 className="font-medium text-sm text-foreground">{t(`categories.${category.id}`)}</h3>
         </div>
       </CardContent>
     </Card>
