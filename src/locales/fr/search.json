@@ -12,11 +12,105 @@
   "filters": {
     "safeSearch": "Recherche Sécurisée",
     "safeSearchOn": "Recherche Sécurisée Activée",
-    "safeSearchOff": "Recherche Sécurisée Désactivée"
+    "safeSearchOff": "Recherche Sécurisée Désactivée",
+    "timeFilter": "Filtre Temporel",
+    "past24h": "Dernières 24 heures",
+    "pastWeek": "Semaine dernière",
+    "pastMonth": "Mois dernier",
+    "anytime": "N'importe quand"
   },
   "chat": {
     "title": "Chat Nexus",
     "placeholder": "Demandez-moi n'importe quoi...",
-    "processing": "Traitement en cours..."
+    "askFollowUp": "Poser des questions de suivi :",
+    "regenerate": "Régénérer la réponse",
+    "copy": "Copier la réponse",
+    "alreadyAsked": "Vous avez déjà posé cette question",
+    "clickToAsk": "Cliquez pour poser cette question",
+    "processing": "Traitement en cours...",
+    "enhancedWithRealTime": "Enrichi avec des informations en temps réel",
+    "webInformation": "Informations web d'il y a {{timeAgo}}",
+    "noActiveSearch": "Aucune recherche active"
+  },
+  "sidebar": {
+    "searchResults": "Résultats de Recherche",
+    "hideResults": "Masquer les Résultats",
+    "showResults": "Afficher les Résultats", 
+    "refreshResults": "Actualiser les Résultats",
+    "preparing": "Préparation de la recherche...",
+    "searching": "Recherche en cours...",
+    "analyzing": "Analyse des résultats...",
+    "contextAware": "contextuelle"
+  },
+  "welcome": {
+    "title": "Bienvenue dans Nexus AI",
+    "subtitle": "Demandez-moi n'importe quoi et je vous fournirai des informations utiles et des réponses à vos questions.",
+    "weatherPrompt": "Météo à New York",
+    "exchangeRatePrompt": "Taux USD vers EUR",
+    "newsPrompt": "Actualités SpaceX",
+    "bitcoinPrompt": "Graphique prix Bitcoin"
+  },
+  "categories": {
+    "title": "Catégories Nexus AI",
+    "subtitle": "Choisissez une catégorie pour commencer avec des prompts spécialisés"
+  },
+  "errors": {
+    "searchFailed": "Échec de la recherche",
+    "noConnection": "Pas de connexion internet",
+    "tryAgainLater": "Veuillez réessayer plus tard",
+    "invalidQuery": "Requête de recherche invalide"
+  },
+  "results": {
+    "about": "Environ {{count}} résultats",
+    "aboutTime": "Environ {{count}} résultats ({{time}} secondes)",
+    "noResults": "Aucun résultat trouvé pour \"{{query}}\"",
+    "noResultsDescription": "Essayez avec des mots-clés ou termes de recherche différents",
+    "searchingImages": "Recherche d'images...",
+    "searchingVideos": "Recherche de vidéos...",
+    "searchingNews": "Recherche d'actualités...",
+    "enterSearchTerm": "Entrez un terme de recherche pour trouver {{type}}",
+    "highQualityImages": "Recherchez des images de haute qualité sur le web",
+    "findVideos": "Trouvez des vidéos sur tout le web",
+    "latestNews": "Obtenez les dernières actualités et mises à jour"
+  },
+  "emptyStates": {
+    "web": {
+      "title": "Rechercher sur le web en sécurité",
+      "description": "Entrez un terme de recherche ci-dessus pour commencer"
+    },
+    "images": {
+      "title": "Rechercher des images",
+      "description": "Entrez un terme de recherche ci-dessus pour commencer"
+    },
+    "videos": {
+      "title": "Rechercher des vidéos",
+      "description": "Entrez un terme de recherche ci-dessus pour commencer"
+    },
+    "news": {
+      "title": "Rechercher des actualités",
+      "description": "Entrez un terme de recherche ci-dessus pour commencer"
+    }
+  },
+  "knowledgeGraph": {
+    "information": "Informations",
+    "website": "Site web"
+  },
+  "peopleAlsoAsk": {
+    "title": "Les Gens Demandent Aussi"
+  },
+  "relatedSearches": {
+    "title": "Recherches Associées"
+  },
+  "processing": {
+    "analyzing": "Analyse de votre demande...",
+    "searchingWeb": "Recherche d'informations en temps réel sur le web...",
+    "generating": "Génération d'une réponse basée sur les informations...",
+    "classifying": "Analyse",
+    "searching": "Recherche",
+    "processingStage": "Traitement"
+  },
+  "input": {
+    "placeholder": "Demandez n'importe quoi à Nexus...",
+    "enterToSubmit": "Appuyez sur Entrée pour envoyer"
   }
 }

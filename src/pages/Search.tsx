@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -317,13 +318,13 @@ const Search: React.FC = () => {
               <div className="flex-shrink-0">
                 <img 
                   src={knowledgeGraph.imageUrl} 
-                  alt={knowledgeGraph.title || 'Knowledge Graph'}
+                  alt={knowledgeGraph.title || t('search:knowledgeGraph.information')}
                   className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-md"
                 />
               </div>
             )}
             <div className="flex-grow">
-              <h2 className="text-xl font-bold">{knowledgeGraph.title || 'Information'}</h2>
+              <h2 className="text-xl font-bold">{knowledgeGraph.title || t('search:knowledgeGraph.information')}</h2>
               <div className="text-sm text-muted-foreground mb-2">{knowledgeGraph.type || ''}</div>
               {knowledgeGraph.description && (
                 <p className="mb-3">{knowledgeGraph.description}</p>
@@ -361,7 +362,7 @@ const Search: React.FC = () => {
     return (
       <Card className="mb-5">
         <CardContent className="p-4">
-          <h3 className="text-lg font-medium mb-3">People Also Ask</h3>
+          <h3 className="text-lg font-medium mb-3">{t('search:peopleAlsoAsk.title')}</h3>
           <div className="space-y-3">
             {peopleAlsoAsk.map((item, index) => (
               <div key={index} className="border-b border-border pb-3 last:border-0 last:pb-0">
@@ -399,7 +400,7 @@ const Search: React.FC = () => {
     return (
       <Card className="mb-5">
         <CardContent className="p-4">
-          <h3 className="text-lg font-medium mb-3">Related Searches</h3>
+          <h3 className="text-lg font-medium mb-3">{t('search:relatedSearches.title')}</h3>
           <div className="flex flex-wrap gap-2">
             {relatedSearches.map((query, index) => (
               <Button 
@@ -624,7 +625,7 @@ const Search: React.FC = () => {
                         results.map((result) => renderSearchResult(result))
                       ) : (
                         <div className="text-center py-6">
-                          <p className="text-muted-foreground">No results found for "{lastSearchedQuery}"</p>
+                          <p className="text-muted-foreground">{t('search:results.noResults', { query: lastSearchedQuery })}</p>
                         </div>
                       )}
                     </div>
@@ -638,9 +639,9 @@ const Search: React.FC = () => {
                 ) : (
                   <div className="text-center py-10">
                     <Globe className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Search the web securely</h3>
+                    <h3 className="text-xl font-medium mb-2">{t('search:emptyStates.web.title')}</h3>
                     <p className="text-muted-foreground max-w-md mx-auto">
-                      Enter a search term above to get started
+                      {t('search:emptyStates.web.description')}
                     </p>
                   </div>
                 )}
@@ -710,16 +711,16 @@ const Search: React.FC = () => {
                       ))
                     ) : (
                       <div className="col-span-full text-center py-6">
-                        <p className="text-muted-foreground">No video results found for "{lastSearchedQuery}"</p>
+                        <p className="text-muted-foreground">{t('search:results.noResults', { query: lastSearchedQuery })}</p>
                       </div>
                     )}
                   </div>
                 ) : (
                   <div className="text-center py-10">
                     <Video className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Search for videos</h3>
+                    <h3 className="text-xl font-medium mb-2">{t('search:emptyStates.videos.title')}</h3>
                     <p className="text-muted-foreground max-w-md mx-auto">
-                      Enter a search term above to get started
+                      {t('search:emptyStates.videos.description')}
                     </p>
                   </div>
                 )}
@@ -761,16 +762,16 @@ const Search: React.FC = () => {
                       ))
                     ) : (
                       <div className="text-center py-6">
-                        <p className="text-muted-foreground">No news results found for "{lastSearchedQuery}"</p>
+                        <p className="text-muted-foreground">{t('search:results.noResults', { query: lastSearchedQuery })}</p>
                       </div>
                     )}
                   </div>
                 ) : (
                   <div className="text-center py-10">
                     <FileText className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">Search for news</h3>
+                    <h3 className="text-xl font-medium mb-2">{t('search:emptyStates.news.title')}</h3>
                     <p className="text-muted-foreground max-w-md mx-auto">
-                      Enter a search term above to get started
+                      {t('search:emptyStates.news.description')}
                     </p>
                   </div>
                 )}

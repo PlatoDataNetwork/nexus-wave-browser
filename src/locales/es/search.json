@@ -32,8 +32,85 @@
     "webInformation": "Información web de {{timeAgo}}",
     "noActiveSearch": "Sin búsqueda activa"
   },
+  "sidebar": {
+    "searchResults": "Resultados de Búsqueda",
+    "hideResults": "Ocultar Resultados",
+    "showResults": "Mostrar Resultados",
+    "refreshResults": "Actualizar Resultados",
+    "preparing": "Preparando búsqueda...",
+    "searching": "Buscando...",
+    "analyzing": "Analizando resultados...",
+    "contextAware": "contextual"
+  },
   "welcome": {
-    "title": "Pregúntame cualquier cosa",
-    "subtitle": "Soy tu asistente de IA powered by Nexus. Puedo buscar en la web, analizar datos y responder preguntas complejas."
+    "title": "Bienvenido a Nexus AI",
+    "subtitle": "Pregúntame cualquier cosa y te proporcionaré información útil y respuestas a tus preguntas.",
+    "weatherPrompt": "Clima en Nueva York",
+    "exchangeRatePrompt": "Tasa USD a EUR",
+    "newsPrompt": "Noticias de SpaceX",
+    "bitcoinPrompt": "Gráfico precio Bitcoin"
+  },
+  "categories": {
+    "title": "Categorías Nexus AI",
+    "subtitle": "Elige una categoría para comenzar con prompts especializados"
+  },
+  "errors": {
+    "searchFailed": "Búsqueda fallida",
+    "noConnection": "Sin conexión a internet",
+    "tryAgainLater": "Por favor intenta de nuevo más tarde",
+    "invalidQuery": "Consulta de búsqueda inválida"
+  },
+  "results": {
+    "about": "Aproximadamente {{count}} resultados",
+    "aboutTime": "Aproximadamente {{count}} resultados ({{time}} segundos)",
+    "noResults": "No se encontraron resultados para \"{{query}}\"",
+    "noResultsDescription": "Prueba con diferentes palabras clave o términos de búsqueda",
+    "searchingImages": "Buscando imágenes...",
+    "searchingVideos": "Buscando videos...",
+    "searchingNews": "Buscando noticias...",
+    "enterSearchTerm": "Ingresa un término de búsqueda para encontrar {{type}}",
+    "highQualityImages": "Busca imágenes de alta calidad en toda la web",
+    "findVideos": "Encuentra videos de toda la web",
+    "latestNews": "Obtén las últimas noticias y actualizaciones"
+  },
+  "emptyStates": {
+    "web": {
+      "title": "Buscar en la web de forma segura",
+      "description": "Ingresa un término de búsqueda arriba para comenzar"
+    },
+    "images": {
+      "title": "Buscar imágenes",
+      "description": "Ingresa un término de búsqueda arriba para comenzar"
+    },
+    "videos": {
+      "title": "Buscar videos",
+      "description": "Ingresa un término de búsqueda arriba para comenzar"
+    },
+    "news": {
+      "title": "Buscar noticias",
+      "description": "Ingresa un término de búsqueda arriba para comenzar"
+    }
+  },
+  "knowledgeGraph": {
+    "information": "Información",
+    "website": "Sitio web"
+  },
+  "peopleAlsoAsk": {
+    "title": "La Gente También Pregunta"
+  },
+  "relatedSearches": {
+    "title": "Búsquedas Relacionadas"
+  },
+  "processing": {
+    "analyzing": "Analizando tu solicitud...",
+    "searchingWeb": "Buscando en la web información en tiempo real...",
+    "generating": "Generando una respuesta basada en la información...",
+    "classifying": "Analizando",
+    "searching": "Buscando",
+    "processingStage": "Procesando"
+  },
+  "input": {
+    "placeholder": "Pregunta a Nexus cualquier cosa...",
+    "enterToSubmit": "Presiona Enter para enviar"
   }
 }
