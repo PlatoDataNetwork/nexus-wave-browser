@@ -30,13 +30,7 @@
     "processing": "Processing...",
     "enhancedWithRealTime": "Enhanced with real-time information",
     "webInformation": "Web information from {{timeAgo}}",
-    "noActiveSearch": "No active search",
-    "thinking": "Thinking...",
-    "generatingResponse": "Generating response...",
-    "analyzingRequest": "Analyzing your request...",
-    "searchingWeb": "Searching the web...",
-    "processingResults": "Processing results...",
-    "finalizing": "Finalizing response..."
+    "noActiveSearch": "No active search"
   },
   "sidebar": {
     "searchResults": "Search Results",
@@ -57,120 +51,14 @@
     "bitcoinPrompt": "Bitcoin price chart"
   },
   "categories": {
-    "title": "Choose an Industry Vertical",
-    "subtitle": "Choose a category to get started with specialized prompts",
-    "finance": "Finance",
-    "healthcare": "Healthcare",
-    "technology": "Technology",
-    "education": "Education",
-    "marketing": "Marketing",
-    "legal": "Legal",
-    "realEstate": "Real Estate",
-    "manufacturing": "Manufacturing",
-    "retail": "Retail",
-    "consulting": "Consulting",
-    "entertainment": "Entertainment",
-    "agriculture": "Agriculture"
-  },
-  "categoryDetail": {
-    "backToCategories": "Back to Categories",
-    "back": "Back",
-    "customPromptPlaceholder": "Ask a custom question about {{category}}...",
-    "categoryNotFound": "Category not found"
-  },
-  "prompts": {
-    "finance": {
-      "marketAnalysis": "Analyze current market trends",
-      "investmentStrategy": "Create an investment strategy for beginners",
-      "budgetPlanning": "Help me create a monthly budget",
-      "cryptoGuide": "Explain cryptocurrency basics",
-      "retirementPlanning": "Plan for retirement savings"
-    },
-    "healthcare": {
-      "symptomChecker": "General health symptom information",
-      "exerciseRoutine": "Create a beginner workout plan",
-      "nutritionAdvice": "Healthy eating guidelines",
-      "mentalHealth": "Stress management techniques",
-      "preventiveCare": "Preventive healthcare checklist"
-    },
-    "technology": {
-      "codingHelp": "Debug my JavaScript code",
-      "techTrends": "Latest technology trends 2024",
-      "cybersecurity": "Improve my online security",
-      "aiExplainer": "Explain artificial intelligence",
-      "gadgetReview": "Best smartphones under $500"
-    },
-    "education": {
-      "studyTips": "Effective study techniques",
-      "careerGuidance": "Choose the right career path",
-      "onlineLearning": "Best online learning platforms",
-      "skillDevelopment": "Learn new skills quickly",
-      "examPrep": "Prepare for standardized tests"
-    },
-    "marketing": {
-      "brandStrategy": "Develop a brand strategy",
-      "socialMedia": "Create a social media plan",
-      "contentMarketing": "Content marketing best practices",
-      "seoOptimization": "Improve website SEO",
-      "customerEngagement": "Increase customer engagement"
-    },
-    "legal": {
-      "contractReview": "Understanding contract terms",
-      "businessLaw": "Small business legal requirements",
-      "intellectualProperty": "Protect intellectual property",
-      "employmentLaw": "Workplace rights and obligations",
-      "estatePlanning": "Basic estate planning guide"
-    },
-    "realEstate": {
-      "propertyValuation": "Estimate property value",
-      "buyingGuide": "First-time home buying tips",
-      "investmentProperties": "Real estate investment strategies",
-      "marketAnalysis": "Local real estate market trends",
-      "renovation": "Home renovation planning"
-    },
-    "manufacturing": {
-      "processOptimization": "Optimize manufacturing processes",
-      "qualityControl": "Implement quality control systems",
-      "supplyChain": "Supply chain management strategies",
-      "automation": "Manufacturing automation benefits",
-      "sustainability": "Sustainable manufacturing practices"
-    },
-    "retail": {
-      "inventoryManagement": "Optimize inventory levels",
-      "customerService": "Improve customer service",
-      "ecommerce": "Start an online store",
-      "merchandising": "Product merchandising strategies",
-      "salesTechniques": "Effective sales techniques"
-    },
-    "consulting": {
-      "businessStrategy": "Develop business strategy",
-      "changeManagement": "Manage organizational change",
-      "performanceImprovement": "Improve team performance",
-      "riskAssessment": "Conduct risk assessments",
-      "projectManagement": "Effective project management"
-    },
-    "entertainment": {
-      "contentCreation": "Create engaging content",
-      "movieRecommendations": "Recommend movies to watch",
-      "musicProduction": "Music production basics",
-      "gameDesign": "Video game design principles",
-      "eventPlanning": "Plan entertainment events"
-    },
-    "agriculture": {
-      "cropManagement": "Optimize crop yields",
-      "sustainableFarming": "Sustainable farming practices",
-      "livestockCare": "Livestock health management",
-      "marketPrices": "Agricultural market analysis",
-      "organicFarming": "Transition to organic farming"
-    }
+    "title": "Nexus AI Categories",
+    "subtitle": "Choose a category to get started with specialized prompts"
   },
   "errors": {
     "searchFailed": "Search failed",
     "noConnection": "No internet connection",
     "tryAgainLater": "Please try again later",
-    "invalidQuery": "Invalid search query",
-    "processingError": "Error processing your request",
-    "networkError": "Network connection error"
+    "invalidQuery": "Invalid search query"
   },
   "results": {
     "about": "About {{count}} results",
@@ -224,12 +112,5 @@
   "input": {
     "placeholder": "Ask Nexus anything...",
     "enterToSubmit": "Press Enter to submit"
-  },
-  "actions": {
-    "copy": "Copy",
-    "regenerate": "Regenerate",
-    "share": "Share",
-    "like": "Like",
-    "dislike": "Dislike"
   }
 }

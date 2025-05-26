@@ -30,13 +30,7 @@
     "processing": "Procesando...",
     "enhancedWithRealTime": "Mejorado con información en tiempo real",
     "webInformation": "Información web de {{timeAgo}}",
-    "noActiveSearch": "Sin búsqueda activa",
-    "thinking": "Pensando...",
-    "generatingResponse": "Generando respuesta...",
-    "analyzingRequest": "Analizando tu solicitud...",
-    "searchingWeb": "Buscando en la web...",
-    "processingResults": "Procesando resultados...",
-    "finalizing": "Finalizando respuesta..."
+    "noActiveSearch": "Sin búsqueda activa"
   },
   "sidebar": {
     "searchResults": "Resultados de Búsqueda",
@@ -57,120 +51,14 @@
     "bitcoinPrompt": "Gráfico precio Bitcoin"
   },
   "categories": {
-    "title": "Elegir un Sector Industrial",
-    "subtitle": "Elige una categoría para comenzar con prompts especializados",
-    "finance": "Finanzas",
-    "healthcare": "Salud",
-    "technology": "Tecnología",
-    "education": "Educación",
-    "marketing": "Marketing",
-    "legal": "Legal",
-    "realEstate": "Bienes Raíces",
-    "manufacturing": "Manufactura",
-    "retail": "Comercio",
-    "consulting": "Consultoría",
-    "entertainment": "Entretenimiento",
-    "agriculture": "Agricultura"
-  },
-  "categoryDetail": {
-    "backToCategories": "Volver a Categorías",
-    "back": "Volver",
-    "customPromptPlaceholder": "Haz una pregunta personalizada sobre {{category}}...",
-    "categoryNotFound": "Categoría no encontrada"
-  },
-  "prompts": {
-    "finance": {
-      "marketAnalysis": "Analizar tendencias actuales del mercado",
-      "investmentStrategy": "Crear una estrategia de inversión para principiantes",
-      "budgetPlanning": "Ayúdame a crear un presupuesto mensual",
-      "cryptoGuide": "Explicar los conceptos básicos de criptomonedas",
-      "retirementPlanning": "Planificar ahorros para la jubilación"
-    },
-    "healthcare": {
-      "symptomChecker": "Información general sobre síntomas de salud",
-      "exerciseRoutine": "Crear un plan de ejercicios para principiantes",
-      "nutritionAdvice": "Directrices de alimentación saludable",
-      "mentalHealth": "Técnicas de manejo del estrés",
-      "preventiveCare": "Lista de verificación de atención preventiva"
-    },
-    "technology": {
-      "codingHelp": "Depurar mi código JavaScript",
-      "techTrends": "Últimas tendencias tecnológicas 2024",
-      "cybersecurity": "Mejorar mi seguridad en línea",
-      "aiExplainer": "Explicar inteligencia artificial",
-      "gadgetReview": "Mejores smartphones por menos de $500"
-    },
-    "education": {
-      "studyTips": "Técnicas de estudio efectivas",
-      "careerGuidance": "Elegir la trayectoria profesional correcta",
-      "onlineLearning": "Mejores plataformas de aprendizaje en línea",
-      "skillDevelopment": "Aprender nuevas habilidades rápidamente",
-      "examPrep": "Prepararse para exámenes estandarizados"
-    },
-    "marketing": {
-      "brandStrategy": "Desarrollar una estrategia de marca",
-      "socialMedia": "Crear un plan de redes sociales",
-      "contentMarketing": "Mejores prácticas de marketing de contenidos",
-      "seoOptimization": "Mejorar SEO del sitio web",
-      "customerEngagement": "Aumentar el compromiso del cliente"
-    },
-    "legal": {
-      "contractReview": "Entender términos de contratos",
-      "businessLaw": "Requisitos legales para pequeñas empresas",
-      "intellectualProperty": "Proteger propiedad intelectual",
-      "employmentLaw": "Derechos y obligaciones laborales",
-      "estatePlanning": "Guía básica de planificación patrimonial"
-    },
-    "realEstate": {
-      "propertyValuation": "Estimar valor de propiedad",
-      "buyingGuide": "Consejos para compradores primerizos",
-      "investmentProperties": "Estrategias de inversión inmobiliaria",
-      "marketAnalysis": "Tendencias del mercado inmobiliario local",
-      "renovation": "Planificación de renovación del hogar"
-    },
-    "manufacturing": {
-      "processOptimization": "Optimizar procesos de manufactura",
-      "qualityControl": "Implementar sistemas de control de calidad",
-      "supplyChain": "Estrategias de gestión de cadena de suministro",
-      "automation": "Beneficios de automatización en manufactura",
-      "sustainability": "Prácticas de manufactura sostenible"
-    },
-    "retail": {
-      "inventoryManagement": "Optimizar niveles de inventario",
-      "customerService": "Mejorar servicio al cliente",
-      "ecommerce": "Iniciar una tienda en línea",
-      "merchandising": "Estrategias de comercialización de productos",
-      "salesTechniques": "Técnicas de ventas efectivas"
-    },
-    "consulting": {
-      "businessStrategy": "Desarrollar estrategia empresarial",
-      "changeManagement": "Gestionar cambio organizacional",
-      "performanceImprovement": "Mejorar rendimiento del equipo",
-      "riskAssessment": "Realizar evaluaciones de riesgo",
-      "projectManagement": "Gestión efectiva de proyectos"
-    },
-    "entertainment": {
-      "contentCreation": "Crear contenido atractivo",
-      "movieRecommendations": "Recomendar películas para ver",
-      "musicProduction": "Conceptos básicos de producción musical",
-      "gameDesign": "Principios de diseño de videojuegos",
-      "eventPlanning": "Planificar eventos de entretenimiento"
-    },
-    "agriculture": {
-      "cropManagement": "Optimizar rendimientos de cultivos",
-      "sustainableFarming": "Prácticas de agricultura sostenible",
-      "livestockCare": "Gestión de salud del ganado",
-      "marketPrices": "Análisis del mercado agrícola",
-      "organicFarming": "Transición a agricultura orgánica"
-    }
+    "title": "Categorías Nexus AI",
+    "subtitle": "Elige una categoría para comenzar con prompts especializados"
   },
   "errors": {
     "searchFailed": "Búsqueda fallida",
     "noConnection": "Sin conexión a internet",
     "tryAgainLater": "Por favor intenta de nuevo más tarde",
-    "invalidQuery": "Consulta de búsqueda inválida",
-    "processingError": "Error procesando tu solicitud",
-    "networkError": "Error de conexión de red"
+    "invalidQuery": "Consulta de búsqueda inválida"
   },
   "results": {
     "about": "Aproximadamente {{count}} resultados",
@@ -224,12 +112,5 @@
   "input": {
     "placeholder": "Pregunta a Nexus cualquier cosa...",
     "enterToSubmit": "Presiona Enter para enviar"
-  },
-  "actions": {
-    "copy": "Copiar",
-    "regenerate": "Regenerar",
-    "share": "Compartir",
-    "like": "Me gusta",
-    "dislike": "No me gusta"
   }
 }
