@@ -66,6 +66,98 @@
     "entertainment": "Divertissement",
     "agriculture": "Agriculture"
   },
+  "categoryDetail": {
+    "backToCategories": "Retour aux Catégories",
+    "back": "Retour",
+    "customPromptPlaceholder": "Posez une question personnalisée sur {{category}}...",
+    "categoryNotFound": "Catégorie non trouvée"
+  },
+  "prompts": {
+    "finance": {
+      "marketAnalysis": "Analyser les tendances actuelles du marché",
+      "investmentStrategy": "Créer une stratégie d'investissement pour débutants",
+      "budgetPlanning": "Aidez-moi à créer un budget mensuel",
+      "cryptoGuide": "Expliquer les bases des cryptomonnaies",
+      "retirementPlanning": "Planifier l'épargne retraite"
+    },
+    "healthcare": {
+      "symptomChecker": "Informations générales sur les symptômes de santé",
+      "exerciseRoutine": "Créer un plan d'entraînement pour débutants",
+      "nutritionAdvice": "Directives d'alimentation saine",
+      "mentalHealth": "Techniques de gestion du stress",
+      "preventiveCare": "Liste de contrôle des soins préventifs"
+    },
+    "technology": {
+      "codingHelp": "Déboguer mon code JavaScript",
+      "techTrends": "Dernières tendances technologiques 2024",
+      "cybersecurity": "Améliorer ma sécurité en ligne",
+      "aiExplainer": "Expliquer l'intelligence artificielle",
+      "gadgetReview": "Meilleurs smartphones sous 500€"
+    },
+    "education": {
+      "studyTips": "Techniques d'étude efficaces",
+      "careerGuidance": "Choisir le bon parcours professionnel",
+      "onlineLearning": "Meilleures plateformes d'apprentissage en ligne",
+      "skillDevelopment": "Apprendre rapidement de nouvelles compétences",
+      "examPrep": "Se préparer aux tests standardisés"
+    },
+    "marketing": {
+      "brandStrategy": "Développer une stratégie de marque",
+      "socialMedia": "Créer un plan de médias sociaux",
+      "contentMarketing": "Meilleures pratiques de marketing de contenu",
+      "seoOptimization": "Améliorer le SEO du site web",
+      "customerEngagement": "Augmenter l'engagement client"
+    },
+    "legal": {
+      "contractReview": "Comprendre les termes contractuels",
+      "businessLaw": "Exigences légales pour petites entreprises",
+      "intellectualProperty": "Protéger la propriété intellectuelle",
+      "employmentLaw": "Droits et obligations du travail",
+      "estatePlanning": "Guide de base de la planification successorale"
+    },
+    "realEstate": {
+      "propertyValuation": "Estimer la valeur d'une propriété",
+      "buyingGuide": "Conseils pour primo-accédants",
+      "investmentProperties": "Stratégies d'investissement immobilier",
+      "marketAnalysis": "Tendances du marché immobilier local",
+      "renovation": "Planification de rénovation domiciliaire"
+    },
+    "manufacturing": {
+      "processOptimization": "Optimiser les processus de fabrication",
+      "qualityControl": "Implémenter des systèmes de contrôle qualité",
+      "supplyChain": "Stratégies de gestion de la chaîne d'approvisionnement",
+      "automation": "Avantages de l'automatisation en fabrication",
+      "sustainability": "Pratiques de fabrication durable"
+    },
+    "retail": {
+      "inventoryManagement": "Optimiser les niveaux d'inventaire",
+      "customerService": "Améliorer le service client",
+      "ecommerce": "Démarrer une boutique en ligne",
+      "merchandising": "Stratégies de merchandising produits",
+      "salesTechniques": "Techniques de vente efficaces"
+    },
+    "consulting": {
+      "businessStrategy": "Développer une stratégie d'entreprise",
+      "changeManagement": "Gérer le changement organisationnel",
+      "performanceImprovement": "Améliorer les performances d'équipe",
+      "riskAssessment": "Effectuer des évaluations de risques",
+      "projectManagement": "Gestion de projet efficace"
+    },
+    "entertainment": {
+      "contentCreation": "Créer du contenu engageant",
+      "movieRecommendations": "Recommander des films à regarder",
+      "musicProduction": "Bases de la production musicale",
+      "gameDesign": "Principes de conception de jeux vidéo",
+      "eventPlanning": "Planifier des événements de divertissement"
+    },
+    "agriculture": {
+      "cropManagement": "Optimiser les rendements des cultures",
+      "sustainableFarming": "Pratiques d'agriculture durable",
+      "livestockCare": "Gestion de la santé du bétail",
+      "marketPrices": "Analyse du marché agricole",
+      "organicFarming": "Transition vers l'agriculture biologique"
+    }
+  },
   "errors": {
     "searchFailed": "Échec de la recherche",
     "noConnection": "Pas de connexion internet",
