@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Send, Globe, Brain, Zap } from "lucide-react";
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 
 interface ChatInputProps {
   currentMessage: string;
@@ -27,8 +26,6 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isAutoSubmitEnabled = false,
   processingStage = 'classifying'
 }) => {
-  const { t } = useTranslation('search');
-  
   // Track auto-submission to prevent duplicates
   const hasAutoSubmittedRef = useRef<boolean>(false);
   
@@ -74,14 +71,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
         return (
           <motion.div className="flex items-center gap-1">
             <Brain className="h-4 w-4 animate-pulse" />
-            <span className="text-xs">{t('processing.classifying')}</span>
+            <span className="text-xs">Analyzing</span>
           </motion.div>
         );
       case 'searching':
         return (
           <motion.div className="flex items-center gap-1">
             <Globe className="h-4 w-4 animate-pulse" />
-            <span className="text-xs">{t('processing.searching')}</span>
+            <span className="text-xs">Searching</span>
           </motion.div>
         );
       case 'processing':
@@ -90,7 +87,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         return (
           <motion.div className="flex items-center gap-1">
             <Zap className="h-4 w-4 animate-pulse" />
-            <span className="text-xs">{t('processing.processingStage')}</span>
+            <span className="text-xs">Processing</span>
           </motion.div>
         );
     }
@@ -111,7 +108,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         }
       }} className="flex gap-2">
         <Textarea
-          placeholder={t('input.placeholder')}
+          placeholder="Ask Nexus anything..."
           value={currentMessage}
           onChange={(e) => setCurrentMessage(e.target.value)}
           className="flex-1 min-h-12 resize-none focus:border-nexus-purple transition-colors"
@@ -142,10 +139,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
         >
           <span className="text-xs text-muted-foreground">
             {isClassifying 
-              ? t('processing.analyzing')
+              ? "Analyzing your request..."
               : isFetchingRealTimeData 
-                ? t('processing.searchingWeb')
-                : t('processing.generating')}
+                ? "Searching the web for real-time information..." 
+                : "Generating a response based on the information..."}
           </span>
         </motion.div>
       )}

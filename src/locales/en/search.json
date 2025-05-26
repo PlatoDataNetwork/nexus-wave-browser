@@ -43,12 +43,8 @@
     "contextAware": "context-aware"
   },
   "welcome": {
-    "title": "Welcome to Nexus AI",
-    "subtitle": "Ask me anything and I'll provide helpful information and answers to your questions.",
-    "weatherPrompt": "Weather in New York",
-    "exchangeRatePrompt": "USD to EUR rate",
-    "newsPrompt": "SpaceX news",
-    "bitcoinPrompt": "Bitcoin price chart"
+    "title": "Ask me anything",
+    "subtitle": "I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions."
   },
   "categories": {
     "title": "Nexus AI Categories",
@@ -59,58 +55,5 @@
     "noConnection": "No internet connection",
     "tryAgainLater": "Please try again later",
     "invalidQuery": "Invalid search query"
-  },
-  "results": {
-    "about": "About {{count}} results",
-    "aboutTime": "About {{count}} results ({{time}} seconds)",
-    "noResults": "No results found for \"{{query}}\"",
-    "noResultsDescription": "Try different keywords or search terms",
-    "searchingImages": "Searching images...",
-    "searchingVideos": "Searching videos...",
-    "searchingNews": "Searching news...",
-    "enterSearchTerm": "Enter a search term to find {{type}}",
-    "highQualityImages": "Search for high-quality images across the web",
-    "findVideos": "Find videos from across the web",
-    "latestNews": "Get the latest news and updates"
-  },
-  "emptyStates": {
-    "web": {
-      "title": "Search the web securely",
-      "description": "Enter a search term above to get started"
-    },
-    "images": {
-      "title": "Search for images",
-      "description": "Enter a search term above to get started"
-    },
-    "videos": {
-      "title": "Search for videos", 
-      "description": "Enter a search term above to get started"
-    },
-    "news": {
-      "title": "Search for news",
-      "description": "Enter a search term above to get started"
-    }
-  },
-  "knowledgeGraph": {
-    "information": "Information",
-    "website": "Website"
-  },
-  "peopleAlsoAsk": {
-    "title": "People Also Ask"
-  },
-  "relatedSearches": {
-    "title": "Related Searches"
-  },
-  "processing": {
-    "analyzing": "Analyzing your request...",
-    "searchingWeb": "Searching the web for real-time information...",
-    "generating": "Generating a response based on the information...",
-    "classifying": "Analyzing",
-    "searching": "Searching",
-    "processingStage": "Processing"
-  },
-  "input": {
-    "placeholder": "Ask Nexus anything...",
-    "enterToSubmit": "Press Enter to submit"
   }
 }
