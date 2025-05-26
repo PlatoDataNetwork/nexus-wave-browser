@@ -30,7 +30,13 @@
     "processing": "Traitement en cours...",
     "enhancedWithRealTime": "Enrichi avec des informations en temps réel",
     "webInformation": "Informations web d'il y a {{timeAgo}}",
-    "noActiveSearch": "Aucune recherche active"
+    "noActiveSearch": "Aucune recherche active",
+    "thinking": "Réflexion...",
+    "generatingResponse": "Génération de réponse...",
+    "analyzingRequest": "Analyse de votre demande...",
+    "searchingWeb": "Recherche sur le web...",
+    "processingResults": "Traitement des résultats...",
+    "finalizing": "Finalisation de la réponse..."
   },
   "sidebar": {
     "searchResults": "Résultats de Recherche",
@@ -162,7 +168,9 @@
     "searchFailed": "Échec de la recherche",
     "noConnection": "Pas de connexion internet",
     "tryAgainLater": "Veuillez réessayer plus tard",
-    "invalidQuery": "Requête de recherche invalide"
+    "invalidQuery": "Requête de recherche invalide",
+    "processingError": "Erreur de traitement de votre demande",
+    "networkError": "Erreur de connexion réseau"
   },
   "results": {
     "about": "Environ {{count}} résultats",
@@ -216,5 +224,12 @@
   "input": {
     "placeholder": "Demandez n'importe quoi à Nexus...",
     "enterToSubmit": "Appuyez sur Entrée pour envoyer"
+  },
+  "actions": {
+    "copy": "Copier",
+    "regenerate": "Régénérer",
+    "share": "Partager",
+    "like": "J'aime",
+    "dislike": "Je n'aime pas"
   }
 }
