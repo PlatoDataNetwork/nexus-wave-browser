@@ -1,0 +1,39 @@
+
+{
+  "title": "Búsqueda Nexus",
+  "placeholder": "Buscar en la web de forma segura...",
+  "tabs": {
+    "web": "Web",
+    "images": "Imágenes",
+    "videos": "Videos",
+    "news": "Noticias",
+    "nexusAi": "Nexus AI"
+  },
+  "filters": {
+    "safeSearch": "Búsqueda Segura",
+    "safeSearchOn": "Búsqueda Segura Activada",
+    "safeSearchOff": "Búsqueda Segura Desactivada",
+    "timeFilter": "Filtro de Tiempo",
+    "past24h": "Últimas 24 horas",
+    "pastWeek": "Última semana",
+    "pastMonth": "Último mes",
+    "anytime": "Cualquier momento"
+  },
+  "chat": {
+    "title": "Chat Nexus",
+    "placeholder": "Pregúntame cualquier cosa...",
+    "askFollowUp": "Hacer preguntas de seguimiento:",
+    "regenerate": "Regenerar respuesta",
+    "copy": "Copiar respuesta",
+    "alreadyAsked": "Ya has hecho esta pregunta",
+    "clickToAsk": "Haz clic para hacer esta pregunta",
+    "processing": "Procesando...",
+    "enhancedWithRealTime": "Mejorado con información en tiempo real",
+    "webInformation": "Información web de {{timeAgo}}",
+    "noActiveSearch": "Sin búsqueda activa"
+  },
+  "welcome": {
+    "title": "Pregúntame cualquier cosa",
+    "subtitle": "Soy tu asistente de IA powered by Nexus. Puedo buscar en la web, analizar datos y responder preguntas complejas."
+  }
+}

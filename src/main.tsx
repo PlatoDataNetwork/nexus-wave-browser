@@ -1,18 +1,24 @@
 
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { ThemeProvider } from './components/theme-provider'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import App from "./App.tsx";
+import "./index.css";
 
-// Create a favicon link element
-const favicon = document.createElement('link');
-favicon.rel = 'icon';
-favicon.href = '/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png';
-favicon.type = 'image/png';
-document.head.appendChild(favicon);
+// Initialize i18n
+import "./locales/index.ts";
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <App />
+        <Toaster />
+      </ThemeProvider>
+    </QueryClientProvider>
+  </StrictMode>,
 );

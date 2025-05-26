@@ -1,8 +1,9 @@
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -43,54 +44,54 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        {/* Main Navigation - Updated menu items with Downloads removed */}
+        {/* Main Navigation */}
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             <li>
               <Link to="/search">
                 <Button
-                  variant={isActive('/search') ? "secondary" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   className="text-white"
                 >
                   <Search className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Search</span>
+                  <span className="hidden sm:inline">{t('navigation.search')}</span>
                 </Button>
               </Link>
             </li>
             <li>
               <Link to="/app">
                 <Button
-                  variant={isActive('/app') ? "secondary" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   className="text-white"
                 >
                   <Globe className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Browser</span>
+                  <span className="hidden sm:inline">{t('navigation.browser')}</span>
                 </Button>
               </Link>
             </li>
             <li>
               <Link to="/token">
                 <Button
-                  variant={isActive('/token') ? "secondary" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   className="text-white"
                 >
                   <Coins className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Token</span>
+                  <span className="hidden sm:inline">{t('navigation.token')}</span>
                 </Button>
               </Link>
             </li>
             <li>
               <Link to="/staking">
                 <Button
-                  variant={isActive('/staking') ? "secondary" : "ghost"}
+                  variant="ghost"
                   size="sm"
                   className="text-white"
                 >
                   <LineChart className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Staking</span>
+                  <span className="hidden sm:inline">{t('navigation.staking')}</span>
                 </Button>
               </Link>
             </li>
@@ -99,19 +100,19 @@ const Header: React.FC = () => {
         
         {/* Right side actions */}
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
           <Link to="/profile">
             <Button
-              variant={isActive('/profile') ? "secondary" : "ghost"}
+              variant="ghost"
               size="sm"
               className="text-white"
             >
-              Signup
+              {t('navigation.signup')}
             </Button>
           </Link>
-
           <Link to="/downloads">
             <Button variant="macos" size="sm">
-              Download
+              {t('navigation.downloads')}
             </Button>
           </Link>
         </div>

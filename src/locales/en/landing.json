@@ -1,0 +1,39 @@
+
+{
+  "hero": {
+    "title": "The Future of Web Browsing",
+    "subtitle": "Experience next-generation browsing with AI-powered search, built-in privacy protection, and Web3 integration.",
+    "cta": "Download for Free",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "title": "Why Choose Nexus Wave?",
+    "subtitle": "Built for the modern web with cutting-edge technology",
+    "aiSearch": {
+      "title": "AI-Powered Search",
+      "description": "Get intelligent search results with our advanced AI that understands context and provides relevant answers."
+    },
+    "privacy": {
+      "title": "Privacy First",
+      "description": "Built-in ad blocking, tracker protection, and secure browsing ensure your data stays private."
+    },
+    "web3": {
+      "title": "Web3 Ready",
+      "description": "Native Web3 integration with wallet support, DApp browsing, and blockchain interactions."
+    },
+    "speed": {
+      "title": "Lightning Fast",
+      "description": "Optimized for speed with instant page loads and smooth browsing experience."
+    }
+  },
+  "testimonials": {
+    "title": "What Users Say",
+    "subtitle": "Join thousands of satisfied users worldwide"
+  },
+  "cta": {
+    "title": "Ready to Transform Your Browsing?",
+    "subtitle": "Download Nexus Wave today and experience the future of web browsing.",
+    "download": "Download Now",
+    "platforms": "Available for Windows, macOS, and Linux"
+  }
+}

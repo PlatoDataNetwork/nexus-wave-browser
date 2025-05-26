@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,11 +23,14 @@ import { Link } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
 import NexusCategories from "@/components/Search/NexusCategories";
 import CategoryDetail from "@/components/Search/CategoryDetail";
+import { useTranslation } from 'react-i18next';
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 
 const Search: React.FC = () => {
+  const { t } = useTranslation(['search', 'common']);
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [lastSearchedQuery, setLastSearchedQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
@@ -471,7 +473,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <SearchIcon className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Search</span>
+                    <span className="hidden sm:inline">{t('common:navigation.search')}</span>
                   </Button>
                 </Link>
               </li>
@@ -483,7 +485,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Globe className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Browser</span>
+                    <span className="hidden sm:inline">{t('common:navigation.browser')}</span>
                   </Button>
                 </Link>
               </li>
@@ -495,7 +497,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Zap className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Token</span>
+                    <span className="hidden sm:inline">{t('common:navigation.token')}</span>
                   </Button>
                 </Link>
               </li>
@@ -507,7 +509,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Image className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Staking</span>
+                    <span className="hidden sm:inline">{t('common:navigation.staking')}</span>
                   </Button>
                 </Link>
               </li>
@@ -522,12 +524,12 @@ const Search: React.FC = () => {
                 size="sm"
                 className="text-white"
               >
-                Signup
+                {t('common:navigation.signup')}
               </Button>
             </Link>
             <Link to="/downloads">
               <Button variant="macos" size="sm">
-                Download
+                {t('common:navigation.downloads')}
               </Button>
             </Link>
           </div>
@@ -543,7 +545,7 @@ const Search: React.FC = () => {
           <div className="flex-1 relative">
             <Input
               type="search"
-              placeholder="Search the web securely..."
+              placeholder={t('search:placeholder')}
               value={searchQuery}
               onChange={handleSearchInputChange}
               className="h-10 pl-10 bg-background"
@@ -555,7 +557,7 @@ const Search: React.FC = () => {
             className="bg-nexus-purple hover:bg-nexus-deep-purple" 
             disabled={isLoading}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common:navigation.search')}
           </Button>
         </form>
 
@@ -565,19 +567,19 @@ const Search: React.FC = () => {
             <div className="flex justify-between items-center">
               <TabsList className="bg-secondary/50">
                 <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Globe className="h-4 w-4 mr-1" /> Web
+                  <Globe className="h-4 w-4 mr-1" /> {t('search:tabs.web')}
                 </TabsTrigger>
                 <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Image className="h-4 w-4 mr-1" /> Images
+                  <Image className="h-4 w-4 mr-1" /> {t('search:tabs.images')}
                 </TabsTrigger>
                 <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Video className="h-4 w-4 mr-1" /> Videos
+                  <Video className="h-4 w-4 mr-1" /> {t('search:tabs.videos')}
                 </TabsTrigger>
                 <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <FileText className="h-4 w-4 mr-1" /> News
+                  <FileText className="h-4 w-4 mr-1" /> {t('search:tabs.news')}
                 </TabsTrigger>
                 <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Zap className="h-4 w-4 mr-1" /> Nexus AI
+                  <Zap className="h-4 w-4 mr-1" /> {t('search:tabs.nexusAi')}
                 </TabsTrigger>
               </TabsList>
               
@@ -589,7 +591,7 @@ const Search: React.FC = () => {
                   type="button"
                 >
                   <Clock className="h-4 w-4" />
-                  <span className="text-xs">Past 24h</span>
+                  <span className="text-xs">{t('search:filters.past24h')}</span>
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -599,7 +601,7 @@ const Search: React.FC = () => {
                   type="button"
                 >
                   <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
-                  <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+                  <span className="text-xs">{safeSearch ? t('search:filters.safeSearchOn') : t('search:filters.safeSearchOff')}</span>
                 </Button>
               </div>
             </div>

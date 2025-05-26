@@ -1,0 +1,19 @@
+
+{
+  "tabs": {
+    "newTab": "Nueva Pestaña",
+    "closeTab": "Cerrar Pestaña",
+    "duplicateTab": "Duplicar Pestaña"
+  },
+  "navigation": {
+    "back": "Atrás",
+    "forward": "Adelante",
+    "reload": "Recargar",
+    "home": "Inicio"
+  },
+  "bookmarks": {
+    "title": "Marcadores",
+    "addBookmark": "Agregar Marcador",
+    "removeBookmark": "Eliminar Marcador"
+  }
+}

@@ -1,0 +1,61 @@
+
+{
+  "navigation": {
+    "search": "Search",
+    "browser": "Browser",
+    "token": "Token",
+    "staking": "Staking",
+    "extensions": "Extensions",
+    "settings": "Settings",
+    "profile": "Profile",
+    "downloads": "Downloads",
+    "signup": "Signup",
+    "signin": "Sign In",
+    "home": "Home"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "refresh": "Refresh",
+    "download": "Download",
+    "upload": "Upload",
+    "copy": "Copy",
+    "paste": "Paste",
+    "clear": "Clear"
+  },
+  "forms": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "username": "Username",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!",
+    "noResults": "No results found",
+    "tryAgain": "Try again",
+    "comingSoon": "Coming soon",
+    "notFound": "Page not found"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hours ago",
+    "daysAgo": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago"
+  }
+}

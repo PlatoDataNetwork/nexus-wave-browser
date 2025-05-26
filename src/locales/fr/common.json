@@ -1,0 +1,53 @@
+
+{
+  "navigation": {
+    "search": "Rechercher",
+    "browser": "Navigateur",
+    "token": "Token",
+    "staking": "Staking",
+    "extensions": "Extensions",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "downloads": "Téléchargements",
+    "signup": "S'inscrire",
+    "signin": "Se Connecter",
+    "home": "Accueil"
+  },
+  "buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Éditer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "refresh": "Actualiser",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "copy": "Copier",
+    "paste": "Coller",
+    "clear": "Effacer"
+  },
+  "forms": {
+    "email": "E-mail",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "username": "Nom d'utilisateur",
+    "required": "Ce champ est requis",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+    "passwordMismatch": "Les mots de passe ne correspondent pas"
+  },
+  "messages": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès !",
+    "noResults": "Aucun résultat trouvé",
+    "tryAgain": "Réessayer",
+    "comingSoon": "Bientôt disponible",
+    "notFound": "Page non trouvée"
+  }
+}

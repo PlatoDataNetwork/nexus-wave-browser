@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { SidebarOpen, SidebarClose } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConversationDisplay from './ConversationDisplay';
 import ChatInput from './ChatInput';
 import { ChatMessage } from '@/types';
+import { useTranslation } from 'react-i18next';
 
 interface ChatPanelProps {
   messages: ChatMessage[];
@@ -51,13 +51,15 @@ const ChatPanel: React.FC<ChatPanelProps> = ({
   clickedQuestionsHistory = new Set(),
   dataTimestamp = null
 }) => {
+  const { t } = useTranslation('search');
+  
   // Only show sidebar toggle when the query needs real-time data
   const showSidebarToggle = !!currentQuery && needsRealTimeData;
   
   return (
     <div className="flex flex-col h-full">
       <div className="p-3 flex items-center justify-between border-b bg-background">
-        <h3 className="text-sm font-medium">Nexus Chat</h3>
+        <h3 className="text-sm font-medium">{t('chat.title')}</h3>
         {showSidebarToggle && (
           <Button 
             variant="outline" 

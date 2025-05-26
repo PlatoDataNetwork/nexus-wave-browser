@@ -1,0 +1,61 @@
+
+{
+  "navigation": {
+    "search": "Buscar",
+    "browser": "Navegador",
+    "token": "Token",
+    "staking": "Staking",
+    "extensions": "Extensiones",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "downloads": "Descargas",
+    "signup": "Registrarse",
+    "signin": "Iniciar Sesión",
+    "home": "Inicio"
+  },
+  "buttons": {
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "refresh": "Actualizar",
+    "download": "Descargar",
+    "upload": "Subir",
+    "copy": "Copiar",
+    "paste": "Pegar",
+    "clear": "Limpiar"
+  },
+  "forms": {
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "username": "Usuario",
+    "required": "Este campo es requerido",
+    "invalidEmail": "Por favor ingrese un correo válido",
+    "passwordMismatch": "Las contraseñas no coinciden"
+  },
+  "messages": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "success": "¡Éxito!",
+    "noResults": "No se encontraron resultados",
+    "tryAgain": "Inténtelo de nuevo",
+    "comingSoon": "Próximamente",
+    "notFound": "Página no encontrada"
+  },
+  "time": {
+    "justNow": "Ahora mismo",
+    "minutesAgo": "hace {{count}} minutos",
+    "hoursAgo": "hace {{count}} horas",
+    "daysAgo": "hace {{count}} días",
+    "weeksAgo": "hace {{count}} semanas",
+    "monthsAgo": "hace {{count}} meses"
+  }
+}
