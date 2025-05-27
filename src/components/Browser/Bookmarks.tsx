@@ -102,6 +102,13 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
         color: getColorFromName("Alek Bot")
       },
+      // Add Alpaca to favorites
+      {
+        id: "alpaca",
+        title: "Alpaca",
+        url: "https://alpacanetwork.ai",
+        color: getColorFromName("Alpaca")
+      },
       // Add DefiX to favorites
       {
         id: "defix",
