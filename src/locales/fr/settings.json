@@ -1,32 +1,4 @@
 
 {
-  "title": "Paramètres",
-  "search": {
-    "title": "Recherche",
-    "defaultEngine": "Moteur de recherche par défaut",
-    "safeSearch": "Recherche sécurisée",
-    "autoComplete": "Saisie automatique",
-    "suggestions": "Suggestions de recherche"
-  },
-  "privacy": {
-    "title": "Confidentialité et Sécurité",
-    "trackingProtection": "Protection contre le suivi",
-    "cookieBlocking": "Blocage des cookies",
-    "fingerprintProtection": "Protection contre l'empreinte digitale",
-    "adBlocking": "Blocage des publicités"
-  },
-  "appearance": {
-    "title": "Apparence",
-    "theme": "Thème",
-    "language": "Langue",
-    "fontSize": "Taille de police",
-    "colorScheme": "Schéma de couleurs"
-  },
-  "advanced": {
-    "title": "Avancé",
-    "developerMode": "Mode développeur",
-    "experimentalFeatures": "Fonctionnalités expérimentales",
-    "debugMode": "Mode débogage",
-    "resetSettings": "Réinitialiser les paramètres"
-  }
+  "title": "Paramètres"
 }

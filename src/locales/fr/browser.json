@@ -1,34 +1,6 @@
 
 {
   "tabs": {
-    "newTab": "Nouvel Onglet",
-    "closeTab": "Fermer l'onglet",
-    "duplicateTab": "Dupliquer l'onglet",
-    "pinTab": "Épingler l'onglet"
-  },
-  "navigation": {
-    "back": "Retour",
-    "forward": "Suivant",
-    "reload": "Actualiser",
-    "home": "Accueil",
-    "addressBar": "Barre d'adresse"
-  },
-  "bookmarks": {
-    "title": "Signets",
-    "addBookmark": "Ajouter un signet",
-    "removeBookmark": "Supprimer le signet",
-    "bookmarkFolder": "Dossier de signets"
-  },
-  "wallet": {
-    "connect": "Connecter le portefeuille",
-    "disconnect": "Déconnecter le portefeuille",
-    "balance": "Solde",
-    "transactions": "Transactions"
-  },
-  "dapps": {
-    "title": "Applications Décentralisées",
-    "featured": "En vedette",
-    "categories": "Catégories",
-    "recent": "Récent"
+    "newTab": "Nouvel Onglet"
   }
 }

@@ -12,51 +12,11 @@
   "filters": {
     "safeSearch": "Recherche Sécurisée",
     "safeSearchOn": "Recherche Sécurisée Activée",
-    "safeSearchOff": "Recherche Sécurisée Désactivée",
-    "timeFilter": "Filtre Temporel",
-    "past24h": "Dernières 24 heures",
-    "pastWeek": "Semaine dernière",
-    "pastMonth": "Mois dernier",
-    "anytime": "N'importe quand"
+    "safeSearchOff": "Recherche Sécurisée Désactivée"
   },
   "chat": {
     "title": "Chat Nexus",
     "placeholder": "Demandez-moi n'importe quoi...",
-    "askFollowUp": "Posez des questions de suivi:",
-    "regenerate": "Régénérer la réponse",
-    "copy": "Copier la réponse",
-    "alreadyAsked": "Vous avez déjà posé cette question",
-    "clickToAsk": "Cliquez pour poser cette question",
-    "processing": "Traitement en cours...",
-    "enhancedWithRealTime": "Amélioré avec des informations en temps réel",
-    "webInformation": "Informations web d'il y a {{timeAgo}}",
-    "noActiveSearch": "Aucune recherche active"
-  },
-  "sidebar": {
-    "searchResults": "Résultats de Recherche",
-    "hideResults": "Masquer les Résultats",
-    "showResults": "Afficher les Résultats",
-    "refreshResults": "Actualiser les Résultats",
-    "preparing": "Préparation de la recherche...",
-    "searching": "Recherche en cours...",
-    "analyzing": "Analyse des résultats...",
-    "contextAware": "contextuel"
-  },
-  "welcome": {
-    "title": "Demandez-moi n'importe quoi",
-    "subtitle": "Je suis votre assistant IA alimenté par Nexus. Je peux rechercher sur le web, analyser des données et répondre à des questions complexes."
-  },
-  "categories": {
-    "title": "Catégories Nexus AI",
-    "subtitle": "Choisissez une catégorie pour commencer avec des invites spécialisées",
-    "chooseIndustry": "Choisissez un Secteur Vertical",
-    "back": "Retour",
-    "customPrompt": "Posez une question personnalisée sur {{category}}..."
-  },
-  "errors": {
-    "searchFailed": "Échec de la recherche",
-    "noConnection": "Pas de connexion internet",
-    "tryAgainLater": "Veuillez réessayer plus tard",
-    "invalidQuery": "Requête de recherche invalide"
+    "processing": "Traitement en cours..."
   }
 }
