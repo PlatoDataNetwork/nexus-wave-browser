@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Send } from "lucide-react";
 import { SearchCategory, getCategoryById } from '@/data/searchCategories';
@@ -17,6 +18,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
   onBack,
   onSelectPrompt 
 }) => {
+  const { t } = useTranslation('categories');
   const [customPrompt, setCustomPrompt] = useState('');
   const category: SearchCategory | undefined = getCategoryById(categoryId);
 
@@ -33,11 +35,15 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
       <div className="p-4 text-center">
         <p>Category not found</p>
         <Button onClick={onBack} variant="outline" className="mt-4">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Categories
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('backToCategories')}
         </Button>
       </div>
     );
   }
+
+  // Get translated category data
+  const translatedTitle = t(`categories.${category.id}.title`);
+  const translatedDescription = t(`categories.${category.id}.description`);
 
   return (
     <div className="p-4 flex flex-col h-full">
@@ -48,9 +54,9 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
         <div>
           <h2 className="text-2xl font-bold flex items-center">
             <category.icon className={`mr-2 h-6 w-6 ${category.color.replace('bg-', 'text-')}`} />
-            {category.title}
+            {translatedTitle}
           </h2>
-          <p className="text-muted-foreground">{category.description}</p>
+          <p className="text-muted-foreground">{translatedDescription}</p>
         </div>
       </div>
 
@@ -59,6 +65,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
           <PromptCard 
             key={prompt.id} 
             prompt={prompt}
+            categoryId={categoryId}
             onClick={onSelectPrompt}
           />
         ))}
@@ -68,7 +75,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
       <div className="mt-auto pt-4 border-t">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
-            placeholder={`Ask a custom question about ${category.title}...`}
+            placeholder={t('askCustomQuestion', { category: translatedTitle })}
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             className="flex-1 min-h-12 resize-none focus:border-nexus-purple transition-colors"

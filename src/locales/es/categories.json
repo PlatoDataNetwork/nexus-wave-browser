@@ -1,0 +1,1598 @@
+
+{
+  "chooseVertical": "Elige un Sector Industrial",
+  "backToCategories": "Volver a Categorías",
+  "askCustomQuestion": "Haz una pregunta personalizada sobre {{category}}...",
+  "categories": {
+    "aerospace": {
+      "title": "Aeroespacial",
+      "description": "Exploración espacial, satélites y tecnología de aviación",
+      "prompts": {
+        "prompt1": {
+          "title": "Actualizaciones de Misiones SpaceX",
+          "prompt": "¿Cuáles son las últimas actualizaciones de misiones de SpaceX y los horarios de lanzamientos futuros?"
+        },
+        "prompt2": {
+          "title": "Tendencias en Tecnología Satelital",
+          "prompt": "¿Cuáles son las tendencias actuales en tecnología satelital y comunicaciones?"
+        },
+        "prompt3": {
+          "title": "Progreso en Exploración de Marte",
+          "prompt": "¿Cuál es el último progreso en la exploración de Marte y los esfuerzos de colonización?"
+        },
+        "prompt4": {
+          "title": "Industria Espacial Comercial",
+          "prompt": "¿Cómo está evolucionando la industria espacial comercial y quiénes son los actores clave?"
+        },
+        "prompt5": {
+          "title": "Oportunidades de Minería Espacial",
+          "prompt": "¿Cuáles son las perspectivas para la minería de asteroides y la extracción de recursos espaciales?"
+        },
+        "prompt6": {
+          "title": "Regulaciones Aeroespaciales",
+          "prompt": "¿Cuáles son las regulaciones actuales que rigen las actividades aeroespaciales comerciales?"
+        }
+      }
+    },
+    "ai": {
+      "title": "Inteligencia Artificial",
+      "description": "Aprendizaje automático, redes neuronales y aplicaciones de IA",
+      "prompts": {
+        "prompt1": {
+          "title": "Últimos Avances en IA",
+          "prompt": "¿Cuáles son los avances más significativos en IA y desarrollos de investigación este año?"
+        },
+        "prompt2": {
+          "title": "Ética y Gobernanza de IA",
+          "prompt": "¿Cuáles son las discusiones actuales sobre ética de IA y marcos de gobernanza?"
+        },
+        "prompt3": {
+          "title": "Modelos de Lenguaje Grandes",
+          "prompt": "¿Cómo están evolucionando los modelos de lenguaje grandes y qué nuevas capacidades emergen?"
+        },
+        "prompt4": {
+          "title": "IA en Salud",
+          "prompt": "¿Cuáles son las últimas aplicaciones de IA en salud e investigación médica?"
+        },
+        "prompt5": {
+          "title": "Tendencias del Mercado de IA",
+          "prompt": "¿Cuáles son las tendencias actuales del mercado y patrones de inversión en tecnología de IA?"
+        },
+        "prompt6": {
+          "title": "Investigación en Seguridad de IA",
+          "prompt": "¿Qué progreso se está haciendo en investigación de seguridad y alineación de IA?"
+        }
+      }
+    },
+    "arvr": {
+      "title": "RA/RV",
+      "description": "Tecnologías de realidad aumentada y virtual",
+      "prompts": {
+        "prompt1": {
+          "title": "Innovaciones en Juegos VR",
+          "prompt": "¿Cuáles son las últimas innovaciones en juegos VR y experiencias inmersivas?"
+        },
+        "prompt2": {
+          "title": "Aplicaciones Empresariales de RA",
+          "prompt": "¿Cómo se está usando la realidad aumentada en aplicaciones empresariales?"
+        },
+        "prompt3": {
+          "title": "Desarrollo del Metaverso",
+          "prompt": "¿Cuál es el estado actual del desarrollo y adopción del metaverso?"
+        },
+        "prompt4": {
+          "title": "Avances en Hardware VR",
+          "prompt": "¿Cuáles son los últimos avances en cascos VR y tecnología de hardware?"
+        },
+        "prompt5": {
+          "title": "Crecimiento del Mercado RA/RV",
+          "prompt": "¿Cuáles son las proyecciones de mercado para el crecimiento de la tecnología RA/RV?"
+        },
+        "prompt6": {
+          "title": "Aplicaciones de Realidad Mixta",
+          "prompt": "¿Cómo se está aplicando la realidad mixta en educación y entrenamiento?"
+        }
+      }
+    },
+    "automotive": {
+      "title": "Automotriz",
+      "description": "Vehículos eléctricos, conducción autónoma e innovación automotriz",
+      "prompts": {
+        "prompt1": {
+          "title": "Mercado de Vehículos Eléctricos",
+          "prompt": "¿Cuáles son las últimas tendencias en el mercado de vehículos eléctricos y tasas de adopción?"
+        },
+        "prompt2": {
+          "title": "Progreso en Conducción Autónoma",
+          "prompt": "¿Qué progreso se ha hecho en tecnología de conducción autónoma?"
+        },
+        "prompt3": {
+          "title": "Tecnología de Baterías EV",
+          "prompt": "¿Cuáles son los últimos desarrollos en tecnología de baterías para vehículos eléctricos?"
+        },
+        "prompt4": {
+          "title": "Actualizaciones de Tesla",
+          "prompt": "¿Cuáles son las últimas noticias y actualizaciones de productos de Tesla?"
+        },
+        "prompt5": {
+          "title": "Infraestructura de Carga",
+          "prompt": "¿Cómo se está desarrollando la infraestructura de carga de vehículos eléctricos globalmente?"
+        },
+        "prompt6": {
+          "title": "Software Automotriz",
+          "prompt": "¿Cómo está transformando el software la industria automotriz?"
+        }
+      }
+    },
+    "aviation": {
+      "title": "Aviación",
+      "description": "Tecnología de aeronaves, aerolíneas e industria de la aviación",
+      "prompts": {
+        "prompt1": {
+          "title": "Aviación Sostenible",
+          "prompt": "¿Cuáles son los últimos desarrollos en combustibles de aviación sostenible y aviación verde?"
+        },
+        "prompt2": {
+          "title": "Aeronaves Eléctricas",
+          "prompt": "¿Qué progreso se está haciendo en el desarrollo de aeronaves eléctricas e híbridas?"
+        },
+        "prompt3": {
+          "title": "Recuperación de la Industria Aérea",
+          "prompt": "¿Cómo se está recuperando y adaptando la industria aérea post-pandemia?"
+        },
+        "prompt4": {
+          "title": "Movilidad Aérea Urbana",
+          "prompt": "¿Cuál es el estado de la movilidad aérea urbana y el desarrollo de taxis voladores?"
+        },
+        "prompt5": {
+          "title": "Tecnología de Seguridad en Aviación",
+          "prompt": "¿Qué nuevas tecnologías de seguridad se están implementando en aviación?"
+        },
+        "prompt6": {
+          "title": "Innovación en Aeropuertos",
+          "prompt": "¿Cómo están innovando los aeropuertos con tecnología y experiencia del pasajero?"
+        }
+      }
+    },
+    "banking": {
+      "title": "Banca",
+      "description": "Banca digital, servicios financieros y tecnología bancaria",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias en Banca Digital",
+          "prompt": "¿Cuáles son las últimas tendencias en banca digital y aplicaciones de banca móvil?"
+        },
+        "prompt2": {
+          "title": "Monedas Digitales de Bancos Centrales",
+          "prompt": "¿Cuál es el estado actual de las monedas digitales de bancos centrales (CBDC)?"
+        },
+        "prompt3": {
+          "title": "Regulaciones Bancarias",
+          "prompt": "¿Cuáles son las últimas regulaciones bancarias y requisitos de cumplimiento?"
+        },
+        "prompt4": {
+          "title": "Banca Abierta",
+          "prompt": "¿Cómo está evolucionando la banca abierta y cuáles son sus impactos?"
+        },
+        "prompt5": {
+          "title": "Aplicaciones de IA en Banca",
+          "prompt": "¿Cómo están usando los bancos la IA para detección de fraude y servicio al cliente?"
+        },
+        "prompt6": {
+          "title": "Crecimiento de Neobancos",
+          "prompt": "¿Qué está impulsando el crecimiento de neobancos e instituciones financieras digitales?"
+        }
+      }
+    },
+    "bigdata": {
+      "title": "Big Data",
+      "description": "Analítica de datos, aprendizaje automático y ciencia de datos",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias en Analítica de Datos",
+          "prompt": "¿Cuáles son las últimas tendencias en analítica de datos e inteligencia empresarial?"
+        },
+        "prompt2": {
+          "title": "Procesamiento de Datos en Tiempo Real",
+          "prompt": "¿Cuáles son las mejores prácticas para procesamiento de datos en tiempo real y analítica de streaming?"
+        },
+        "prompt3": {
+          "title": "Cumplimiento de Privacidad de Datos",
+          "prompt": "¿Cómo están manejando las organizaciones la privacidad de datos y el cumplimiento GDPR?"
+        },
+        "prompt4": {
+          "title": "Plataformas de Datos en la Nube",
+          "prompt": "¿Cuáles son las principales plataformas de datos en la nube y sus capacidades?"
+        },
+        "prompt5": {
+          "title": "Herramientas de Visualización de Datos",
+          "prompt": "¿Cuáles son las herramientas y técnicas de visualización de datos más efectivas?"
+        },
+        "prompt6": {
+          "title": "Analítica Predictiva",
+          "prompt": "¿Cómo se está usando la analítica predictiva en diferentes industrias?"
+        }
+      }
+    },
+    "biotech": {
+      "title": "Biotecnología",
+      "description": "Terapia génica, farmacéuticos e innovación biotecnológica",
+      "prompts": {
+        "prompt1": {
+          "title": "Avances en Terapia Génica",
+          "prompt": "¿Cuáles son los últimos avances en terapia génica y tecnología CRISPR?"
+        },
+        "prompt2": {
+          "title": "Desarrollo de Medicamentos Biotecnológicos",
+          "prompt": "¿Cuáles son las tendencias actuales en desarrollo de medicamentos biotecnológicos y ensayos clínicos?"
+        },
+        "prompt3": {
+          "title": "Medicina Personalizada",
+          "prompt": "¿Cómo está evolucionando la medicina personalizada con innovaciones biotecnológicas?"
+        },
+        "prompt4": {
+          "title": "Inversiones en Biotecnología",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en el sector biotecnológico?"
+        },
+        "prompt5": {
+          "title": "Biología Sintética",
+          "prompt": "¿Qué desarrollos están ocurriendo en biología sintética y bioingeniería?"
+        },
+        "prompt6": {
+          "title": "Regulaciones Biotecnológicas",
+          "prompt": "¿Cuáles son los desafíos regulatorios que enfrentan las empresas de biotecnología?"
+        }
+      }
+    },
+    "blockchain": {
+      "title": "Blockchain",
+      "description": "Tecnología de libro mayor distribuido y aplicaciones blockchain",
+      "prompts": {
+        "prompt1": {
+          "title": "Escalabilidad de Blockchain",
+          "prompt": "¿Qué soluciones se están desarrollando para los problemas de escalabilidad de blockchain?"
+        },
+        "prompt2": {
+          "title": "Blockchain Empresarial",
+          "prompt": "¿Cómo están adoptando las empresas blockchain para cadena de suministro y operaciones?"
+        },
+        "prompt3": {
+          "title": "Interoperabilidad de Blockchain",
+          "prompt": "¿Qué progreso se está haciendo en soluciones de interoperabilidad de blockchain?"
+        },
+        "prompt4": {
+          "title": "Seguridad de Contratos Inteligentes",
+          "prompt": "¿Cuáles son las mejores prácticas para seguridad y auditoría de contratos inteligentes?"
+        },
+        "prompt5": {
+          "title": "Gobernanza de Blockchain",
+          "prompt": "¿Cómo están manejando las redes blockchain la gobernanza y mecanismos de consenso?"
+        },
+        "prompt6": {
+          "title": "Soluciones de Capa 2",
+          "prompt": "¿Cuáles son las últimas soluciones de escalamiento de Capa 2 para redes blockchain?"
+        }
+      }
+    },
+    "cannabis": {
+      "title": "Cannabis",
+      "description": "Industria del cannabis, regulaciones y tendencias del mercado",
+      "prompts": {
+        "prompt1": {
+          "title": "Legalización del Cannabis",
+          "prompt": "¿Cuál es el estado actual de la legalización del cannabis en diferentes estados y países?"
+        },
+        "prompt2": {
+          "title": "Crecimiento del Mercado de Cannabis",
+          "prompt": "¿Cuáles son las proyecciones de crecimiento para el mercado legal de cannabis?"
+        },
+        "prompt3": {
+          "title": "Tendencias de Inversión en Cannabis",
+          "prompt": "¿Cuáles son las últimas tendencias de inversión en la industria del cannabis?"
+        },
+        "prompt4": {
+          "title": "Regulaciones del Cannabis",
+          "prompt": "¿Cuáles son los principales desafíos regulatorios que enfrenta la industria del cannabis?"
+        },
+        "prompt5": {
+          "title": "Tecnología del Cannabis",
+          "prompt": "¿Cómo se está usando la tecnología en el cultivo y procesamiento del cannabis?"
+        },
+        "prompt6": {
+          "title": "Investigación de Cannabis Medicinal",
+          "prompt": "¿Cuál es la última investigación sobre aplicaciones de cannabis medicinal?"
+        }
+      }
+    },
+    "carbon": {
+      "title": "Mercados de Carbono",
+      "description": "Créditos de carbono, comercio de emisiones y financiamiento climático",
+      "prompts": {
+        "prompt1": {
+          "title": "Mercados de Créditos de Carbono",
+          "prompt": "¿Cómo están evolucionando los mercados de créditos de carbono y cuáles son los precios actuales?"
+        },
+        "prompt2": {
+          "title": "Verificación de Compensaciones de Carbono",
+          "prompt": "¿Cuáles son los estándares para verificación y calidad de compensaciones de carbono?"
+        },
+        "prompt3": {
+          "title": "Objetivos Corporativos de Carbono",
+          "prompt": "¿Cómo están estableciendo y logrando las corporaciones objetivos de carbono neto cero?"
+        },
+        "prompt4": {
+          "title": "Tecnología de Captura de Carbono",
+          "prompt": "¿Cuáles son los últimos desarrollos en tecnología de captura y almacenamiento de carbono?"
+        },
+        "prompt5": {
+          "title": "Financiamiento Climático",
+          "prompt": "¿Cuáles son las tendencias actuales en financiamiento climático e inversión verde?"
+        },
+        "prompt6": {
+          "title": "Ajustes Fronterizos de Carbono",
+          "prompt": "¿Cómo impactarán los ajustes fronterizos de carbono el comercio global?"
+        }
+      }
+    },
+    "cleantech": {
+      "title": "Tecnología Limpia",
+      "description": "Energía renovable, sostenibilidad e innovación verde",
+      "prompts": {
+        "prompt1": {
+          "title": "Crecimiento de Energía Renovable",
+          "prompt": "¿Cuáles son las últimas tendencias en adopción y tecnología de energía renovable?"
+        },
+        "prompt2": {
+          "title": "Almacenamiento de Energía Limpia",
+          "prompt": "¿Qué avances se están haciendo en almacenamiento de energía para fuentes renovables?"
+        },
+        "prompt3": {
+          "title": "Hidrógeno Verde",
+          "prompt": "¿Cuál es el potencial del hidrógeno verde en la transición energética limpia?"
+        },
+        "prompt4": {
+          "title": "Inversiones en Tecnología Limpia",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en tecnología limpia?"
+        },
+        "prompt5": {
+          "title": "Economía Circular",
+          "prompt": "¿Cómo están implementando las empresas principios de economía circular?"
+        },
+        "prompt6": {
+          "title": "Transporte Limpio",
+          "prompt": "¿Qué innovaciones están impulsando soluciones de transporte limpio?"
+        }
+      }
+    },
+    "clinicaltrials": {
+      "title": "Ensayos Clínicos",
+      "description": "Investigación médica, pruebas de medicamentos y estudios clínicos",
+      "prompts": {
+        "prompt1": {
+          "title": "Diseño de Ensayos Clínicos",
+          "prompt": "¿Cuáles son las últimas innovaciones en diseño y metodología de ensayos clínicos?"
+        },
+        "prompt2": {
+          "title": "Ensayos Clínicos Digitales",
+          "prompt": "¿Cómo están transformando las tecnologías digitales los ensayos clínicos?"
+        },
+        "prompt3": {
+          "title": "Reclutamiento de Pacientes",
+          "prompt": "¿Qué estrategias se están usando para mejorar el reclutamiento de pacientes en ensayos clínicos?"
+        },
+        "prompt4": {
+          "title": "Aprobaciones Regulatorias",
+          "prompt": "¿Cuáles son las tendencias actuales en aprobaciones regulatorias de medicamentos y cronogramas?"
+        },
+        "prompt5": {
+          "title": "IA en Investigación Clínica",
+          "prompt": "¿Cómo se está usando la IA para acelerar la investigación clínica y descubrimiento de medicamentos?"
+        },
+        "prompt6": {
+          "title": "Evidencia del Mundo Real",
+          "prompt": "¿Cómo se está integrando la evidencia del mundo real en la investigación clínica?"
+        }
+      }
+    },
+    "code": {
+      "title": "Desarrollo de Software",
+      "description": "Programación, ingeniería de software y herramientas de desarrollo",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias en Lenguajes de Programación",
+          "prompt": "¿Cuáles son los lenguajes de programación y frameworks más populares en 2024?"
+        },
+        "prompt2": {
+          "title": "Mejores Prácticas de DevOps",
+          "prompt": "¿Cuáles son las mejores prácticas actuales en DevOps y pipelines CI/CD?"
+        },
+        "prompt3": {
+          "title": "Desarrollo Nativo de la Nube",
+          "prompt": "¿Cómo está cambiando el desarrollo nativo de la nube la arquitectura de software?"
+        },
+        "prompt4": {
+          "title": "Herramientas de Codificación con IA",
+          "prompt": "¿Qué herramientas de codificación potenciadas por IA están transformando el desarrollo de software?"
+        },
+        "prompt5": {
+          "title": "Arquitectura de Microservicios",
+          "prompt": "¿Cuáles son las mejores prácticas para diseñar arquitectura de microservicios?"
+        },
+        "prompt6": {
+          "title": "Seguridad de Software",
+          "prompt": "¿Cuáles son las últimas tendencias en seguridad de aplicaciones y codificación segura?"
+        }
+      }
+    },
+    "crowdfunding": {
+      "title": "Crowdfunding",
+      "description": "Plataformas de crowdfunding, campañas y financiamiento alternativo",
+      "prompts": {
+        "prompt1": {
+          "title": "Plataformas de Crowdfunding",
+          "prompt": "¿Cuáles son las plataformas de crowdfunding más exitosas y sus características?"
+        },
+        "prompt2": {
+          "title": "Crowdfunding de Equity",
+          "prompt": "¿Cómo está cambiando el crowdfunding de equity los paisajes de financiamiento de startups?"
+        },
+        "prompt3": {
+          "title": "Factores de Éxito de Campañas",
+          "prompt": "¿Qué factores contribuyen a campañas de crowdfunding exitosas?"
+        },
+        "prompt4": {
+          "title": "Regulación del Crowdfunding",
+          "prompt": "¿Cuáles son los marcos regulatorios que rigen el crowdfunding?"
+        },
+        "prompt5": {
+          "title": "Crowdfunding Cripto",
+          "prompt": "¿Cómo se está usando la criptomoneda en campañas de crowdfunding?"
+        },
+        "prompt6": {
+          "title": "Analítica de Crowdfunding",
+          "prompt": "¿Qué métricas deberían rastrearse para el rendimiento de campañas de crowdfunding?"
+        }
+      }
+    },
+    "crypto": {
+      "title": "Criptomoneda",
+      "description": "Monedas digitales, trading y mercados cripto",
+      "prompts": {
+        "prompt1": {
+          "title": "Análisis del Precio de Bitcoin",
+          "prompt": "¿Cuáles son los factores actuales que influyen en los movimientos de precio de Bitcoin?"
+        },
+        "prompt2": {
+          "title": "Regulaciones Cripto",
+          "prompt": "¿Cuáles son las últimas regulaciones de criptomonedas y requisitos de cumplimiento?"
+        },
+        "prompt3": {
+          "title": "Desarrollos DeFi",
+          "prompt": "¿Cuáles son los últimos desarrollos en finanzas descentralizadas (DeFi)?"
+        },
+        "prompt4": {
+          "title": "Adopción de Cripto",
+          "prompt": "¿Cómo está progresando la adopción de criptomonedas entre instituciones y minoristas?"
+        },
+        "prompt5": {
+          "title": "Tendencias de Altcoins",
+          "prompt": "¿Cuáles son las altcoins en tendencia y sus propuestas de valor?"
+        },
+        "prompt6": {
+          "title": "Seguridad Cripto",
+          "prompt": "¿Cuáles son las mejores prácticas para seguridad y almacenamiento de criptomonedas?"
+        }
+      }
+    },
+    "cybersecurity": {
+      "title": "Ciberseguridad",
+      "description": "Seguridad de la información, amenazas cibernéticas y estrategias de protección",
+      "prompts": {
+        "prompt1": {
+          "title": "Panorama de Amenazas Cibernéticas",
+          "prompt": "¿Cuáles son las principales amenazas cibernéticas actuales y vectores de ataque?"
+        },
+        "prompt2": {
+          "title": "Seguridad de Confianza Cero",
+          "prompt": "¿Cómo están implementando las organizaciones modelos de seguridad de confianza cero?"
+        },
+        "prompt3": {
+          "title": "Protección contra Ransomware",
+          "prompt": "¿Cuáles son las mejores estrategias para prevención y respuesta a ransomware?"
+        },
+        "prompt4": {
+          "title": "Seguridad en la Nube",
+          "prompt": "¿Cuáles son las consideraciones clave para seguridad en la nube y protección de datos?"
+        },
+        "prompt5": {
+          "title": "IA en Ciberseguridad",
+          "prompt": "¿Cómo se está usando la IA para mejorar la defensa y detección de ciberseguridad?"
+        },
+        "prompt6": {
+          "title": "Cumplimiento de Seguridad",
+          "prompt": "¿Cuáles son los últimos requisitos de cumplimiento y marcos de ciberseguridad?"
+        }
+      }
+    },
+    "defense": {
+      "title": "Defensa",
+      "description": "Tecnología militar, contratos de defensa y seguridad",
+      "prompts": {
+        "prompt1": {
+          "title": "Tecnología de Defensa",
+          "prompt": "¿Cuáles son los últimos avances en tecnología militar y de defensa?"
+        },
+        "prompt2": {
+          "title": "Guerra Cibernética",
+          "prompt": "¿Cómo está evolucionando la guerra cibernética y cuáles son las estrategias de defensa?"
+        },
+        "prompt3": {
+          "title": "Contratos de Defensa",
+          "prompt": "¿Cuáles son los principales contratos de defensa y tendencias de adquisición?"
+        },
+        "prompt4": {
+          "title": "IA Militar",
+          "prompt": "¿Cómo se está integrando la inteligencia artificial en sistemas militares?"
+        },
+        "prompt5": {
+          "title": "Defensa Espacial",
+          "prompt": "¿Cuáles son los desarrollos en defensa espacial y seguridad satelital?"
+        },
+        "prompt6": {
+          "title": "Presupuesto de Defensa",
+          "prompt": "¿Cuáles son las tendencias en gasto global de defensa y asignación de presupuesto?"
+        }
+      }
+    },
+    "ecommerce": {
+      "title": "Comercio Electrónico",
+      "description": "Venta minorista en línea, comercio digital y tendencias de marketplace",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de E-commerce",
+          "prompt": "¿Cuáles son las últimas tendencias en e-commerce y venta minorista en línea?"
+        },
+        "prompt2": {
+          "title": "Comercio Social",
+          "prompt": "¿Cómo están transformando las redes sociales el e-commerce y las compras en línea?"
+        },
+        "prompt3": {
+          "title": "Comercio Móvil",
+          "prompt": "¿Cuáles son las tendencias en comercio móvil y compras basadas en aplicaciones?"
+        },
+        "prompt4": {
+          "title": "Analítica de E-commerce",
+          "prompt": "¿Qué métricas son cruciales para la optimización del rendimiento de e-commerce?"
+        },
+        "prompt5": {
+          "title": "E-commerce Transfronterizo",
+          "prompt": "¿Cómo está creciendo el e-commerce transfronterizo y cuáles son los desafíos?"
+        },
+        "prompt6": {
+          "title": "Automatización de E-commerce",
+          "prompt": "¿Cómo están transformando la IA y automatización las operaciones de e-commerce?"
+        }
+      }
+    },
+    "edtech": {
+      "title": "Tecnología Educativa",
+      "description": "Aprendizaje en línea, software educativo y educación digital",
+      "prompts": {
+        "prompt1": {
+          "title": "Plataformas de Aprendizaje en Línea",
+          "prompt": "¿Cuáles son las plataformas y herramientas de aprendizaje en línea más efectivas?"
+        },
+        "prompt2": {
+          "title": "IA en Educación",
+          "prompt": "¿Cómo se está usando la IA para personalizar y mejorar la educación?"
+        },
+        "prompt3": {
+          "title": "Aprendizaje Remoto",
+          "prompt": "¿Cuáles son las mejores prácticas para aprendizaje remoto e híbrido efectivo?"
+        },
+        "prompt4": {
+          "title": "Inversiones en EdTech",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en tecnología educativa?"
+        },
+        "prompt5": {
+          "title": "RV en Educación",
+          "prompt": "¿Cómo se está usando la realidad virtual en aplicaciones educativas?"
+        },
+        "prompt6": {
+          "title": "Credenciales Digitales",
+          "prompt": "¿Cómo están cambiando las credenciales digitales y blockchain la verificación educativa?"
+        }
+      }
+    },
+    "energy": {
+      "title": "Energía",
+      "description": "Mercados energéticos, fuentes renovables y generación de energía",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias del Mercado Energético",
+          "prompt": "¿Cuáles son las tendencias actuales en mercados energéticos globales y precios?"
+        },
+        "prompt2": {
+          "title": "Crecimiento de Energía Renovable",
+          "prompt": "¿Qué está impulsando el crecimiento de la adopción de energía renovable mundialmente?"
+        },
+        "prompt3": {
+          "title": "Soluciones de Almacenamiento de Energía",
+          "prompt": "¿Cuáles son los últimos desarrollos en tecnología de almacenamiento de energía?"
+        },
+        "prompt4": {
+          "title": "Tecnología de Red Inteligente",
+          "prompt": "¿Cómo está transformando la tecnología de red inteligente la distribución de energía?"
+        },
+        "prompt5": {
+          "title": "Transición Energética",
+          "prompt": "¿Cuáles son los desafíos y oportunidades en la transición energética global?"
+        },
+        "prompt6": {
+          "title": "Energía Nuclear",
+          "prompt": "¿Cuál es el papel de la energía nuclear en la mezcla energética futura?"
+        }
+      }
+    },
+    "esg": {
+      "title": "ESG",
+      "description": "Inversión ambiental, social y de gobernanza",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de Inversión ESG",
+          "prompt": "¿Cuáles son las tendencias actuales en inversión ESG y finanzas sostenibles?"
+        },
+        "prompt2": {
+          "title": "Estándares de Reporte ESG",
+          "prompt": "¿Cuáles son los estándares evolutivos para reporte y divulgación ESG?"
+        },
+        "prompt3": {
+          "title": "Sostenibilidad Corporativa",
+          "prompt": "¿Cómo están integrando las empresas la sostenibilidad en sus estrategias de negocio?"
+        },
+        "prompt4": {
+          "title": "Bonos Verdes",
+          "prompt": "¿Cuál es el estado actual del mercado de bonos verdes y tendencias de emisión?"
+        },
+        "prompt5": {
+          "title": "Analítica de Datos ESG",
+          "prompt": "¿Cómo está mejorando la analítica de datos la evaluación y puntuación ESG?"
+        },
+        "prompt6": {
+          "title": "Inversión de Impacto",
+          "prompt": "¿Cuáles son las tendencias y oportunidades en inversión de impacto?"
+        }
+      }
+    },
+    "esports": {
+      "title": "Esports",
+      "description": "Juegos competitivos, industria de esports y torneos de gaming",
+      "prompts": {
+        "prompt1": {
+          "title": "Crecimiento del Mercado de Esports",
+          "prompt": "¿Qué está impulsando el crecimiento del mercado global de esports?"
+        },
+        "prompt2": {
+          "title": "Torneos de Esports",
+          "prompt": "¿Cuáles son los principales torneos de esports y sus premios este año?"
+        },
+        "prompt3": {
+          "title": "Patrocinios de Esports",
+          "prompt": "¿Cómo están abordando las marcas los patrocinios y asociaciones de esports?"
+        },
+        "prompt4": {
+          "title": "Esports Móviles",
+          "prompt": "¿Cuál es el potencial de crecimiento de los juegos móviles en esports?"
+        },
+        "prompt5": {
+          "title": "Transmisión de Esports",
+          "prompt": "¿Cómo se está distribuyendo y monetizando el contenido de esports?"
+        },
+        "prompt6": {
+          "title": "Esports Universitarios",
+          "prompt": "¿Cómo están creciendo los esports universitarios y qué oportunidades existen?"
+        }
+      }
+    },
+    "finance": {
+      "title": "Finanzas",
+      "description": "Mercados financieros, estrategias de inversión y tendencias económicas",
+      "prompts": {
+        "prompt1": {
+          "title": "Análisis del Mercado de Valores",
+          "prompt": "¿Cuáles son las tendencias actuales y análisis de los principales índices bursátiles?"
+        },
+        "prompt2": {
+          "title": "Impacto de las Tasas de Interés",
+          "prompt": "¿Cómo están afectando los cambios de tasas de interés los mercados financieros e inversiones?"
+        },
+        "prompt3": {
+          "title": "Tendencias de Inflación",
+          "prompt": "¿Cuáles son las tendencias actuales de inflación y sus impactos económicos?"
+        },
+        "prompt4": {
+          "title": "Estrategias de Inversión",
+          "prompt": "¿Cuáles son las estrategias de inversión más efectivas en el mercado actual?"
+        },
+        "prompt5": {
+          "title": "Indicadores Económicos",
+          "prompt": "¿Qué indicadores económicos clave deberían monitorear los inversores?"
+        },
+        "prompt6": {
+          "title": "Tecnología Financiera",
+          "prompt": "¿Cómo está disrumpiendo la tecnología los servicios financieros tradicionales?"
+        }
+      }
+    },
+    "financefeeds": {
+      "title": "Feeds Financieros",
+      "description": "Datos financieros en tiempo real, feeds de mercado e información de trading",
+      "prompts": {
+        "prompt1": {
+          "title": "Datos de Mercado en Tiempo Real",
+          "prompt": "¿Cuáles son las mejores fuentes para datos de mercado en tiempo real y feeds financieros?"
+        },
+        "prompt2": {
+          "title": "Algoritmos de Trading",
+          "prompt": "¿Cómo están usando los sistemas de trading algorítmico los feeds de datos en tiempo real?"
+        },
+        "prompt3": {
+          "title": "Proveedores de Datos de Mercado",
+          "prompt": "¿Cuáles son los principales proveedores de datos de mercado y sus ofertas?"
+        },
+        "prompt4": {
+          "title": "APIs Financieras",
+          "prompt": "¿Cuáles son las APIs de datos financieros más confiables para desarrolladores?"
+        },
+        "prompt5": {
+          "title": "Latencia de Feeds de Datos",
+          "prompt": "¿Qué tan importante es la baja latencia en feeds de datos financieros para trading?"
+        },
+        "prompt6": {
+          "title": "Datos Alternativos",
+          "prompt": "¿Cómo se están integrando los datos alternativos en el análisis financiero?"
+        }
+      }
+    },
+    "fintech": {
+      "title": "Fintech",
+      "description": "Tecnología financiera, pagos digitales e innovación financiera",
+      "prompts": {
+        "prompt1": {
+          "title": "Pagos Digitales",
+          "prompt": "¿Cuáles son las últimas tendencias en pagos digitales y billeteras móviles?"
+        },
+        "prompt2": {
+          "title": "Regulaciones Fintech",
+          "prompt": "¿Cómo están evolucionando las regulaciones para empresas y servicios fintech?"
+        },
+        "prompt3": {
+          "title": "Compra Ahora Paga Después",
+          "prompt": "¿Cuál es el estado actual de los servicios Compra Ahora Paga Después (BNPL)?"
+        },
+        "prompt4": {
+          "title": "Inversiones en Fintech",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en el sector fintech?"
+        },
+        "prompt5": {
+          "title": "Finanzas Embebidas",
+          "prompt": "¿Cómo están transformando las finanzas embebidas los negocios no financieros?"
+        },
+        "prompt6": {
+          "title": "Robo-Asesores",
+          "prompt": "¿Cuál es la evolución de los robo-asesores y plataformas de inversión automatizada?"
+        }
+      }
+    },
+    "forex": {
+      "title": "Forex",
+      "description": "Mercados de divisas, trading de monedas y análisis FX",
+      "prompts": {
+        "prompt1": {
+          "title": "Análisis del Mercado de Divisas",
+          "prompt": "¿Cuáles son las tendencias actuales y análisis en los principales pares de divisas?"
+        },
+        "prompt2": {
+          "title": "Políticas de Bancos Centrales",
+          "prompt": "¿Cómo están afectando las políticas de bancos centrales los mercados de divisas?"
+        },
+        "prompt3": {
+          "title": "Estrategias de Trading Forex",
+          "prompt": "¿Cuáles son las estrategias de trading forex más efectivas para mercados actuales?"
+        },
+        "prompt4": {
+          "title": "Calendario Económico",
+          "prompt": "¿Qué eventos económicos clave deberían observar los traders de forex esta semana?"
+        },
+        "prompt5": {
+          "title": "Volatilidad de Divisas",
+          "prompt": "¿Qué factores están impulsando la volatilidad de divisas en mercados globales?"
+        },
+        "prompt6": {
+          "title": "Impacto de Monedas Digitales",
+          "prompt": "¿Cómo están afectando las monedas digitales los mercados forex tradicionales?"
+        }
+      }
+    },
+    "gaming": {
+      "title": "Gaming",
+      "description": "Videojuegos, industria del gaming y entretenimiento interactivo",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de la Industria del Gaming",
+          "prompt": "¿Cuáles son las últimas tendencias y desarrollos en la industria del gaming?"
+        },
+        "prompt2": {
+          "title": "Crecimiento del Gaming Móvil",
+          "prompt": "¿Cómo está evolucionando el gaming móvil y cuáles son las oportunidades de crecimiento?"
+        },
+        "prompt3": {
+          "title": "Gaming en la Nube",
+          "prompt": "¿Cuál es el estado actual del gaming en la nube y servicios de streaming?"
+        },
+        "prompt4": {
+          "title": "Monetización del Gaming",
+          "prompt": "¿Cuáles son las estrategias de monetización efectivas en gaming?"
+        },
+        "prompt5": {
+          "title": "Consolas de Próxima Generación",
+          "prompt": "¿Cómo están funcionando las consolas de gaming de próxima generación en el mercado?"
+        },
+        "prompt6": {
+          "title": "Tecnología de Gaming",
+          "prompt": "¿Qué tecnologías emergentes están dando forma al futuro del gaming?"
+        }
+      }
+    },
+    "hydrogen": {
+      "title": "Hidrógeno",
+      "description": "Energía de hidrógeno, celdas de combustible y economía del hidrógeno",
+      "prompts": {
+        "prompt1": {
+          "title": "Producción de Hidrógeno Verde",
+          "prompt": "¿Cuáles son los últimos desarrollos en tecnología de producción de hidrógeno verde?"
+        },
+        "prompt2": {
+          "title": "Economía del Hidrógeno",
+          "prompt": "¿Cómo se está desarrollando la economía del hidrógeno y cuáles son los factores clave?"
+        },
+        "prompt3": {
+          "title": "Transporte de Hidrógeno",
+          "prompt": "¿Cuál es el potencial del hidrógeno en transporte y logística?"
+        },
+        "prompt4": {
+          "title": "Infraestructura de Hidrógeno",
+          "prompt": "¿Qué infraestructura se necesita para la adopción generalizada del hidrógeno?"
+        },
+        "prompt5": {
+          "title": "Inversiones en Hidrógeno",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en tecnología de hidrógeno?"
+        },
+        "prompt6": {
+          "title": "Almacenamiento de Hidrógeno",
+          "prompt": "¿Cuáles son los desafíos y soluciones para el almacenamiento de hidrógeno?"
+        }
+      }
+    },
+    "iot": {
+      "title": "Internet de las Cosas",
+      "description": "Dispositivos conectados, plataformas IoT y tecnología inteligente",
+      "prompts": {
+        "prompt1": {
+          "title": "Seguridad de Dispositivos IoT",
+          "prompt": "¿Cuáles son las mejores prácticas para seguridad y privacidad de dispositivos IoT?"
+        },
+        "prompt2": {
+          "title": "IoT Industrial",
+          "prompt": "¿Cómo está transformando el IoT Industrial (IIoT) la manufactura y operaciones?"
+        },
+        "prompt3": {
+          "title": "Ciudades Inteligentes",
+          "prompt": "¿Qué tecnologías IoT están habilitando el desarrollo de ciudades inteligentes?"
+        },
+        "prompt4": {
+          "title": "Analítica IoT",
+          "prompt": "¿Cómo se está aplicando la analítica de datos a los datos de dispositivos IoT?"
+        },
+        "prompt5": {
+          "title": "Conectividad IoT",
+          "prompt": "¿Cuáles son los últimos desarrollos en conectividad y redes IoT?"
+        },
+        "prompt6": {
+          "title": "Edge Computing IoT",
+          "prompt": "¿Cómo está mejorando el edge computing las aplicaciones y rendimiento IoT?"
+        }
+      }
+    },
+    "medicaldevices": {
+      "title": "Dispositivos Médicos",
+      "description": "Tecnología sanitaria, equipos médicos e innovación en salud",
+      "prompts": {
+        "prompt1": {
+          "title": "Tecnología de Salud Portátil",
+          "prompt": "¿Cuáles son los últimos desarrollos en dispositivos portátiles de monitoreo de salud?"
+        },
+        "prompt2": {
+          "title": "Regulaciones de Dispositivos Médicos",
+          "prompt": "¿Cuáles son los requisitos regulatorios actuales para aprobación de dispositivos médicos?"
+        },
+        "prompt3": {
+          "title": "Terapéuticos Digitales",
+          "prompt": "¿Cómo están cambiando los terapéuticos digitales los enfoques de tratamiento?"
+        },
+        "prompt4": {
+          "title": "IA en Dispositivos Médicos",
+          "prompt": "¿Cómo se está integrando la IA en dispositivos médicos y diagnósticos?"
+        },
+        "prompt5": {
+          "title": "Monitoreo Remoto de Pacientes",
+          "prompt": "¿Qué tecnologías permiten el monitoreo remoto efectivo de pacientes?"
+        },
+        "prompt6": {
+          "title": "Innovación en Dispositivos Médicos",
+          "prompt": "¿Cuáles son las innovaciones más prometedoras en tecnología de dispositivos médicos?"
+        }
+      }
+    },
+    "music": {
+      "title": "Música",
+      "description": "Industria musical, streaming y tecnología de entretenimiento",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de Streaming Musical",
+          "prompt": "¿Cuáles son las tendencias actuales en streaming musical y consumo de música digital?"
+        },
+        "prompt2": {
+          "title": "Tecnología Musical",
+          "prompt": "¿Cómo está cambiando la tecnología la producción y distribución musical?"
+        },
+        "prompt3": {
+          "title": "Modelos de Ingresos de Artistas",
+          "prompt": "¿Cuáles son los modelos de ingresos evolutivos para músicos y artistas?"
+        },
+        "prompt4": {
+          "title": "IA Musical",
+          "prompt": "¿Cómo se está usando la IA en creación musical y recomendación?"
+        },
+        "prompt5": {
+          "title": "Industria de Música en Vivo",
+          "prompt": "¿Cómo se está adaptando la industria de música en vivo a los cambios tecnológicos?"
+        },
+        "prompt6": {
+          "title": "Derechos de Autor Musical",
+          "prompt": "¿Cuáles son los desafíos y soluciones actuales para derechos de autor musical?"
+        }
+      }
+    },
+    "nanotechnology": {
+      "title": "Nanotecnología",
+      "description": "Ciencia a nanoescala, ingeniería de materiales y aplicaciones nanotech",
+      "prompts": {
+        "prompt1": {
+          "title": "Aplicaciones de Nanomedicina",
+          "prompt": "¿Cuáles son las últimas aplicaciones de nanotecnología en medicina?"
+        },
+        "prompt2": {
+          "title": "Desarrollo de Nanomateriales",
+          "prompt": "¿Qué avances se están haciendo en nanomateriales y sus propiedades?"
+        },
+        "prompt3": {
+          "title": "Nanoelectrónica",
+          "prompt": "¿Cómo está avanzando la nanotecnología la electrónica y computación?"
+        },
+        "prompt4": {
+          "title": "Seguridad de la Nanotecnología",
+          "prompt": "¿Cuáles son las consideraciones de seguridad y regulaciones para nanotecnología?"
+        },
+        "prompt5": {
+          "title": "Manufactura Nano",
+          "prompt": "¿Cómo se está escalando la nanotecnología para manufactura comercial?"
+        },
+        "prompt6": {
+          "title": "Nanotecnología Ambiental",
+          "prompt": "¿Cómo se está usando la nanotecnología para aplicaciones ambientales?"
+        }
+      }
+    },
+    "nfts": {
+      "title": "NFTs",
+      "description": "Tokens no fungibles, arte digital y coleccionables blockchain",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias del Mercado NFT",
+          "prompt": "¿Cuáles son las tendencias actuales y desarrollos en el mercado NFT?"
+        },
+        "prompt2": {
+          "title": "Utilidad NFT",
+          "prompt": "¿Cómo están evolucionando los NFTs más allá del arte hacia utilidad y funcionalidad?"
+        },
+        "prompt3": {
+          "title": "NFT Gaming",
+          "prompt": "¿Cómo se están integrando los NFTs en gaming y mundos virtuales?"
+        },
+        "prompt4": {
+          "title": "Regulaciones NFT",
+          "prompt": "¿Qué desarrollos regulatorios están afectando el espacio NFT?"
+        },
+        "prompt5": {
+          "title": "Tecnología NFT",
+          "prompt": "¿Qué mejoras tecnológicas se están haciendo a las plataformas NFT?"
+        },
+        "prompt6": {
+          "title": "Marketplaces NFT",
+          "prompt": "¿Cuáles son los principales marketplaces NFT y sus características?"
+        }
+      }
+    },
+    "patents": {
+      "title": "Patentes",
+      "description": "Propiedad intelectual, ley de patentes y protección de innovación",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de Solicitudes de Patentes",
+          "prompt": "¿Cuáles son las tendencias actuales en solicitudes de patentes en diferentes industrias?"
+        },
+        "prompt2": {
+          "title": "Estrategia de Patentes",
+          "prompt": "¿Cuáles son las estrategias de patentes efectivas para startups y corporaciones?"
+        },
+        "prompt3": {
+          "title": "Panorama de Patentes de IA",
+          "prompt": "¿Cómo está evolucionando el panorama de patentes para IA y aprendizaje automático?"
+        },
+        "prompt4": {
+          "title": "Litigio de Patentes",
+          "prompt": "¿Cuáles son las tendencias actuales en litigio y disputas de patentes?"
+        },
+        "prompt5": {
+          "title": "Patentes Internacionales",
+          "prompt": "¿Cómo se comparan e interactúan los sistemas de patentes internacionales?"
+        },
+        "prompt6": {
+          "title": "Analítica de Patentes",
+          "prompt": "¿Cómo se está usando la analítica de datos para investigación y estrategia de patentes?"
+        }
+      }
+    },
+    "payments": {
+      "title": "Pagos",
+      "description": "Pagos digitales, procesamiento de pagos y transacciones financieras",
+      "prompts": {
+        "prompt1": {
+          "title": "Innovación en Pagos",
+          "prompt": "¿Cuáles son las últimas innovaciones en tecnología y procesamiento de pagos?"
+        },
+        "prompt2": {
+          "title": "Pagos Transfronterizos",
+          "prompt": "¿Cómo se están mejorando y agilizando los pagos transfronterizos?"
+        },
+        "prompt3": {
+          "title": "Seguridad de Pagos",
+          "prompt": "¿Cuáles son las mejores prácticas para seguridad de pagos y prevención de fraude?"
+        },
+        "prompt4": {
+          "title": "Pagos sin Contacto",
+          "prompt": "¿Cómo ha evolucionado la adopción de pagos sin contacto post-pandemia?"
+        },
+        "prompt5": {
+          "title": "Regulaciones de Pagos",
+          "prompt": "¿Qué cambios regulatorios están afectando la industria de pagos?"
+        },
+        "prompt6": {
+          "title": "Pagos con Criptomonedas",
+          "prompt": "¿Cómo se están integrando las criptomonedas en sistemas de pago?"
+        }
+      }
+    },
+    "privateequity": {
+      "title": "Capital Privado",
+      "description": "Inversión privada, buyouts e inversiones alternativas",
+      "prompts": {
+        "prompt1": {
+          "title": "Actividad de Deals PE",
+          "prompt": "¿Cuáles son las tendencias actuales en actividad de deals de capital privado y valuaciones?"
+        },
+        "prompt2": {
+          "title": "Estrategias de Salida PE",
+          "prompt": "¿Qué estrategias de salida están usando las firmas de capital privado en mercados actuales?"
+        },
+        "prompt3": {
+          "title": "Recaudación PE",
+          "prompt": "¿Cómo está funcionando la recaudación de capital privado y cuáles son las preferencias LP?"
+        },
+        "prompt4": {
+          "title": "Enfoque Tecnológico PE",
+          "prompt": "¿Qué sectores tecnológicos están atrayendo más inversión de capital privado?"
+        },
+        "prompt5": {
+          "title": "ESG en Capital Privado",
+          "prompt": "¿Cómo se está integrando ESG en estrategias de inversión de capital privado?"
+        },
+        "prompt6": {
+          "title": "Perspectiva del Mercado PE",
+          "prompt": "¿Cuál es la perspectiva para mercados de capital privado y retornos?"
+        }
+      }
+    },
+    "psychedelics": {
+      "title": "Psicodélicos",
+      "description": "Medicina psicodélica, tratamiento de salud mental e investigación terapéutica",
+      "prompts": {
+        "prompt1": {
+          "title": "Medicina Psicodélica",
+          "prompt": "¿Qué progreso se está haciendo en investigación y ensayos de medicina psicodélica?"
+        },
+        "prompt2": {
+          "title": "Tratamiento de Salud Mental",
+          "prompt": "¿Cómo se están estudiando los psicodélicos para tratamiento de salud mental?"
+        },
+        "prompt3": {
+          "title": "Regulaciones Psicodélicas",
+          "prompt": "¿Cuáles son las regulaciones evolutivas sobre investigación y terapia psicodélica?"
+        },
+        "prompt4": {
+          "title": "Inversiones Psicodélicas",
+          "prompt": "¿Qué oportunidades de inversión existen en el espacio de medicina psicodélica?"
+        },
+        "prompt5": {
+          "title": "Resultados de Ensayos Clínicos",
+          "prompt": "¿Cuáles son los últimos resultados de ensayos clínicos para terapias psicodélicas?"
+        },
+        "prompt6": {
+          "title": "Protocolos Terapéuticos",
+          "prompt": "¿Qué protocolos terapéuticos se están desarrollando para tratamiento psicodélico?"
+        }
+      }
+    },
+    "quantum": {
+      "title": "Computación Cuántica",
+      "description": "Tecnología cuántica, computadoras cuánticas y aplicaciones cuánticas",
+      "prompts": {
+        "prompt1": {
+          "title": "Progreso en Computación Cuántica",
+          "prompt": "¿Cuáles son los últimos avances en tecnología de computación cuántica?"
+        },
+        "prompt2": {
+          "title": "Aplicaciones Cuánticas",
+          "prompt": "¿Cuáles son las aplicaciones más prometedoras para computación cuántica?"
+        },
+        "prompt3": {
+          "title": "Supremacía Cuántica",
+          "prompt": "¿Qué progreso se ha hecho hacia la supremacía cuántica práctica?"
+        },
+        "prompt4": {
+          "title": "Seguridad Cuántica",
+          "prompt": "¿Cómo impactará la computación cuántica la ciberseguridad y encriptación?"
+        },
+        "prompt5": {
+          "title": "Inversiones Cuánticas",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en tecnología cuántica?"
+        },
+        "prompt6": {
+          "title": "Fuerza Laboral Cuántica",
+          "prompt": "¿Qué habilidades y desarrollo de fuerza laboral se necesitan para tecnología cuántica?"
+        }
+      }
+    },
+    "realestate": {
+      "title": "Bienes Raíces",
+      "description": "Mercados inmobiliarios, tecnología inmobiliaria e inversión en propiedades",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias del Mercado Inmobiliario",
+          "prompt": "¿Cuáles son las tendencias actuales en mercados inmobiliarios residenciales y comerciales?"
+        },
+        "prompt2": {
+          "title": "Innovación PropTech",
+          "prompt": "¿Cómo está transformando la tecnología la industria inmobiliaria?"
+        },
+        "prompt3": {
+          "title": "Inversión Inmobiliaria",
+          "prompt": "¿Cuáles son las mejores estrategias para inversión inmobiliaria en mercados actuales?"
+        },
+        "prompt4": {
+          "title": "Impacto del Trabajo Remoto",
+          "prompt": "¿Cómo ha impactado el trabajo remoto los bienes raíces comerciales y residenciales?"
+        },
+        "prompt5": {
+          "title": "Edificios Sostenibles",
+          "prompt": "¿Qué tendencias están impulsando el desarrollo de construcción sostenible y verde?"
+        },
+        "prompt6": {
+          "title": "Financiamiento Inmobiliario",
+          "prompt": "¿Cómo están evolucionando los mercados de financiamiento inmobiliario y hipotecas?"
+        }
+      }
+    },
+    "saas": {
+      "title": "Software como Servicio",
+      "description": "Software en la nube, modelos de negocio SaaS y software empresarial",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias del Mercado SaaS",
+          "prompt": "¿Cuáles son las tendencias actuales y áreas de crecimiento en el mercado SaaS?"
+        },
+        "prompt2": {
+          "title": "Métricas SaaS",
+          "prompt": "¿Cuáles son las métricas clave para medir el rendimiento del negocio SaaS?"
+        },
+        "prompt3": {
+          "title": "Éxito del Cliente SaaS",
+          "prompt": "¿Cuáles son las mejores prácticas para éxito y retención del cliente SaaS?"
+        },
+        "prompt4": {
+          "title": "Estrategias de Precios SaaS",
+          "prompt": "¿Qué estrategias de precios funcionan mejor para diferentes tipos de productos SaaS?"
+        },
+        "prompt5": {
+          "title": "Seguridad SaaS",
+          "prompt": "¿Qué consideraciones de seguridad son críticas para aplicaciones SaaS?"
+        },
+        "prompt6": {
+          "title": "Integración SaaS",
+          "prompt": "¿Cómo están mejorando las plataformas SaaS la integración e interoperabilidad?"
+        }
+      }
+    },
+    "semiconductor": {
+      "title": "Semiconductores",
+      "description": "Manufactura de chips, tecnología de semiconductores y electrónicos",
+      "prompts": {
+        "prompt1": {
+          "title": "Impacto de la Escasez de Chips",
+          "prompt": "¿Cómo está afectando la escasez de semiconductores a diferentes industrias?"
+        },
+        "prompt2": {
+          "title": "Tecnología Avanzada de Chips",
+          "prompt": "¿Qué avances se están haciendo en procesos de manufactura de semiconductores?"
+        },
+        "prompt3": {
+          "title": "Cadena de Suministro de Semiconductores",
+          "prompt": "¿Cómo están abordando las empresas las vulnerabilidades de la cadena de suministro de semiconductores?"
+        },
+        "prompt4": {
+          "title": "Chips de IA",
+          "prompt": "¿Qué desarrollos están ocurriendo en diseño de semiconductores específicos para IA?"
+        },
+        "prompt5": {
+          "title": "Geopolítica de Semiconductores",
+          "prompt": "¿Cómo están afectando los factores geopolíticos la industria global de semiconductores?"
+        },
+        "prompt6": {
+          "title": "Semiconductores de Próxima Generación",
+          "prompt": "¿Qué tecnologías emergentes de semiconductores darán forma al futuro?"
+        }
+      }
+    },
+    "seo": {
+      "title": "Optimización para Motores de Búsqueda",
+      "description": "Estrategias SEO, marketing de búsqueda y visibilidad digital",
+      "prompts": {
+        "prompt1": {
+          "title": "Mejores Prácticas SEO",
+          "prompt": "¿Cuáles son las mejores prácticas SEO actuales y actualizaciones de algoritmo?"
+        },
+        "prompt2": {
+          "title": "SEO Local",
+          "prompt": "¿Cómo pueden las empresas mejorar su optimización de búsqueda local?"
+        },
+        "prompt3": {
+          "title": "SEO Técnico",
+          "prompt": "¿Qué factores de SEO técnico son más importantes para el rendimiento del sitio web?"
+        },
+        "prompt4": {
+          "title": "SEO de Contenido",
+          "prompt": "¿Cómo debería optimizarse el contenido para motores de búsqueda y usuarios?"
+        },
+        "prompt5": {
+          "title": "Herramientas SEO",
+          "prompt": "¿Cuáles son las herramientas SEO y plataformas de analítica más efectivas?"
+        },
+        "prompt6": {
+          "title": "SEO de Búsqueda por Voz",
+          "prompt": "¿Cómo está cambiando la búsqueda por voz las estrategias SEO y optimización?"
+        }
+      }
+    },
+    "solar": {
+      "title": "Energía Solar",
+      "description": "Tecnología solar, fotovoltaicos y tendencias del mercado solar",
+      "prompts": {
+        "prompt1": {
+          "title": "Avances en Tecnología Solar",
+          "prompt": "¿Cuáles son los últimos avances en tecnología y eficiencia de paneles solares?"
+        },
+        "prompt2": {
+          "title": "Crecimiento del Mercado Solar",
+          "prompt": "¿Qué está impulsando el crecimiento del mercado global de energía solar?"
+        },
+        "prompt3": {
+          "title": "Soluciones de Almacenamiento Solar",
+          "prompt": "¿Cómo están mejorando las soluciones de almacenamiento de energía los sistemas de energía solar?"
+        },
+        "prompt4": {
+          "title": "Impacto de Políticas Solares",
+          "prompt": "¿Cómo están afectando las políticas gubernamentales la adopción de energía solar?"
+        },
+        "prompt5": {
+          "title": "Inversión Solar",
+          "prompt": "¿Cuáles son las tendencias de inversión actuales en proyectos de energía solar?"
+        },
+        "prompt6": {
+          "title": "Solar Flotante",
+          "prompt": "¿Cuál es el potencial para instalaciones solares flotantes y solar marino?"
+        }
+      }
+    },
+    "spacs": {
+      "title": "SPACs",
+      "description": "Compañías de Adquisición de Propósito Especial y métodos alternativos de IPO",
+      "prompts": {
+        "prompt1": {
+          "title": "Actividad del Mercado SPAC",
+          "prompt": "¿Cuál es el estado actual de la actividad SPAC y flujo de deals?"
+        },
+        "prompt2": {
+          "title": "Rendimiento SPAC",
+          "prompt": "¿Cómo están funcionando los SPACs comparado con IPOs tradicionales?"
+        },
+        "prompt3": {
+          "title": "Regulaciones SPAC",
+          "prompt": "¿Qué cambios regulatorios están afectando el mercado SPAC?"
+        },
+        "prompt4": {
+          "title": "SPAC vs IPO",
+          "prompt": "¿Cuándo deberían las empresas elegir SPACs sobre rutas IPO tradicionales?"
+        },
+        "prompt5": {
+          "title": "Patrocinadores SPAC",
+          "prompt": "¿Qué hace un patrocinador SPAC exitoso y equipo de gestión?"
+        },
+        "prompt6": {
+          "title": "Due Diligence SPAC",
+          "prompt": "¿Qué consideraciones de due diligence son importantes para inversiones SPAC?"
+        }
+      }
+    },
+    "startups": {
+      "title": "Startups",
+      "description": "Emprendimiento, financiamiento de startups y desarrollo de negocios",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de Financiamiento de Startups",
+          "prompt": "¿Cuáles son las tendencias actuales en financiamiento de startups y capital de riesgo?"
+        },
+        "prompt2": {
+          "title": "Factores de Éxito de Startups",
+          "prompt": "¿Qué factores contribuyen al éxito y escalamiento de startups?"
+        },
+        "prompt3": {
+          "title": "Valuación de Startups",
+          "prompt": "¿Cómo se determinan las valuaciones de startups en diferentes condiciones de mercado?"
+        },
+        "prompt4": {
+          "title": "Aceleradoras de Startups",
+          "prompt": "¿Cuáles son las mejores aceleradoras y programas de incubación de startups?"
+        },
+        "prompt5": {
+          "title": "Startups Remotas",
+          "prompt": "¿Cómo están construyendo equipos y cultura las startups remote-first?"
+        },
+        "prompt6": {
+          "title": "Estrategias de Salida de Startups",
+          "prompt": "¿Qué estrategias de salida deberían considerar y planificar las startups?"
+        }
+      }
+    },
+    "stemcell": {
+      "title": "Células Madre",
+      "description": "Investigación de células madre, medicina regenerativa y terapia celular",
+      "prompts": {
+        "prompt1": {
+          "title": "Terapia de Células Madre",
+          "prompt": "¿Qué avances se están haciendo en aplicaciones de terapia de células madre?"
+        },
+        "prompt2": {
+          "title": "Medicina Regenerativa",
+          "prompt": "¿Cómo está usando la medicina regenerativa células madre para tratamiento?"
+        },
+        "prompt3": {
+          "title": "Investigación de Células Madre",
+          "prompt": "¿Cuáles son los últimos avances en investigación de células madre?"
+        },
+        "prompt4": {
+          "title": "Ensayos Clínicos",
+          "prompt": "¿Qué ensayos clínicos de células madre están mostrando resultados prometedores?"
+        },
+        "prompt5": {
+          "title": "Regulaciones de Células Madre",
+          "prompt": "¿Cuáles son los marcos regulatorios que rigen la investigación y terapia de células madre?"
+        },
+        "prompt6": {
+          "title": "Manufactura de Células Madre",
+          "prompt": "¿Cómo se está escalando la manufactura de células madre para uso terapéutico?"
+        }
+      }
+    },
+    "supplychain": {
+      "title": "Cadena de Suministro",
+      "description": "Logística, gestión de cadena de suministro y eficiencia operacional",
+      "prompts": {
+        "prompt1": {
+          "title": "Resiliencia de Cadena de Suministro",
+          "prompt": "¿Cómo están construyendo las empresas cadenas de suministro más resilientes y flexibles?"
+        },
+        "prompt2": {
+          "title": "Tecnología de Cadena de Suministro",
+          "prompt": "¿Qué tecnologías están transformando la gestión de cadena de suministro?"
+        },
+        "prompt3": {
+          "title": "Automatización Logística",
+          "prompt": "¿Cómo está mejorando la automatización las operaciones logísticas y de almacén?"
+        },
+        "prompt4": {
+          "title": "Visibilidad de Cadena de Suministro",
+          "prompt": "¿Qué herramientas proporcionan mejor visibilidad y rastreo de cadena de suministro?"
+        },
+        "prompt5": {
+          "title": "Cadena de Suministro Sostenible",
+          "prompt": "¿Cómo están haciendo las empresas sus cadenas de suministro más sostenibles?"
+        },
+        "prompt6": {
+          "title": "Riesgo de Cadena de Suministro",
+          "prompt": "¿Cuáles son los principales riesgos que enfrentan las cadenas de suministro globales hoy?"
+        }
+      }
+    },
+    "trading": {
+      "title": "Trading",
+      "description": "Trading financiero, análisis de mercado y estrategias de inversión",
+      "prompts": {
+        "prompt1": {
+          "title": "Estrategias de Trading",
+          "prompt": "¿Cuáles son las estrategias de trading más efectivas para condiciones de mercado actuales?"
+        },
+        "prompt2": {
+          "title": "Trading Algorítmico",
+          "prompt": "¿Cómo está evolucionando el trading algorítmico y cuáles son los últimos desarrollos?"
+        },
+        "prompt3": {
+          "title": "Volatilidad del Mercado",
+          "prompt": "¿Cómo deberían adaptarse los traders a períodos de alta volatilidad del mercado?"
+        },
+        "prompt4": {
+          "title": "Tecnología de Trading",
+          "prompt": "¿Qué tecnologías están avanzando las plataformas de trading y ejecución?"
+        },
+        "prompt5": {
+          "title": "Gestión de Riesgo",
+          "prompt": "¿Cuáles son las mejores prácticas de gestión de riesgo para traders?"
+        },
+        "prompt6": {
+          "title": "Day Trading",
+          "prompt": "¿Cuáles son las consideraciones clave para day trading exitoso?"
+        }
+      }
+    },
+    "venturecapital": {
+      "title": "Capital de Riesgo",
+      "description": "Financiamiento VC, inversiones en startups y tendencias de capital de riesgo",
+      "prompts": {
+        "prompt1": {
+          "title": "Tendencias de Inversión VC",
+          "prompt": "¿Cuáles son las tendencias actuales en inversión de capital de riesgo y financiamiento?"
+        },
+        "prompt2": {
+          "title": "Financiamiento de Etapa Temprana",
+          "prompt": "¿Cómo está evolucionando el financiamiento de startups de etapa temprana y qué buscan los VCs?"
+        },
+        "prompt3": {
+          "title": "Perspectiva del Mercado VC",
+          "prompt": "¿Cuál es la perspectiva para mercados de capital de riesgo y actividad de deals?"
+        },
+        "prompt4": {
+          "title": "Valuaciones de Unicornios",
+          "prompt": "¿Cómo se están valuando las empresas unicornio y qué impulsa su crecimiento?"
+        },
+        "prompt5": {
+          "title": "Due Diligence VC",
+          "prompt": "¿Qué procesos de due diligence usan los VCs para decisiones de inversión?"
+        },
+        "prompt6": {
+          "title": "Sectores VC Emergentes",
+          "prompt": "¿Qué nuevos sectores y tecnologías están atrayendo atención VC?"
+        }
+      }
+    },
+    "wastemanagement": {
+      "title": "Gestión de Residuos",
+      "description": "Reciclaje, reducción de residuos y sostenibilidad ambiental",
+      "prompts": {
+        "prompt1": {
+          "title": "Economía Circular",
+          "prompt": "¿Cómo está transformando el enfoque de economía circular la gestión de residuos?"
+        },
+        "prompt2": {
+          "title": "Tecnología de Reciclaje",
+          "prompt": "¿Qué nuevas tecnologías están mejorando la eficiencia y procesos de reciclaje?"
+        },
+        "prompt3": {
+          "title": "Soluciones para Residuos Plásticos",
+          "prompt": "¿Qué soluciones innovadoras se están desarrollando para reducción de residuos plásticos?"
+        },
+        "prompt4": {
+          "title": "Residuos a Energía",
+          "prompt": "¿Qué tan efectivas son las tecnologías de residuos a energía para disposición sostenible?"
+        },
+        "prompt5": {
+          "title": "Reducción de Residuos Corporativos",
+          "prompt": "¿Qué estrategias están usando las empresas para reducir residuos y mejorar sostenibilidad?"
+        },
+        "prompt6": {
+          "title": "Gestión Inteligente de Residuos",
+          "prompt": "¿Cómo están mejorando IoT y tecnología inteligente la recolección y gestión de residuos?"
+        }
+      }
+    },
+    "web3": {
+      "title": "Web3",
+      "description": "Web descentralizada, aplicaciones blockchain y ecosistema Web3",
+      "prompts": {
+        "prompt1": {
+          "title": "Desarrollo Web3",
+          "prompt": "¿Cuáles son los últimos desarrollos en infraestructura y aplicaciones Web3?"
+        },
+        "prompt2": {
+          "title": "Apps Descentralizadas",
+          "prompt": "¿Cuáles son las aplicaciones descentralizadas (dApps) más exitosas y sus casos de uso?"
+        },
+        "prompt3": {
+          "title": "Experiencia de Usuario Web3",
+          "prompt": "¿Cómo está mejorando la experiencia de usuario Web3 para adopción mainstream?"
+        },
+        "prompt4": {
+          "title": "Gobernanza Web3",
+          "prompt": "¿Qué modelos de gobernanza están emergiendo en Web3 y estructuras DAO?"
+        },
+        "prompt5": {
+          "title": "Interoperabilidad Web3",
+          "prompt": "¿Cómo se está logrando la interoperabilidad entre diferentes redes Web3?"
+        },
+        "prompt6": {
+          "title": "Inversión Web3",
+          "prompt": "¿Cuáles son las oportunidades de inversión y tendencias en el ecosistema Web3?"
+        }
+      }
+    },
+    "nexus": {
+      "title": "Nexus Wave",
+      "description": "Plataforma Nexus Wave, características y ecosistema",
+      "prompts": {
+        "prompt1": {
+          "title": "Características de Nexus",
+          "prompt": "¿Cuáles son las características y capacidades clave de la plataforma Nexus Wave?"
+        },
+        "prompt2": {
+          "title": "Seguridad de Nexus",
+          "prompt": "¿Cómo asegura Nexus Wave la privacidad del usuario y seguridad de datos?"
+        },
+        "prompt3": {
+          "title": "Navegador Nexus",
+          "prompt": "¿Qué hace diferente al navegador Nexus de otros navegadores web?"
+        },
+        "prompt4": {
+          "title": "Token Nexus",
+          "prompt": "¿Cuál es la utilidad y propósito del token Nexus Wave?"
+        },
+        "prompt5": {
+          "title": "Ecosistema Nexus",
+          "prompt": "¿Cómo funciona el ecosistema Nexus Wave y cuáles son sus componentes?"
+        },
+        "prompt6": {
+          "title": "Roadmap Nexus",
+          "prompt": "¿Qué hay en el roadmap de desarrollo de Nexus Wave y planes futuros?"
+        }
+      }
+    }
+  }
+}
