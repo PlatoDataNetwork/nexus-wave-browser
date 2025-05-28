@@ -1,0 +1,44 @@
+
+{
+  "ui": {
+    "title": "Choisissez un Secteur Vertical d'Industrie",
+    "back": "Retour",
+    "customPrompt": "Posez une question personnalisée sur {{category}}..."
+  },
+  "aviation": {
+    "title": "Aviation et Aérospatiale",
+    "description": "Conception d'aéronefs, ingénierie aérospatiale, opérations de vol et protocoles de sécurité aérienne",
+    "prompts": [
+      "Expliquez les principes de l'aérodynamique dans la conception d'aéronefs modernes",
+      "Quels sont les derniers protocoles de sécurité pour l'aviation commerciale ?",
+      "Comment fonctionnent les moteurs à réaction et quels sont les différents types ?"
+    ]
+  },
+  "automotive": {
+    "title": "Automobile",
+    "description": "Ingénierie des véhicules, processus de fabrication, véhicules électriques et innovation automobile",
+    "prompts": [
+      "Comparez les technologies de batteries des véhicules électriques et leur efficacité",
+      "Quelles sont les dernières tendances dans le développement de véhicules autonomes ?",
+      "Expliquez le processus de fabrication des moteurs de voitures modernes"
+    ]
+  },
+  "biotechnology": {
+    "title": "Biotechnologie",
+    "description": "Génie génétique, recherche pharmaceutique, dispositifs biomédicaux et sciences de la vie",
+    "prompts": [
+      "Quelles sont les dernières percées dans la technologie d'édition génique CRISPR ?",
+      "Expliquez le processus de découverte et de développement de médicaments",
+      "Comment les dispositifs biomédicaux révolutionnent-ils les soins de santé ?"
+    ]
+  },
+  "construction": {
+    "title": "Construction et Architecture",
+    "description": "Conception de bâtiments, gestion de construction, architecture durable et planification urbaine",
+    "prompts": [
+      "Quels sont les principes de l'architecture durable et de la construction verte ?",
+      "Expliquez les méthodologies modernes de gestion de projets de construction",
+      "Comment les villes intelligentes sont-elles conçues et mises en œuvre ?"
+    ]
+  }
+}

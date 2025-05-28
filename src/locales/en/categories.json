@@ -1,0 +1,44 @@
+
+{
+  "ui": {
+    "title": "Choose an Industry Vertical",
+    "back": "Back",
+    "customPrompt": "Ask a custom question about {{category}}..."
+  },
+  "aviation": {
+    "title": "Aviation & Aerospace",
+    "description": "Aircraft design, aerospace engineering, flight operations, and aviation safety protocols",
+    "prompts": [
+      "Explain the principles of aerodynamics in modern aircraft design",
+      "What are the latest safety protocols for commercial aviation?",
+      "How do jet engines work and what are the different types?"
+    ]
+  },
+  "automotive": {
+    "title": "Automotive",
+    "description": "Vehicle engineering, manufacturing processes, electric vehicles, and automotive innovation",
+    "prompts": [
+      "Compare electric vehicle battery technologies and their efficiency",
+      "What are the latest trends in autonomous vehicle development?",
+      "Explain the manufacturing process of modern car engines"
+    ]
+  },
+  "biotechnology": {
+    "title": "Biotechnology",
+    "description": "Genetic engineering, pharmaceutical research, biomedical devices, and life sciences",
+    "prompts": [
+      "What are the latest breakthroughs in CRISPR gene editing technology?",
+      "Explain the drug discovery and development process",
+      "How are biomedical devices revolutionizing healthcare?"
+    ]
+  },
+  "construction": {
+    "title": "Construction & Architecture",
+    "description": "Building design, construction management, sustainable architecture, and urban planning",
+    "prompts": [
+      "What are the principles of sustainable architecture and green building?",
+      "Explain modern construction project management methodologies",
+      "How are smart cities being designed and implemented?"
+    ]
+  }
+}

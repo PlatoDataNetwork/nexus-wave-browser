@@ -1,0 +1,44 @@
+
+{
+  "ui": {
+    "title": "Elige un Sector Vertical de Industria",
+    "back": "Atrás",
+    "customPrompt": "Haz una pregunta personalizada sobre {{category}}..."
+  },
+  "aviation": {
+    "title": "Aviación y Aeroespacial",
+    "description": "Diseño de aeronaves, ingeniería aeroespacial, operaciones de vuelo y protocolos de seguridad aérea",
+    "prompts": [
+      "Explica los principios de la aerodinámica en el diseño de aeronaves modernas",
+      "¿Cuáles son los últimos protocolos de seguridad para la aviación comercial?",
+      "¿Cómo funcionan los motores a reacción y cuáles son los diferentes tipos?"
+    ]
+  },
+  "automotive": {
+    "title": "Automotriz",
+    "description": "Ingeniería de vehículos, procesos de fabricación, vehículos eléctricos e innovación automotriz",
+    "prompts": [
+      "Compara las tecnologías de baterías de vehículos eléctricos y su eficiencia",
+      "¿Cuáles son las últimas tendencias en el desarrollo de vehículos autónomos?",
+      "Explica el proceso de fabricación de motores de automóviles modernos"
+    ]
+  },
+  "biotechnology": {
+    "title": "Biotecnología",
+    "description": "Ingeniería genética, investigación farmacéutica, dispositivos biomédicos y ciencias de la vida",
+    "prompts": [
+      "¿Cuáles son los últimos avances en la tecnología de edición genética CRISPR?",
+      "Explica el proceso de descubrimiento y desarrollo de medicamentos",
+      "¿Cómo están revolucionando los dispositivos biomédicos la atención médica?"
+    ]
+  },
+  "construction": {
+    "title": "Construcción y Arquitectura",
+    "description": "Diseño de edificios, gestión de construcción, arquitectura sostenible y planificación urbana",
+    "prompts": [
+      "¿Cuáles son los principios de la arquitectura sostenible y la construcción verde?",
+      "Explica las metodologías modernas de gestión de proyectos de construcción",
+      "¿Cómo se están diseñando e implementando las ciudades inteligentes?"
+    ]
+  }
+}
