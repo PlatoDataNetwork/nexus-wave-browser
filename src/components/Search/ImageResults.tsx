@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Loader2 } from "lucide-react";
 import { SearchResultItem } from '@/services/searchApi';
 import ImageResultsGrid from './ImageResultsGrid';
@@ -11,11 +12,13 @@ interface ImageResultsProps {
 }
 
 const ImageResults: React.FC<ImageResultsProps> = ({ isLoading, results, searchQuery }) => {
+  const { t } = useTranslation('common');
+
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-40">
         <Loader2 className="h-8 w-8 text-nexus-purple animate-spin mb-2" />
-        <p className="text-muted-foreground">Searching images...</p>
+        <p className="text-muted-foreground">{t('messages.loading')}</p>
       </div>
     );
   }

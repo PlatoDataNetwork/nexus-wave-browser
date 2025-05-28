@@ -1,0 +1,215 @@
+
+{
+  "aerospace": {
+    "title": "Aérospatial",
+    "description": "Exploration spatiale et technologie aérospatiale"
+  },
+  "ai": {
+    "title": "IA",
+    "description": "Intelligence artificielle et apprentissage automatique"
+  },
+  "arvr": {
+    "title": "AR/VR",
+    "description": "Technologies de réalité augmentée et virtuelle"
+  },
+  "automotive": {
+    "title": "Automobile",
+    "description": "Industrie automobile et technologie véhiculaire"
+  },
+  "aviation": {
+    "title": "Aviation",
+    "description": "Aéronefs et industrie de l'aviation"
+  },
+  "banking": {
+    "title": "Banque",
+    "description": "Industrie bancaire et services financiers"
+  },
+  "bigdata": {
+    "title": "Big Data",
+    "description": "Analyse et gestion de données massives"
+  },
+  "biotech": {
+    "title": "Biotechnologie",
+    "description": "Biotechnologie et génie génétique"
+  },
+  "blockchain": {
+    "title": "Blockchain",
+    "description": "Technologies de registre décentralisé"
+  },
+  "cannabis": {
+    "title": "Cannabis",
+    "description": "Industrie du cannabis et recherche médicale"
+  },
+  "carbon": {
+    "title": "Carbone",
+    "description": "Gestion du carbone et technologie climatique"
+  },
+  "cleantech": {
+    "title": "Technologie Propre",
+    "description": "Solutions technologiques durables"
+  },
+  "clinicaltrials": {
+    "title": "Essais Cliniques",
+    "description": "Recherche médicale et tests de médicaments"
+  },
+  "code": {
+    "title": "Code",
+    "description": "Programmation et développement logiciel"
+  },
+  "crowdfunding": {
+    "title": "Financement Participatif",
+    "description": "Financement collectif pour projets et startups"
+  },
+  "crypto": {
+    "title": "Crypto",
+    "description": "Cryptomonnaies et actifs numériques"
+  },
+  "cybersecurity": {
+    "title": "Cybersécurité",
+    "description": "Sécurité numérique et protection contre les menaces"
+  },
+  "defense": {
+    "title": "Défense",
+    "description": "Technologie militaire et systèmes de sécurité"
+  },
+  "ecommerce": {
+    "title": "Commerce Électronique",
+    "description": "Vente au détail en ligne et commerce numérique"
+  },
+  "edtech": {
+    "title": "EdTech",
+    "description": "Technologie éducative et innovation"
+  },
+  "energy": {
+    "title": "Énergie",
+    "description": "Génération et distribution d'énergie"
+  },
+  "esg": {
+    "title": "ESG",
+    "description": "Facteurs environnementaux, sociaux et de gouvernance"
+  },
+  "esports": {
+    "title": "Esports",
+    "description": "Jeux vidéo compétitifs et industrie"
+  },
+  "finance": {
+    "title": "Finance",
+    "description": "Systèmes financiers et stratégies d'investissement"
+  },
+  "financefeeds": {
+    "title": "Flux Financiers",
+    "description": "Nouvelles financières et flux de données"
+  },
+  "fintech": {
+    "title": "Fintech",
+    "description": "Innovation en technologie financière"
+  },
+  "forex": {
+    "title": "Forex",
+    "description": "Marché des changes et commerce de devises"
+  },
+  "gaming": {
+    "title": "Gaming",
+    "description": "Jeux vidéo et divertissement interactif"
+  },
+  "hydrogen": {
+    "title": "Hydrogène",
+    "description": "Énergie hydrogène et technologie de carburant"
+  },
+  "iot": {
+    "title": "IOT",
+    "description": "Appareils connectés de l'Internet des Objets"
+  },
+  "medicaldevices": {
+    "title": "Dispositifs Médicaux",
+    "description": "Équipements et technologie de santé"
+  },
+  "music": {
+    "title": "Musique",
+    "description": "Industrie musicale et technologie audio"
+  },
+  "nanotechnology": {
+    "title": "Nanotechnologie",
+    "description": "Matériaux et ingénierie à échelle microscopique"
+  },
+  "nfts": {
+    "title": "NFTs",
+    "description": "Jetons non fongibles et propriété numérique"
+  },
+  "patents": {
+    "title": "Brevets",
+    "description": "Propriété intellectuelle et droit des brevets"
+  },
+  "payments": {
+    "title": "Paiements",
+    "description": "Traitement des transactions et systèmes de paiement"
+  },
+  "privateequity": {
+    "title": "Capital Privé",
+    "description": "Investissement privé dans les entreprises"
+  },
+  "psychedelics": {
+    "title": "Psychédéliques",
+    "description": "Médecine psychédélique et recherche"
+  },
+  "quantum": {
+    "title": "Quantique",
+    "description": "Informatique quantique et applications"
+  },
+  "realestate": {
+    "title": "Immobilier",
+    "description": "Technologie immobilière et innovation"
+  },
+  "saas": {
+    "title": "SaaS",
+    "description": "Entreprises de Logiciel en tant que Service"
+  },
+  "semiconductor": {
+    "title": "Semiconducteurs",
+    "description": "Conception et fabrication de puces"
+  },
+  "seo": {
+    "title": "SEO",
+    "description": "Techniques d'optimisation pour moteurs de recherche"
+  },
+  "solar": {
+    "title": "Solaire",
+    "description": "Énergie solaire et technologie photovoltaïque"
+  },
+  "spacs": {
+    "title": "SPACs",
+    "description": "Sociétés d'Acquisition à Vocation Spéciale"
+  },
+  "startups": {
+    "title": "Startups",
+    "description": "Entreprises en phase de démarrage et entrepreneuriat"
+  },
+  "stemcell": {
+    "title": "Cellules Souches",
+    "description": "Recherche et thérapies par cellules souches"
+  },
+  "supplychain": {
+    "title": "Chaîne d'Approvisionnement",
+    "description": "Réseaux de logistique et de distribution"
+  },
+  "trading": {
+    "title": "Trading",
+    "description": "Commerce de marché et stratégies d'investissement"
+  },
+  "venturecapital": {
+    "title": "Capital Risque",
+    "description": "Investissement et financement de startups"
+  },
+  "wastemanagement": {
+    "title": "Gestion des Déchets",
+    "description": "Systèmes d'élimination des déchets et recyclage"
+  },
+  "web3": {
+    "title": "Web3",
+    "description": "Technologies internet décentralisées"
+  },
+  "nexus": {
+    "title": "Nexus AI",
+    "description": "Capacités de recherche avancées alimentées par IA"
+  }
+}

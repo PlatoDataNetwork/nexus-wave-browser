@@ -1,0 +1,215 @@
+
+{
+  "aerospace": {
+    "title": "Aerospace",
+    "description": "Space exploration and aerospace technology"
+  },
+  "ai": {
+    "title": "AI",
+    "description": "Artificial intelligence and machine learning"
+  },
+  "arvr": {
+    "title": "AR/VR",
+    "description": "Augmented and virtual reality technologies"
+  },
+  "automotive": {
+    "title": "Automotive",
+    "description": "Automotive industry and vehicle technology"
+  },
+  "aviation": {
+    "title": "Aviation",
+    "description": "Aircraft and aviation industry"
+  },
+  "banking": {
+    "title": "Banking",
+    "description": "Banking industry and financial services"
+  },
+  "bigdata": {
+    "title": "Big Data",
+    "description": "Big data analytics and management"
+  },
+  "biotech": {
+    "title": "Biotech",
+    "description": "Biotechnology and genetic engineering"
+  },
+  "blockchain": {
+    "title": "Blockchain",
+    "description": "Decentralized ledger technologies"
+  },
+  "cannabis": {
+    "title": "Cannabis",
+    "description": "Cannabis industry and medical research"
+  },
+  "carbon": {
+    "title": "Carbon",
+    "description": "Carbon management and climate technology"
+  },
+  "cleantech": {
+    "title": "Cleantech",
+    "description": "Sustainable technology solutions"
+  },
+  "clinicaltrials": {
+    "title": "Clinical Trials",
+    "description": "Medical research and drug testing"
+  },
+  "code": {
+    "title": "Code",
+    "description": "Programming and software development"
+  },
+  "crowdfunding": {
+    "title": "Crowdfunding",
+    "description": "Collective financing for projects and startups"
+  },
+  "crypto": {
+    "title": "Crypto",
+    "description": "Cryptocurrency and digital assets"
+  },
+  "cybersecurity": {
+    "title": "Cyber Security",
+    "description": "Digital security and threat protection"
+  },
+  "defense": {
+    "title": "Defense",
+    "description": "Military technology and security systems"
+  },
+  "ecommerce": {
+    "title": "Ecommerce",
+    "description": "Online retail and digital commerce"
+  },
+  "edtech": {
+    "title": "EdTech",
+    "description": "Educational technology and innovation"
+  },
+  "energy": {
+    "title": "Energy",
+    "description": "Power generation and distribution"
+  },
+  "esg": {
+    "title": "ESG",
+    "description": "Environmental, Social, and Governance factors"
+  },
+  "esports": {
+    "title": "Esports",
+    "description": "Competitive video gaming and industry"
+  },
+  "finance": {
+    "title": "Finance",
+    "description": "Financial systems and investment strategies"
+  },
+  "financefeeds": {
+    "title": "Finance Feeds",
+    "description": "Financial news and data streams"
+  },
+  "fintech": {
+    "title": "Fintech",
+    "description": "Financial technology innovation"
+  },
+  "forex": {
+    "title": "Forex",
+    "description": "Foreign exchange market and currency trading"
+  },
+  "gaming": {
+    "title": "Gaming",
+    "description": "Video games and interactive entertainment"
+  },
+  "hydrogen": {
+    "title": "Hydrogen",
+    "description": "Hydrogen energy and fuel technology"
+  },
+  "iot": {
+    "title": "IOT",
+    "description": "Internet of Things connected devices"
+  },
+  "medicaldevices": {
+    "title": "Medical Devices",
+    "description": "Healthcare equipment and technology"
+  },
+  "music": {
+    "title": "Music",
+    "description": "Music industry and audio technology"
+  },
+  "nanotechnology": {
+    "title": "Nano Technology",
+    "description": "Microscopic-scale materials and engineering"
+  },
+  "nfts": {
+    "title": "NFTs",
+    "description": "Non-fungible tokens and digital ownership"
+  },
+  "patents": {
+    "title": "Patents",
+    "description": "Intellectual property and patent law"
+  },
+  "payments": {
+    "title": "Payments",
+    "description": "Transaction processing and payment systems"
+  },
+  "privateequity": {
+    "title": "Private Equity",
+    "description": "Private investment in companies"
+  },
+  "psychedelics": {
+    "title": "Psychedelics",
+    "description": "Psychedelic medicine and research"
+  },
+  "quantum": {
+    "title": "Quantum",
+    "description": "Quantum computing and applications"
+  },
+  "realestate": {
+    "title": "Real Estate",
+    "description": "Property technology and innovation"
+  },
+  "saas": {
+    "title": "SaaS",
+    "description": "Software-as-a-Service businesses"
+  },
+  "semiconductor": {
+    "title": "Semiconductor",
+    "description": "Computer chip design and manufacturing"
+  },
+  "seo": {
+    "title": "SEO",
+    "description": "Search engine optimization techniques"
+  },
+  "solar": {
+    "title": "Solar",
+    "description": "Solar energy and photovoltaic technology"
+  },
+  "spacs": {
+    "title": "SPACs",
+    "description": "Special Purpose Acquisition Companies"
+  },
+  "startups": {
+    "title": "Startups",
+    "description": "Early-stage companies and entrepreneurship"
+  },
+  "stemcell": {
+    "title": "Stem Cell",
+    "description": "Stem cell research and therapies"
+  },
+  "supplychain": {
+    "title": "Supply Chain",
+    "description": "Logistics and distribution networks"
+  },
+  "trading": {
+    "title": "Trading",
+    "description": "Market trading and investment strategies"
+  },
+  "venturecapital": {
+    "title": "Venture Capital",
+    "description": "Startup investment and funding"
+  },
+  "wastemanagement": {
+    "title": "Waste Management",
+    "description": "Waste disposal and recycling systems"
+  },
+  "web3": {
+    "title": "Web3",
+    "description": "Decentralized internet technologies"
+  },
+  "nexus": {
+    "title": "Nexus AI",
+    "description": "Advanced AI-powered search capabilities"
+  }
+}

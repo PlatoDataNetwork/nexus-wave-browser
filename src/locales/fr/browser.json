@@ -1,6 +1,32 @@
 
 {
   "tabs": {
-    "newTab": "Nouvel Onglet"
+    "newTab": "Nouvel Onglet",
+    "closeTab": "Fermer l'Onglet",
+    "duplicateTab": "Dupliquer l'Onglet"
+  },
+  "navigation": {
+    "back": "Retour",
+    "forward": "Avancer",
+    "reload": "Recharger",
+    "home": "Accueil"
+  },
+  "bookmarks": {
+    "title": "Favoris",
+    "addBookmark": "Ajouter un Favori",
+    "removeBookmark": "Supprimer le Favori",
+    "bookmarkAdded": "Favori ajouté",
+    "bookmarkRemoved": "Favori supprimé"
+  },
+  "wallet": {
+    "connect": "Connecter le Portefeuille",
+    "disconnect": "Déconnecter",
+    "balance": "Solde",
+    "transaction": "Transaction"
+  },
+  "dapps": {
+    "title": "DApps",
+    "featured": "DApps en Vedette",
+    "categories": "Catégories"
   }
 }
