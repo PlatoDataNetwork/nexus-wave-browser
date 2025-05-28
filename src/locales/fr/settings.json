@@ -1,29 +1,4 @@
 
 {
-  "title": "Paramètres",
-  "search": {
-    "title": "Recherche",
-    "defaultEngine": "Moteur de Recherche par Défaut",
-    "suggestions": "Suggestions de Recherche",
-    "autoComplete": "Saisie Automatique"
-  },
-  "privacy": {
-    "title": "Confidentialité et Sécurité",
-    "adBlocking": "Blocage des Publicités",
-    "trackerProtection": "Protection contre les Traqueurs",
-    "cookieSettings": "Paramètres des Cookies",
-    "httpsUpgrade": "Mise à Niveau HTTPS"
-  },
-  "appearance": {
-    "title": "Apparence",
-    "theme": "Thème",
-    "fontSize": "Taille de Police",
-    "language": "Langue"
-  },
-  "advanced": {
-    "title": "Avancé",
-    "clearData": "Effacer les Données de Navigation",
-    "resetSettings": "Remettre par Défaut",
-    "developerMode": "Mode Développeur"
-  }
+  "title": "Paramètres"
 }
