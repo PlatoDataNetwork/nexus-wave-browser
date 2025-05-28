@@ -19,7 +19,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onClick, categoryId }) 
       const translatedPrompts = t(`${categoryId}.prompts`, { returnObjects: true, defaultValue: [] }) as string[];
       if (Array.isArray(translatedPrompts) && translatedPrompts.length > 0) {
         // Find the corresponding prompt by index or content matching
-        const promptIndex = prompt.id - 1; // Assuming ID starts from 1
+        const promptIndex = Number(prompt.id) - 1; // Ensure prompt.id is treated as number
         return translatedPrompts[promptIndex] || prompt.prompt;
       }
     }
