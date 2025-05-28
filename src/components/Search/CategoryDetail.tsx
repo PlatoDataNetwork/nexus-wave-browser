@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Send } from "lucide-react";
 import { SearchCategory, getCategoryById } from '@/data/searchCategories';
@@ -17,6 +18,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
   onBack,
   onSelectPrompt 
 }) => {
+  const { t } = useTranslation('categories');
   const [customPrompt, setCustomPrompt] = useState('');
   const category: SearchCategory | undefined = getCategoryById(categoryId);
 
@@ -31,33 +33,37 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
   if (!category) {
     return (
       <div className="p-4 text-center">
-        <p>Category not found</p>
+        <p>{t('ui.notFound')}</p>
         <Button onClick={onBack} variant="outline" className="mt-4">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Categories
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('ui.backToCategories')}
         </Button>
       </div>
     );
   }
 
+  const translatedTitle = t(`${category.id}.title`, { defaultValue: category.title });
+  const translatedDescription = t(`${category.id}.description`, { defaultValue: category.description });
+
   return (
     <div className="p-4 flex flex-col h-full">
       <div className="flex items-center gap-4 mb-6">
         <Button onClick={onBack} variant="outline" size="sm">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('ui.back')}
         </Button>
         <div>
           <h2 className="text-2xl font-bold flex items-center">
             <category.icon className={`mr-2 h-6 w-6 ${category.color.replace('bg-', 'text-')}`} />
-            {category.title}
+            {translatedTitle}
           </h2>
-          <p className="text-muted-foreground">{category.description}</p>
+          <p className="text-muted-foreground">{translatedDescription}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 flex-grow overflow-auto mb-4">
         {category.prompts.map((prompt) => (
           <PromptCard 
-            key={prompt.id} 
+            key={prompt.id}
+            categoryId={categoryId}
             prompt={prompt}
             onClick={onSelectPrompt}
           />
@@ -68,7 +74,7 @@ const CategoryDetail: React.FC<CategoryDetailProps> = ({
       <div className="mt-auto pt-4 border-t">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <Textarea
-            placeholder={`Ask a custom question about ${category.title}...`}
+            placeholder={t('ui.customPromptPlaceholder', { category: translatedTitle })}
             value={customPrompt}
             onChange={(e) => setCustomPrompt(e.target.value)}
             className="flex-1 min-h-12 resize-none focus:border-nexus-purple transition-colors"
