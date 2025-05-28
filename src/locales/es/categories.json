@@ -40,5 +40,125 @@
       "Explica las metodologías modernas de gestión de proyectos de construcción",
       "¿Cómo se están diseñando e implementando las ciudades inteligentes?"
     ]
+  },
+  "ai": {
+    "title": "IA",
+    "description": "Inteligencia artificial y aprendizaje automático",
+    "prompts": [
+      "¿Cuáles son las consideraciones éticas clave en el desarrollo de IA?",
+      "Explica la diferencia entre aprendizaje supervisado y no supervisado",
+      "¿Cómo imitan las redes neuronales la función del cerebro humano?",
+      "¿Cuáles son las aplicaciones prácticas de la IA en el cuidado de la salud?",
+      "¿Cómo podría evolucionar la IA en la próxima década?",
+      "¿Cuáles son las limitaciones actuales de la inteligencia artificial?"
+    ]
+  },
+  "crypto": {
+    "title": "Cripto",
+    "description": "Criptomonedas y activos digitales",
+    "prompts": [
+      "¿Cuáles son las características clave y desarrollos de Bitcoin y Ethereum?",
+      "Analiza las tendencias del mercado de criptomonedas para las principales altcoins",
+      "¿Cómo está transformando DeFi los servicios financieros a través de contratos inteligentes?",
+      "Explica la tokenómica detrás de proyectos de criptomonedas exitosos",
+      "¿Cuáles son los enfoques regulatorios hacia las criptomonedas en diferentes países?",
+      "Compara los mecanismos de minería y staking para diferentes criptomonedas"
+    ]
+  },
+  "finance": {
+    "title": "Finanzas",
+    "description": "Sistemas financieros y estrategias de inversión",
+    "prompts": [
+      "¿Qué estrategias de inversión son efectivas para mercados volátiles?",
+      "¿Cómo están respondiendo los mercados financieros a los cambios económicos globales?",
+      "¿Qué enfoques de gestión de riesgos protegen contra las caídas del mercado?",
+      "¿Cómo pueden las empresas optimizar su estructura de capital para el crecimiento?",
+      "¿Qué estrategias mejoran los resultados financieros personales al lidiar con la inflación?",
+      "¿Qué métodos de análisis proporcionan insights sobre oportunidades de mercado?"
+    ]
+  },
+  "fintech": {
+    "title": "Fintech",
+    "description": "Innovación en tecnología financiera",
+    "prompts": [
+      "¿Qué innovaciones están transformando los sistemas de pago para empresas?",
+      "¿Cómo está cambiando la banca digital los servicios financieros a través de aplicaciones móviles?",
+      "¿Qué soluciones insurtech abordan los desafíos en la evaluación de riesgos?",
+      "¿Cómo está ayudando regtech a las instituciones financieras a cumplir con las regulaciones?",
+      "¿Qué enfoques fintech están transformando la gestión de patrimonio para millennials?",
+      "¿Cómo está promoviendo fintech la inclusión financiera para poblaciones subbancarizadas?"
+    ]
+  },
+  "blockchain": {
+    "title": "Blockchain",
+    "description": "Tecnologías de libro mayor descentralizado",
+    "prompts": [
+      "Explica cómo se utiliza la tecnología de libro mayor distribuido para el seguimiento de la cadena de suministro",
+      "¿Cómo pueden los contratos inteligentes revolucionar los acuerdos legales?",
+      "¿Cuáles son las aplicaciones empresariales de blockchain en el cuidado de la salud?",
+      "¿Qué medidas de seguridad protegen los sistemas blockchain para transacciones financieras?",
+      "Compara los mecanismos de consenso para blockchain en diferentes industrias",
+      "¿Qué enfoques abordan la escalabilidad de blockchain para la adopción masiva?"
+    ]
+  },
+  "cybersecurity": {
+    "title": "Ciberseguridad",
+    "description": "Seguridad digital y protección contra amenazas",
+    "prompts": [
+      "¿Cuáles son los enfoques actuales para detectar amenazas persistentes avanzadas?",
+      "¿Cómo pueden las organizaciones asegurar las redes contra ataques de ransomware?",
+      "Explica la arquitectura de confianza cero para proteger contra amenazas internas",
+      "¿Qué estrategias previenen y mitigan los ataques de ransomware en infraestructura crítica?",
+      "¿Cómo pueden las organizaciones garantizar la privacidad de los datos mientras permiten la colaboración?",
+      "¿Qué prácticas permiten el desarrollo seguro de aplicaciones en la nube?"
+    ]
+  },
+  "energy": {
+    "title": "Energía",
+    "description": "Generación y distribución de energía",
+    "prompts": [
+      "¿Qué innovaciones están mejorando la energía renovable del solar y eólico?",
+      "¿Qué soluciones de almacenamiento de energía abordan los desafíos en la estabilidad de la red?",
+      "¿Cómo están las tecnologías de red inteligente optimizando la distribución de energía?",
+      "¿Qué enfoques mejoran la eficiencia energética en edificios comerciales?",
+      "¿Cómo está avanzando la tecnología de energía de hidrógeno para el transporte?",
+      "¿Qué nuevas tecnologías nucleares abordan las preocupaciones sobre seguridad y residuos?"
+    ]
+  },
+  "ecommerce": {
+    "title": "Comercio Electrónico",
+    "description": "Comercio minorista en línea y comercio digital",
+    "prompts": [
+      "¿Qué estrategias mejoran el rendimiento del comercio minorista en línea para pequeñas empresas?",
+      "¿Qué sistemas de pago sirven mejor a los sitios de comercio electrónico que venden internacionalmente?",
+      "¿Cómo pueden los sitios de comercio electrónico mejorar la experiencia del cliente para usuarios móviles?",
+      "¿Qué enfoques tienen éxito en mercados como Amazon para nuevos vendedores?",
+      "¿Cómo pueden las empresas optimizar el comercio móvil para mejores tasas de conversión?",
+      "¿Qué soluciones logísticas mejoran las operaciones de comercio electrónico para entrega el mismo día?"
+    ]
+  },
+  "gaming": {
+    "title": "Videojuegos",
+    "description": "Videojuegos y entretenimiento interactivo",
+    "prompts": [
+      "¿Qué enfoques son efectivos para desarrollar juegos con narrativa inmersiva?",
+      "¿Cómo está evolucionando el hardware de juegos para soportar experiencias de realidad virtual?",
+      "¿Qué principios de diseño crean experiencias convincentes en juegos multijugador?",
+      "¿Qué tendencias están dando forma al enfoque de la industria de juegos hacia la monetización?",
+      "¿Cómo se forman y evolucionan las comunidades de juegos alrededor de títulos competitivos?",
+      "¿Qué enfoques de monetización son efectivos para juegos que se enfocan en la retención de jugadores?"
+    ]
+  },
+  "edtech": {
+    "title": "EdTech",
+    "description": "Tecnología educativa e innovación",
+    "prompts": [
+      "¿Qué innovaciones en el aprendizaje en línea están mejorando el compromiso estudiantil?",
+      "¿Cómo está la analítica de aprendizaje mejorando los resultados en la educación superior?",
+      "¿Qué juegos educativos están enseñando efectivamente conceptos STEM?",
+      "¿Cómo está la tecnología de aprendizaje adaptativo personalizando la educación para diferentes estilos de aprendizaje?",
+      "¿Cómo está la realidad virtual mejorando la educación en entrenamiento médico?",
+      "¿Qué tecnologías están avanzando la educación STEM para estudiantes subrepresentados?"
+    ]
   }
 }

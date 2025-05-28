@@ -40,5 +40,125 @@
       "Explain modern construction project management methodologies",
       "How are smart cities being designed and implemented?"
     ]
+  },
+  "ai": {
+    "title": "AI",
+    "description": "Artificial intelligence and machine learning",
+    "prompts": [
+      "What are the key ethical considerations in AI development?",
+      "Explain the difference between supervised and unsupervised learning",
+      "How do neural networks mimic human brain function?",
+      "What are practical applications of AI in healthcare?",
+      "How might AI evolve over the next decade?",
+      "What are the current limitations of artificial intelligence?"
+    ]
+  },
+  "crypto": {
+    "title": "Crypto",
+    "description": "Cryptocurrency and digital assets",
+    "prompts": [
+      "What are the key features and developments of Bitcoin and Ethereum?",
+      "Analyze the cryptocurrency market trends for major altcoins",
+      "How is DeFi transforming financial services through smart contracts?",
+      "Explain the tokenomics behind successful cryptocurrency projects",
+      "What are the regulatory approaches to cryptocurrency in different countries?",
+      "Compare mining and staking mechanisms for different cryptocurrencies"
+    ]
+  },
+  "finance": {
+    "title": "Finance",
+    "description": "Financial systems and investment strategies",
+    "prompts": [
+      "What investment strategies are effective for volatile markets?",
+      "How are financial markets responding to global economic changes?",
+      "What risk management approaches protect against market downturns?",
+      "How can businesses optimize their capital structure for growth?",
+      "What strategies improve personal financial outcomes when dealing with inflation?",
+      "What analysis methods provide insights into market opportunities?"
+    ]
+  },
+  "fintech": {
+    "title": "Fintech",
+    "description": "Financial technology innovation",
+    "prompts": [
+      "What innovations are transforming payment systems for businesses?",
+      "How is digital banking changing financial services through mobile apps?",
+      "What insurtech solutions address challenges in risk assessment?",
+      "How is regtech helping financial institutions comply with regulations?",
+      "What fintech approaches are transforming wealth management for millennials?",
+      "How is fintech promoting financial inclusion for underbanked populations?"
+    ]
+  },
+  "blockchain": {
+    "title": "Blockchain",
+    "description": "Decentralized ledger technologies",
+    "prompts": [
+      "Explain how distributed ledger technology is used for supply chain tracking",
+      "How can smart contracts revolutionize legal agreements?",
+      "What are the enterprise applications of blockchain in healthcare?",
+      "What security measures protect blockchain systems for financial transactions?",
+      "Compare consensus mechanisms for blockchain in different industries",
+      "What approaches address blockchain scalability for mass adoption?"
+    ]
+  },
+  "cybersecurity": {
+    "title": "Cyber Security",
+    "description": "Digital security and threat protection",
+    "prompts": [
+      "What are the current approaches to detecting advanced persistent threats?",
+      "How can organizations secure networks against ransomware attacks?",
+      "Explain zero trust architecture for protecting against insider threats",
+      "What strategies prevent and mitigate ransomware attacks on critical infrastructure?",
+      "How can organizations ensure data privacy while enabling collaboration?",
+      "What practices enable secure development of cloud applications?"
+    ]
+  },
+  "energy": {
+    "title": "Energy",
+    "description": "Power generation and distribution",
+    "prompts": [
+      "What innovations are improving renewable energy from solar and wind?",
+      "What energy storage solutions address challenges in grid stability?",
+      "How are smart grid technologies optimizing energy distribution?",
+      "What approaches improve energy efficiency in commercial buildings?",
+      "How is hydrogen energy technology advancing for transportation?",
+      "What new nuclear technologies address concerns about safety and waste?"
+    ]
+  },
+  "ecommerce": {
+    "title": "Ecommerce",
+    "description": "Online retail and digital commerce",
+    "prompts": [
+      "What strategies improve online retail performance for small businesses?",
+      "Which payment systems best serve ecommerce sites selling internationally?",
+      "How can ecommerce sites improve customer experience for mobile users?",
+      "What approaches succeed on marketplaces like Amazon for new sellers?",
+      "How can businesses optimize mobile commerce for better conversion rates?",
+      "What logistics solutions improve ecommerce operations for same-day delivery?"
+    ]
+  },
+  "gaming": {
+    "title": "Gaming",
+    "description": "Video games and interactive entertainment",
+    "prompts": [
+      "What approaches are effective for developing games with immersive storytelling?",
+      "How is gaming hardware evolving to support virtual reality experiences?",
+      "What design principles create compelling experiences in multiplayer games?",
+      "What trends are shaping the gaming industry's approach to monetization?",
+      "How do gaming communities form and evolve around competitive titles?",
+      "Which monetization approaches are effective for games focusing on player retention?"
+    ]
+  },
+  "edtech": {
+    "title": "EdTech",
+    "description": "Educational technology and innovation",
+    "prompts": [
+      "What innovations in online learning are improving student engagement?",
+      "How is learning analytics enhancing outcomes in higher education?",
+      "What educational games are effectively teaching STEM concepts?",
+      "How is adaptive learning technology personalizing education for different learning styles?",
+      "How is virtual reality enhancing education in medical training?",
+      "What technologies are advancing STEM education for underrepresented students?"
+    ]
   }
 }
