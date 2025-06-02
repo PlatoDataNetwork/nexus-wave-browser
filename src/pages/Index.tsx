@@ -49,8 +49,13 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
       {/* Main browser header with title and time - Always dark in both themes */}
       <div className="flex items-center justify-between px-4 py-2 bg-nexus-header-blue border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="text-sm text-white">
-            Nexus Wave Browser - Web3 V2.1
+          <div className="flex flex-col text-white">
+            <div className="text-sm font-semibold">
+              Nexus Wave by PlatoAI
+            </div>
+            <div className="text-xs text-nexus-purple">
+              Web3 AI Browser
+            </div>
           </div>
         </div>
         

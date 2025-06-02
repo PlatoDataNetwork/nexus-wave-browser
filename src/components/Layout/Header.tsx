@@ -40,9 +40,14 @@ const Header: React.FC = () => {
                 className="h-full w-full object-cover"
               />
             </div>
-            <span className="hidden text-xl font-bold text-white sm:inline-block">
-              Nexus Wave
-            </span>
+            <div className="hidden sm:flex flex-col">
+              <span className="text-lg font-bold text-white leading-tight">
+                Nexus Wave by PlatoAI
+              </span>
+              <span className="text-xs text-nexus-purple leading-tight">
+                Web3 AI Browser
+              </span>
+            </div>
           </Link>
         </div>
         
