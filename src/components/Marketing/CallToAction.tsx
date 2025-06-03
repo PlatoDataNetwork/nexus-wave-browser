@@ -1,10 +1,17 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import ComingSoonModal from "@/components/Downloads/ComingSoonModal";
 
 const CallToAction: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleMacOSDownload = () => {
+    setShowModal(true);
+  };
+
   return (
     <div className="max-w-5xl mx-auto text-center">
       <div className="relative z-10">
@@ -18,12 +25,15 @@ const CallToAction: React.FC = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/app">
-            <Button variant="macos" size="macos-lg" className="rounded-lg shadow-lg">
-              <Download className="mr-2 h-5 w-5" />
-              Download for MacOS
-            </Button>
-          </Link>
+          <Button 
+            variant="macos" 
+            size="macos-lg" 
+            className="rounded-lg shadow-lg"
+            onClick={handleMacOSDownload}
+          >
+            <Download className="mr-2 h-5 w-5" />
+            Download for MacOS
+          </Button>
           <Button size="macos-lg" variant="macos-light" className="rounded-lg">
             <Globe className="mr-2 h-5 w-5" />
             Try Web Version
@@ -56,6 +66,12 @@ const CallToAction: React.FC = () => {
         <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-nexus-purple/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 left-1/4 w-60 h-60 bg-nexus-purple/5 rounded-full blur-3xl" />
       </div>
+
+      <ComingSoonModal 
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        platform="macOS"
+      />
     </div>
   );
 };
