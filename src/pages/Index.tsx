@@ -53,9 +53,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
             <div className="text-sm font-semibold">
               Nexus Wave by PlatoAI
             </div>
-            <div className="text-xs text-nexus-purple">
-              Web3 AI Browser
-            </div>
           </div>
         </div>
         

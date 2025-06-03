@@ -33,19 +33,9 @@ const Header: React.FC = () => {
         {/* Logo and Brand */}
         <div className="mr-4 flex items-center">
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
-              <img 
-                src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
-                alt="Nexus Wave Logo" 
-                className="h-full w-full object-cover"
-              />
-            </div>
             <div className="hidden sm:flex flex-col">
               <span className="text-lg font-bold text-white leading-tight">
                 Nexus Wave by PlatoAI
-              </span>
-              <span className="text-xs text-nexus-purple leading-tight">
-                Web3 AI Browser
               </span>
             </div>
           </Link>
