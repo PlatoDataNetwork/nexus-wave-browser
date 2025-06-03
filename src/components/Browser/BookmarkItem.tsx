@@ -18,12 +18,17 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({
 }) => {
   const initial = title.charAt(0).toUpperCase();
   
+  const handleClick = () => {
+    console.log(`🎯 BookmarkItem clicked: ${title} with URL: ${url}`);
+    onClick(url, title);
+  };
+  
   return (
     <Button
       variant="ghost"
       size="sm"
       className="flex items-center space-x-1 whitespace-nowrap p-1 h-8 hover:bg-primary/10"
-      onClick={() => onClick(url, title)}
+      onClick={handleClick}
     >
       <div 
         className="flex items-center justify-center h-6 w-6 rounded-full text-white font-medium text-xs"

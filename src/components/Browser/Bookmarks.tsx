@@ -27,18 +27,26 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
   };
 
   const handleBookmarkClick = (url: string, title: string) => {
+    console.log(`🔥 Bookmark click handler called for ${title} with URL: ${url}`);
+    
     let processedUrl = url;
     if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
       processedUrl = `https://${url}`;
     }
     
-    console.log(`Bookmark clicked: ${title} - Navigating to: ${processedUrl}`);
+    console.log(`🚀 Final processed URL for navigation: ${processedUrl}`);
     toast.success(`Loading ${title}...`);
     
     onNavigate(processedUrl);
   };
 
   const alphabetizedBookmarks = getAlphabetizedBookmarks();
+  
+  // Debug log the Gtrade bookmark specifically
+  const gtradeBookmark = alphabetizedBookmarks.find(b => b.title === "Gtrade");
+  if (gtradeBookmark) {
+    console.log(`📋 Gtrade bookmark in component: ${gtradeBookmark.title} -> ${gtradeBookmark.url}`);
+  }
 
   return (
     <div className="relative flex items-center bg-nexus-header-blue border-b border-border">
