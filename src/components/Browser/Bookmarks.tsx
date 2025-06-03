@@ -51,7 +51,6 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
     onNavigate(processedUrl);
   };
 
-  // Create a merged and alphabetized list of bookmarks
   const getColorFromName = (name: string) => {
     // Generate a consistent color based on the name
     const colors = [
@@ -88,6 +87,9 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
 
   // Create a combined and alphabetized list of bookmarks
   const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
+    // Items to exclude from favorites
+    const excludedItems = ["Alek Bot", "Algorand", "Avalanche", "Cardano"];
+    
     // Create a combined array of bookmarks and protocols
     const combinedBookmarks: EnhancedBookmark[] = [
       // Include the original bookmarks with added color property
@@ -95,13 +97,6 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         ...bookmark,
         color: getColorFromName(bookmark.title)
       })),
-      // Include Alek Bot
-      {
-        id: "alekbot",
-        title: "Alek Bot",
-        url: "https://gist.github.com/AlekBot/8f25dd2b086621f44ee23ed4d33ce43b",
-        color: getColorFromName("Alek Bot")
-      },
       // Add Alpaca to favorites
       {
         id: "alpaca",
@@ -116,19 +111,23 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://web3-vercel-nexus.vercel.app/",
         color: getColorFromName("DefiX")
       },
-      // Include top protocols
-      ...topProtocols.map(protocol => ({
-        id: protocol.id,
-        title: protocol.name,
-        url: protocol.url,
-        color: protocol.color || getColorFromName(protocol.name)
-      }))
+      // Include top protocols, excluding the specified ones
+      ...topProtocols
+        .filter(protocol => !excludedItems.includes(protocol.name))
+        .map(protocol => ({
+          id: protocol.id,
+          title: protocol.name,
+          url: protocol.url,
+          color: protocol.color || getColorFromName(protocol.name)
+        }))
     ];
 
-    // Sort alphabetically by title
-    return combinedBookmarks.sort((a, b) => 
-      a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-    );
+    // Filter out excluded items and sort alphabetically by title
+    return combinedBookmarks
+      .filter(bookmark => !excludedItems.includes(bookmark.title))
+      .sort((a, b) => 
+        a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+      );
   };
 
   const alphabetizedBookmarks = getAlphabetizedBookmarks();
