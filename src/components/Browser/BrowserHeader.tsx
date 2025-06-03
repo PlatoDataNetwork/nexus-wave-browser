@@ -412,7 +412,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <BuyNFW3Button size="sm" />
           <Button
             variant="ghost"
             size="sm"
