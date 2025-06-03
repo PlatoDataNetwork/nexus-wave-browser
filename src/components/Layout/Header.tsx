@@ -3,12 +3,9 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const { t } = useTranslation('common');
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
@@ -52,7 +49,7 @@ const Header: React.FC = () => {
                   className="text-white"
                 >
                   <Search className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">{t('navigation.search')}</span>
+                  <span className="hidden sm:inline">Search</span>
                 </Button>
               </Link>
             </li>
@@ -64,7 +61,7 @@ const Header: React.FC = () => {
                   className="text-white"
                 >
                   <Globe className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">{t('navigation.browser')}</span>
+                  <span className="hidden sm:inline">Browser</span>
                 </Button>
               </Link>
             </li>
@@ -76,7 +73,7 @@ const Header: React.FC = () => {
                   className="text-white"
                 >
                   <Coins className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">{t('navigation.token')}</span>
+                  <span className="hidden sm:inline">Token</span>
                 </Button>
               </Link>
             </li>
@@ -88,7 +85,7 @@ const Header: React.FC = () => {
                   className="text-white"
                 >
                   <LineChart className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">{t('navigation.staking')}</span>
+                  <span className="hidden sm:inline">Staking</span>
                 </Button>
               </Link>
             </li>
@@ -97,19 +94,18 @@ const Header: React.FC = () => {
         
         {/* Right side actions */}
         <div className="flex items-center gap-2">
-          <LanguageSwitcher />
           <Link to="/profile">
             <Button
               variant="ghost"
               size="sm"
               className="text-white"
             >
-              {t('navigation.signup')}
+              Signup
             </Button>
           </Link>
           <Link to="/downloads">
             <Button variant="macos" size="sm">
-              {t('navigation.downloads')}
+              Downloads
             </Button>
           </Link>
         </div>

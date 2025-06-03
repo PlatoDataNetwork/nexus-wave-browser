@@ -7,9 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import App from "./App.tsx";
 import "./index.css";
 
-// Initialize i18n
-import "./locales/index.ts";
-
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
