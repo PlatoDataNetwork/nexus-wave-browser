@@ -1,4 +1,3 @@
-
 import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -105,8 +104,10 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
       "OpenSea",
       "Optimism",
       "Polkadot",
+      "Polygon",
       "Solana",
-      "Tezos"
+      "Tezos",
+      "Uniswap"
     ];
     
     // Create a combined array of bookmarks and protocols
@@ -123,12 +124,12 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://alpacanetwork.ai",
         color: getColorFromName("Alpaca")
       },
-      // Add DefiX to favorites
+      // Add Plato DefIX to favorites
       {
-        id: "defix",
-        title: "DefiX",
+        id: "plato-defix",
+        title: "Plato DefIX",
         url: "https://web3-vercel-nexus.vercel.app/",
-        color: getColorFromName("DefiX")
+        color: getColorFromName("Plato DefIX")
       },
       // Include top protocols, excluding the specified ones
       ...topProtocols
