@@ -1,12 +1,8 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import ComingSoonModal from "@/components/Downloads/ComingSoonModal";
-import BuyNFW3Button from "@/components/Swap/BuyNFW3Button";
-import NFW3StakingButton from "@/components/Swap/NFW3StakingButton";
-import NFW3RewardsButton from "@/components/Swap/NFW3RewardsButton";
 
 const CallToAction: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +23,7 @@ const CallToAction: React.FC = () => {
           for both MacOS & PC with seamless integration across the decentralized web.
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button 
             variant="macos" 
             size="macos-lg" 
@@ -46,13 +42,6 @@ const CallToAction: React.FC = () => {
           <Button size="macos-lg" variant="link" className="text-nexus-light-purple">
             Learn More <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
-        </div>
-
-        {/* NFW3 Action Buttons with Confetti */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <BuyNFW3Button size="lg" />
-          <NFW3StakingButton size="lg" />
-          <NFW3RewardsButton size="lg" />
         </div>
         
         <div className="mt-12 flex items-center justify-center space-x-8">
