@@ -5,8 +5,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, Search, Settings as SettingsIcon, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import SettingsAppearance from "@/components/Settings/SettingsAppearance";
 import SettingsPrivacySecurity from "@/components/Settings/SettingsPrivacySecurity";
 import SettingsAutofill from "@/components/Settings/SettingsAutofill";
@@ -19,7 +17,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 
 const SettingsDocumentation: React.FC = () => {
-  const { t } = useTranslation('settings');
   const [searchQuery, setSearchQuery] = React.useState("");
   const [activeSection, setActiveSection] = React.useState("settings");
   const [activeTab, setActiveTab] = React.useState("appearance");
@@ -123,11 +120,8 @@ const SettingsDocumentation: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between h-8 bg-card border-b border-border px-4">
         <h1 className="text-xs font-medium">
-          Nexus Wave Browser - {activeSection === "settings" ? t('title') : "Documentation"}
+          Nexus Wave Browser - {activeSection === "settings" ? "Settings" : "Documentation"}
         </h1>
-        <div className="flex items-center">
-          <LanguageSwitcher />
-        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
@@ -142,7 +136,7 @@ const SettingsDocumentation: React.FC = () => {
               className="w-full mb-4"
             >
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="settings">{t('title')}</TabsTrigger>
+                <TabsTrigger value="settings">Settings</TabsTrigger>
                 <TabsTrigger value="documentation">Docs</TabsTrigger>
               </TabsList>
             </Tabs>
@@ -170,7 +164,7 @@ const SettingsDocumentation: React.FC = () => {
                     value="appearance"
                     className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
                   >
-                    <span>{t('appearance.title')}</span>
+                    <span>Appearance</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
                   <TabsTrigger
@@ -184,7 +178,7 @@ const SettingsDocumentation: React.FC = () => {
                     value="privacy"
                     className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
                   >
-                    <span>{t('privacy.title')}</span>
+                    <span>Privacy & Security</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
                   <TabsTrigger
@@ -219,7 +213,7 @@ const SettingsDocumentation: React.FC = () => {
                     value="advanced"
                     className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
                   >
-                    <span>{t('advanced.title')}</span>
+                    <span>Advanced</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
                 </TabsList>
