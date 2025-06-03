@@ -91,30 +91,6 @@ const Downloads: React.FC = () => {
         {/* Mobile Downloads */}
         <div className="mt-12 text-center">
           <h2 className="text-2xl font-bold mb-6">Also Available on Mobile</h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a 
-              href="#" 
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img 
-                src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
-                alt="Download on the App Store" 
-                className="h-12 w-auto"
-              />
-            </a>
-            <a 
-              href="#" 
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img 
-                src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
-                alt="Get it on Google Play" 
-                className="h-12 w-auto"
-              />
-            </a>
-          </div>
         </div>
         
         {/* System Requirements */}
@@ -134,7 +110,6 @@ const Downloads: React.FC = () => {
               <h4 className="font-semibold mb-2">Windows</h4>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                 <li>Windows 10 or later</li>
-                <li>Intel or AMD processor</li>
                 <li>4 GB RAM minimum</li>
                 <li>1 GB available storage</li>
               </ul>
