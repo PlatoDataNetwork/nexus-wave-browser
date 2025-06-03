@@ -34,19 +34,30 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     "Tezos", "Uniswap"
   ];
   
+  // First, process bookmarks and ensure Gtrade URL is updated
+  const processedBookmarks = bookmarks.map(bookmark => {
+    console.log(`Processing original bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
+    
+    let finalUrl = bookmark.url;
+    // Explicitly handle Gtrade URL update
+    if (bookmark.title === "Gtrade") {
+      finalUrl = "https://sol.gains.trade";
+      console.log(`✅ UPDATED Gtrade URL from ${bookmark.url} to ${finalUrl}`);
+    }
+    
+    const updatedBookmark = {
+      ...bookmark,
+      color: getColorFromName(bookmark.title),
+      url: finalUrl
+    };
+    
+    console.log(`Final processed bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
+    return updatedBookmark;
+  });
+  
   const combinedBookmarks: EnhancedBookmark[] = [
-    // Include the original bookmarks with added color property, but update Gtrade URL
-    ...bookmarks.map(bookmark => {
-      console.log(`Processing bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
-      const updatedBookmark = {
-        ...bookmark,
-        color: getColorFromName(bookmark.title),
-        // Update Gtrade URL to Solana-specific version
-        url: bookmark.title === "Gtrade" ? "https://sol.gains.trade" : bookmark.url
-      };
-      console.log(`Updated bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
-      return updatedBookmark;
-    }),
+    // Include the processed bookmarks
+    ...processedBookmarks,
     // Add Alpaca to favorites
     {
       id: "alpaca",
@@ -113,6 +124,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       a.title.toLowerCase().localeCompare(b.title.toLowerCase())
     );
 
-  console.log("Final bookmarks:", finalBookmarks);
+  console.log("🔍 Final bookmarks array:", finalBookmarks);
+  
+  // Double-check Gtrade in final array
+  const gtradeBookmark = finalBookmarks.find(b => b.title === "Gtrade");
+  if (gtradeBookmark) {
+    console.log(`🎯 FINAL Gtrade bookmark URL: ${gtradeBookmark.url}`);
+  }
+  
   return finalBookmarks;
 };
