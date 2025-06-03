@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download, Compass, Palette, BarChart3 } from "lucide-react";
+import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -22,21 +22,6 @@ const Header: React.FC = () => {
   const isActive = (path: string) => {
     return location.pathname === path || 
            (path !== '/' && location.pathname.startsWith(path));
-  };
-
-  // Handle Discovery link click to open in browser
-  const handleDiscoveryClick = () => {
-    window.location.href = '/app?url=https://ai.platodata.io';
-  };
-
-  // Handle PlatoAI Creator link click to open in browser
-  const handleCreatorClick = () => {
-    window.location.href = '/app?url=https://dashboard.platodata.io';
-  };
-
-  // Handle PlatoAI Analyst link click to open in browser
-  const handleAnalystClick = () => {
-    window.location.href = '/app?url=https://analyst.platodata.io';
   };
 
   return (
@@ -67,39 +52,6 @@ const Header: React.FC = () => {
                   <span className="hidden sm:inline">Search</span>
                 </Button>
               </Link>
-            </li>
-            <li>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white"
-                onClick={handleCreatorClick}
-              >
-                <Palette className="mr-1 h-4 w-4" />
-                <span className="hidden sm:inline">PlatoAI Creator</span>
-              </Button>
-            </li>
-            <li>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white"
-                onClick={handleAnalystClick}
-              >
-                <BarChart3 className="mr-1 h-4 w-4" />
-                <span className="hidden sm:inline">PlatoAI Analyst</span>
-              </Button>
-            </li>
-            <li>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white"
-                onClick={handleDiscoveryClick}
-              >
-                <Compass className="mr-1 h-4 w-4" />
-                <span className="hidden sm:inline">Discovery</span>
-              </Button>
             </li>
             <li>
               <Link to="/app">
