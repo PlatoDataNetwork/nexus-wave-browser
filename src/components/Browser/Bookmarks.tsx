@@ -1,5 +1,3 @@
-
-
 import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -140,12 +138,12 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://web3-vercel-nexus.vercel.app/",
         color: getColorFromName("Plato DefIX")
       },
-      // Add PlatoAI Nexus to favorites
+      // Add Plato Data Network to favorites
       {
-        id: "platoai-nexus",
-        title: "PlatoAI Nexus",
-        url: "https://nexus-carbon-tour.vercel.app",
-        color: getColorFromName("PlatoAI Nexus")
+        id: "plato-data-network",
+        title: "Plato Data Network",
+        url: "https://platodata.ai",
+        color: getColorFromName("Plato Data Network")
       },
       // Add Circle Nexus to favorites
       {
@@ -232,4 +230,3 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
 };
 
 export default Bookmarks;
-
