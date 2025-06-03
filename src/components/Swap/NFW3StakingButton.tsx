@@ -19,19 +19,26 @@ const NFW3StakingButton: React.FC<NFW3StakingButtonProps> = ({
   const { toast } = useToast();
 
   const handleClick = () => {
-    console.log('NFW3 Staking button clicked - triggering confetti');
+    console.log('NFW3 Staking button clicked - about to trigger confetti');
     
-    // Trigger confetti with enhanced settings
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#3B82F6', '#1D4ED8', '#2563EB', '#1E40AF'],
-      startVelocity: 30,
-      gravity: 0.8,
-      drift: 0,
-      ticks: 200
-    });
+    try {
+      // Trigger confetti with verified settings
+      const result = confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { x: 0.5, y: 0.6 },
+        colors: ['#3B82F6', '#1D4ED8', '#2563EB', '#1E40AF'],
+        startVelocity: 30,
+        gravity: 0.8,
+        drift: 0,
+        ticks: 200,
+        scalar: 1.2
+      });
+      
+      console.log('Confetti result:', result);
+    } catch (error) {
+      console.error('Confetti error:', error);
+    }
     
     toast({
       title: "NFW3 Staking",

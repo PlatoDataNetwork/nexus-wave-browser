@@ -19,19 +19,26 @@ const BuyNFW3Button: React.FC<BuyNFW3ButtonProps> = ({
   const [showSwapModal, setShowSwapModal] = useState(false);
 
   const handleClick = () => {
-    console.log('Buy NFW3 button clicked - triggering confetti');
+    console.log('Buy NFW3 button clicked - about to trigger confetti');
     
-    // Trigger confetti with enhanced settings
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#8B5CF6', '#A855F7', '#9333EA', '#7C3AED'],
-      startVelocity: 30,
-      gravity: 0.8,
-      drift: 0,
-      ticks: 200
-    });
+    try {
+      // Trigger confetti with verified settings
+      const result = confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { x: 0.5, y: 0.6 },
+        colors: ['#8B5CF6', '#A855F7', '#9333EA', '#7C3AED'],
+        startVelocity: 30,
+        gravity: 0.8,
+        drift: 0,
+        ticks: 200,
+        scalar: 1.2
+      });
+      
+      console.log('Confetti result:', result);
+    } catch (error) {
+      console.error('Confetti error:', error);
+    }
     
     setShowSwapModal(true);
   };

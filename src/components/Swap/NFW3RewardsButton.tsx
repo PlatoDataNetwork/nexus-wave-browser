@@ -19,19 +19,26 @@ const NFW3RewardsButton: React.FC<NFW3RewardsButtonProps> = ({
   const { toast } = useToast();
 
   const handleClick = () => {
-    console.log('NFW3 Rewards button clicked - triggering confetti');
+    console.log('NFW3 Rewards button clicked - about to trigger confetti');
     
-    // Trigger confetti with enhanced settings
-    confetti({
-      particleCount: 150,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#10B981', '#059669', '#047857', '#065F46'],
-      startVelocity: 30,
-      gravity: 0.8,
-      drift: 0,
-      ticks: 200
-    });
+    try {
+      // Trigger confetti with verified settings
+      const result = confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { x: 0.5, y: 0.6 },
+        colors: ['#10B981', '#059669', '#047857', '#065F46'],
+        startVelocity: 30,
+        gravity: 0.8,
+        drift: 0,
+        ticks: 200,
+        scalar: 1.2
+      });
+      
+      console.log('Confetti result:', result);
+    } catch (error) {
+      console.error('Confetti error:', error);
+    }
     
     toast({
       title: "NFW3 Rewards",
