@@ -8,9 +8,9 @@ import ComingSoonModal from "@/components/Downloads/ComingSoonModal";
 
 const Downloads: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<'macOS' | 'Windows'>('macOS');
+  const [selectedPlatform, setSelectedPlatform] = useState<'MacOS' | 'Windows'>('MacOS');
 
-  const handleDownloadClick = (platform: 'macOS' | 'Windows') => {
+  const handleDownloadClick = (platform: 'MacOS' | 'Windows') => {
     console.log(`Download clicked for ${platform}`);
     setSelectedPlatform(platform);
     setShowModal(true);
@@ -29,7 +29,7 @@ const Downloads: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* macOS Download Section */}
+          {/* MacOS Download Section */}
           <Card className="overflow-hidden border-2 border-primary/5 hover:border-primary/20 transition-all duration-300">
             <div className="h-48 bg-gradient-to-br from-[#1E1E1E] to-[#2D2D2D] flex items-center justify-center">
               <Apple className="h-24 w-24 text-white" />
@@ -38,20 +38,20 @@ const Downloads: React.FC = () => {
               <div>
                 <h2 className="text-2xl font-bold mb-2">Download for Mac</h2>
                 <p className="text-muted-foreground">
-                  Optimized for macOS with native performance and features.
+                  Optimized for MacOS with native performance and features.
                 </p>
               </div>
               
               <div className="flex flex-col gap-3">
                 <button 
-                  onClick={() => handleDownloadClick('macOS')}
+                  onClick={() => handleDownloadClick('MacOS')}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
                   <Download className="h-5 w-5" />
-                  Download for macOS
+                  Download for MacOS
                 </button>
                 <p className="text-xs text-muted-foreground text-center">
-                  Compatible with macOS 11.0 or later
+                  Compatible with MacOS 11.0 or later
                 </p>
               </div>
             </CardContent>
@@ -122,9 +122,9 @@ const Downloads: React.FC = () => {
           <h3 className="text-xl font-bold mb-4">System Requirements</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold mb-2">macOS</h4>
+              <h4 className="font-semibold mb-2">MacOS</h4>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                <li>macOS 11.0 or later</li>
+                <li>MacOS 11.0 or later</li>
                 <li>Apple M1/M2/M3 or Intel processor</li>
                 <li>4 GB RAM minimum</li>
                 <li>1 GB available storage</li>
