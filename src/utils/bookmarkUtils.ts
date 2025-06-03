@@ -51,6 +51,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
     ...processedBookmarks,
+    // Add MoltenArc to favorites
+    {
+      id: "molten-arc",
+      title: "MoltenArc",
+      url: "https://moltenarcsc2.vercel.app/",
+      color: getColorFromName("MoltenArc")
+    },
     // Add Gtrade to favorites with correct URL
     {
       id: "gtrade",
@@ -126,10 +133,10 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
 
   console.log("🔍 Final bookmarks array:", finalBookmarks);
   
-  // Log Gtrade specifically for testing
-  const gtradeBookmark = finalBookmarks.find(b => b.title === "Gtrade");
-  if (gtradeBookmark) {
-    console.log(`🎯 Gtrade bookmark added with URL: ${gtradeBookmark.url}`);
+  // Log MoltenArc specifically for verification
+  const moltenArcBookmark = finalBookmarks.find(b => b.title === "MoltenArc");
+  if (moltenArcBookmark) {
+    console.log(`🎯 MoltenArc bookmark added with URL: ${moltenArcBookmark.url}`);
   }
   
   return finalBookmarks;
