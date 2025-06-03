@@ -1,5 +1,4 @@
 
-
 import { bookmarks } from "@/lib/dummyData";
 import { topProtocols } from "@/lib/protocolData";
 
@@ -108,13 +107,6 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://cut.platodata.xyz",
       color: getColorFromName("CUT")
     },
-    // Add PlatoAI Nexus to favorites
-    {
-      id: "platoai-nexus",
-      title: "PlatoAI Nexus",
-      url: "https://platodata.xyz",
-      color: getColorFromName("PlatoAI Nexus")
-    },
     // Include top protocols, excluding the specified ones
     ...topProtocols
       .filter(protocol => !excludedItems.includes(protocol.name))
@@ -142,4 +134,3 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   
   return finalBookmarks;
 };
-
