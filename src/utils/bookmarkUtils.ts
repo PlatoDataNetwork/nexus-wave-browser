@@ -29,12 +29,12 @@ export const getColorFromName = (name: string): string => {
 export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const excludedItems = [
     "Alek Bot", "Algorand", "Avalanche", "Cardano", "Chainlink", "Curve",
-    "Decentraland", "dYdX", "Ethereum", "Gtrade", "MakerDAO", "MarginFI", "Metamask",
+    "Decentraland", "dYdX", "Ethereum", "MakerDAO", "MarginFI", "Metamask",
     "Nexus Browser", "OpenSea", "Optimism", "Polkadot", "Polygon", "Solana",
     "Tezos", "Uniswap"
   ];
   
-  // Process bookmarks without any special Gtrade handling
+  // Process bookmarks without any special handling
   const processedBookmarks = bookmarks.map(bookmark => {
     console.log(`Processing original bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
     
@@ -51,6 +51,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
     ...processedBookmarks,
+    // Add Gtrade to favorites with correct URL
+    {
+      id: "gtrade",
+      title: "Gtrade",
+      url: "https://sol.gains.trade",
+      color: getColorFromName("Gtrade")
+    },
     // Add Alpaca to favorites
     {
       id: "alpaca",
@@ -118,6 +125,12 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     );
 
   console.log("🔍 Final bookmarks array:", finalBookmarks);
+  
+  // Log Gtrade specifically for testing
+  const gtradeBookmark = finalBookmarks.find(b => b.title === "Gtrade");
+  if (gtradeBookmark) {
+    console.log(`🎯 Gtrade bookmark added with URL: ${gtradeBookmark.url}`);
+  }
   
   return finalBookmarks;
 };
