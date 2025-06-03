@@ -29,26 +29,19 @@ export const getColorFromName = (name: string): string => {
 export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const excludedItems = [
     "Alek Bot", "Algorand", "Avalanche", "Cardano", "Chainlink", "Curve",
-    "Decentraland", "dYdX", "Ethereum", "MakerDAO", "MarginFI", "Metamask",
+    "Decentraland", "dYdX", "Ethereum", "Gtrade", "MakerDAO", "MarginFI", "Metamask",
     "Nexus Browser", "OpenSea", "Optimism", "Polkadot", "Polygon", "Solana",
     "Tezos", "Uniswap"
   ];
   
-  // First, process bookmarks and ensure Gtrade URL is updated
+  // Process bookmarks without any special Gtrade handling
   const processedBookmarks = bookmarks.map(bookmark => {
     console.log(`Processing original bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
-    
-    let finalUrl = bookmark.url;
-    // Explicitly handle Gtrade URL update
-    if (bookmark.title === "Gtrade") {
-      finalUrl = "https://sol.gains.trade";
-      console.log(`✅ UPDATED Gtrade URL from ${bookmark.url} to ${finalUrl}`);
-    }
     
     const updatedBookmark = {
       ...bookmark,
       color: getColorFromName(bookmark.title),
-      url: finalUrl
+      url: bookmark.url
     };
     
     console.log(`Final processed bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
@@ -125,12 +118,6 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     );
 
   console.log("🔍 Final bookmarks array:", finalBookmarks);
-  
-  // Double-check Gtrade in final array
-  const gtradeBookmark = finalBookmarks.find(b => b.title === "Gtrade");
-  if (gtradeBookmark) {
-    console.log(`🎯 FINAL Gtrade bookmark URL: ${gtradeBookmark.url}`);
-  }
   
   return finalBookmarks;
 };
