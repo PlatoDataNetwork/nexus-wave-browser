@@ -5,6 +5,9 @@ import BrowserContent from "@/components/Browser/BrowserContent";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import WalletConnect from "@/components/Browser/WalletConnect";
+import BuyNFW3Button from "@/components/Swap/BuyNFW3Button";
+import NFW3StakingButton from "@/components/Swap/NFW3StakingButton";
+import NFW3RewardsButton from "@/components/Swap/NFW3RewardsButton";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -84,6 +87,16 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
           bookmarksBarState={bookmarksBarState}
           onToggleBookmarksBar={toggleBookmarksBarState}
         />
+        
+        {/* Test Confetti Buttons */}
+        <div className="bg-nexus-header-blue/20 border-b border-border p-4">
+          <div className="flex items-center justify-center gap-4">
+            <div className="text-white text-sm mr-4">Test Confetti:</div>
+            <BuyNFW3Button size="sm" />
+            <NFW3StakingButton size="sm" />
+            <NFW3RewardsButton size="sm" />
+          </div>
+        </div>
         
         <BrowserContent 
           currentUrl={currentUrl} 
