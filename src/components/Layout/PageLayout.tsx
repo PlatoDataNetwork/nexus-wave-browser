@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import BrowserFooter from "../Browser/BrowserFooter";
+import Header from "./Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -50,6 +51,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   return (
     <div className={containerClassName}>
+      <Header />
       <div className={contentClassName}>
         {children}
       </div>
