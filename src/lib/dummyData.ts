@@ -115,7 +115,7 @@ export const bookmarks = [
   }
 ];
 
-// Add the missing popularDApps export
+// Add the missing popularDApps export - REMOVED ALL GTRADE REFERENCES
 export const popularDApps = [
   {
     id: 1,
