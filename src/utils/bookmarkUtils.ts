@@ -75,6 +75,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://nexus-carbon-tour.vercel.app",
       color: getColorFromName("Circle Nexus")
     },
+    // Add PlatoAI Code Nexus to favorites
+    {
+      id: "platoai-code-nexus",
+      title: "PlatoAI Code Nexus",
+      url: "https://platoai-code-forge.vercel.app/",
+      color: getColorFromName("PlatoAI Code Nexus")
+    },
     // Include top protocols, excluding the specified ones
     ...topProtocols
       .filter(protocol => !excludedItems.includes(protocol.name))
