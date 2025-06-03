@@ -43,14 +43,6 @@ const Downloads: React.FC = () => {
               </div>
               
               <div className="flex flex-col gap-3">
-                <AspectRatio ratio={13/3} className="w-full overflow-hidden rounded-lg">
-                  <img 
-                    src="/lovable-uploads/aae1d781-d63b-4fa3-9b41-0a760d977a72.png" 
-                    alt="Download for macOS" 
-                    className="w-full h-full object-cover"
-                  />
-                </AspectRatio>
-                
                 <button 
                   onClick={() => handleDownloadClick('macOS')}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -81,14 +73,6 @@ const Downloads: React.FC = () => {
               </div>
               
               <div className="flex flex-col gap-3">
-                <AspectRatio ratio={13/3} className="w-full overflow-hidden rounded-lg">
-                  <img 
-                    src="/lovable-uploads/404bd8cc-211d-4725-a971-535eea7f17fe.png" 
-                    alt="Download for Windows" 
-                    className="w-full h-full object-cover"
-                  />
-                </AspectRatio>
-                
                 <button 
                   onClick={() => handleDownloadClick('Windows')}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
