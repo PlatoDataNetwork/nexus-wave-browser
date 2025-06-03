@@ -1,4 +1,3 @@
-
 import { LucideIcon } from "lucide-react";
 import { Book, GraduationCap, Home, Rocket, Wallet, Database, FileSearch, ArrowRightLeft, Landmark } from "lucide-react";
 
@@ -18,13 +17,6 @@ export const initialTabs: Tab[] = [
     title: "Platodata.io",
     url: "https://Platodata.io",
     isActive: true,
-    icon: undefined
-  },
-  {
-    id: "tab-2",
-    title: "Google",
-    url: "https://google.com",
-    isActive: false,
     icon: undefined
   },
   {
