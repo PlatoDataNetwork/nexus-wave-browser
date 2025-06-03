@@ -27,7 +27,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="dark">
           <TooltipProvider>
             <Routes>
               <Route path="/" element={<PageLayout><LandingPage /></PageLayout>} />
