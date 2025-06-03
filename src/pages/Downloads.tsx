@@ -8,9 +8,9 @@ import ComingSoonModal from "@/components/Downloads/ComingSoonModal";
 
 const Downloads: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedPlatform, setSelectedPlatform] = useState<'MacOS' | 'Windows'>('MacOS');
+  const [selectedPlatform, setSelectedPlatform] = useState<'macOS' | 'Windows'>('macOS');
 
-  const handleDownloadClick = (platform: 'MacOS' | 'Windows') => {
+  const handleDownloadClick = (platform: 'macOS' | 'Windows') => {
     console.log(`Download clicked for ${platform}`);
     setSelectedPlatform(platform);
     setShowModal(true);
@@ -44,7 +44,7 @@ const Downloads: React.FC = () => {
               
               <div className="flex flex-col gap-3">
                 <button 
-                  onClick={() => handleDownloadClick('MacOS')}
+                  onClick={() => handleDownloadClick('macOS')}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
                   <Download className="h-5 w-5" />
