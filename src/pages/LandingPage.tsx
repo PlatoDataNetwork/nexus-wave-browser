@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -69,7 +68,7 @@ const LandingPage: React.FC = () => {
                       </Button>
                     </Link>
                     <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
-                      Watch Demo
+                      Try Demo
                     </Button>
                   </div>
                 </motion.div>
