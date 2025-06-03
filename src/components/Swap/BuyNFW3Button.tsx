@@ -22,7 +22,7 @@ const BuyNFW3Button: React.FC<BuyNFW3ButtonProps> = ({
       <Button 
         variant={variant}
         size={size}
-        className={`${className} bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600`}
+        className={`${className} bg-nexus-purple hover:bg-nexus-deep-purple text-white transition-colors`}
         onClick={() => setShowSwapModal(true)}
       >
         <Coins className="mr-2 h-4 w-4" />
