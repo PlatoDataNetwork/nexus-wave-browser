@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Globe } from "lucide-react";
@@ -34,10 +33,12 @@ const CallToAction: React.FC = () => {
             <Download className="mr-2 h-5 w-5" />
             Download for MacOS
           </Button>
-          <Button size="macos-lg" variant="macos-light" className="rounded-lg">
-            <Globe className="mr-2 h-5 w-5" />
-            Try Web Version
-          </Button>
+          <Link to="/app">
+            <Button size="macos-lg" variant="macos-light" className="rounded-lg">
+              <Globe className="mr-2 h-5 w-5" />
+              Try Web Version
+            </Button>
+          </Link>
           <Button size="macos-lg" variant="link" className="text-nexus-light-purple">
             Learn More <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
