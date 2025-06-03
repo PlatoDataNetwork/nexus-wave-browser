@@ -106,16 +106,10 @@ export const bookmarks = [
     title: "PlatoAI Analyst",
     url: "https://analyst.platodata.io",
     color: "#06B6D4"
-  },
-  {
-    id: "bookmark-8",
-    title: "Lumia",
-    url: "https://lumia.org",
-    color: "#9333EA"
   }
 ];
 
-// Add the missing popularDApps export - REMOVED ALL GTRADE REFERENCES
+// Add the missing popularDApps export - REMOVED ALL GTRADE AND LUMIA REFERENCES
 export const popularDApps = [
   {
     id: 1,
