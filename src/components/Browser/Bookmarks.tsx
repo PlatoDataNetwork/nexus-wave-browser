@@ -126,6 +126,13 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://alpacanetwork.ai",
         color: getColorFromName("Alpaca")
       },
+      // Add ARK to favorites
+      {
+        id: "ark",
+        title: "ARK",
+        url: "https://ark.platodata.xyz",
+        color: getColorFromName("ARK")
+      },
       // Add Plato DefIX to favorites
       {
         id: "plato-defix",
