@@ -399,7 +399,15 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
         {/* Address Bar */}
         <div className="flex-1">
-          <AddressBar currentUrl={currentUrl} onNavigate={onNavigate} />
+          <AddressBar 
+            currentUrl={currentUrl} 
+            onNavigate={onNavigate}
+            onGoBack={onGoBack}
+            onGoForward={onGoForward}
+            onRefresh={onRefresh}
+            canGoBack={canGoBack}
+            canGoForward={canGoForward}
+          />
         </div>
 
         {/* Action Buttons */}
@@ -426,7 +434,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
       {/* Bookmarks Bar */}
       {bookmarksBarState !== "hidden" && (
         <Bookmarks 
-          isMinimized={bookmarksBarState === "minimized"}
           onNavigate={onNavigate}
         />
       )}
