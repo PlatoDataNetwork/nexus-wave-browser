@@ -35,10 +35,12 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   ];
   
   const combinedBookmarks: EnhancedBookmark[] = [
-    // Include the original bookmarks with added color property
+    // Include the original bookmarks with added color property, but update Gtrade URL
     ...bookmarks.map(bookmark => ({
       ...bookmark,
-      color: getColorFromName(bookmark.title)
+      color: getColorFromName(bookmark.title),
+      // Update Gtrade URL to Solana-specific version
+      url: bookmark.title === "Gtrade" ? "https://sol.gains.trade" : bookmark.url
     })),
     // Add Alpaca to favorites
     {
