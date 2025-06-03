@@ -67,9 +67,11 @@ const LandingPage: React.FC = () => {
                         Download for MacOS <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
-                    <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
-                      Try Demo
-                    </Button>
+                    <Link to="/app">
+                      <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
+                        Try Demo
+                      </Button>
+                    </Link>
                   </div>
                 </motion.div>
               </div>
