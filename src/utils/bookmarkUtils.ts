@@ -36,12 +36,17 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the original bookmarks with added color property, but update Gtrade URL
-    ...bookmarks.map(bookmark => ({
-      ...bookmark,
-      color: getColorFromName(bookmark.title),
-      // Update Gtrade URL to Solana-specific version
-      url: bookmark.title === "Gtrade" ? "https://sol.gains.trade" : bookmark.url
-    })),
+    ...bookmarks.map(bookmark => {
+      console.log(`Processing bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
+      const updatedBookmark = {
+        ...bookmark,
+        color: getColorFromName(bookmark.title),
+        // Update Gtrade URL to Solana-specific version
+        url: bookmark.title === "Gtrade" ? "https://sol.gains.trade" : bookmark.url
+      };
+      console.log(`Updated bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
+      return updatedBookmark;
+    }),
     // Add Alpaca to favorites
     {
       id: "alpaca",
@@ -102,9 +107,12 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       }))
   ];
 
-  return combinedBookmarks
+  const finalBookmarks = combinedBookmarks
     .filter(bookmark => !excludedItems.includes(bookmark.title))
     .sort((a, b) => 
       a.title.toLowerCase().localeCompare(b.title.toLowerCase())
     );
+
+  console.log("Final bookmarks:", finalBookmarks);
+  return finalBookmarks;
 };
