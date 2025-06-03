@@ -59,6 +59,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
     ...processedBookmarks,
+    // Add ArcMolten to favorites
+    {
+      id: "arc-molten",
+      title: "ArcMolten",
+      url: "https://moltenarcsc1.vercel.app",
+      color: getColorFromName("ArcMolten")
+    },
     // Add MoltenArc to favorites
     {
       id: "molten-arc",
@@ -73,49 +80,42 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://sol.gains.trade",
       color: getColorFromName("Gtrade")
     },
-    // Add Alpaca to favorites
     {
       id: "alpaca",
       title: "Alpaca",
       url: "https://alpacanetwork.ai",
       color: getColorFromName("Alpaca")
     },
-    // Add ARK to favorites
     {
       id: "ark",
       title: "ARK",
       url: "https://ark.platodata.xyz",
       color: getColorFromName("ARK")
     },
-    // Add Plato DefIX to favorites
     {
       id: "plato-defix",
       title: "Plato DefIX",
       url: "https://web3-vercel-nexus.vercel.app/",
       color: getColorFromName("Plato DefIX")
     },
-    // Add Plato Data Network to favorites
     {
       id: "plato-data-network",
       title: "Plato Data Network",
       url: "https://platodata.ai",
       color: getColorFromName("Plato Data Network")
     },
-    // Add Circle Nexus to favorites
     {
       id: "circle-nexus",
       title: "Circle Nexus",
       url: "https://nexus-carbon-tour.vercel.app",
       color: getColorFromName("Circle Nexus")
     },
-    // Add PlatoAI Code Nexus to favorites
     {
       id: "platoai-code-nexus",
       title: "PlatoAI Code Nexus",
       url: "https://platoai-code-forge.vercel.app/",
       color: getColorFromName("PlatoAI Code Nexus")
     },
-    // Add CUT to favorites
     {
       id: "cut",
       title: "CUT",
