@@ -1,4 +1,3 @@
-
 import { LucideIcon } from "lucide-react";
 import { Book, GraduationCap, Home, Rocket, Wallet, Database, FileSearch, ArrowRightLeft, Landmark } from "lucide-react";
 
@@ -106,12 +105,6 @@ export const bookmarks = [
     title: "PlatoAI Analyst",
     url: "https://analyst.platodata.io",
     color: "#06B6D4"
-  },
-  {
-    id: "bookmark-8",
-    title: "Gtrade",
-    url: "https://gtrade.io",
-    color: "#7C3AED"
   }
 ];
 
