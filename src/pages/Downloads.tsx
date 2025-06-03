@@ -1,11 +1,20 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Apple, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import ComingSoonModal from "@/components/Downloads/ComingSoonModal";
 
 const Downloads: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<'macOS' | 'Windows'>('macOS');
+
+  const handleDownloadClick = (platform: 'macOS' | 'Windows') => {
+    setSelectedPlatform(platform);
+    setShowModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="flex-1 container max-w-screen-xl mx-auto py-10 px-4 md:px-6">
@@ -41,18 +50,16 @@ const Downloads: React.FC = () => {
                   />
                 </AspectRatio>
                 
-                <a 
-                  href="#" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center"
+                <button 
+                  onClick={() => handleDownloadClick('macOS')}
+                  className="flex items-center justify-center cursor-pointer"
                 >
                   <img 
                     src="/lovable-uploads/e0dc38fd-aecf-45f5-94f1-ac3f7bacc533.png" 
                     alt="Download on the Mac App Store" 
-                    className="h-12 w-auto"
+                    className="h-12 w-auto hover:opacity-80 transition-opacity"
                   />
-                </a>
+                </button>
                 <p className="text-xs text-muted-foreground text-center">
                   Compatible with macOS 11.0 or later
                 </p>
@@ -84,18 +91,16 @@ const Downloads: React.FC = () => {
                   />
                 </AspectRatio>
                 
-                <a 
-                  href="#" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center"
+                <button 
+                  onClick={() => handleDownloadClick('Windows')}
+                  className="flex items-center justify-center cursor-pointer"
                 >
                   <img 
                     src="/lovable-uploads/5fe79665-4517-4163-90ff-8ee3ba56dd23.png" 
                     alt="Get it on Google Play" 
-                    className="h-12 w-auto"
+                    className="h-12 w-auto hover:opacity-80 transition-opacity"
                   />
-                </a>
+                </button>
                 <p className="text-xs text-muted-foreground text-center">
                   Compatible with Windows 10 or later
                 </p>
@@ -158,6 +163,12 @@ const Downloads: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <ComingSoonModal 
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        platform={selectedPlatform}
+      />
     </div>
   );
 };
