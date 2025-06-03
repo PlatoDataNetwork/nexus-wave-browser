@@ -29,24 +29,32 @@ export const getColorFromName = (name: string): string => {
 export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const excludedItems = [
     "Alek Bot", "Algorand", "Avalanche", "Cardano", "Chainlink", "Curve",
-    "Decentraland", "dYdX", "Ethereum", "MakerDAO", "MarginFI", "Metamask",
+    "Decentraland", "dYdX", "Ethereum", "MakerDAO", "MarginFI", "Metamask", "MetaMask",
     "Nexus Browser", "OpenSea", "Optimism", "Polkadot", "Polygon", "Solana",
     "Tezos", "Uniswap"
   ];
   
+  console.log("Excluded items:", excludedItems);
+  
   // Process bookmarks without any special handling
-  const processedBookmarks = bookmarks.map(bookmark => {
-    console.log(`Processing original bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
-    
-    const updatedBookmark = {
-      ...bookmark,
-      color: getColorFromName(bookmark.title),
-      url: bookmark.url
-    };
-    
-    console.log(`Final processed bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
-    return updatedBookmark;
-  });
+  const processedBookmarks = bookmarks
+    .filter(bookmark => {
+      const isExcluded = excludedItems.includes(bookmark.title);
+      console.log(`Bookmark ${bookmark.title}: excluded = ${isExcluded}`);
+      return !isExcluded;
+    })
+    .map(bookmark => {
+      console.log(`Processing original bookmark: ${bookmark.title} with URL: ${bookmark.url}`);
+      
+      const updatedBookmark = {
+        ...bookmark,
+        color: getColorFromName(bookmark.title),
+        url: bookmark.url
+      };
+      
+      console.log(`Final processed bookmark: ${updatedBookmark.title} with URL: ${updatedBookmark.url}`);
+      return updatedBookmark;
+    });
   
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
@@ -116,7 +124,11 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     },
     // Include top protocols, excluding the specified ones
     ...topProtocols
-      .filter(protocol => !excludedItems.includes(protocol.name))
+      .filter(protocol => {
+        const isExcluded = excludedItems.includes(protocol.name);
+        console.log(`Protocol ${protocol.name}: excluded = ${isExcluded}`);
+        return !isExcluded;
+      })
       .map(protocol => ({
         id: protocol.id,
         title: protocol.name,
@@ -126,18 +138,12 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   ];
 
   const finalBookmarks = combinedBookmarks
-    .filter(bookmark => !excludedItems.includes(bookmark.title))
     .sort((a, b) => 
       a.title.toLowerCase().localeCompare(b.title.toLowerCase())
     );
 
   console.log("🔍 Final bookmarks array:", finalBookmarks);
-  
-  // Log MoltenArc specifically for verification
-  const moltenArcBookmark = finalBookmarks.find(b => b.title === "MoltenArc");
-  if (moltenArcBookmark) {
-    console.log(`🎯 MoltenArc bookmark added with URL: ${moltenArcBookmark.url}`);
-  }
+  console.log("🔍 Checking for Metamask in final array:", finalBookmarks.find(b => b.title.toLowerCase().includes('metamask')));
   
   return finalBookmarks;
 };
