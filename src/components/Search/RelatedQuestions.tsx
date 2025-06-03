@@ -1,8 +1,8 @@
+
 import React, { memo, useState } from 'react';
 import { MessageSquarePlus, Loader2, CheckCircle2, Clock } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useTranslation } from 'react-i18next';
 
 interface RelatedQuestionsProps {
   questions: string[];
@@ -16,7 +16,6 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({
   onQuestionClick,
   alreadyClickedQuestions = new Set()
 }) => {
-  const { t } = useTranslation('search');
   const [clickedQuestionIndex, setClickedQuestionIndex] = useState<number | null>(null);
   
   if (!questions || questions.length === 0) {
@@ -46,7 +45,7 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({
     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-1 text-xs font-medium mb-2">
         <MessageSquarePlus className="h-3 w-3" />
-        <span>{t('chat.askFollowUp')}</span>
+        <span>Ask a follow-up question</span>
       </div>
       <div className="flex flex-col gap-2">
         {questions.map((question, index) => {
@@ -69,7 +68,7 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({
                     {clickedQuestionIndex === index ? (
                       <div className="flex items-center gap-1.5">
                         <Loader2 className="h-3 w-3 animate-spin" />
-                        <span>{t('chat.processing')}</span>
+                        <span>Processing...</span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-1.5 w-full">
@@ -84,7 +83,7 @@ const RelatedQuestions: React.FC<RelatedQuestionsProps> = memo(({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="top" align="center" className="text-xs">
-                  {wasClickedBefore ? t('chat.alreadyAsked') : t('chat.clickToAsk')}
+                  {wasClickedBefore ? 'Already asked' : 'Click to ask'}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
