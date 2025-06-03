@@ -6,7 +6,7 @@ import confetti from 'canvas-confetti';
 interface ComingSoonModalProps {
   isOpen: boolean;
   onClose: () => void;
-  platform: 'macOS' | 'Windows';
+  platform: 'MacOS' | 'Windows';
 }
 
 const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, platform }) => {
