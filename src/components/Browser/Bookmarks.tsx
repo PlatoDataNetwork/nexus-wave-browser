@@ -88,7 +88,26 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
   // Create a combined and alphabetized list of bookmarks
   const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     // Items to exclude from favorites
-    const excludedItems = ["Alek Bot", "Algorand", "Avalanche", "Cardano"];
+    const excludedItems = [
+      "Alek Bot", 
+      "Algorand", 
+      "Avalanche", 
+      "Cardano",
+      "Chainlink",
+      "Curve",
+      "Decentraland",
+      "dYdX",
+      "Ethereum",
+      "MakerDAO",
+      "MarginFI",
+      "Metamask",
+      "Nexus Browser",
+      "OpenSea",
+      "Optimism",
+      "Polkadot",
+      "Solana",
+      "Tezos"
+    ];
     
     // Create a combined array of bookmarks and protocols
     const combinedBookmarks: EnhancedBookmark[] = [
