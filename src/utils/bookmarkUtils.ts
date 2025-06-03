@@ -73,13 +73,6 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://moltenarcsc2.vercel.app/",
       color: getColorFromName("MoltenArc")
     },
-    // Add Gtrade to favorites with correct URL
-    {
-      id: "gtrade",
-      title: "Gtrade",
-      url: "https://sol.gains.trade",
-      color: getColorFromName("Gtrade")
-    },
     {
       id: "alpaca",
       title: "Alpaca",
