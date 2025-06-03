@@ -27,7 +27,11 @@ import {
   Trash,
   HelpCircle,
   Moon,
-  Home
+  Home,
+  ChevronLeft,
+  ChevronRight,
+  RotateCcw,
+  MoreVertical
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,6 +54,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/hooks/useTheme";
+import BuyNFW3Button from "@/components/Swap/BuyNFW3Button";
 
 // Removed duplicate import of useNavigate
 
@@ -311,7 +316,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   onRefresh,
   canGoBack,
   canGoForward,
-  bookmarksBarState = "visible",
+  bookmarksBarState,
   onToggleBookmarksBar
 }) => {
   // Ensure navigation handler properly handles URLs
@@ -351,57 +356,79 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-background border-b border-border">
+      {/* Tab Bar */}
       <TabBar
         tabs={tabs}
-        onAddTab={onAddTab}
         onCloseTab={onCloseTab}
         onActivateTab={onActivateTab}
+        onAddTab={onAddTab}
       />
-      <div className="flex-none">
-        <AddressBar
-          currentUrl={currentUrl}
-          onNavigate={handleNavigate}
-          onGoBack={onGoBack}
-          onGoForward={onGoForward}
-          onRefresh={onRefresh}
-          canGoBack={canGoBack}
-          canGoForward={canGoForward}
-        />
-      </div>
       
-      {/* Bookmarks bar with toggle button */}
-      {bookmarksBarState !== "hidden" && (
-        <div className="relative">
-          {/* Bookmarks toggle button */}
-          {onToggleBookmarksBar && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-2 top-2 z-10 h-5 w-5 rounded-full bg-muted/80 hover:bg-muted"
-                  onClick={onToggleBookmarksBar}
-                >
-                  {getBookmarksBarIcon()}
-                  <span className="sr-only">{getBookmarksBarTooltip()}</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{getBookmarksBarTooltip()}</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-          
-          {/* Show full or minimized bookmarks based on state */}
-          {bookmarksBarState === "visible" ? (
-            <Bookmarks onNavigate={handleNavigate} />
-          ) : (
-            <div className="flex items-center px-4 py-1 border-b border-border bg-secondary/20">
-              <span className="text-xs text-muted-foreground">Bookmarks minimized</span>
-            </div>
-          )}
+      {/* Navigation and Address Bar */}
+      <div className="flex items-center gap-2 p-2">
+        {/* Navigation buttons */}
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onGoBack}
+            disabled={!canGoBack}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onGoForward}
+            disabled={!canGoForward}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onRefresh}
+            className="h-8 w-8 p-0"
+          >
+            <RotateCcw className="h-4 w-4" />
+          </Button>
         </div>
+
+        {/* Address Bar */}
+        <div className="flex-1">
+          <AddressBar currentUrl={currentUrl} onNavigate={onNavigate} />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
+          <BuyNFW3Button size="sm" />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onToggleBookmarksBar}
+            className="h-8 px-2"
+          >
+            <Star className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+          >
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Bookmarks Bar */}
+      {bookmarksBarState !== "hidden" && (
+        <Bookmarks 
+          isMinimized={bookmarksBarState === "minimized"}
+          onNavigate={onNavigate}
+        />
       )}
     </div>
   );
