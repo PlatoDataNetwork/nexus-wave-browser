@@ -1,4 +1,5 @@
 
+
 import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -139,6 +140,13 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         url: "https://nexus-carbon-tour.vercel.app",
         color: getColorFromName("PlatoAI Nexus")
       },
+      // Add Circle Nexus to favorites
+      {
+        id: "circle-nexus",
+        title: "Circle Nexus",
+        url: "https://nexus-carbon-tour.vercel.app",
+        color: getColorFromName("Circle Nexus")
+      },
       // Include top protocols, excluding the specified ones
       ...topProtocols
         .filter(protocol => !excludedItems.includes(protocol.name))
@@ -217,3 +225,4 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
 };
 
 export default Bookmarks;
+
