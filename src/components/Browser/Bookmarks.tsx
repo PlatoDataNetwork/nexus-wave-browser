@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { bookmarks } from "@/lib/dummyData";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,13 @@ const Bookmarks: React.FC<BookmarksProps> = ({ onNavigate, onToggle }) => {
         title: "Plato DefIX",
         url: "https://web3-vercel-nexus.vercel.app/",
         color: getColorFromName("Plato DefIX")
+      },
+      // Add PlatoAI Nexus to favorites
+      {
+        id: "platoai-nexus",
+        title: "PlatoAI Nexus",
+        url: "https://nexus-carbon-tour.vercel.app",
+        color: getColorFromName("PlatoAI Nexus")
       },
       // Include top protocols, excluding the specified ones
       ...topProtocols
