@@ -82,6 +82,13 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://platoai-code-forge.vercel.app/",
       color: getColorFromName("PlatoAI Code Nexus")
     },
+    // Add CUT to favorites
+    {
+      id: "cut",
+      title: "CUT",
+      url: "https://cut.platodata.xyz",
+      color: getColorFromName("CUT")
+    },
     // Include top protocols, excluding the specified ones
     ...topProtocols
       .filter(protocol => !excludedItems.includes(protocol.name))
