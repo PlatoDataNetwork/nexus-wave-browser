@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
@@ -53,7 +54,7 @@ import {
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/components/theme-provider";
 import BuyNFW3Button from "@/components/Swap/BuyNFW3Button";
 
 // Removed duplicate import of useNavigate
