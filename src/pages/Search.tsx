@@ -23,14 +23,11 @@ import { Link } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
 import NexusCategories from "@/components/Search/NexusCategories";
 import CategoryDetail from "@/components/Search/CategoryDetail";
-import { useTranslation } from 'react-i18next';
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
 
 const Search: React.FC = () => {
-  const { t } = useTranslation(['search', 'common']);
-  
   const [searchQuery, setSearchQuery] = useState("");
   const [lastSearchedQuery, setLastSearchedQuery] = useState("");
   const [results, setResults] = useState<SearchResultItem[]>([]);
@@ -473,7 +470,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <SearchIcon className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">{t('common:navigation.search')}</span>
+                    <span className="hidden sm:inline">Search</span>
                   </Button>
                 </Link>
               </li>
@@ -485,7 +482,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Globe className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">{t('common:navigation.browser')}</span>
+                    <span className="hidden sm:inline">Browser</span>
                   </Button>
                 </Link>
               </li>
@@ -497,7 +494,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Zap className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">{t('common:navigation.token')}</span>
+                    <span className="hidden sm:inline">Token</span>
                   </Button>
                 </Link>
               </li>
@@ -509,7 +506,7 @@ const Search: React.FC = () => {
                     className="text-white"
                   >
                     <Image className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">{t('common:navigation.staking')}</span>
+                    <span className="hidden sm:inline">Staking</span>
                   </Button>
                 </Link>
               </li>
@@ -524,12 +521,12 @@ const Search: React.FC = () => {
                 size="sm"
                 className="text-white"
               >
-                {t('common:navigation.signup')}
+                Signup
               </Button>
             </Link>
             <Link to="/downloads">
               <Button variant="macos" size="sm">
-                {t('common:navigation.downloads')}
+                Downloads
               </Button>
             </Link>
           </div>
@@ -545,7 +542,7 @@ const Search: React.FC = () => {
           <div className="flex-1 relative">
             <Input
               type="search"
-              placeholder={t('search:placeholder')}
+              placeholder="Search the web..."
               value={searchQuery}
               onChange={handleSearchInputChange}
               className="h-10 pl-10 bg-background"
@@ -557,7 +554,7 @@ const Search: React.FC = () => {
             className="bg-nexus-purple hover:bg-nexus-deep-purple" 
             disabled={isLoading}
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('common:navigation.search')}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
           </Button>
         </form>
 
@@ -567,19 +564,19 @@ const Search: React.FC = () => {
             <div className="flex justify-between items-center">
               <TabsList className="bg-secondary/50">
                 <TabsTrigger value="web" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Globe className="h-4 w-4 mr-1" /> {t('search:tabs.web')}
+                  <Globe className="h-4 w-4 mr-1" /> Web
                 </TabsTrigger>
                 <TabsTrigger value="images" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Image className="h-4 w-4 mr-1" /> {t('search:tabs.images')}
+                  <Image className="h-4 w-4 mr-1" /> Images
                 </TabsTrigger>
                 <TabsTrigger value="videos" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Video className="h-4 w-4 mr-1" /> {t('search:tabs.videos')}
+                  <Video className="h-4 w-4 mr-1" /> Videos
                 </TabsTrigger>
                 <TabsTrigger value="news" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <FileText className="h-4 w-4 mr-1" /> {t('search:tabs.news')}
+                  <FileText className="h-4 w-4 mr-1" /> News
                 </TabsTrigger>
                 <TabsTrigger value="nexus" className="data-[state=active]:bg-nexus-purple data-[state=active]:text-white">
-                  <Zap className="h-4 w-4 mr-1" /> {t('search:tabs.nexusAi')}
+                  <Zap className="h-4 w-4 mr-1" /> Nexus AI
                 </TabsTrigger>
               </TabsList>
               
@@ -591,7 +588,7 @@ const Search: React.FC = () => {
                   type="button"
                 >
                   <Clock className="h-4 w-4" />
-                  <span className="text-xs">{t('search:filters.past24h')}</span>
+                  <span className="text-xs">Past 24h</span>
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -601,7 +598,7 @@ const Search: React.FC = () => {
                   type="button"
                 >
                   <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
-                  <span className="text-xs">{safeSearch ? t('search:filters.safeSearchOn') : t('search:filters.safeSearchOff')}</span>
+                  <span className="text-xs">{safeSearch ? "Safe Search: On" : "Safe Search: Off"}</span>
                 </Button>
               </div>
             </div>
