@@ -15,16 +15,19 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
 
   useEffect(() => {
     if (isOpen) {
+      console.log('Coming Soon modal opened for', platform);
       setShowCountdown(true);
       setCountdown(3);
       
       const timer = setInterval(() => {
         setCountdown(prev => {
+          console.log('Countdown:', prev);
           if (prev === 1) {
             clearInterval(timer);
             
             // Trigger confetti explosion
             setTimeout(() => {
+              console.log('Triggering confetti');
               confetti({
                 particleCount: 150,
                 spread: 180,
@@ -47,11 +50,11 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
 
       return () => clearInterval(timer);
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, platform]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-nexus-header-blue to-nexus-space-black border-nexus-purple/20">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-nexus-header-blue to-nexus-space-black border border-nexus-purple/30 shadow-2xl backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-white mb-4">
             Coming Soon

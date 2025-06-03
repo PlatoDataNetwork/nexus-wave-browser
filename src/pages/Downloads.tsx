@@ -11,6 +11,7 @@ const Downloads: React.FC = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<'macOS' | 'Windows'>('macOS');
 
   const handleDownloadClick = (platform: 'macOS' | 'Windows') => {
+    console.log(`Download clicked for ${platform}`);
     setSelectedPlatform(platform);
     setShowModal(true);
   };
@@ -52,13 +53,10 @@ const Downloads: React.FC = () => {
                 
                 <button 
                   onClick={() => handleDownloadClick('macOS')}
-                  className="flex items-center justify-center cursor-pointer"
+                  className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
-                  <img 
-                    src="/lovable-uploads/e0dc38fd-aecf-45f5-94f1-ac3f7bacc533.png" 
-                    alt="Download on the Mac App Store" 
-                    className="h-12 w-auto hover:opacity-80 transition-opacity"
-                  />
+                  <Download className="h-5 w-5" />
+                  Download for macOS
                 </button>
                 <p className="text-xs text-muted-foreground text-center">
                   Compatible with macOS 11.0 or later
@@ -93,13 +91,10 @@ const Downloads: React.FC = () => {
                 
                 <button 
                   onClick={() => handleDownloadClick('Windows')}
-                  className="flex items-center justify-center cursor-pointer"
+                  className="w-full bg-gradient-to-r from-purple-500 to-purple-700 text-white py-4 px-6 rounded-lg font-semibold text-lg flex items-center justify-center gap-2 hover:from-purple-600 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
-                  <img 
-                    src="/lovable-uploads/5fe79665-4517-4163-90ff-8ee3ba56dd23.png" 
-                    alt="Get it on Google Play" 
-                    className="h-12 w-auto hover:opacity-80 transition-opacity"
-                  />
+                  <Download className="h-5 w-5" />
+                  Download for Windows
                 </button>
                 <p className="text-xs text-muted-foreground text-center">
                   Compatible with Windows 10 or later
