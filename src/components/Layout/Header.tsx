@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
   const isHistoryRoute = location.pathname.startsWith('/history');
   
-  // Don't display header on app routes that have their own browser chrome
-  const shouldHideHeader = isAppRoute || isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
+  // Only hide header on search, extension-store, and history routes, but show on app routes
+  const shouldHideHeader = isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
   
   if (shouldHideHeader) {
     return null;
@@ -35,8 +36,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     console.log("Search clicked, navigating");
     
     if (onNavigate) {
+      console.log("Using onNavigate to open search in browser");
       onNavigate("/search");
     } else {
+      console.log("Using React Router to navigate to search");
       navigate('/search');
     }
     
