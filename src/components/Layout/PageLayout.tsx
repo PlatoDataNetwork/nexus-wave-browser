@@ -51,7 +51,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   return (
     <div className={containerClassName}>
-      <Header />
+      <Header onNavigate={onNavigate} />
       <div className={contentClassName}>
         {children}
       </div>
