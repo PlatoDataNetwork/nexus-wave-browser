@@ -1,11 +1,15 @@
 
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
@@ -22,6 +26,17 @@ const Header: React.FC = () => {
   const isActive = (path: string) => {
     return location.pathname === path || 
            (path !== '/' && location.pathname.startsWith(path));
+  };
+
+  const handleSearchClick = () => {
+    console.log("Search clicked, navigating");
+    
+    navigate('/search');
+    
+    toast({
+      title: "Opening Nexus Search",
+      description: "Loading the privacy-focused Nexus Search engine"
+    });
   };
 
   return (
@@ -42,16 +57,15 @@ const Header: React.FC = () => {
         <nav className="flex-1">
           <ul className="flex gap-1 md:gap-2">
             <li>
-              <Link to="/search">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white"
-                >
-                  <Search className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Search</span>
-                </Button>
-              </Link>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white"
+                onClick={handleSearchClick}
+              >
+                <Search className="mr-1 h-4 w-4" />
+                <span className="hidden sm:inline">Search</span>
+              </Button>
             </li>
             <li>
               <Link to="/app">
