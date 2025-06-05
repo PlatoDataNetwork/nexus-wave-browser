@@ -18,13 +18,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
   const isHistoryRoute = location.pathname.startsWith('/history');
   
-  // Check if we're on /app with search URL parameter
-  const urlParams = new URLSearchParams(location.search);
-  const urlParam = urlParams.get('url');
-  const isSearchInBrowser = isAppRoute && urlParam === '/search';
-  
-  // Hide header on search, extension-store, history routes, and when search is loaded in browser
-  const shouldHideHeader = isSearchRoute || isExtensionStoreRoute || isHistoryRoute || isSearchInBrowser;
+  // Hide header on search, extension-store, and history routes only
+  const shouldHideHeader = isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
   
   if (shouldHideHeader) {
     return null;
