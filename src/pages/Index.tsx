@@ -1,8 +1,7 @@
 
 import React, { useState } from "react";
-import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle, HomeButton } from "@/components/Browser/BrowserHeader";
+import BrowserHeader from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
-import Header from "@/components/Layout/Header";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import WalletConnect from "@/components/Browser/WalletConnect";
@@ -47,27 +46,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
 
   return (
     <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
-      {/* Main browser header with title and time - Always dark in both themes */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-header-blue border-b border-border">
-        <div className="flex items-center gap-2">
-          <div className="flex flex-col text-white">
-            <div className="text-sm font-semibold">
-              Nexus Wave by PlatoAI
-            </div>
-          </div>
-        </div>
-        
-        <div className="flex-1"></div>
-        
-        <div className="flex items-center gap-4">
-          <DateTime />
-          <HomeButton />
-          <ThemeToggle />
-          <SettingsButton />
-          <UserMenu />
-        </div>
-      </div>
-      
       {/* Browser interface */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <BrowserHeader
