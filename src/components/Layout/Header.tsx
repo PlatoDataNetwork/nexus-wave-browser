@@ -1,11 +1,14 @@
-
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onNavigate?: (url: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -31,7 +34,11 @@ const Header: React.FC = () => {
   const handleSearchClick = () => {
     console.log("Search clicked, navigating");
     
-    navigate('/search');
+    if (onNavigate) {
+      onNavigate("/search");
+    } else {
+      navigate('/search');
+    }
     
     toast({
       title: "Opening Nexus Search",
