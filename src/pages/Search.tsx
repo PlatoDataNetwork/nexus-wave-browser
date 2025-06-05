@@ -48,7 +48,26 @@ const Search: React.FC = () => {
   const [chatMessage, setChatMessage] = useState<string>("");
   const [showChat, setShowChat] = useState(false);
   
+  // Check if we're being rendered inside the browser (via iframe)
+  const [isInBrowser, setIsInBrowser] = useState(false);
+  
   useEffect(() => {
+    // Detect if we're in an iframe (browser context)
+    const checkIfInBrowser = () => {
+      try {
+        // Check if we're in an iframe or if the parent URL contains /app
+        const inIframe = window.self !== window.top;
+        const parentUrl = window.location.href;
+        const isAppContext = parentUrl.includes('/app') || inIframe;
+        setIsInBrowser(isAppContext);
+      } catch (e) {
+        // If we can't access parent, we're likely in an iframe
+        setIsInBrowser(true);
+      }
+    };
+    
+    checkIfInBrowser();
+    
     // Initialize search query from URL parameters if they exist
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('q');
@@ -440,98 +459,100 @@ const Search: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top navigation bar similar to the home screen */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
-        <div className="container flex h-16 max-w-screen-2xl items-center">
-          {/* Logo and Brand */}
-          <div className="mr-4 flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
-                  alt="Nexus Wave Logo" 
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <span className="hidden text-xl font-bold text-white sm:inline-block">
-                Nexus Wave
-              </span>
-            </Link>
+      {/* Conditionally render header only when NOT in browser context */}
+      {!isInBrowser && (
+        <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
+          <div className="container flex h-16 max-w-screen-2xl items-center">
+            {/* Logo and Brand */}
+            <div className="mr-4 flex items-center">
+              <Link to="/" className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center">
+                  <img 
+                    src="/lovable-uploads/43781a1e-b320-4a1b-aeb4-6cae375ea2f8.png" 
+                    alt="Nexus Wave Logo" 
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <span className="hidden text-xl font-bold text-white sm:inline-block">
+                  Nexus Wave
+                </span>
+              </Link>
+            </div>
+            
+            {/* Main Navigation */}
+            <nav className="flex-1">
+              <ul className="flex gap-1 md:gap-2">
+                <li>
+                  <Link to="/search">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="text-white"
+                    >
+                      <SearchIcon className="mr-1 h-4 w-4" />
+                      <span className="hidden sm:inline">Search</span>
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/app">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white"
+                    >
+                      <Globe className="mr-1 h-4 w-4" />
+                      <span className="hidden sm:inline">Browser</span>
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/token">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white"
+                    >
+                      <Zap className="mr-1 h-4 w-4" />
+                      <span className="hidden sm:inline">Token</span>
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/staking">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white"
+                    >
+                      <Image className="mr-1 h-4 w-4" />
+                      <span className="hidden sm:inline">Staking</span>
+                    </Button>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+            
+            {/* Right side actions */}
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white"
+                >
+                  Signup
+                </Button>
+              </Link>
+              <Link to="/downloads">
+                <Button variant="macos" size="sm">
+                  Downloads
+                </Button>
+              </Link>
+            </div>
           </div>
-          
-          {/* Main Navigation */}
-          <nav className="flex-1">
-            <ul className="flex gap-1 md:gap-2">
-              <li>
-                <Link to="/search">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="text-white"
-                  >
-                    <SearchIcon className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Search</span>
-                  </Button>
-                </Link>
-              </li>
-              <li>
-                <Link to="/app">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white"
-                  >
-                    <Globe className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Browser</span>
-                  </Button>
-                </Link>
-              </li>
-              <li>
-                <Link to="/token">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white"
-                  >
-                    <Zap className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Token</span>
-                  </Button>
-                </Link>
-              </li>
-              <li>
-                <Link to="/staking">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white"
-                  >
-                    <Image className="mr-1 h-4 w-4" />
-                    <span className="hidden sm:inline">Staking</span>
-                  </Button>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-          
-          {/* Right side actions */}
-          <div className="flex items-center gap-2">
-            <Link to="/profile">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white"
-              >
-                Signup
-              </Button>
-            </Link>
-            <Link to="/downloads">
-              <Button variant="macos" size="sm">
-                Downloads
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Search interface */}
       <div className="p-4 border-b border-border nexus-gradient-bg">
