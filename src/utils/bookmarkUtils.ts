@@ -1,5 +1,4 @@
 
-
 import { bookmarks } from "@/lib/dummyData";
 import { topProtocols } from "@/lib/protocolData";
 
@@ -60,13 +59,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
     ...processedBookmarks,
-    // Add Gtrade to favorites
-    {
-      id: "gtrade",
-      title: "Gtrade",
-      url: "https://sol.gains.trade",
-      color: getColorFromName("Gtrade")
-    },
+    // Removed duplicate Gtrade entry since it's already in topProtocols
     // Add ArcMolten to favorites
     {
       id: "arc-molten",
@@ -148,4 +141,3 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   
   return finalBookmarks;
 };
-
