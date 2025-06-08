@@ -1,8 +1,16 @@
+
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download } from "lucide-react";
+import { Search, Globe, Coins, LineChart, Download, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   onNavigate?: (url: string) => void;
@@ -12,6 +20,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const isAppRoute = location.pathname.startsWith('/app');
   const isSearchRoute = location.pathname.startsWith('/search');
@@ -25,12 +34,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     return null;
   }
   
-  // Determine if the current path is active
-  const isActive = (path: string) => {
-    return location.pathname === path || 
-           (path !== '/' && location.pathname.startsWith(path));
-  };
-
   const handleSearchClick = () => {
     console.log("Search clicked, navigating to /app with search URL");
     
@@ -43,87 +46,112 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     });
   };
 
+  // Mobile navigation menu items
+  const navigationItems = [
+    { label: "Search", icon: Search, action: handleSearchClick },
+    { label: "Browser", icon: Globe, path: "/app" },
+    { label: "Token", icon: Coins, path: "/token" },
+    { label: "Staking", icon: LineChart, path: "/staking" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
-      <div className="container flex h-16 max-w-screen-2xl items-center">
-        {/* Logo and Brand */}
-        <div className="mr-4 flex items-center">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="hidden sm:flex flex-col">
-              <span className="text-lg font-bold text-white leading-tight">
-                Nexus Wave by PlatoAI
+      <div className="container flex h-12 sm:h-16 max-w-screen-2xl items-center px-2 sm:px-4">
+        {/* Logo and Brand - Responsive */}
+        <div className="mr-2 sm:mr-4 flex items-center flex-shrink-0">
+          <Link to="/" className="flex items-center gap-1 sm:gap-2">
+            <div className="flex flex-col">
+              <span className="text-sm sm:text-lg font-bold text-white leading-tight">
+                {isMobile ? "Nexus" : "Nexus Wave by PlatoAI"}
               </span>
             </div>
           </Link>
         </div>
         
-        {/* Main Navigation */}
-        <nav className="flex-1">
-          <ul className="flex gap-1 md:gap-2">
-            <li>
+        {/* Desktop Navigation */}
+        {!isMobile && (
+          <nav className="flex-1">
+            <ul className="flex gap-1 md:gap-2">
+              {navigationItems.map((item) => (
+                <li key={item.label}>
+                  {item.path ? (
+                    <Link to={item.path}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-white text-xs sm:text-sm"
+                      >
+                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="hidden sm:inline">{item.label}</span>
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white text-xs sm:text-sm"
+                      onClick={item.action}
+                    >
+                      <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">{item.label}</span>
+                    </Button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        {/* Mobile Navigation Menu */}
+        {isMobile && (
+          <div className="flex-1 flex justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-white"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-48">
+                {navigationItems.map((item) => (
+                  <DropdownMenuItem
+                    key={item.label}
+                    onClick={() => {
+                      if (item.path) {
+                        navigate(item.path);
+                      } else if (item.action) {
+                        item.action();
+                      }
+                    }}
+                  >
+                    <item.icon className="mr-2 h-4 w-4" />
+                    {item.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+        
+        {/* Right side actions - Responsive */}
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+          {!isMobile && (
+            <Link to="/profile">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white"
-                onClick={handleSearchClick}
+                className="text-white text-xs sm:text-sm"
               >
-                <Search className="mr-1 h-4 w-4" />
-                <span className="hidden sm:inline">Search</span>
+                Signup
               </Button>
-            </li>
-            <li>
-              <Link to="/app">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white"
-                >
-                  <Globe className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Browser</span>
-                </Button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/token">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white"
-                >
-                  <Coins className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Token</span>
-                </Button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/staking">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white"
-                >
-                  <LineChart className="mr-1 h-4 w-4" />
-                  <span className="hidden sm:inline">Staking</span>
-                </Button>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-        
-        {/* Right side actions */}
-        <div className="flex items-center gap-2">
-          <Link to="/profile">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-white"
-            >
-              Signup
-            </Button>
-          </Link>
+            </Link>
+          )}
           <Link to="/downloads">
-            <Button variant="macos" size="sm">
-              Downloads
+            <Button variant="macos" size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
+              {isMobile ? "DL" : "Downloads"}
             </Button>
           </Link>
         </div>

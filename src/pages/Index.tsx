@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle, HomeButton } from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
@@ -6,6 +5,7 @@ import Header from "@/components/Layout/Header";
 import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import WalletConnect from "@/components/Browser/WalletConnect";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -14,6 +14,7 @@ interface IndexProps {
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(true);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
+  const isMobile = useIsMobile();
   
   const { 
     tabs, 
@@ -35,7 +36,15 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
 
   const toggleBookmarksBarState = () => {
     setBookmarksBarState(current => {
-      // Cycle through states: visible -> minimized -> hidden -> visible
+      // On mobile, hide bookmarks by default to save space
+      if (isMobile) {
+        switch (current) {
+          case "visible": return "hidden";
+          case "hidden": return "visible";
+          default: return "hidden";
+        }
+      }
+      // Desktop behavior unchanged
       switch (current) {
         case "visible": return "minimized";
         case "minimized": return "hidden";
@@ -47,23 +56,23 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
 
   return (
     <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
-      {/* Main browser header with title and time - Always dark in both themes */}
-      <div className="flex items-center justify-between px-4 py-2 bg-nexus-header-blue border-b border-border">
-        <div className="flex items-center gap-2">
-          <div className="flex flex-col text-white">
-            <div className="text-sm font-semibold">
-              Nexus Wave by PlatoAI
+      {/* Main browser header with title and time - Responsive layout */}
+      <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
+          <div className="flex flex-col text-white min-w-0">
+            <div className="text-xs sm:text-sm font-semibold truncate">
+              {isMobile ? "Nexus Wave" : "Nexus Wave by PlatoAI"}
             </div>
           </div>
         </div>
         
-        <div className="flex-1"></div>
-        
-        <div className="flex items-center gap-4">
-          <DateTime />
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-4 flex-shrink-0">
+          {/* Hide date/time on very small screens */}
+          {!isMobile && <DateTime />}
           <HomeButton />
           <ThemeToggle />
-          <SettingsButton />
+          {/* Hide settings on mobile to save space */}
+          {!isMobile && <SettingsButton />}
           <UserMenu />
         </div>
       </div>
@@ -82,7 +91,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
           onRefresh={refreshPage}
           canGoBack={canGoBack()}
           canGoForward={canGoForward()}
-          bookmarksBarState={bookmarksBarState}
+          bookmarksBarState={isMobile ? "hidden" : bookmarksBarState}
           onToggleBookmarksBar={toggleBookmarksBarState}
         />
         
@@ -91,11 +100,18 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
           onNavigate={navigateToUrl}
         />
         
-        {/* Nexus Wave Bridge overlay - centered in the browser */}
+        {/* Wallet connect overlay - adjusted for mobile */}
         {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
       </div>
       
-      <CustomToaster position="bottom-right" />
+      <CustomToaster 
+        position={isMobile ? "top-center" : "bottom-right"} 
+        toastOptions={{
+          style: {
+            fontSize: isMobile ? '14px' : '16px',
+          }
+        }}
+      />
     </div>
   );
 };

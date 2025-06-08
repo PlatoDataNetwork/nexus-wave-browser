@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, MessageCircle, Shield, Calendar, Zap } from "lucide-react";
+import { Loader2, Send, MessageCircle, Shield, Calendar, Zap, Menu } from "lucide-react";
 import ConversationMessage from './ConversationMessage';
 import SearchSuggestions from './SearchSuggestions';
 import { SearchResultItem } from '@/services/searchApi';
@@ -11,6 +11,12 @@ import SearchSidebar from './SearchSidebar';
 import { getChatGPTResponse, getStreamingResponse } from '@/utils/openai';
 import { ClassificationResult } from '@/utils/queryClassifier';
 import { getRealTimeData } from '@/utils/realTimeData';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 // Default classification for simple queries
 const DEFAULT_CLASSIFICATION: ClassificationResult = {
@@ -53,11 +59,13 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
   const [recencyFilter, setRecencyFilter] = useState<"day" | "week" | "month" | "any">("day");
   const [searchError, setSearchError] = useState<string>("");
   const [isStreaming, setIsStreaming] = useState(false);
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   // State to maintain conversation history for GPT
   const [conversationHistory, setConversationHistory] = useState<{ role: "user" | "assistant"; content: string }[]>([]);
-
+  
   // State to track if we're using cached results
   const [usingCachedResults, setUsingCachedResults] = useState(false);
   
@@ -284,7 +292,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
 
   // Toggle sidebar
   const handleToggleSidebar = () => {
-    setShowSidebar(prev => !prev);
+    if (isMobile) {
+      setMobileSheetOpen(!mobileSheetOpen);
+    } else {
+      setShowSidebar(prev => !prev);
+    }
   };
 
   // Change recency filter
@@ -398,55 +410,92 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
     }
   };
 
+  // Mobile Sidebar Component
+  const MobileSidebar = () => (
+    <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
+      <SheetContent side="right" className="w-full sm:w-80 p-0">
+        <SearchSidebar 
+          isLoading={searchLoading}
+          results={searchResults}
+          searchQuery={lastSearchQuery}
+          recencyFilter={recencyFilter}
+          onRefresh={handleRefreshResults}
+          error={searchError}
+        />
+      </SheetContent>
+    </Sheet>
+  );
+
   return (
     <div className="flex h-full">
       <div className="flex-1 flex flex-col h-full">
-        <div className="flex justify-between p-2 border-b border-border">
-          <div className="flex items-center gap-2">
+        {/* Top Controls - Mobile Optimized */}
+        <div className="flex justify-between items-center p-2 border-b border-border gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`flex items-center gap-1 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
+              className={`flex items-center gap-1 text-xs sm:text-sm ${safeSearch ? 'text-green-500' : 'text-amber-500'}`}
               onClick={handleToggleSafeSearch}
               type="button"
             >
-              <Shield className={`h-4 w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
-              <span className="text-xs">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+              <Shield className={`h-3 w-3 sm:h-4 sm:w-4 ${safeSearch ? 'text-green-500' : 'text-amber-500'}`} />
+              <span className="hidden sm:inline">{safeSearch ? 'Safe Search On' : 'Safe Search Off'}</span>
+              <span className="sm:hidden">{safeSearch ? 'Safe' : 'Off'}</span>
             </Button>
 
-            <div className="flex items-center gap-1 border-l pl-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className="flex items-center gap-1 border-l pl-1 sm:pl-2">
+              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
               <select 
-                className="text-xs bg-transparent border-none focus:ring-0 cursor-pointer"
+                className="text-xs bg-transparent border-none focus:ring-0 cursor-pointer max-w-20 sm:max-w-none"
                 value={recencyFilter}
                 onChange={(e) => handleChangeRecencyFilter(e.target.value as "day" | "week" | "month" | "any")}
               >
-                <option value="day">Last 24 hours</option>
-                <option value="week">Past week</option>
-                <option value="month">Past month</option>
-                <option value="any">Any time</option>
+                <option value="day">{isMobile ? "24h" : "Last 24 hours"}</option>
+                <option value="week">{isMobile ? "1w" : "Past week"}</option>
+                <option value="month">{isMobile ? "1m" : "Past month"}</option>
+                <option value="any">{isMobile ? "All" : "Any time"}</option>
               </select>
             </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleToggleSidebar}
-            className="text-muted-foreground"
-          >
-            {showSidebar ? "Hide Results" : "Show Results"}
-          </Button>
+          <div className="flex items-center gap-1">
+            {isMobile ? (
+              <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground"
+                  >
+                    <Menu className="h-4 w-4" />
+                    <span className="ml-1 text-xs">Results</span>
+                  </Button>
+                </SheetTrigger>
+              </Sheet>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleToggleSidebar}
+                className="text-muted-foreground"
+              >
+                {showSidebar ? "Hide Results" : "Show Results"}
+              </Button>
+            )}
+          </div>
         </div>
-        <ScrollArea className="flex-1 p-4">
-          <div className="space-y-4 pb-4">
+
+        {/* Messages Area - Mobile Optimized */}
+        <ScrollArea className="flex-1 p-2 sm:p-4">
+          <div className="space-y-3 sm:space-y-4 pb-4">
             {messages.length === 0 ? (
-              <div className="text-center py-10">
-                <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
-                  <MessageCircle className="h-8 w-8 text-nexus-purple" />
+              <div className="text-center py-6 sm:py-10">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="h-6 w-6 sm:h-8 sm:w-8 text-nexus-purple" />
                 </div>
-                <h2 className="text-xl font-medium mb-2">Ask me anything</h2>
-                <p className="text-muted-foreground max-w-md mx-auto">
+                <h2 className="text-lg sm:text-xl font-medium mb-2">Ask me anything</h2>
+                <p className="text-muted-foreground max-w-md mx-auto text-sm sm:text-base px-4">
                   I'm your AI assistant powered by Nexus. I can search the web, analyze data, and answer complex questions.
                 </p>
                 
@@ -472,13 +521,14 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
           </div>
         </ScrollArea>
         
-        <div className="p-4 border-t border-border">
-          <form onSubmit={handleSubmit} className="flex gap-2">
+        {/* Input Area - Mobile Optimized */}
+        <div className="p-2 sm:p-4 border-t border-border">
+          <form onSubmit={handleSubmit} className="flex gap-1 sm:gap-2">
             <Textarea
-              placeholder="Ask me anything..."
+              placeholder={isMobile ? "Ask anything..." : "Ask me anything..."}
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
-              className="flex-1 min-h-12 resize-none"
+              className="flex-1 min-h-10 sm:min-h-12 resize-none text-sm sm:text-base"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
@@ -489,16 +539,17 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             />
             <Button 
               type="submit" 
-              className="h-full bg-nexus-purple hover:bg-nexus-deep-purple"
+              className="h-full bg-nexus-purple hover:bg-nexus-deep-purple px-3 sm:px-4"
               disabled={isLoading || !currentMessage.trim()}
             >
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {isLoading ? <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" /> : <Send className="h-3 w-3 sm:h-4 sm:w-4" />}
             </Button>
           </form>
         </div>
       </div>
       
-      {showSidebar && (
+      {/* Desktop Sidebar */}
+      {!isMobile && showSidebar && (
         <div className="w-80 border-l border-border h-full">
           <SearchSidebar 
             isLoading={searchLoading}
@@ -509,6 +560,11 @@ const ConversationalSearch: React.FC<ConversationalSearchProps> = ({ onSearch })
             error={searchError}
           />
         </div>
+      )}
+
+      {/* Mobile Sidebar Sheet */}
+      {isMobile && (
+        <MobileSidebar />
       )}
     </div>
   );
