@@ -116,13 +116,6 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       url: "https://cut.platodata.xyz",
       color: getColorFromName("CUT")
     },
-    // Add Zenko to favorites
-    {
-      id: "zenko",
-      title: "Zenko",
-      url: "https://www.zenkoprotocol.com",
-      color: getColorFromName("Zenko")
-    },
     // Include top protocols, excluding the specified ones
     ...topProtocols
       .filter(protocol => {
