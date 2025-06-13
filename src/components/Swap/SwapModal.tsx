@@ -27,7 +27,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ isOpen, onClose }) => {
   const [walletAddress, setWalletAddress] = useState('');
   const [swapData, setSwapData] = useState<SwapState>({
     fromToken: 'ETH',
-    toToken: 'NFW3',
+    toToken: 'NWAV',
     fromAmount: '1',
     toAmount: '0.0'
   });
@@ -37,7 +37,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ isOpen, onClose }) => {
     { symbol: 'ETH', name: 'Ethereum', balance: '2.5' },
     { symbol: 'USDC', name: 'USD Coin', balance: '1,000' },
     { symbol: 'USDT', name: 'Tether', balance: '500' },
-    { symbol: 'NFW3', name: 'Nexus Finance Web3', balance: '0' }
+    { symbol: 'NWAV', name: 'Nexus Wave', balance: '0' }
   ];
 
   const handleAmountChange = (value: string) => {
@@ -89,7 +89,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ isOpen, onClose }) => {
     setCurrentStep('swap');
     setSwapData({
       fromToken: 'ETH',
-      toToken: 'NFW3',
+      toToken: 'NWAV',
       fromAmount: '1',
       toAmount: '0.0'
     });
@@ -284,7 +284,7 @@ const SwapModal: React.FC<SwapModalProps> = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Buy $NFW3 Tokens</DialogTitle>
+          <DialogTitle>Buy $NWAV Tokens</DialogTitle>
         </DialogHeader>
         {getStepContent()}
       </DialogContent>

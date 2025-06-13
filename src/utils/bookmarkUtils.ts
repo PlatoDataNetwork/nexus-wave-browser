@@ -59,7 +59,6 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
   const combinedBookmarks: EnhancedBookmark[] = [
     // Include the processed bookmarks
     ...processedBookmarks,
-    // Removed duplicate Gtrade entry since it's already in topProtocols
     // Add ArcMolten to favorites
     {
       id: "arc-molten",

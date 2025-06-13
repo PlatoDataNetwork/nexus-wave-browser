@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Coins } from "lucide-react";
 import SwapModal from './SwapModal';
 
-interface BuyNFW3ButtonProps {
+interface BuyNWAVButtonProps {
   variant?: "default" | "outline" | "ghost";
   size?: "sm" | "default" | "lg";
   className?: string;
 }
 
-const BuyNFW3Button: React.FC<BuyNFW3ButtonProps> = ({ 
+const BuyNWAVButton: React.FC<BuyNWAVButtonProps> = ({ 
   variant = "default", 
   size = "default",
   className = ""
@@ -26,7 +26,7 @@ const BuyNFW3Button: React.FC<BuyNFW3ButtonProps> = ({
         onClick={() => setShowSwapModal(true)}
       >
         <Coins className="mr-2 h-4 w-4" />
-        Buy $NFW3
+        Buy $NWAV
       </Button>
       
       <SwapModal 
@@ -37,4 +37,4 @@ const BuyNFW3Button: React.FC<BuyNFW3ButtonProps> = ({
   );
 };
 
-export default BuyNFW3Button;
+export default BuyNWAVButton;
