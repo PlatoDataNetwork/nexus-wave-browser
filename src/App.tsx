@@ -20,7 +20,6 @@ import ExtensionAdmin from "./pages/ExtensionAdmin";
 import NotFound from "./pages/NotFound";
 import Token from "./pages/Token";
 import Staking from "./pages/Staking";
-import IntelContent from "./pages/IntelContent";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +43,6 @@ function App() {
               <Route path="/extension-admin" element={<PageLayout><ExtensionAdmin /></PageLayout>} />
               <Route path="/token" element={<PageLayout><Token /></PageLayout>} />
               <Route path="/staking" element={<PageLayout><Staking /></PageLayout>} />
-              <Route path="/intel-content" element={<PageLayout><IntelContent /></PageLayout>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
