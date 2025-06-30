@@ -1,160 +1,111 @@
 
-import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download, Menu } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Menu, X, Zap, Coins, Chrome, Brain } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import BuyNWAVButton from "@/components/Swap/BuyNFW3Button";
 
-interface HeaderProps {
-  onNavigate?: (url: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
+const Header: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const isMobile = useIsMobile();
-  
-  const isAppRoute = location.pathname.startsWith('/app');
-  const isSearchRoute = location.pathname.startsWith('/search');
-  const isExtensionStoreRoute = location.pathname.startsWith('/extension-store');
-  const isHistoryRoute = location.pathname.startsWith('/history');
-  
-  // Hide header on search, extension-store, and history routes only
-  const shouldHideHeader = isSearchRoute || isExtensionStoreRoute || isHistoryRoute;
-  
-  if (shouldHideHeader) {
-    return null;
-  }
-  
-  const handleSearchClick = () => {
-    console.log("Search clicked, navigating to /app with search URL");
-    
-    // Navigate to /app first, then load search in the address bar
-    navigate('/app?url=/search');
-    
-    toast({
-      title: "Opening Nexus Search",
-      description: "Loading the privacy-focused Nexus Search engine in browser"
-    });
-  };
 
-  // Mobile navigation menu items
+  const isActive = (path: string) => location.pathname === path;
+
   const navigationItems = [
-    { label: "Search", icon: Search, action: handleSearchClick },
-    { label: "Browser", icon: Globe, path: "/app" },
-    { label: "Token", icon: Coins, path: "/token" },
-    { label: "Staking", icon: LineChart, path: "/staking" },
+    { path: "/app", label: "Browser", icon: Chrome },
+    { path: "/intel-content", label: "Intel Content", icon: Brain },
+    { path: "/token", label: "Token", icon: Coins },
+    { path: "/staking", label: "Staking", icon: Zap },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
-      <div className="container flex h-12 sm:h-16 max-w-screen-2xl items-center px-2 sm:px-4">
-        {/* Logo and Brand - Responsive */}
-        <div className="mr-2 sm:mr-4 flex items-center flex-shrink-0">
-          <Link to="/" className="flex items-center gap-1 sm:gap-2">
-            <div className="flex flex-col">
-              <span className="text-sm sm:text-lg font-bold text-white leading-tight">
-                {isMobile ? "Nexus" : "Nexus Wave by PlatoAI"}
-              </span>
+    <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="h-8 w-8 rounded-lg bg-nexus-purple flex items-center justify-center">
+              <span className="text-white font-bold text-sm">NW</span>
             </div>
+            <span className="font-bold text-xl bg-gradient-to-r from-nexus-purple to-nexus-light-purple bg-clip-text text-transparent">
+              Nexus Wave
+            </span>
           </Link>
-        </div>
-        
-        {/* Desktop Navigation */}
-        {!isMobile && (
-          <nav className="flex-1">
-            <ul className="flex gap-1 md:gap-2">
-              {navigationItems.map((item) => (
-                <li key={item.label}>
-                  {item.path ? (
-                    <Link to={item.path}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-white text-xs sm:text-sm"
-                      >
-                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                        <span className="hidden sm:inline">{item.label}</span>
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white text-xs sm:text-sm"
-                      onClick={item.action}
-                    >
-                      <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                      <span className="hidden sm:inline">{item.label}</span>
-                    </Button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
 
-        {/* Mobile Navigation Menu */}
-        {isMobile && (
-          <div className="flex-1 flex justify-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-white"
+          {/* Desktop Navigation */}
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              {navigationItems.map((item) => (
+                <NavigationMenuItem key={item.path}>
+                  <Link to={item.path}>
+                    <NavigationMenuLink
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "flex items-center gap-2",
+                        isActive(item.path) && "bg-accent text-accent-foreground"
+                      )}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* CTA Button */}
+          <div className="hidden md:block">
+            <BuyNWAVButton size="sm" />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 pb-4 border-t border-border">
+            <nav className="flex flex-col space-y-2 pt-4">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive(item.path)
+                      ? "bg-accent text-accent-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  )}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-48">
-                {navigationItems.map((item) => (
-                  <DropdownMenuItem
-                    key={item.label}
-                    onClick={() => {
-                      if (item.path) {
-                        navigate(item.path);
-                      } else if (item.action) {
-                        item.action();
-                      }
-                    }}
-                  >
-                    <item.icon className="mr-2 h-4 w-4" />
-                    {item.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              ))}
+              <div className="pt-2">
+                <BuyNWAVButton size="sm" className="w-full" />
+              </div>
+            </nav>
           </div>
         )}
-        
-        {/* Right side actions - Responsive */}
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          {!isMobile && (
-            <Link to="/profile">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white text-xs sm:text-sm"
-              >
-                Signup
-              </Button>
-            </Link>
-          )}
-          <Link to="/downloads">
-            <Button variant="macos" size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
-              {isMobile ? "DL" : "Downloads"}
-            </Button>
-          </Link>
-        </div>
       </div>
     </header>
   );
