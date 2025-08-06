@@ -457,13 +457,13 @@ const WalletConnect: React.FC<WalletConnectProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="relative">
-        {/* X Close Button - More circular design */}
+        {/* X Close Button - Perfect circular design like reference */}
         <button
           onClick={handleCloseCard}
-          className="absolute -top-4 -right-4 w-8 h-8 bg-[#e5007e] hover:bg-[#e5007e]/80 text-white rounded-full flex items-center justify-center z-10 shadow-md transition-all duration-200 hover:scale-105"
+          className="absolute -top-3 -right-3 w-6 h-6 bg-[#e5007e] hover:bg-[#e5007e]/90 text-white rounded-full flex items-center justify-center z-10 shadow-lg transition-all duration-200 hover:scale-110 border-2 border-white"
           aria-label="Close"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3 w-3 stroke-[3]" />
         </button>
         
         <Card className="nexus-glass animate-pulse-glow w-[400px] h-[400px] aspect-square">
