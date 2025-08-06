@@ -262,7 +262,7 @@ const BrowserFooter: React.FC<{
           </DialogTrigger>
           <DialogContent className="p-0 border-none max-w-4xl">
             <div className="flex items-center justify-center p-6">
-              <WalletConnect />
+              <WalletConnect onClose={() => setIsWalletDialogOpen(false)} />
             </div>
           </DialogContent>
         </Dialog>

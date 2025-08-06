@@ -242,7 +242,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
               </DialogDescription>
             </DialogHeader>
             <div className="py-4">
-              <WalletConnect />
+              <WalletConnect onClose={() => setIsWalletDialogOpen(false)} />
             </div>
           </DialogContent>
         </Dialog>
