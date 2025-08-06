@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
           <Link to="/" className="flex items-center gap-1 sm:gap-2">
             <div className="flex flex-col">
               <span className="text-xs sm:text-sm md:text-lg font-bold text-white leading-tight">
-                {isMobile ? "Nexus" : "Nexus Wave by PlatoAI"}
+                {isMobile ? "Nexus" : "NexusWave W3"}
               </span>
             </div>
           </Link>
