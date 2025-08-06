@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -58,7 +59,7 @@ const LandingPage: React.FC = () => {
                     <span className="block">The Way Web3 was Meant to Be.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Step into the future with Nexus Wave, a truly immersive Web3 browser built
+                    Step into the future with NexusWave Web3, a truly immersive Web3 browser built
                     exclusively for MacOS with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
@@ -223,7 +224,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
+                  NexusWave Web3 isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
                   MacOS has to offer, from Apple Silicon performance to system-level integration that makes your 
                   Web3 experience truly seamless.
                 </p>
@@ -273,7 +274,7 @@ const LandingPage: React.FC = () => {
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Whether you're trading, creating, or building, Nexus Wave empowers you with next-gen UI/UX,
+                Whether you're trading, creating, or building, NexusWave Web3 empowers you with next-gen UI/UX,
                 blazing-fast performance, and seamless integration across the decentralized web.
               </p>
             </div>
@@ -382,7 +383,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Web3 AI Assistant</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave comes with a built-in AI assistant that provides context, explanations, and insights
+                  NexusWave Web3 comes with a built-in AI assistant that provides context, explanations, and insights
                   to help you navigate Web3 with confidence.
                 </p>
                 
