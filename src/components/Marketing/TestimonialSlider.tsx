@@ -11,7 +11,7 @@ const testimonials = [
     name: "Sarah Johnson",
     role: "Crypto Investor",
     avatar: "SJ",
-    quote: "Nexus Wave has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
+    quote: "NexusWave has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
     rating: 5
   },
   {
