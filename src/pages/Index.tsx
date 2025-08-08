@@ -13,7 +13,7 @@ interface IndexProps {
 
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(true);
-  const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
+  const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("hidden");
   const isMobile = useIsMobile();
   
   const { 

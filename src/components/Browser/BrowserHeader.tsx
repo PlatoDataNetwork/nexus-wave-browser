@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import TabBar from "./TabBar";
 import AddressBar from "./AddressBar";
-import Bookmarks from "./Bookmarks";
+
 import { Tab } from "@/lib/dummyData";
 import { Link, useNavigate } from "react-router-dom";
 import { 
@@ -415,14 +415,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onToggleBookmarksBar}
-            className="h-8 px-2"
-          >
-            <Star className="h-4 w-4" />
-          </Button>
+          {/* Bookmarks toggle removed for cleaner UI */}
           <Button
             variant="ghost"
             size="sm"
@@ -433,12 +426,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
         </div>
       </div>
 
-      {/* Bookmarks Bar */}
-      {bookmarksBarState !== "hidden" && (
-        <Bookmarks 
-          onNavigate={onNavigate}
-        />
-      )}
     </div>
   );
 };
