@@ -15,10 +15,10 @@ const Staking: React.FC = () => {
             Coming Soon
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            NFW3 Staking
+            NWAV Staking
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Stake your NFW3 tokens to earn rewards, secure the network, and unlock premium features.
+            Stake your NWAV tokens to earn rewards, secure the network, and unlock premium features.
           </p>
         </div>
 
