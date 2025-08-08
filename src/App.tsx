@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Toaster } from "@/components/ui/toaster";
+
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -45,7 +45,7 @@ function App() {
               <Route path="/staking" element={<PageLayout><Staking /></PageLayout>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <Toaster />
+            
           </TooltipProvider>
         </ThemeProvider>
       </BrowserRouter>

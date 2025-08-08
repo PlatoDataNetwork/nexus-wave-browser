@@ -36,14 +36,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   
   const handleSearchClick = () => {
     console.log("Search clicked, navigating to /app with search URL");
-    
     // Navigate to /app first, then load search in the address bar
     navigate('/app?url=/search');
-    
-    toast({
-      title: "Opening Nexus Search",
-      description: "Loading the privacy-focused Nexus Search engine in browser"
-    });
   };
 
   // Mobile navigation menu items

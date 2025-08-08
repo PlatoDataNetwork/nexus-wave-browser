@@ -3,7 +3,7 @@ import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle, HomeBut
 import BrowserContent from "@/components/Browser/BrowserContent";
 import Header from "@/components/Layout/Header";
 import { useTabs } from "@/hooks/useTabs";
-import { Toaster as CustomToaster } from "@/components/ui/sonner";
+
 import WalletConnect from "@/components/Browser/WalletConnect";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ProtocolsMenu from "@/components/Browser/ProtocolsMenu";
@@ -104,14 +104,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
         {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
       </div>
       
-      <CustomToaster 
-        position={isMobile ? "top-center" : "bottom-right"} 
-        toastOptions={{
-          style: {
-            fontSize: isMobile ? '14px' : '16px',
-          }
-        }}
-      />
     </div>
   );
 };
