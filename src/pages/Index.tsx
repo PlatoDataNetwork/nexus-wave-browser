@@ -62,7 +62,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <ProtocolsMenu onNavigate={navigateToUrl} />
           <div className="flex flex-col text-white min-w-0">
-            <div className="text-xs sm:text-sm font-semibold truncate">NexusWave W3</div>
+            <div className="text-sm sm:text-base md:text-lg font-bold truncate">NexusWave W3</div>
           </div>
         </div>
         
