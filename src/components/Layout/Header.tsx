@@ -136,25 +136,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
           </div>
         )}
         
-        {/* Right side actions - Responsive */}
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          {!isMobile && (
-            <Link to="/profile">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-white text-xs sm:text-sm"
-              >
-                Signup
-              </Button>
-            </Link>
-          )}
-          <Link to="/downloads">
-            <Button variant="macos" size="sm" className="text-xs sm:text-sm px-2 sm:px-4">
-              {isMobile ? "DL" : "Downloads"}
-            </Button>
-          </Link>
-        </div>
+        {/* Right side actions removed per request */}
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0" />
       </div>
     </header>
   );
