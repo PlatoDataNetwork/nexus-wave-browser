@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import TabBar from "./TabBar";
+
 import AddressBar from "./AddressBar";
 
 import { Tab } from "@/lib/dummyData";
@@ -359,14 +359,6 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
 
   return (
     <div className="flex flex-col bg-background border-b border-border">
-      {/* Tab Bar */}
-      <TabBar
-        tabs={tabs}
-        onCloseTab={onCloseTab}
-        onActivateTab={onActivateTab}
-        onAddTab={onAddTab}
-      />
-      
       {/* Navigation and Address Bar */}
       <div className="flex items-center gap-2 p-2">
         <ProtocolsMenu onNavigate={handleNavigate} />
