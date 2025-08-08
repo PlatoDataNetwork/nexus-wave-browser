@@ -40,17 +40,30 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     navigate('/app?url=/search');
   };
 
+  // Types for nav items to satisfy TS
+  type NavItem = { label: string; icon: any; action?: () => void; path?: string; iconClass?: string };
+
   // Mobile navigation menu items
-  const navigationItems = [
+  const baseItems: NavItem[] = [
     { label: "Search", icon: Search, action: handleSearchClick },
     { label: "Browser", icon: Globe, path: "/app" },
     { label: "Protocols", icon: Globe, action: () => navigate('/app?openProtocols=1') },
-    { label: "NexusTrade", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-trade-henna.vercel.app/')}`), iconClass: "text-primary" },
-    { label: "NexusCode", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-web3-mirror.vercel.app/')}`), iconClass: "text-accent" },
-    { label: "NexusCarbon", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-wave-carbon.vercel.app/')}`), iconClass: "text-destructive" },
+  ];
+
+  const nexusItems: NavItem[] = [
+    { label: "Nexus AI", icon: Globe, action: () => { toast({ title: "Nexus AI", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-popover-foreground" },
     { label: "NexusArk", icon: Globe, action: () => { toast({ title: "NexusArk", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-secondary" },
-    { label: "NexusStake", icon: Globe, action: () => { toast({ title: "NexusStake", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-ring" },
+    { label: "NexusCarbon", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-wave-carbon.vercel.app/')}`), iconClass: "text-destructive" },
     { label: "NexusChain", icon: Globe, action: () => { toast({ title: "NexusChain", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-muted-foreground" },
+    { label: "NexusCode", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-web3-mirror.vercel.app/')}`), iconClass: "text-accent" },
+    { label: "NexusMusic", icon: Globe, action: () => { toast({ title: "NexusMusic", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-card-foreground" },
+    { label: "NexusStake", icon: Globe, action: () => { toast({ title: "NexusStake", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-ring" },
+    { label: "NexusTrade", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-trade-henna.vercel.app/')}`), iconClass: "text-primary" },
+  ];
+
+  const navigationItems: NavItem[] = [
+    ...baseItems,
+    ...[...nexusItems].sort((a, b) => a.label.localeCompare(b.label))
   ];
 
   return (
