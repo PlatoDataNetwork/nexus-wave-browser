@@ -56,6 +56,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/components/theme-provider";
 import BuyNFW3Button from "@/components/Swap/BuyNFW3Button";
+import ProtocolsMenu from "./ProtocolsMenu";
 
 // Removed duplicate import of useNavigate
 
@@ -368,6 +369,7 @@ const BrowserHeader: React.FC<BrowserHeaderProps> = ({
       
       {/* Navigation and Address Bar */}
       <div className="flex items-center gap-2 p-2">
+        <ProtocolsMenu onNavigate={handleNavigate} />
         {/* Navigation buttons */}
         <div className="flex items-center gap-1">
           <Button
