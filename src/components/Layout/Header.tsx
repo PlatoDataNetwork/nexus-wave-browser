@@ -48,6 +48,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     { label: "NexusTrade", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-trade-henna.vercel.app/')}`), iconClass: "text-primary" },
     { label: "NexusCode", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-web3-mirror.vercel.app/')}`), iconClass: "text-accent" },
     { label: "NexusCarbon", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-wave-carbon.vercel.app/')}`), iconClass: "text-destructive" },
+    { label: "NexusArk", icon: Globe, action: () => { toast({ title: "NexusArk", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-secondary" },
+    { label: "NexusStake", icon: Globe, action: () => { toast({ title: "NexusStake", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-ring" },
+    { label: "NexusChain", icon: Globe, action: () => { toast({ title: "NexusChain", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-muted-foreground" },
   ];
 
   return (
