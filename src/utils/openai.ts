@@ -86,7 +86,7 @@ export async function getStreamingResponse(
     
     // Request with optimized parameters for fastest possible first token
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using mini for faster responses
+      model: 'gpt-4.1-2025-04-14', // Flagship model for higher quality
       messages: messages as any,
       temperature: 0.5,
       max_tokens: 600, // Reduced for faster responses
@@ -196,7 +196,7 @@ export async function getChatGPTResponseWithRealTimeData(
     
     // Request with optimized parameters for faster responses
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Using mini for faster responses
+      model: 'gpt-4.1-2025-04-14', // Flagship model for higher quality
       messages: messages as any,
       temperature: temperature,
       max_tokens: 500, // Reduced for faster response times
@@ -265,7 +265,7 @@ export async function getChatGPTResponse(
     
     // Removed timeout parameter since it's not supported in the API
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-2025-04-14',
       messages: messages as any,
       temperature: 0.5,
       max_tokens: 400, // Reduced for faster responses

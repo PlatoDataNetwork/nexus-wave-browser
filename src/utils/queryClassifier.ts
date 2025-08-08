@@ -137,7 +137,7 @@ export async function classifyQuery(query: string): Promise<ClassificationResult
     // For more complex cases, use GPT to classify but with shorter context
     console.log('Falling back to GPT classification');
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Using smaller model for speed
+      model: "gpt-4.1-2025-04-14", // Upgraded flagship model
       messages: [
         {
           role: "system",

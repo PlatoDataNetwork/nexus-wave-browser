@@ -187,7 +187,7 @@ export async function getRealTimeData(
     }));
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Using mini for speed
+      model: "gpt-4.1-2025-04-14", // Upgraded flagship for quality
       messages: [
         {
           role: "system",
