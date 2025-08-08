@@ -23,6 +23,7 @@ import { Link } from "react-router-dom";
 import NexusChat from "@/components/Search/NexusChat";
 import NexusCategories from "@/components/Search/NexusCategories";
 import CategoryDetail from "@/components/Search/CategoryDetail";
+import NexusBrowserShell from "@/components/Search/NexusBrowserShell";
 
 // Import updated searchApi functionality
 import { searchWithSerper, SearchAPIResponse, SearchResultItem } from '@/services/searchApi';
@@ -796,7 +797,9 @@ const Search: React.FC = () => {
             </TabsContent>
             
             <TabsContent value="nexus" className="h-full flex flex-col">
-              {renderNexusContent()}
+              <NexusBrowserShell>
+                {renderNexusContent()}
+              </NexusBrowserShell>
             </TabsContent>
           </Tabs>
         </div>
