@@ -34,8 +34,8 @@ const ProtocolsMenu: React.FC<ProtocolsMenuProps> = ({ onNavigate }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Open protocols menu">
-          <Menu className="h-4 w-4" />
+        <Button variant="ghost" size="icon" className="h-10 w-10" aria-label="Open protocols menu">
+          <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-72 sm:w-80 p-0">
