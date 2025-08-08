@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle, HomeButton } from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
 import Header from "@/components/Layout/Header";
@@ -16,14 +15,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
   const [showWalletConnect, setShowWalletConnect] = useState(true);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("visible");
   const isMobile = useIsMobile();
-  
-  // Hide wallet connect by default on mobile to reduce clutter
-  useEffect(() => {
-    if (isMobile) {
-      setShowWalletConnect(false);
-      setBookmarksBarState("hidden");
-    }
-  }, [isMobile]);
   
   const { 
     tabs, 
@@ -64,43 +55,25 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black safe-area-padding">
-      {/* Mobile-optimized main browser header */}
-      <div className="flex items-center justify-between px-2 sm:px-4 py-1.5 sm:py-2 bg-nexus-header-blue border-b border-border">
+    <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
+      {/* Main browser header with title and time - Responsive layout */}
+      <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
         <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
           <div className="flex flex-col text-white min-w-0">
             <div className="text-xs sm:text-sm font-semibold truncate">
-              {isMobile ? "Nexus" : "Nexus Wave by PlatoAI"}
+              {isMobile ? "Nexus Wave" : "Nexus Wave by PlatoAI"}
             </div>
-            {/* Show current time on mobile only when not in compact mode */}
-            {isMobile && (
-              <div className="text-xs opacity-75">
-                <DateTime compact />
-              </div>
-            )}
           </div>
         </div>
         
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          {/* Desktop layout */}
-          {!isMobile && (
-            <>
-              <DateTime />
-              <HomeButton />
-              <ThemeToggle />
-              <SettingsButton />
-              <UserMenu />
-            </>
-          )}
-          
-          {/* Mobile layout - compact controls */}
-          {isMobile && (
-            <>
-              <HomeButton />
-              <ThemeToggle />
-              <UserMenu />
-            </>
-          )}
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-4 flex-shrink-0">
+          {/* Hide date/time on very small screens */}
+          {!isMobile && <DateTime />}
+          <HomeButton />
+          <ThemeToggle />
+          {/* Hide settings on mobile to save space */}
+          {!isMobile && <SettingsButton />}
+          <UserMenu />
         </div>
       </div>
       
@@ -127,12 +100,8 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
           onNavigate={navigateToUrl}
         />
         
-        {/* Wallet connect overlay - mobile optimized */}
-        {showWalletConnect && (
-          <WalletConnect 
-            onClose={handleCloseWalletConnect} 
-          />
-        )}
+        {/* Wallet connect overlay - adjusted for mobile */}
+        {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
       </div>
       
       <CustomToaster 
@@ -140,8 +109,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
         toastOptions={{
           style: {
             fontSize: isMobile ? '14px' : '16px',
-          },
-          duration: isMobile ? 2000 : 4000, // Shorter duration on mobile
+          }
         }}
       />
     </div>

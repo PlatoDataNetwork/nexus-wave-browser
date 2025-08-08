@@ -18,7 +18,7 @@ const Token: React.FC = () => {
             NWAV Token
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            The native utility token powering the NexusWave ecosystem. Stake, earn, and participate in governance.
+            The native utility token powering the Nexus Wave ecosystem. Stake, earn, and participate in governance.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Participate in protocol governance and help shape the future of the NexusWave ecosystem.
+                Participate in protocol governance and help shape the future of the Nexus Wave ecosystem.
               </CardDescription>
             </CardContent>
           </Card>
@@ -79,7 +79,7 @@ const Token: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/app">
                   <Button className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-                    Try NexusWave Browser
+                    Try Nexus Wave Browser
                   </Button>
                 </Link>
                 <Button variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
