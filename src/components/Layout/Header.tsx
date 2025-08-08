@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const navigationItems = [
     { label: "Search", icon: Search, action: handleSearchClick },
     { label: "Browser", icon: Globe, path: "/app" },
-    { label: "Protocols", icon: Menu, action: () => navigate('/app?openProtocols=1') },
+    { label: "Protocols", icon: Globe, action: () => navigate('/app?openProtocols=1') },
     { label: "NexusTrade", icon: Globe, href: "https://nexus-trade-henna.vercel.app/" },
     { label: "NexusCode", icon: Globe, href: "https://nexus-web3-mirror.vercel.app/" },
     { label: "Nexus Carbon", icon: Globe, href: "https://nexus-wave-carbon.vercel.app/" },
