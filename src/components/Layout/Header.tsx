@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download, Menu } from "lucide-react";
+import { Search, Globe, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -44,8 +44,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const navigationItems = [
     { label: "Search", icon: Search, action: handleSearchClick },
     { label: "Browser", icon: Globe, path: "/app" },
-    { label: "Token", icon: Coins, path: "/token" },
-    { label: "Staking", icon: LineChart, path: "/staking" },
+    { label: "Protocols", icon: Menu, action: () => navigate('/app?openProtocols=1') },
+    { label: "NexusTrade", icon: Globe, href: "https://nexus-trade-henna.vercel.app/" },
+    { label: "NexusCode", icon: Globe, href: "https://nexus-web3-mirror.vercel.app/" },
+    { label: "Nexus Carbon", icon: Globe, href: "https://nexus-wave-carbon.vercel.app/" },
   ];
 
   return (
@@ -71,6 +73,17 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         <span className="hidden sm:inline">{item.label}</span>
                       </Button>
                     </Link>
+                  ) : item.href ? (
+                    <a href={item.href} target="_blank" rel="noreferrer">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-white text-xs sm:text-sm"
+                      >
+                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                        <span className="hidden sm:inline">{item.label}</span>
+                      </Button>
+                    </a>
                   ) : (
                     <Button
                       variant="ghost"
@@ -108,6 +121,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                     onClick={() => {
                       if (item.path) {
                         navigate(item.path);
+                      } else if (item.href) {
+                        window.open(item.href, '_blank', 'noopener,noreferrer');
                       } else if (item.action) {
                         item.action();
                       }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getAlphabetizedBookmarks } from "@/utils/bookmarkUtils";
 import { topProtocols } from "@/lib/protocolData";
+import { useLocation } from "react-router-dom";
 
 interface ProtocolsMenuProps {
   onNavigate: (url: string) => void;
@@ -22,6 +23,8 @@ const ProtocolsMenu: React.FC<ProtocolsMenuProps> = ({ onNavigate }) => {
   const bookmarks = getAlphabetizedBookmarks();
   const protocolNames = new Set(topProtocols.map((p) => p.name));
   const protocols = bookmarks.filter((b) => protocolNames.has(b.title));
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
 
   const handleClick = (url: string) => {
     let processed = url;
@@ -31,8 +34,16 @@ const ProtocolsMenu: React.FC<ProtocolsMenuProps> = ({ onNavigate }) => {
     onNavigate(processed);
   };
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const shouldOpen = params.get('openProtocols');
+    if (shouldOpen === '1' || shouldOpen === 'true') {
+      setOpen(true);
+    }
+  }, [location.search]);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="h-10 w-10" aria-label="Open protocols menu">
           <Menu className="h-6 w-6" />
