@@ -45,9 +45,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     { label: "Search", icon: Search, action: handleSearchClick },
     { label: "Browser", icon: Globe, path: "/app" },
     { label: "Protocols", icon: Globe, action: () => navigate('/app?openProtocols=1') },
-    { label: "NexusTrade", icon: Globe, href: "https://nexus-trade-henna.vercel.app/" },
-    { label: "NexusCode", icon: Globe, href: "https://nexus-web3-mirror.vercel.app/" },
-    { label: "Nexus Carbon", icon: Globe, href: "https://nexus-wave-carbon.vercel.app/" },
+    { label: "NexusTrade", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-trade-henna.vercel.app/')}`), iconClass: "text-primary" },
+    { label: "NexusCode", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-web3-mirror.vercel.app/')}`), iconClass: "text-accent" },
+    { label: "NexusCarbon", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-wave-carbon.vercel.app/')}`), iconClass: "text-destructive" },
   ];
 
   return (
@@ -69,21 +69,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         size="sm"
                         className="text-white text-xs sm:text-sm"
                       >
-                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                        <item.icon className={`mr-1 h-3 w-3 sm:h-4 sm:w-4 ${item.iconClass ?? ''}`} />
                         <span className="hidden sm:inline">{item.label}</span>
                       </Button>
                     </Link>
-                  ) : item.href ? (
-                    <a href={item.href} target="_blank" rel="noreferrer">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-white text-xs sm:text-sm"
-                      >
-                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                        <span className="hidden sm:inline">{item.label}</span>
-                      </Button>
-                    </a>
                   ) : (
                     <Button
                       variant="ghost"
@@ -91,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       className="text-white text-xs sm:text-sm"
                       onClick={item.action}
                     >
-                      <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                      <item.icon className={`mr-1 h-3 w-3 sm:h-4 sm:w-4 ${item.iconClass ?? ''}`} />
                       <span className="hidden sm:inline">{item.label}</span>
                     </Button>
                   )}
@@ -121,14 +110,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                     onClick={() => {
                       if (item.path) {
                         navigate(item.path);
-                      } else if (item.href) {
-                        window.open(item.href, '_blank', 'noopener,noreferrer');
                       } else if (item.action) {
                         item.action();
                       }
                     }}
                   >
-                    <item.icon className="mr-2 h-4 w-4" />
+                    <item.icon className={`mr-2 h-4 w-4 ${item.iconClass ?? ''}`} />
                     {item.label}
                   </DropdownMenuItem>
                 ))}
