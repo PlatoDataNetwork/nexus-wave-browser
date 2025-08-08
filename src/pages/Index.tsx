@@ -6,6 +6,7 @@ import { useTabs } from "@/hooks/useTabs";
 import { Toaster as CustomToaster } from "@/components/ui/sonner";
 import WalletConnect from "@/components/Browser/WalletConnect";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ProtocolsMenu from "@/components/Browser/ProtocolsMenu";
 
 interface IndexProps {
   defaultUrl?: string;
@@ -58,11 +59,10 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://platodata.io" }) =>
     <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
       {/* Main browser header with title and time - Responsive layout */}
       <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
-        <div className="flex items-center gap-1 sm:gap-2 min-w-0 flex-1">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <ProtocolsMenu onNavigate={navigateToUrl} />
           <div className="flex flex-col text-white min-w-0">
-            <div className="text-xs sm:text-sm font-semibold truncate">
-              {isMobile ? "Nexus Wave" : "Nexus Wave by PlatoAI"}
-            </div>
+            <div className="text-xs sm:text-sm font-semibold truncate">NexusWave W3</div>
           </div>
         </div>
         
