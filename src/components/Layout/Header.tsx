@@ -57,16 +57,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
       <div className="container flex h-12 sm:h-16 max-w-screen-2xl items-center px-2 sm:px-4">
-        {/* Logo and Brand - Responsive */}
-        <div className="mr-2 sm:mr-4 flex items-center flex-shrink-0">
-          <Link to="/" className="flex items-center gap-1 sm:gap-2">
-            <div className="flex flex-col">
-              <span className="text-sm sm:text-lg font-bold text-white leading-tight">
-                {isMobile ? "Nexus" : "Nexus Wave by PlatoAI"}
-              </span>
-            </div>
-          </Link>
-        </div>
+        {/* Brand removed per request */}
+        <div className="mr-2 sm:mr-4 flex-shrink-0" />
         
         {/* Desktop Navigation */}
         {!isMobile && (
