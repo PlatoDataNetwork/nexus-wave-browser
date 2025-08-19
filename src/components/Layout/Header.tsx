@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Menu } from "lucide-react";
+import { Search, Globe, Coins, LineChart, Download, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -40,30 +40,12 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     navigate('/app?url=/search');
   };
 
-  // Types for nav items to satisfy TS
-  type NavItem = { label: string; icon: any; action?: () => void; path?: string; iconClass?: string };
-
   // Mobile navigation menu items
-  const baseItems: NavItem[] = [
+  const navigationItems = [
     { label: "Search", icon: Search, action: handleSearchClick },
     { label: "Browser", icon: Globe, path: "/app" },
-    { label: "Protocols", icon: Globe, action: () => navigate('/app?openProtocols=1') },
-  ];
-
-  const nexusItems: NavItem[] = [
-    { label: "Nexus AI", icon: Globe, action: () => { toast({ title: "Nexus AI", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-popover-foreground" },
-    { label: "NexusArk", icon: Globe, action: () => { toast({ title: "NexusArk", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-secondary" },
-    { label: "NexusCarbon", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-wave-carbon.vercel.app/')}`), iconClass: "text-destructive" },
-    { label: "NexusChain", icon: Globe, action: () => { toast({ title: "NexusChain", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-muted-foreground" },
-    { label: "NexusCode", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-web3-mirror.vercel.app/')}`), iconClass: "text-accent" },
-    { label: "NexusMusic", icon: Globe, action: () => { toast({ title: "NexusMusic", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-card-foreground" },
-    { label: "NexusStake", icon: Globe, action: () => { toast({ title: "NexusStake", description: "URL coming soon. Opening browser." }); navigate('/app'); }, iconClass: "text-ring" },
-    { label: "NexusTrade", icon: Globe, action: () => navigate(`/app?url=${encodeURIComponent('https://nexus-trade-henna.vercel.app/')}`), iconClass: "text-primary" },
-  ];
-
-  const navigationItems: NavItem[] = [
-    ...baseItems,
-    ...[...nexusItems].sort((a, b) => a.label.localeCompare(b.label))
+    { label: "Token", icon: Coins, path: "/token" },
+    { label: "Staking", icon: LineChart, path: "/staking" },
   ];
 
   return (
@@ -85,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         size="sm"
                         className="text-white text-xs sm:text-sm"
                       >
-                        <item.icon className={`mr-1 h-3 w-3 sm:h-4 sm:w-4 ${item.iconClass ?? ''}`} />
+                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
                         <span className="hidden sm:inline">{item.label}</span>
                       </Button>
                     </Link>
@@ -96,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       className="text-white text-xs sm:text-sm"
                       onClick={item.action}
                     >
-                      <item.icon className={`mr-1 h-3 w-3 sm:h-4 sm:w-4 ${item.iconClass ?? ''}`} />
+                      <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
                       <span className="hidden sm:inline">{item.label}</span>
                     </Button>
                   )}
@@ -131,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       }
                     }}
                   >
-                    <item.icon className={`mr-2 h-4 w-4 ${item.iconClass ?? ''}`} />
+                    <item.icon className="mr-2 h-4 w-4" />
                     {item.label}
                   </DropdownMenuItem>
                 ))}
