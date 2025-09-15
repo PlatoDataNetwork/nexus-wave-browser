@@ -54,10 +54,10 @@ const LandingPage: React.FC = () => {
                     The First Real Web3 Browser for MacOS
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    <span className="block">The World's Most Eco Friendly AI Browser.</span>
+                    <span className="block">The World's Most Eco Friendly AI Web3 Browser.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    The World's most Eco Friendly AI Browser. Step into the future with Nexus Wave, 
+                    Step into the future with Nexus Wave, 
                     a truly immersive Web3 browser built exclusively for MacOS with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
