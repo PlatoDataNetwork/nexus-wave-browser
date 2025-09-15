@@ -58,7 +58,7 @@ const LandingPage: React.FC = () => {
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
                     Step into the future with Nexus Wave, 
-                    a truly immersive Web3 browser built exclusively for MacOS with seamless integration across the decentralized web.
+                    a truly immersive Web3 browser built exclusively for MacOS & Windows with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <Link to="/app">
