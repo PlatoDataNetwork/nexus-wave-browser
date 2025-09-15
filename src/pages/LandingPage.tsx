@@ -50,8 +50,8 @@ const LandingPage: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
-                    The First Real Web3 Browser for MacOS
+                  <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-semibold border-nexus-purple text-nexus-light-purple bg-nexus-purple/20 backdrop-blur-sm shadow-lg shadow-nexus-purple/30 animate-pulse-glow">
+                    Revolutionary AI-Powered Web3 Experience
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                     <span className="block">The World's Most Eco Friendly AI Web3 Browser.</span>
