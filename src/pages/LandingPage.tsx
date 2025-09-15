@@ -58,8 +58,8 @@ const LandingPage: React.FC = () => {
                     <span className="block">The Way Web3 was Meant to Be.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Step into the future with Nexus Wave, a truly immersive Web3 browser built
-                    exclusively for MacOS with seamless integration across the decentralized web.
+                    The World's most Eco Friendly AI Browser. Step into the future with Nexus Wave, 
+                    a truly immersive Web3 browser built exclusively for MacOS with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <Link to="/app">
