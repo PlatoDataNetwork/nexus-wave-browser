@@ -19,7 +19,7 @@ const CallToAction: React.FC = () => {
           <span className="block">The Way Web3 was Meant to Be.</span>
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Step into the future with Nexus Wave, a truly immersive Web3 browser built
+          Step into the future with Plato W3 AI Browser, a truly immersive Web3 browser built
           for both MacOS & PC with seamless integration across the decentralized web.
         </p>
         
@@ -46,8 +46,8 @@ const CallToAction: React.FC = () => {
         
         <div className="mt-12 flex items-center justify-center space-x-8">
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-nexus-purple mb-2">100K+</span>
-            <span className="text-sm text-gray-400">Active Users</span>
+            <span className="text-3xl font-bold text-nexus-purple mb-2">10K+</span>
+            <span className="text-sm text-gray-400">Digital Assets</span>
           </div>
           <div className="h-10 border-l border-gray-700" />
           <div className="flex flex-col items-center">
@@ -56,8 +56,8 @@ const CallToAction: React.FC = () => {
           </div>
           <div className="h-10 border-l border-gray-700" />
           <div className="flex flex-col items-center">
-            <span className="text-3xl font-bold text-nexus-purple mb-2">15+</span>
-            <span className="text-sm text-gray-400">Blockchain Networks</span>
+            <span className="text-3xl font-bold text-nexus-purple mb-2">30+</span>
+            <span className="text-sm text-gray-400">Blockchain Protocols</span>
           </div>
         </div>
       </div>
