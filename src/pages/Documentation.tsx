@@ -41,10 +41,10 @@ const Documentation: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-background min-h-screen">
+    <div className="flex flex-col bg-nexus-space-black min-h-screen">
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="w-64 border-r border-border bg-card">
+        <div className="w-64 border-r border-border bg-nexus-card-dark">
           <div className="p-4">
             <div className="flex items-center mb-4">
               <BookText className="h-5 w-5 mr-2 text-nexus-blue" />
