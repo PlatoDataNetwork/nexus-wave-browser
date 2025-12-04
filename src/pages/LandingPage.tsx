@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
                     <span className="block">Browser</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Step into the future with Nexus Wave, 
+                    Step into the future with Plato W3 AI Browser, 
                     a truly immersive Web3 browser built exclusively for MacOS & Windows with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
@@ -224,7 +224,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
+                  Plato W3 AI Browser isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
                   MacOS has to offer, from Apple Silicon performance to system-level integration that makes your 
                   Web3 experience truly seamless.
                 </p>
@@ -274,7 +274,7 @@ const LandingPage: React.FC = () => {
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Whether you're trading, creating, or building, Nexus Wave empowers you with next-gen UI/UX,
+                Whether you're trading, creating, or building, Plato W3 AI Browser empowers you with next-gen UI/UX,
                 blazing-fast performance, and seamless integration across the decentralized web.
               </p>
             </div>
