@@ -5,12 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Coins, TrendingUp, Lock, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
-import Header from "@/components/Layout/Header";
 
 const Token: React.FC = () => {
   return (
     <div className="min-h-screen bg-nexus-space-black">
-      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
