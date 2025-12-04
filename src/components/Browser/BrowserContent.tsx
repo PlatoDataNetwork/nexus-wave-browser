@@ -114,7 +114,7 @@ const BrowserContent: React.FC<BrowserContentProps> = ({ currentUrl, onNavigate 
   };
 
   return (
-    <PageLayout includeFooter={true} onNavigate={onNavigate}>
+    <PageLayout includeFooter={true} includeHeader={false} onNavigate={onNavigate}>
       <div className="flex-1 h-full w-full overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
