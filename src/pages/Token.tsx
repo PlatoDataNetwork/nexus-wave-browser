@@ -15,7 +15,7 @@ const Token: React.FC = () => {
             Coming Soon
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            PLTO Token
+            Plato Token
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
             The native utility token powering the Plato W3 AI Browser ecosystem. Stake, earn, and participate in governance.
@@ -32,7 +32,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Use PLTO tokens for premium features, gas optimization, and exclusive access to Web3 tools.
+                Use Plato tokens for premium features, gas optimization, and exclusive access to Web3 tools.
               </CardDescription>
             </CardContent>
           </Card>
@@ -60,7 +60,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Earn PLTO tokens through browsing, staking, and contributing to the Web3 community.
+                Earn Plato tokens through browsing, staking, and contributing to the Web3 community.
               </CardDescription>
             </CardContent>
           </Card>
@@ -74,7 +74,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400 mb-6">
-                The PLTO token is currently in development. Join our community to be the first to know about the token launch and early access opportunities.
+                The Plato token is currently in development. Join our community to be the first to know about the token launch and early access opportunities.
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/app">
