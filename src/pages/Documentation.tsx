@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Header from "@/components/Layout/Header";
+
 
 const Documentation: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -42,7 +42,6 @@ const Documentation: React.FC = () => {
 
   return (
     <div className="flex flex-col bg-background min-h-screen">
-      <Header />
       
       {/* Page Title */}
       <div className="flex items-center justify-center h-10 bg-card border-b border-border">
