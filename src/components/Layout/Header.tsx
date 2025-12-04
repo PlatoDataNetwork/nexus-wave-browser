@@ -2,7 +2,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Coins, LineChart, Download, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -11,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Menu } from "lucide-react";
 
 interface HeaderProps {
   onNavigate?: (url: string) => void;
@@ -36,28 +36,32 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   
   const handleSearchClick = () => {
     console.log("Search clicked, navigating to /app with search URL");
-    // Navigate to /app first, then load search in the address bar
     navigate('/app?url=/search');
   };
 
-  // Mobile navigation menu items
+  // Navigation items without icons
   const navigationItems = [
-    { label: "Search", icon: Search, action: handleSearchClick },
-    { label: "Browser", icon: Globe, path: "/app" },
-    { label: "Token", icon: Coins, path: "/token" },
-    { label: "Staking", icon: LineChart, path: "/staking" },
+    { label: "Search", action: handleSearchClick },
+    { label: "Browser", path: "/app" },
+    { label: "Token", path: "/token" },
+    { label: "Staking", path: "/staking" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-nexus-header-blue shadow-sm backdrop-blur-sm">
-      <div className="container flex h-12 sm:h-16 max-w-screen-2xl items-center px-2 sm:px-4">
-        {/* Brand removed per request */}
-        <div className="mr-2 sm:mr-4 flex-shrink-0" />
+      <div className="container flex h-12 sm:h-16 max-w-screen-2xl items-center justify-between px-2 sm:px-4">
+        {/* Left: Brand */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <img src="/favicon.png" alt="Plato" className="h-8 w-8" />
+          <span className="text-white font-bold text-sm sm:text-base md:text-lg whitespace-nowrap">
+            Plato W3 AI Browser
+          </span>
+        </div>
         
-        {/* Desktop Navigation */}
+        {/* Center: Navigation */}
         {!isMobile && (
-          <nav className="flex-1">
-            <ul className="flex gap-1 md:gap-2">
+          <nav className="flex-1 flex justify-center">
+            <ul className="flex gap-2 md:gap-6">
               {navigationItems.map((item) => (
                 <li key={item.label}>
                   {item.path ? (
@@ -65,21 +69,19 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-white text-xs sm:text-sm"
+                        className="text-white text-sm hover:bg-white/10"
                       >
-                        <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                        <span className="hidden sm:inline">{item.label}</span>
+                        {item.label}
                       </Button>
                     </Link>
                   ) : (
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white text-xs sm:text-sm"
+                      className="text-white text-sm hover:bg-white/10"
                       onClick={item.action}
                     >
-                      <item.icon className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                      <span className="hidden sm:inline">{item.label}</span>
+                      {item.label}
                     </Button>
                   )}
                 </li>
@@ -113,7 +115,6 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                       }
                     }}
                   >
-                    <item.icon className="mr-2 h-4 w-4" />
                     {item.label}
                   </DropdownMenuItem>
                 ))}
@@ -122,8 +123,15 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
           </div>
         )}
         
-        {/* Right side actions removed per request */}
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0" />
+        {/* Right: W3 AI Button */}
+        <div className="flex items-center flex-shrink-0">
+          <Button 
+            size="sm" 
+            className="bg-nexus-purple hover:bg-nexus-deep-purple text-white font-semibold px-4"
+          >
+            W3 AI
+          </Button>
+        </div>
       </div>
     </header>
   );
