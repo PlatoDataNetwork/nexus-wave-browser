@@ -197,7 +197,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/80 text-white border-none h-9 px-4"
           type="button"
         >
-          Buy $NWAV
+          Buy $PLTO
         </Button>
 
         <Button 
@@ -206,7 +206,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#4c5fd7] hover:bg-[#4c5fd7]/80 text-white border-none h-9 px-4"
           type="button"
         >
-          NWAV Staking
+          PLTO Staking
         </Button>
         
         <Button 
@@ -215,7 +215,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
           className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
           type="button"
         >
-          NWAV Rewards
+          PLTO Rewards
         </Button>
       
         <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
