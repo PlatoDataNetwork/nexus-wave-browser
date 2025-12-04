@@ -3,15 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Search, Lock, RefreshCw, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import WalletConnect from "./WalletConnect";
 import UserSettingsTray from "./UserSettingsTray";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -37,7 +28,6 @@ const AddressBar: React.FC<AddressBarProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(currentUrl);
   const [isLoading, setIsLoading] = useState(false);
-  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -190,67 +180,9 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </form>
       </div>
       
-      <div className="flex items-center space-x-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-[#8B5CF6] hover:bg-[#8B5CF6]/80 text-white border-none h-9 px-4"
-          type="button"
-        >
-          Buy $PLTO
-        </Button>
-
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-[#4c5fd7] hover:bg-[#4c5fd7]/80 text-white border-none h-9 px-4"
-          type="button"
-        >
-          PLTO Staking
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="bg-[#006f4e] hover:bg-[#006f4e]/80 text-white border-none h-9 px-4"
-          type="button"
-        >
-          PLTO Rewards
-        </Button>
-      
-        <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              variant="secondary" 
-              size="sm" 
-              className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white h-9 px-4"
-              type="button"
-            >
-              Nexus Bridge
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-nexus-purple flex items-center justify-center text-white font-bold">
-                  NB
-                </div>
-                <span className="ml-2">Nexus Bridge</span>
-              </DialogTitle>
-              <DialogDescription>
-                Connect your wallet to interact with Web3 applications.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-4">
-              <WalletConnect />
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* User Settings Tray */}
-        <div className="ml-2">
-          <UserSettingsTray />
-        </div>
+      {/* User Settings Tray */}
+      <div className="flex items-center">
+        <UserSettingsTray />
       </div>
     </div>
   );
