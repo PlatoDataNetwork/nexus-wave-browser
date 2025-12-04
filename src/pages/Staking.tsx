@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const Staking: React.FC = () => {
   return (
-    <div className="min-h-screen bg-nexus-space-black">
+    <div className="min-h-screen bg-nexus-header-blue">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
@@ -23,7 +23,7 @@ const Staking: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
                 <TrendingUp className="h-6 w-6 text-nexus-blue" />
@@ -37,7 +37,7 @@ const Staking: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
                 <Shield className="h-6 w-6 text-nexus-blue" />
@@ -51,7 +51,7 @@ const Staking: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
                 <Award className="h-6 w-6 text-nexus-blue" />
@@ -65,7 +65,7 @@ const Staking: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
                 <LineChart className="h-6 w-6 text-nexus-blue" />
@@ -81,7 +81,7 @@ const Staking: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Staking Tiers</CardTitle>
               <CardDescription className="text-gray-400">
@@ -115,7 +115,7 @@ const Staking: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-nexus-card-dark border-nexus-blue/10">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Staking Benefits</CardTitle>
               <CardDescription className="text-gray-400">
@@ -150,7 +150,7 @@ const Staking: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <Card className="bg-nexus-card-dark border-nexus-blue/10 max-w-2xl mx-auto">
+          <Card className="bg-white/5 border-white/10 backdrop-blur-sm max-w-2xl mx-auto">
             <CardHeader>
               <Lock className="h-16 w-16 text-nexus-blue mx-auto mb-4" />
               <CardTitle>Staking Platform Coming Soon</CardTitle>
