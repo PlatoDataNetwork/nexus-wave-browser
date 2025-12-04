@@ -19,10 +19,10 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-sm active:translate-y-[0.5px]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Enhanced macOS style button with improved gradients and shadows
-        macos: "bg-gradient-to-b from-[#8E81DB] to-[#7B63DD] text-white shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all border border-[#9B87F5]/20",
+        // Enhanced macOS style button with improved gradients and shadows - using brand blue
+        macos: "bg-gradient-to-b from-[#3B82F6] to-[#2563EB] text-white shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all border border-[#3B82F6]/20",
         // New flat macOS style button - minimalist design inspired by modern macOS
-        "macos-flat": "bg-nexus-purple text-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all",
+        "macos-flat": "bg-nexus-blue text-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-[1px] active:translate-y-0 active:shadow-sm transition-all",
         // New light macOS style button for secondary actions
         "macos-light": "bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-[1px] hover:bg-white/15 active:translate-y-0 active:shadow-sm transition-all",
       },

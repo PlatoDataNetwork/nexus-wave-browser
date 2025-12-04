@@ -68,7 +68,7 @@ export default {
                     foreground: 'hsl(var(--header-foreground))',
                     border: 'hsl(var(--header-border))'
                 },
-				nexus: {
+			nexus: {
 					'dark-blue': '#1A1F2C',
 					'purple': '#7B63DD',
 					'light-purple': '#9b87f5',
@@ -77,6 +77,10 @@ export default {
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
 					'header-blue': '#0F0F17', /* Used for headers in both themes */
+					// Plato brand blue colors from icon
+					'blue': '#2563EB',
+					'light-blue': '#3B82F6',
+					'deep-blue': '#1D4ED8',
 					// Light mode optimized colors (but headers still use dark color)
 					'light-bg': '#f8fafc',
 					'light-card': '#ffffff',
