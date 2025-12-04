@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const testimonials = [
@@ -11,7 +10,7 @@ const testimonials = [
     name: "Sarah Johnson",
     role: "Crypto Investor",
     avatar: "SJ",
-    quote: "Nexus Wave has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
+    quote: "Plato W3 AI Browser has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
     rating: 5
   },
   {
@@ -51,7 +50,7 @@ const TestimonialSlider: React.FC = () => {
   return (
     <div className="w-full">
       <div className="text-center mb-12">
-        <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+        <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
           Trusted By Web3 Users
         </Badge>
         <h2 className="text-3xl md:text-5xl font-bold mb-6">What Our Users Say</h2>
@@ -65,8 +64,8 @@ const TestimonialSlider: React.FC = () => {
           >
             {testimonials.map((testimonial, index) => (
               <div key={index} className="w-full flex-shrink-0 px-4">
-                <Card className="bg-nexus-card-dark border-nexus-purple/10 p-6">
-                  <CardContent className="pt-6 px-4">
+                <div className="p-6">
+                  <div className="pt-6 px-4">
                     <div className="flex items-center justify-center mb-6">
                       {[...Array(5)].map((_, i) => (
                         <Star 
@@ -81,16 +80,16 @@ const TestimonialSlider: React.FC = () => {
                     </p>
                     
                     <div className="flex flex-col items-center">
-                      <Avatar className="h-16 w-16 mb-4 border-2 border-nexus-purple">
-                        <AvatarFallback className="bg-nexus-purple/20 text-nexus-light-purple">
+                      <Avatar className="h-16 w-16 mb-4 border-2 border-nexus-blue">
+                        <AvatarFallback className="bg-nexus-blue/20 text-nexus-light-blue">
                           {testimonial.avatar}
                         </AvatarFallback>
                       </Avatar>
                       <h4 className="font-medium text-xl">{testimonial.name}</h4>
                       <p className="text-gray-400">{testimonial.role}</p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -99,7 +98,7 @@ const TestimonialSlider: React.FC = () => {
         <Button 
           variant="outline" 
           size="icon" 
-          className="absolute top-1/2 -left-4 transform -translate-y-1/2 rounded-full bg-nexus-card-navy border-nexus-purple/20"
+          className="absolute top-1/2 -left-4 transform -translate-y-1/2 rounded-full bg-transparent border-nexus-blue/20"
           onClick={handlePrev}
         >
           <ChevronLeft className="h-5 w-5" />
@@ -108,23 +107,11 @@ const TestimonialSlider: React.FC = () => {
         <Button 
           variant="outline" 
           size="icon"
-          className="absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full bg-nexus-card-navy border-nexus-purple/20"
+          className="absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full bg-transparent border-nexus-blue/20"
           onClick={handleNext}
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
-      </div>
-      
-      <div className="flex justify-center mt-6 space-x-2">
-        {testimonials.map((_, index) => (
-          <button
-            key={index}
-            className={`h-2 rounded-full transition-all ${
-              index === currentIndex ? "w-8 bg-nexus-purple" : "w-2 bg-nexus-purple/30"
-            }`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
       </div>
     </div>
   );
