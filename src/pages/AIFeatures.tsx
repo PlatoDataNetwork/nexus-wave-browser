@@ -8,11 +8,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 
 const AIFeatures: React.FC = () => {
   return (
     <div className="bg-nexus-space-black min-h-screen">
+      <Header />
+      
       {/* Hero Section */}
       <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-nexus-dark-blue opacity-50" />
