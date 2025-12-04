@@ -43,7 +43,7 @@ const Settings: React.FC = () => {
         <div className="w-64 border-r border-border bg-card">
           <div className="p-4">
             <div className="flex items-center mb-4">
-              <SettingsIcon className="h-5 w-5 mr-2 text-nexus-purple" />
+              <SettingsIcon className="h-5 w-5 mr-2 text-nexus-blue" />
               <h2 className="font-medium">Settings</h2>
             </div>
             <div className="relative mb-4">
@@ -66,56 +66,56 @@ const Settings: React.FC = () => {
               <TabsList className="flex flex-col items-start justify-start h-auto gap-1 bg-transparent p-0">
                 <TabsTrigger
                   value="appearance"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Appearance</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="shields"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Shields & Privacy</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="privacy"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Privacy and Security</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="extensions"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Extensions</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="autofill"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Autofill</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="search"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Search Engine</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="web3"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Web3</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="advanced"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-purple/20 data-[state=active]:text-nexus-purple data-[state=active]:font-medium"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Advanced</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
