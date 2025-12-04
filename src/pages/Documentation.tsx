@@ -54,7 +54,7 @@ const Documentation: React.FC = () => {
         <div className="w-64 border-r border-border bg-card">
           <div className="p-4">
             <div className="flex items-center mb-4">
-              <BookText className="h-5 w-5 mr-2 text-muted-foreground" />
+              <BookText className="h-5 w-5 mr-2 text-nexus-blue" />
               <h2 className="font-medium">Documentation</h2>
             </div>
             <div className="relative mb-4">
@@ -77,63 +77,63 @@ const Documentation: React.FC = () => {
               <TabsList className="flex flex-col items-start justify-start h-auto gap-1 bg-transparent p-0">
                 <TabsTrigger
                   value="overview"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Overview</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="getting-started"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Getting Started</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="features"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Features</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="installation"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Installation</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="web3"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Web3 Integration</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="privacy"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Privacy & Security</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="settings"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Settings Guide</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="shortcuts"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Keyboard Shortcuts</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </TabsTrigger>
                 <TabsTrigger
                   value="troubleshooting"
-                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
+                  className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-nexus-blue/20 data-[state=active]:text-nexus-blue data-[state=active]:font-medium"
                 >
                   <span>Troubleshooting</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
