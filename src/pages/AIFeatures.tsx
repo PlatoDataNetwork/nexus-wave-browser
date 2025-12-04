@@ -8,16 +8,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 
 const AIFeatures: React.FC = () => {
   return (
     <div className="bg-nexus-space-black min-h-screen">
-      <Header />
-      
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-nexus-dark-blue opacity-50" />
         <div className="absolute inset-0 z-0">
           <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-nexus-blue/20 via-transparent to-transparent" />
@@ -32,9 +29,9 @@ const AIFeatures: React.FC = () => {
             <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-semibold border-nexus-blue text-nexus-light-blue bg-nexus-blue/20 backdrop-blur-sm shadow-lg shadow-nexus-blue/30">
               W3 AI Features
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-8 pb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               <span className="block">AI-Powered Web3</span>
-              <span className="block">Intelligence</span>
+              <span className="block pb-2">Intelligence</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Experience the future of browsing with integrated AI that understands Web3, 
