@@ -125,12 +125,14 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         
         {/* Right: W3 AI Button */}
         <div className="flex items-center flex-shrink-0">
-          <Button 
-            size="sm" 
-            className="bg-nexus-purple hover:bg-nexus-deep-purple text-white font-semibold px-4"
-          >
-            W3 AI
-          </Button>
+          <Link to="/ai-features">
+            <Button 
+              size="sm" 
+              className="bg-nexus-blue hover:bg-nexus-deep-blue text-white font-semibold px-4"
+            >
+              W3 AI
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

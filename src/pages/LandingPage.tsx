@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
         <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
           <div className="absolute inset-0 z-0 bg-nexus-dark-blue opacity-50" />
           <div className="absolute inset-0 z-0">
-            <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-nexus-purple/20 via-transparent to-transparent" />
+            <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-nexus-blue/20 via-transparent to-transparent" />
           </div>
 
           <div className="max-w-7xl mx-auto relative z-10">
@@ -50,7 +50,7 @@ const LandingPage: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-semibold border-nexus-purple text-nexus-light-purple bg-nexus-purple/20 backdrop-blur-sm shadow-lg shadow-nexus-purple/30 animate-pulse-glow">
+                  <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-semibold border-nexus-blue text-nexus-light-blue bg-nexus-blue/20 backdrop-blur-sm shadow-lg shadow-nexus-blue/30 animate-pulse-glow">
                     Revolutionary AI-Powered Web3 Experience
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
@@ -64,12 +64,12 @@ const LandingPage: React.FC = () => {
                   </p>
                   <div className="flex flex-wrap gap-4">
                     <Link to="/app">
-                      <Button size="lg" className="bg-nexus-purple hover:bg-nexus-deep-purple text-white">
+                      <Button size="lg" className="bg-nexus-blue hover:bg-nexus-deep-blue text-white">
                         Download for MacOS <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                     <Link to="/app">
-                      <Button size="lg" variant="outline" className="border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
+                      <Button size="lg" variant="outline" className="border-nexus-blue text-nexus-light-blue hover:bg-nexus-blue/10">
                         Try Demo
                       </Button>
                     </Link>
@@ -97,7 +97,7 @@ const LandingPage: React.FC = () => {
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+              <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
                 Crafted for MacOS
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">The Complete Web3 Experience</h2>
@@ -109,32 +109,32 @@ const LandingPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard 
-                icon={<Globe className="h-8 w-8 text-nexus-purple" />}
+                icon={<Globe className="h-8 w-8 text-nexus-blue" />}
                 title="Seamless dApp Access"
                 description="Connect instantly to thousands of decentralized applications without additional plugins or configurations."
               />
               <FeatureCard 
-                icon={<Wallet className="h-8 w-8 text-nexus-purple" />}
+                icon={<Wallet className="h-8 w-8 text-nexus-blue" />}
                 title="Unified Wallet Integration"
                 description="Connect and manage multiple crypto wallets in one secure, intuitive interface."
               />
               <FeatureCard 
-                icon={<Zap className="h-8 w-8 text-nexus-purple" />}
+                icon={<Zap className="h-8 w-8 text-nexus-blue" />}
                 title="Blazing-Fast Performance"
                 description="Optimized specifically for MacOS with native performance that outpaces traditional browsers."
               />
               <FeatureCard 
-                icon={<Shield className="h-8 w-8 text-nexus-purple" />}
+                icon={<Shield className="h-8 w-8 text-nexus-blue" />}
                 title="Enhanced Security"
                 description="Built-in protection against common Web3 threats, phishing attempts, and malicious smart contracts."
               />
               <FeatureCard 
-                icon={<Layers className="h-8 w-8 text-nexus-purple" />}
+                icon={<Layers className="h-8 w-8 text-nexus-blue" />}
                 title="Multi-Chain Support"
                 description="Seamlessly interact with all major blockchains and Layer 2 solutions in one browser."
               />
               <FeatureCard 
-                icon={<Code className="h-8 w-8 text-nexus-purple" />}
+                icon={<Code className="h-8 w-8 text-nexus-blue" />}
                 title="Developer Tools"
                 description="Comprehensive suite of developer tools optimized for blockchain and Web3 development."
               />
@@ -143,12 +143,8 @@ const LandingPage: React.FC = () => {
         </section>
 
         {/* MacOS Integration Section */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <div className="h-full w-full bg-gradient-to-b from-nexus-dark-blue to-nexus-space-black" />
-          </div>
-          
-          <div className="max-w-7xl mx-auto relative z-10">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -219,7 +215,7 @@ const LandingPage: React.FC = () => {
                 viewport={{ once: true }}
                 className="order-1 lg:order-2"
               >
-                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
                   Built for MacOS
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
@@ -231,8 +227,8 @@ const LandingPage: React.FC = () => {
                 
                 <div className="space-y-5">
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Designed for Apple Silicon</h4>
@@ -241,8 +237,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Continuity Features</h4>
@@ -251,8 +247,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Keyboard Shortcuts</h4>
@@ -269,7 +265,7 @@ const LandingPage: React.FC = () => {
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-nexus-card-navy">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+              <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
                 Complete Web3 Suite
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
@@ -280,10 +276,10 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+              <Card className="bg-nexus-card-dark border-nexus-blue/10 hover:border-nexus-blue/30 transition-all">
                 <CardHeader>
-                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
-                    <Wallet className="h-6 w-6 text-nexus-purple" />
+                  <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
+                    <Wallet className="h-6 w-6 text-nexus-blue" />
                   </div>
                   <CardTitle>Multi-Wallet Dashboard</CardTitle>
                 </CardHeader>
@@ -295,25 +291,25 @@ const LandingPage: React.FC = () => {
                 <CardFooter>
                   <ul className="space-y-1 text-xs text-gray-400">
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Advanced transaction analysis</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Cross-chain portfolio view</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Gas fee optimization</span>
                     </li>
                   </ul>
                 </CardFooter>
               </Card>
 
-              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+              <Card className="bg-nexus-card-dark border-nexus-blue/10 hover:border-nexus-blue/30 transition-all">
                 <CardHeader>
-                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
-                    <Globe className="h-6 w-6 text-nexus-purple" />
+                  <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
+                    <Globe className="h-6 w-6 text-nexus-blue" />
                   </div>
                   <CardTitle>dApp Connection Hub</CardTitle>
                 </CardHeader>
@@ -325,25 +321,25 @@ const LandingPage: React.FC = () => {
                 <CardFooter>
                   <ul className="space-y-1 text-xs text-gray-400">
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>One-click dApp connections</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Security verification system</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Personalized recommendations</span>
                     </li>
                   </ul>
                 </CardFooter>
               </Card>
 
-              <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all">
+              <Card className="bg-nexus-card-dark border-nexus-blue/10 hover:border-nexus-blue/30 transition-all">
                 <CardHeader>
-                  <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-nexus-purple" />
+                  <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
+                    <Shield className="h-6 w-6 text-nexus-blue" />
                   </div>
                   <CardTitle>Security Guardian</CardTitle>
                 </CardHeader>
@@ -355,15 +351,15 @@ const LandingPage: React.FC = () => {
                 <CardFooter>
                   <ul className="space-y-1 text-xs text-gray-400">
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Smart contract analysis</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Phishing protection</span>
                     </li>
                     <li className="flex items-center gap-1">
-                      <Star className="h-3 w-3 text-nexus-purple/70" />
+                      <Star className="h-3 w-3 text-nexus-blue/70" />
                       <span>Transaction simulation</span>
                     </li>
                   </ul>
@@ -378,19 +374,19 @@ const LandingPage: React.FC = () => {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
                   Real-Time Intelligence
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Web3 AI Assistant</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave comes with a built-in AI assistant that provides context, explanations, and insights
+                  Plato W3 AI Browser comes with a built-in AI assistant that provides context, explanations, and insights
                   to help you navigate Web3 with confidence.
                 </p>
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <Book className="h-6 w-6 text-nexus-purple" />
+                    <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <Book className="h-6 w-6 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-xl mb-2">Blockchain Education</h4>
@@ -399,8 +395,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <Shield className="h-6 w-6 text-nexus-purple" />
+                    <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <Shield className="h-6 w-6 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-xl mb-2">Transaction Analysis</h4>
@@ -409,8 +405,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <Maximize2 className="h-6 w-6 text-nexus-purple" />
+                    <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <Maximize2 className="h-6 w-6 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-xl mb-2">Market Insights</h4>
@@ -419,15 +415,17 @@ const LandingPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <Button size="lg" className="mt-8 bg-nexus-purple hover:bg-nexus-deep-purple text-white">
-                  See AI Features in Action
-                </Button>
+                <Link to="/ai-features">
+                  <Button size="lg" className="mt-8 bg-nexus-blue hover:bg-nexus-deep-blue text-white">
+                    See AI Features in Action
+                  </Button>
+                </Link>
               </div>
               
               <div className="nexus-glass rounded-2xl p-6 shadow-lg animate-pulse-glow">
                 <div className="bg-nexus-card-dark rounded-xl p-5 max-h-[500px] overflow-hidden">
                   <div className="flex flex-col space-y-4">
-                    <div className="self-end max-w-[80%] bg-nexus-purple text-white p-3 rounded-lg">
+                    <div className="self-end max-w-[80%] bg-nexus-blue text-white p-3 rounded-lg">
                       What's the difference between ERC-20 and ERC-721 tokens?
                     </div>
                     
@@ -439,12 +437,12 @@ const LandingPage: React.FC = () => {
                         <p className="text-xs font-medium mb-1">Relevant projects in your browsing history:</p>
                         <ul className="space-y-1">
                           <li className="text-xs">
-                            <a href="#" className="text-nexus-purple underline hover:text-nexus-deep-purple">
+                            <a href="#" className="text-nexus-blue underline hover:text-nexus-deep-blue">
                               Uniswap (uses ERC-20)
                             </a>
                           </li>
                           <li className="text-xs">
-                            <a href="#" className="text-nexus-purple underline hover:text-nexus-deep-purple">
+                            <a href="#" className="text-nexus-blue underline hover:text-nexus-deep-blue">
                               OpenSea (uses ERC-721)
                             </a>
                           </li>
@@ -452,7 +450,7 @@ const LandingPage: React.FC = () => {
                       </div>
                     </div>
                     
-                    <div className="self-end max-w-[80%] bg-nexus-purple text-white p-3 rounded-lg">
+                    <div className="self-end max-w-[80%] bg-nexus-blue text-white p-3 rounded-lg">
                       Can you analyze this smart contract before I connect my wallet?
                     </div>
                   </div>
@@ -483,13 +481,13 @@ const LandingPage: React.FC = () => {
                       </div>
                       
                       <div className="text-gray-300">
-                        <span className="text-blue-400">contract</span> <span className="text-green-400">NexusWaveDemo</span> {"{"}
+                        <span className="text-blue-400">contract</span> <span className="text-green-400">PlatoDemo</span> {"{"}
                       </div>
                       <div className="text-gray-300 pl-4">
-                        <span className="text-blue-400">mapping</span>(<span className="text-purple-400">address</span> {"=>"} <span className="text-purple-400">uint256</span>) <span className="text-yellow-400">public</span> balances;
+                        <span className="text-blue-400">mapping</span>(<span className="text-blue-400">address</span> {"=>"} <span className="text-blue-400">uint256</span>) <span className="text-yellow-400">public</span> balances;
                       </div>
                       <div className="text-gray-300 pl-4">
-                        <span className="text-blue-400">event</span> <span className="text-green-400">Deposit</span>(<span className="text-purple-400">address</span> indexed from, <span className="text-purple-400">uint256</span> amount);
+                        <span className="text-blue-400">event</span> <span className="text-green-400">Deposit</span>(<span className="text-blue-400">address</span> indexed from, <span className="text-blue-400">uint256</span> amount);
                       </div>
                       <div className="text-gray-300 pl-4">
                         <span className="text-yellow-400">function</span> <span className="text-green-400">deposit</span>() <span className="text-yellow-400">public payable</span> {"{"}
@@ -529,19 +527,19 @@ const LandingPage: React.FC = () => {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-purple text-nexus-light-purple bg-nexus-purple/10">
+                <Badge variant="outline" className="mb-4 px-3 py-1 border-nexus-blue text-nexus-light-blue bg-nexus-blue/10">
                   Developer Tools
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Built by Developers, for Developers</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Nexus Wave provides an exceptional development experience with specialized tools for Web3 developers,
+                  Plato W3 AI Browser provides an exceptional development experience with specialized tools for Web3 developers,
                   making it easier than ever to build, test, and deploy decentralized applications.
                 </p>
                 
                 <div className="space-y-5">
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Smart Contract Inspector</h4>
@@ -550,8 +548,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Web3 DevTools</h4>
@@ -560,8 +558,8 @@ const LandingPage: React.FC = () => {
                   </div>
                   
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-purple/20 flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="h-3 w-3 text-nexus-purple" />
+                    <div className="mt-1 h-6 w-6 rounded-full bg-nexus-blue/20 flex items-center justify-center flex-shrink-0">
+                      <ArrowRight className="h-3 w-3 text-nexus-blue" />
                     </div>
                     <div>
                       <h4 className="font-medium text-lg">Local Development Environment</h4>
@@ -570,7 +568,7 @@ const LandingPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <Button size="lg" variant="outline" className="mt-8 border-nexus-purple text-nexus-light-purple hover:bg-nexus-purple/10">
+                <Button size="lg" variant="outline" className="mt-8 border-nexus-blue text-nexus-light-blue hover:bg-nexus-blue/10">
                   Developer Documentation
                 </Button>
               </motion.div>
@@ -601,9 +599,9 @@ const FeatureCard: React.FC<{
   description: string;
 }> = ({ icon, title, description }) => {
   return (
-    <Card className="bg-nexus-card-dark border-nexus-purple/10 hover:border-nexus-purple/30 transition-all h-full">
+    <Card className="bg-nexus-card-dark border-nexus-blue/10 hover:border-nexus-blue/30 transition-all h-full">
       <CardHeader>
-        <div className="h-12 w-12 rounded-lg bg-nexus-purple/20 flex items-center justify-center mb-4">
+        <div className="h-12 w-12 rounded-lg bg-nexus-blue/20 flex items-center justify-center mb-4">
           {icon}
         </div>
         <CardTitle>{title}</CardTitle>
