@@ -64,7 +64,7 @@ const BrowserFooter: React.FC<{
     
     toast({
       title: "Opening Extension Store",
-      description: "Loading the Nexus Wave Extension Store"
+      description: "Loading the Plato W3 AI Browser Extension Store"
     });
   };
 
@@ -78,8 +78,8 @@ const BrowserFooter: React.FC<{
     }
     
     toast({
-      title: "Opening Nexus Search",
-      description: "Loading the privacy-focused Nexus Search engine"
+      title: "Opening Plato Search",
+      description: "Loading the privacy-focused Plato Search engine"
     });
   };
 
@@ -154,7 +154,7 @@ const BrowserFooter: React.FC<{
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Open Nexus Search</p>
+            <p>Open Plato Search</p>
           </TooltipContent>
         </Tooltip>
 
@@ -244,7 +244,7 @@ const BrowserFooter: React.FC<{
               className="bg-[#3949AB] hover:bg-[#3949AB]/80 text-white font-medium px-3 py-1 rounded-md"
               onClick={handleHomeClick}
             >
-              Nexus Wave V2.1
+              Plato V2.1
             </Button>
           </TooltipTrigger>
           <TooltipContent>Go to home page</TooltipContent>
@@ -257,7 +257,7 @@ const BrowserFooter: React.FC<{
               className="bg-[#e5007e] hover:bg-[#e5007e]/80 text-white font-medium px-3 py-1 rounded-md"
               onClick={() => setIsWalletDialogOpen(true)}
             >
-              Nexus Bridge V2.1
+              Plato Bridge V2.1
             </Button>
           </DialogTrigger>
           <DialogContent className="p-0 border-none max-w-4xl">
