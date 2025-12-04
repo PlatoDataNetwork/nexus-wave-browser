@@ -47,19 +47,19 @@ const SettingsDocumentation: React.FC = () => {
     <div className="p-6 space-y-6">
       <div className="flex items-center space-x-2">
         <FileText className="h-5 w-5" />
-        <h1 className="text-2xl font-bold">Nexus Wave Browser Documentation</h1>
+        <h1 className="text-2xl font-bold">Plato W3 AI Browser Documentation</h1>
       </div>
       
       <Separator />
 
       <Card className="nexus-glass border-none shadow-md">
         <CardHeader>
-          <CardTitle>Getting Started with Nexus Wave</CardTitle>
+          <CardTitle>Getting Started with Plato</CardTitle>
           <CardDescription>Basic overview of browser features</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Nexus Wave is a next-generation Web3 browser designed to seamlessly integrate 
+            Plato is a next-generation Web3 browser designed to seamlessly integrate 
             blockchain technology with traditional web browsing. This documentation will help
             you get started with the key features.
           </p>
@@ -81,8 +81,8 @@ const SettingsDocumentation: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Nexus Wave allows you to connect multiple wallets or create a new one directly
-            in the browser. Click on the "Nexus Bridge" button in the footer to access
+            Plato allows you to connect multiple wallets or create a new one directly
+            in the browser. Click on the wallet button in the footer to access
             wallet functions.
           </p>
           <h3 className="text-lg font-semibold">Supported Networks:</h3>
@@ -117,13 +117,6 @@ const SettingsDocumentation: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      {/* Header */}
-      <div className="flex items-center justify-between h-8 bg-card border-b border-border px-4">
-        <h1 className="text-xs font-medium">
-          Nexus Wave Browser - {activeSection === "settings" ? "Settings" : "Documentation"}
-        </h1>
-      </div>
-
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <div className="w-64 border-r border-border bg-card">
@@ -135,9 +128,9 @@ const SettingsDocumentation: React.FC = () => {
               onValueChange={handleSectionChange} 
               className="w-full mb-4"
             >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="settings">Settings</TabsTrigger>
-                <TabsTrigger value="documentation">Docs</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 h-10">
+                <TabsTrigger value="settings" className="h-full">Settings</TabsTrigger>
+                <TabsTrigger value="documentation" className="h-full">Docs</TabsTrigger>
               </TabsList>
             </Tabs>
 

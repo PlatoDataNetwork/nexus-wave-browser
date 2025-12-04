@@ -11,12 +11,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 interface PageLayoutProps {
   children: React.ReactNode;
   includeFooter?: boolean;
+  includeHeader?: boolean;
   onNavigate?: (url: string) => void;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ 
   children, 
-  includeFooter = true, 
+  includeFooter = true,
+  includeHeader = true,
   onNavigate 
 }) => {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 
   return (
     <div className={containerClassName}>
-      <Header onNavigate={onNavigate} />
+      {includeHeader && <Header onNavigate={onNavigate} />}
       <div className={contentClassName}>
         {children}
       </div>
