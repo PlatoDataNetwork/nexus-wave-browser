@@ -12,7 +12,7 @@ interface IndexProps {
   defaultUrl?: string;
 }
 
-const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw.io" }) => {
+const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }) => {
   const [showWalletConnect, setShowWalletConnect] = useState(false);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("hidden");
   const isMobile = useIsMobile();

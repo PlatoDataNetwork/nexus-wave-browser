@@ -78,7 +78,7 @@ export function useTabs(defaultUrl: string = "https://tmrw-digital.com") {
       [newTabId]: 0
     }));
     
-    setCurrentUrl("https://tmrw.io");
+    setCurrentUrl("https://tmrw-digital.com");
     toast.success("New tab opened");
   }, []);
 

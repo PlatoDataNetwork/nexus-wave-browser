@@ -74,7 +74,7 @@ export const bookmarks = [
   {
     id: "bookmark-2",
     title: "TMRW Browser",
-    url: "https://tmrw.io",
+    url: "https://tmrw-digital.com",
     color: "#9b87f5"
   },
   {
