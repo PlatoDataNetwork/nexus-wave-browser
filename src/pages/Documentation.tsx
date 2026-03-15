@@ -645,7 +645,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Web3 Integration</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn about Plato W3 AI Browser's powerful blockchain and Web3 features
+                    Learn about TMRW W3AI Browser's powerful blockchain and Web3 features
                   </p>
                 </div>
 
