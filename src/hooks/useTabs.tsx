@@ -53,8 +53,8 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
     const newTabId = `tab-${Date.now()}`;
     const newTab: Tab = {
       id: newTabId,
-      title: "platodata.io",
-      url: "https://platodata.io",
+      title: "tmrw.io",
+      url: "https://tmrw.io",
       isActive: false,
       icon: undefined
     };
