@@ -511,9 +511,9 @@ const Documentation: React.FC = () => {
                           <p className="mb-2">Install TMRW W3AI Browser using Snap (recommended) or Flatpak:</p>
                           <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
                             <p># Using Snap</p>
-                            <p>sudo snap install plato-browser</p>
+                            <p>sudo snap install tmrw-browser</p>
                             <p className="mt-2"># Using Flatpak</p>
-                            <p>flatpak install flathub dev.plato.browser</p>
+                            <p>flatpak install flathub dev.tmrw.browser</p>
                           </div>
                         </div>
                         
