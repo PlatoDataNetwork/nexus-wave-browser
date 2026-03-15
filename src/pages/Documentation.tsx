@@ -422,7 +422,7 @@ const Documentation: React.FC = () => {
                           <h5 className="font-medium">Option 2: Direct Download</h5>
                           <p className="mb-2">Download the installer package directly from our official website:</p>
                           <ol className="list-decimal pl-5 space-y-1">
-                            <li>Visit the official Plato W3 AI Browser website</li>
+                            <li>Visit the official TMRW W3AI Browser website</li>
                             <li>Go to the Downloads section</li>
                             <li>Select the macOS version</li>
                             <li>Download the .dmg file</li>
