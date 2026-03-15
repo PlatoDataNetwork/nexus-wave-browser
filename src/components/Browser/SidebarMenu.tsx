@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass } from "lucide-react";
+import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass, Newspaper } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { topProtocols } from "@/lib/protocolData";
 import { useNavigate } from "react-router-dom";
@@ -181,6 +181,15 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
                   }
                 />
               ))}
+            </div>
+          )}
+
+          {/* Intelligence */}
+          <SectionHeader sectionKey="intelligence" icon={<Newspaper className="h-4 w-4" />} label="Intelligence" />
+          {openSections["intelligence"] && (
+            <div className="space-y-0.5">
+              <NavItem name="Plato" url="https://platodata.io" indent={1} />
+              <NavItem name="CoinTelegraph" url="https://cointelegraph.com" indent={1} />
             </div>
           )}
 

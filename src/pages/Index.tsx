@@ -6,12 +6,17 @@ import WalletConnect from "@/components/Browser/WalletConnect";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SidebarMenu from "@/components/Browser/SidebarMenu";
 import ProtocolsMenu from "@/components/Browser/ProtocolsMenu";
+import { useNavigate } from "react-router-dom";
+import { Search, BarChart3, Compass, Globe, Newspaper, Link2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface IndexProps {
   defaultUrl?: string;
 }
 
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }) => {
+  const navigate = useNavigate();
   const [showWalletConnect, setShowWalletConnect] = useState(false);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("hidden");
   const isMobile = useIsMobile();
@@ -64,14 +69,30 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }
       <div className="flex-1 flex flex-col min-w-0">
         {/* Main browser header */}
         <div className="flex items-center justify-between px-2 sm:px-4 py-1 bg-nexus-header-blue border-b border-border">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            {/* Show hamburger menu only on mobile */}
+          <div className="flex items-center gap-2 min-w-0">
             {isMobile && <ProtocolsMenu onNavigate={navigateToUrl} />}
-          
+            {!isMobile && <DateTime />}
           </div>
           
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-4 flex-shrink-0">
-            {!isMobile && <DateTime />}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <Tooltip><TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 bg-muted/20 hover:bg-muted/40" onClick={() => navigate('/search')}>
+                <Search className="h-4 w-4 text-foreground" /><span className="sr-only">Discovery</span>
+              </Button>
+            </TooltipTrigger><TooltipContent>Discovery</TooltipContent></Tooltip>
+
+            <Tooltip><TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 bg-muted/20 hover:bg-muted/40" onClick={() => navigate('/token')}>
+                <BarChart3 className="h-4 w-4 text-foreground" /><span className="sr-only">Analytics</span>
+              </Button>
+            </TooltipTrigger><TooltipContent>Analytics</TooltipContent></Tooltip>
+
+            <Tooltip><TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 bg-muted/20 hover:bg-muted/40" onClick={() => navigateToUrl('https://platodata.io')}>
+                <Newspaper className="h-4 w-4 text-foreground" /><span className="sr-only">Intelligence</span>
+              </Button>
+            </TooltipTrigger><TooltipContent>Intelligence</TooltipContent></Tooltip>
+
             <HomeButton />
             <ThemeToggle />
             {!isMobile && <SettingsButton />}
