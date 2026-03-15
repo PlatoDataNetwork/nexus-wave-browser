@@ -284,7 +284,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Tab Management</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser provides advanced tab management features to keep your browsing organized:
+                        TMRW W3AI Browser provides advanced tab management features to keep your browsing organized:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Drag and drop to reorder tabs</li>
