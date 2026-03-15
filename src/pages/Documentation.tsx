@@ -246,7 +246,7 @@ const Documentation: React.FC = () => {
                         <li><strong>Tab Bar:</strong> Displays and manages open tabs</li>
                         <li><strong>Bookmarks Bar:</strong> Quick access to saved sites</li>
                         <li><strong>Extensions Area:</strong> Access browser extensions</li>
-                        <li><strong>Plato Bridge Button:</strong> Connect to Web3 wallets</li>
+                        <li><strong>TMRW Bridge Button:</strong> Connect to Web3 wallets</li>
                         <li><strong>Settings Button:</strong> Configure browser options</li>
                         <li><strong>Protocol Ticker:</strong> Shows current crypto prices</li>
                       </ul>
