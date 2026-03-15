@@ -481,7 +481,7 @@ const LandingPage: React.FC = () => {
                       </div>
                       
                       <div className="text-gray-300">
-                        <span className="text-blue-400">contract</span> <span className="text-green-400">PlatoDemo</span> {"{"}
+                        <span className="text-blue-400">contract</span> <span className="text-green-400">TMRWDemo</span> {"{"}
                       </div>
                       <div className="text-gray-300 pl-4">
                         <span className="text-blue-400">mapping</span>(<span className="text-blue-400">address</span> {"=>"} <span className="text-blue-400">uint256</span>) <span className="text-yellow-400">public</span> balances;
