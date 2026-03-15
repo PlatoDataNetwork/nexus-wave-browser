@@ -240,7 +240,7 @@ const Documentation: React.FC = () => {
                   <AccordionItem value="interface">
                     <AccordionTrigger className="text-md font-medium">Understanding the Interface</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>The Plato W3 AI Browser interface includes:</p>
+                      <p>The TMRW W3AI Browser interface includes:</p>
                       <ul className="space-y-2 list-disc pl-5">
                         <li><strong>Address Bar:</strong> For URL entry and search</li>
                         <li><strong>Tab Bar:</strong> Displays and manages open tabs</li>
