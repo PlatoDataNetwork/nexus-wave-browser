@@ -379,9 +379,9 @@ const Documentation: React.FC = () => {
 
                 <Card className="border-nexus-blue/20 mb-6">
                   <CardContent className="p-6">
-                    <h3 className="text-md font-medium mb-3">Plato W3 AI Browser Versions</h3>
+                    <h3 className="text-md font-medium mb-3">TMRW W3AI Browser Versions</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato W3 AI Browser is available as both a native application for various operating systems 
+                      TMRW W3AI Browser is available as both a native application for various operating systems 
                       and as a web-based version. Choose the option that best suits your needs.
                     </p>
                   </CardContent>
