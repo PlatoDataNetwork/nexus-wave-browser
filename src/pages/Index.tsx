@@ -16,6 +16,7 @@ interface IndexProps {
 }
 
 const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }) => {
+  const navigate = useNavigate();
   const [showWalletConnect, setShowWalletConnect] = useState(false);
   const [bookmarksBarState, setBookmarksBarState] = useState<"visible" | "minimized" | "hidden">("hidden");
   const isMobile = useIsMobile();
