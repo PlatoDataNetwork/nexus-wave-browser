@@ -68,7 +68,7 @@ const mockHistoryData = [
   {
     id: "hist-6",
     title: "NFT Marketplace Trends - Web3 Analysis",
-    url: "https://platodata.io/nft-trends",
+    url: "https://tmrw.io/nft-trends",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 48, // 2 days ago
     type: "webpage"

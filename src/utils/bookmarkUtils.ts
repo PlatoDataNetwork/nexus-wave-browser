@@ -112,7 +112,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "cut",
       title: "CUT",
-      url: "https://cut.platodata.xyz",
+      url: "https://cut.tmrw.io",
       color: getColorFromName("CUT")
     },
     // Include top protocols, excluding the specified ones

@@ -62,7 +62,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw.io" }) => {
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <ProtocolsMenu onNavigate={navigateToUrl} />
           <div className="flex flex-col text-white min-w-0">
-            <div className="text-base sm:text-lg md:text-xl font-bold truncate">Plato W3 AI Browser</div>
+            <div className="text-base sm:text-lg md:text-xl font-bold truncate">TMRW W3AI Browser</div>
           </div>
         </div>
         
