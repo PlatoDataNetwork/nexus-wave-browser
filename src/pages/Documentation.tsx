@@ -407,7 +407,7 @@ const Documentation: React.FC = () => {
                           <p className="mb-2">Download TMRW W3AI Browser directly from the Apple App Store for the simplest installation experience:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the App Store on your Mac</li>
-                            <li>Search for "Plato W3 AI Browser"</li>
+                            <li>Search for "TMRW W3AI Browser"</li>
                             <li>Click "Get" or the price button</li>
                             <li>Authenticate with your Apple ID if prompted</li>
                             <li>The app will download and install automatically</li>
