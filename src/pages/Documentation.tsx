@@ -427,7 +427,7 @@ const Documentation: React.FC = () => {
                             <li>Select the macOS version</li>
                             <li>Download the .dmg file</li>
                             <li>Open the downloaded file</li>
-                            <li>Drag the Plato W3 AI Browser icon to your Applications folder</li>
+                            <li>Drag the TMRW W3AI Browser icon to your Applications folder</li>
                             <li>Right-click the app and select "Open" the first time to bypass Gatekeeper</li>
                           </ol>
                           <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
