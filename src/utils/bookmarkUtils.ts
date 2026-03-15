@@ -82,7 +82,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "ark",
       title: "ARK",
-      url: "https://ark.tmrw.io",
+      url: "https://ark.tmrw-digital.com",
       color: getColorFromName("ARK")
     },
     {
@@ -112,7 +112,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "cut",
       title: "CUT",
-      url: "https://cut.tmrw.io",
+      url: "https://cut.tmrw-digital.com",
       color: getColorFromName("CUT")
     },
     // Include top protocols, excluding the specified ones

@@ -47,19 +47,19 @@ export const shortcuts = [
     name: "Learn",
     description: "Learn about web3",
     icon: Book,
-    url: "https://tmrw.io/learn",
+    url: "https://tmrw-digital.com/learn",
   },
   {
     name: "Academy",
     description: "Take web3 courses",
     icon: GraduationCap,
-    url: "https://tmrw.io/academy",
+    url: "https://tmrw-digital.com/academy",
   },
   {
     name: "Launchpad",
     description: "Discover new web3 projects",
     icon: Rocket,
-    url: "https://tmrw.io/launchpad",
+    url: "https://tmrw-digital.com/launchpad",
   },
 ];
 
@@ -98,13 +98,13 @@ export const bookmarks = [
   {
     id: "bookmark-6",
     title: "TMRW AI Creator",
-    url: "https://dashboard.tmrw.io",
+    url: "https://dashboard.tmrw-digital.com",
     color: "#8B5CF6"
   },
   {
     id: "bookmark-7",
     title: "TMRW AI Analyst",
-    url: "https://analyst.tmrw.io",
+    url: "https://analyst.tmrw-digital.com",
     color: "#06B6D4"
   }
 ];

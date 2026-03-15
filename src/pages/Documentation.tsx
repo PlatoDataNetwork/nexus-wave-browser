@@ -521,8 +521,8 @@ const Documentation: React.FC = () => {
                           <h5 className="font-medium">Option 2: APT Repository (Debian/Ubuntu)</h5>
                           <p className="mb-2">Add our repository and install via APT:</p>
                           <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
-                            <p>curl -s https://repo.tmrw.io/gpg | sudo apt-key add -</p>
-                            <p>echo "deb [arch=amd64] https://repo.tmrw.io/apt stable main" | sudo tee /etc/apt/sources.list.d/tmrw.list</p>
+                            <p>curl -s https://repo.tmrw-digital.com/gpg | sudo apt-key add -</p>
+                            <p>echo "deb [arch=amd64] https://repo.tmrw-digital.com/apt stable main" | sudo tee /etc/apt/sources.list.d/tmrw.list</p>
                             <p>sudo apt update</p>
                             <p>sudo apt install tmrw-browser</p>
                           </div>
@@ -563,7 +563,7 @@ const Documentation: React.FC = () => {
                     
                     <h4 className="font-medium text-sm mt-3">Accessing the Web Version:</h4>
                     <ol className="list-decimal pl-5 space-y-1 text-sm text-muted-foreground mb-4">
-                      <li>Visit app.tmrw.io in any modern browser</li>
+                      <li>Visit app.tmrw-digital.com in any modern browser</li>
                       <li>Create an account or sign in with your existing credentials</li>
                       <li>Your browsing data will sync across devices when signed in</li>
                       <li>Bookmark the page for quick access</li>

@@ -27,8 +27,8 @@ import PageLayout from "@/components/Layout/PageLayout";
 const mockHistoryData = [
   {
     id: "hist-1",
-    title: "tmrw.io - Web3 Analytics Platform",
-    url: "https://tmrw.io/analytics",
+    title: "tmrw-digital.com - Web3 Analytics Platform",
+    url: "https://tmrw-digital.com/analytics",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 5, // 5 minutes ago
     type: "webpage"
@@ -52,7 +52,7 @@ const mockHistoryData = [
   {
     id: "hist-4",
     title: "DeFi Protocol Analytics - TMRW",
-    url: "https://tmrw.io/defi-protocols",
+    url: "https://tmrw-digital.com/defi-protocols",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 3, // 3 hours ago
     type: "webpage"
@@ -68,7 +68,7 @@ const mockHistoryData = [
   {
     id: "hist-6",
     title: "NFT Marketplace Trends - Web3 Analysis",
-    url: "https://tmrw.io/nft-trends",
+    url: "https://tmrw-digital.com/nft-trends",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 48, // 2 days ago
     type: "webpage"
