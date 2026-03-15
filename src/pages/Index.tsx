@@ -63,7 +63,7 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Main browser header */}
-        <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
+        <div className="flex items-center justify-between px-2 sm:px-4 py-1 bg-nexus-header-blue border-b border-border">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             {/* Show hamburger menu only on mobile */}
             {isMobile && <ProtocolsMenu onNavigate={navigateToUrl} />}

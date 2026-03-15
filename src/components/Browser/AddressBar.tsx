@@ -78,15 +78,15 @@ const AddressBar: React.FC<AddressBarProps> = ({
   }, [currentUrl]);
 
   return (
-    <div className="flex items-center space-x-2 px-2 py-2 bg-nexus-header-blue">
+    <div className="flex items-center space-x-1.5 px-2 py-1 bg-nexus-header-blue">
       <div className="flex items-center space-x-1">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
-                size="icon" 
-                className="h-8 w-8" 
+                size="sm" 
+                className="h-6 w-6" 
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -96,7 +96,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 aria-label="Go back"
                 type="button"
               >
-                <ArrowLeft className={`h-4 w-4 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
+                <ArrowLeft className={`h-3.5 w-3.5 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -110,8 +110,8 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
-                size="icon" 
-                className="h-8 w-8" 
+                size="sm" 
+                className="h-6 w-6" 
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -121,7 +121,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 aria-label="Go forward"
                 type="button"
               >
-                <ArrowRight className={`h-4 w-4 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
+                <ArrowRight className={`h-3.5 w-3.5 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -135,14 +135,14 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
-                size="icon" 
-                className="h-8 w-8" 
+                size="sm" 
+                className="h-6 w-6" 
                 onClick={handleRefresh}
                 aria-label="Refresh page"
                 disabled={isLoading}
                 type="button"
               >
-                <RefreshCw className={`h-4 w-4 text-white ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-3.5 w-3.5 text-white ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -152,7 +152,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </TooltipProvider>
       </div>
       
-      <div className="flex-1 mx-2">
+      <div className="flex-1 mx-1.5">
         <form onSubmit={handleSubmit} className="w-full">
           <div className="address-bar">
             <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
