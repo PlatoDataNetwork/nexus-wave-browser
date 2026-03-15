@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
                     <span className="block">Browser</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
-                    Step into the future with Plato W3 AI Browser, 
+                    Step into the future with TMRW W3AI Browser, 
                     a truly immersive Web3 browser built exclusively for MacOS & Windows with seamless integration across the decentralized web.
                   </p>
                   <div className="flex flex-wrap gap-4">
