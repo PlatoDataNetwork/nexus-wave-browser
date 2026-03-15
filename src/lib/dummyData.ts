@@ -15,8 +15,8 @@ export interface Tab {
 export const initialTabs: Tab[] = [
   {
     id: "tab-1",
-    title: "tmrw.io",
-    url: "https://tmrw.io",
+    title: "tmrw-digital.com",
+    url: "https://tmrw-digital.com",
     isActive: true,
     icon: undefined
   },
