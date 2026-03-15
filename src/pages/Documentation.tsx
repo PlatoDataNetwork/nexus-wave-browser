@@ -210,7 +210,7 @@ const Documentation: React.FC = () => {
                   <AccordionItem value="installation">
                     <AccordionTrigger className="text-md font-medium">Installation</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>To install Plato W3 AI Browser:</p>
+                      <p>To install TMRW W3AI Browser:</p>
                       <ol className="space-y-2 list-decimal pl-5">
                         <li>Download the installer from the official website</li>
                         <li>Run the installer and follow the on-screen instructions</li>
