@@ -151,9 +151,9 @@ const Documentation: React.FC = () => {
                 <div className="space-y-6">
                   <Card className="border-nexus-blue/20">
                     <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">About Plato W3 AI Browser</h3>
+                      <h3 className="text-md font-medium mb-3">About TMRW W3AI Browser</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Plato W3 AI Browser is a revolutionary browser built from the ground up with Web3 integration, 
+                        TMRW W3AI Browser is a revolutionary browser built from the ground up with Web3 integration, 
                         privacy protection, and an intuitive user interface. It combines the speed and security of 
                         modern browsing with powerful blockchain features that make interacting with decentralized 
                         applications seamless and secure.
