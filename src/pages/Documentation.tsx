@@ -588,7 +588,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Mobile Applications</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Take Plato W3 AI Browser with you on your mobile devices. Our mobile apps offer a
+                      Take TMRW W3AI Browser with you on your mobile devices. Our mobile apps offer a
                       tailored experience for smaller screens while maintaining the core functionality
                       of the desktop version.
                     </p>
