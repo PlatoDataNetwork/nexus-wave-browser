@@ -53,7 +53,7 @@ export const shortcuts = [
     name: "Academy",
     description: "Take web3 courses",
     icon: GraduationCap,
-    url: "https://tmrw.io/academy",
+    url: "https://tmrw-digital.com/academy",
   },
   {
     name: "Launchpad",
