@@ -78,7 +78,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
   }, [currentUrl]);
 
   return (
-    <div className="flex items-center space-x-2 px-2 py-2 bg-nexus-header-blue">
+    <div className="flex items-center space-x-1.5 px-2 py-1 bg-nexus-header-blue">
       <div className="flex items-center space-x-1">
         <TooltipProvider>
           <Tooltip>
