@@ -68,16 +68,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       )}
       
       {/* Show footer button with mobile optimization */}
-      {includeFooter && !isFooterVisible && (
-        <Button 
-          variant="ghost"
-          size="icon"
-          className="fixed bottom-4 right-4 rounded-full h-9 w-9 bg-muted/80 hover:bg-muted text-foreground shadow-lg z-50"
-          onClick={toggleFooter}
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
-      )}
     </div>
   );
 };
