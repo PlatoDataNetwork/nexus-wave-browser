@@ -52,7 +52,7 @@ const mockHistoryData = [
   {
     id: "hist-4",
     title: "DeFi Protocol Analytics - TMRW",
-    url: "https://tmrw.io/defi-protocols",
+    url: "https://tmrw-digital.com/defi-protocols",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 3, // 3 hours ago
     type: "webpage"
