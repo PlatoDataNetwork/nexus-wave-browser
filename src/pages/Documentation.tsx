@@ -556,7 +556,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Web-Based Version</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Access Plato W3 AI Browser directly from your web browser with no installation required.
+                      Access TMRW W3AI Browser directly from your web browser with no installation required.
                       The web-based version offers most of the same functionality as the desktop app,
                       with some limitations for certain Web3 integrations that require deeper system access.
                     </p>
