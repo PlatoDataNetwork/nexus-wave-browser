@@ -86,10 +86,10 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       color: getColorFromName("ARK")
     },
     {
-      id: "plato-defix",
-      title: "Plato DefIX",
+      id: "tmrw-defix",
+      title: "TMRW DefIX",
       url: "https://web3-vercel-nexus.vercel.app/",
-      color: getColorFromName("Plato DefIX")
+      color: getColorFromName("TMRW DefIX")
     },
     {
       id: "plato-data-network",
