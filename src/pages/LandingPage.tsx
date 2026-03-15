@@ -54,9 +54,9 @@ const LandingPage: React.FC = () => {
                     Revolutionary AI-Powered Web3 Experience
                   </Badge>
                   <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    <span className="block">The World's Most</span>
-                    <span className="block">ECO Friendly AI Web3</span>
-                    <span className="block">Browser</span>
+                    <span className="block">Secure Network Protocol</span>
+                    <span className="block">and Browser for</span>
+                    <span className="block">the Next Web.</span>
                   </h1>
                   <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-xl">
                     Step into the future with TMRW W3AI Browser, 
