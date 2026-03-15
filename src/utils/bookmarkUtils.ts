@@ -82,7 +82,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "ark",
       title: "ARK",
-      url: "https://ark.platodata.xyz",
+      url: "https://ark.tmrw.io",
       color: getColorFromName("ARK")
     },
     {
