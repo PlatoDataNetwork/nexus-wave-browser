@@ -53,7 +53,7 @@ const LandingPage: React.FC = () => {
                   <Badge variant="outline" className="mb-6 px-6 py-3 text-base font-semibold border-nexus-blue text-nexus-light-blue bg-nexus-blue/20 backdrop-blur-sm shadow-lg shadow-nexus-blue/30 animate-pulse-glow">
                     Revolutionary AI-Powered Web3 Experience
                   </Badge>
-                  <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                  <h1 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                     <span className="block">Secure Network Protocol</span>
                     <span className="block">and Browser for</span>
                     <span className="block">the Next Web.</span>

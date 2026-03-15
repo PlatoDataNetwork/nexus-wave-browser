@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import BrowserHeader, { DateTime, UserMenu, SettingsButton, ThemeToggle, HomeButton } from "@/components/Browser/BrowserHeader";
 import BrowserContent from "@/components/Browser/BrowserContent";
-import Header from "@/components/Layout/Header";
 import { useTabs } from "@/hooks/useTabs";
-
 import WalletConnect from "@/components/Browser/WalletConnect";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SidebarMenu from "@/components/Browser/SidebarMenu";
 import ProtocolsMenu from "@/components/Browser/ProtocolsMenu";
 
 interface IndexProps {
@@ -37,7 +36,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }
 
   const toggleBookmarksBarState = () => {
     setBookmarksBarState(current => {
-      // On mobile, hide bookmarks by default to save space
       if (isMobile) {
         switch (current) {
           case "visible": return "hidden";
@@ -45,7 +43,6 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }
           default: return "hidden";
         }
       }
-      // Desktop behavior unchanged
       switch (current) {
         case "visible": return "minimized";
         case "minimized": return "hidden";
@@ -56,54 +53,60 @@ const Index: React.FC<IndexProps> = ({ defaultUrl = "https://tmrw-digital.com" }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background dark:bg-nexus-space-black">
-      {/* Main browser header with title and time - Responsive layout */}
-      <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-          <ProtocolsMenu onNavigate={navigateToUrl} />
-          <div className="flex flex-col text-white min-w-0">
-            <div className="text-base sm:text-lg md:text-xl font-bold truncate">TMRW W3AI Browser</div>
+    <div className="flex h-screen bg-background dark:bg-nexus-space-black">
+      {/* Permanent sidebar - hidden on mobile */}
+      {!isMobile && (
+        <div className="w-56 flex-shrink-0">
+          <SidebarMenu onNavigate={navigateToUrl} />
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Main browser header */}
+        <div className="flex items-center justify-between px-2 sm:px-4 py-2 bg-nexus-header-blue border-b border-border">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            {/* Show hamburger menu only on mobile */}
+            {isMobile && <ProtocolsMenu onNavigate={navigateToUrl} />}
+            <div className="flex flex-col text-white min-w-0">
+              <div className="text-base sm:text-lg md:text-xl font-bold truncate">TMRW W3AI Browser</div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-4 flex-shrink-0">
+            {!isMobile && <DateTime />}
+            <HomeButton />
+            <ThemeToggle />
+            {!isMobile && <SettingsButton />}
+            <UserMenu />
           </div>
         </div>
         
-        <div className="flex items-center gap-1 sm:gap-2 md:gap-4 flex-shrink-0">
-          {/* Hide date/time on very small screens */}
-          {!isMobile && <DateTime />}
-          <HomeButton />
-          <ThemeToggle />
-          {/* Hide settings on mobile to save space */}
-          {!isMobile && <SettingsButton />}
-          <UserMenu />
+        {/* Browser interface */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <BrowserHeader
+            tabs={tabs}
+            currentUrl={currentUrl}
+            onAddTab={addTab}
+            onCloseTab={closeTab}
+            onActivateTab={activateTab}
+            onNavigate={navigateToUrl}
+            onGoBack={goBack}
+            onGoForward={goForward}
+            onRefresh={refreshPage}
+            canGoBack={canGoBack()}
+            canGoForward={canGoForward()}
+            bookmarksBarState={isMobile ? "hidden" : bookmarksBarState}
+            onToggleBookmarksBar={toggleBookmarksBarState}
+          />
+          
+          <BrowserContent 
+            currentUrl={currentUrl} 
+            onNavigate={navigateToUrl}
+          />
+          
+          {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
         </div>
       </div>
-      
-      {/* Browser interface */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <BrowserHeader
-          tabs={tabs}
-          currentUrl={currentUrl}
-          onAddTab={addTab}
-          onCloseTab={closeTab}
-          onActivateTab={activateTab}
-          onNavigate={navigateToUrl}
-          onGoBack={goBack}
-          onGoForward={goForward}
-          onRefresh={refreshPage}
-          canGoBack={canGoBack()}
-          canGoForward={canGoForward()}
-          bookmarksBarState={isMobile ? "hidden" : bookmarksBarState}
-          onToggleBookmarksBar={toggleBookmarksBarState}
-        />
-        
-        <BrowserContent 
-          currentUrl={currentUrl} 
-          onNavigate={navigateToUrl}
-        />
-        
-        {/* Wallet connect overlay - adjusted for mobile */}
-        {showWalletConnect && <WalletConnect onClose={handleCloseWalletConnect} />}
-      </div>
-      
     </div>
   );
 };
