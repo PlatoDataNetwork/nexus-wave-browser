@@ -43,7 +43,7 @@ const mockHistoryData = [
   },
   {
     id: "hist-3",
-    title: "Nexus Wave Extension Store",
+    title: "TMRW W3AI Extension Store",
     url: "/extension-store",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60, // 1 hour ago
