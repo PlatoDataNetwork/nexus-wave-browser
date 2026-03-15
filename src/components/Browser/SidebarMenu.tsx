@@ -224,7 +224,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
               onClick={() => handleClick("https://app.uniswap.org")}
               className="w-full flex items-center justify-between text-sm"
             >
-              <span className="text-foreground font-medium">Uniswap v3</span>
+              <span className="text-white font-medium">Uniswap v3</span>
               <span className="text-green-400 text-xs font-medium">+5.2% ↗</span>
             </button>
           </div>
