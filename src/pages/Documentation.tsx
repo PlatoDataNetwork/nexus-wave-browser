@@ -743,7 +743,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Keyboard Shortcuts</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Master Plato W3 AI Browser with these time-saving keyboard shortcuts
+                    Master TMRW W3AI Browser with these time-saving keyboard shortcuts
                   </p>
                 </div>
               </TabsContent>
