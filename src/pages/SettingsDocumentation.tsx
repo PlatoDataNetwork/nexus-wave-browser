@@ -22,7 +22,6 @@ const SettingsDocumentation: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState("appearance");
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Set initial active section based on URL search params
   useEffect(() => {
     if (searchParams.has("tab") && searchParams.get("tab") === "documentation") {
       setActiveSection("documentation");
@@ -31,35 +30,32 @@ const SettingsDocumentation: React.FC = () => {
     }
   }, []);
 
-  // Change tab without triggering a full page reload
   const handleSectionChange = (value: string) => {
     setActiveSection(value);
     setSearchParams({ tab: value === "documentation" ? "documentation" : "" }, { replace: true });
   };
 
-  // Change settings tab without triggering a full page reload
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
 
-  // Documentation section content
   const renderDocumentationContent = () => (
     <div className="p-6 space-y-6">
       <div className="flex items-center space-x-2">
         <FileText className="h-5 w-5" />
-        <h1 className="text-2xl font-bold">Plato W3 AI Browser Documentation</h1>
+        <h1 className="text-2xl font-bold">TMRW W3AI Browser Documentation</h1>
       </div>
       
       <Separator />
 
       <Card className="nexus-glass border-none shadow-md">
         <CardHeader>
-          <CardTitle>Getting Started with Plato</CardTitle>
+          <CardTitle>Getting Started with TMRW</CardTitle>
           <CardDescription>Basic overview of browser features</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Plato is a next-generation Web3 browser designed to seamlessly integrate 
+            TMRW is a next-generation Web3 browser designed to seamlessly integrate 
             blockchain technology with traditional web browsing. This documentation will help
             you get started with the key features.
           </p>
@@ -81,7 +77,7 @@ const SettingsDocumentation: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Plato allows you to connect multiple wallets or create a new one directly
+            TMRW allows you to connect multiple wallets or create a new one directly
             in the browser. Click on the wallet button in the footer to access
             wallet functions.
           </p>
@@ -118,10 +114,8 @@ const SettingsDocumentation: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
         <div className="w-64 border-r border-border bg-card">
           <div className="p-4">
-            {/* Main section tabs */}
             <Tabs 
               defaultValue={activeSection} 
               value={activeSection}
@@ -153,59 +147,35 @@ const SettingsDocumentation: React.FC = () => {
                 className="w-full"
               >
                 <TabsList className="flex flex-col items-start justify-start h-auto gap-1 bg-transparent p-0">
-                  <TabsTrigger
-                    value="appearance"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="appearance" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Appearance</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="shields"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="shields" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Shields & Privacy</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="privacy"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="privacy" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Privacy & Security</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="extensions"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="extensions" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Extensions</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="autofill"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="autofill" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Autofill</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="search"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="search" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Search engine</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="web3"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="web3" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Web3</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="advanced"
-                    className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground"
-                  >
+                  <TabsTrigger value="advanced" className="w-full justify-between px-2 py-1.5 text-sm font-normal data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">
                     <span>Advanced</span>
                     <ChevronRight className="h-4 w-4 opacity-50" />
                   </TabsTrigger>
@@ -213,10 +183,7 @@ const SettingsDocumentation: React.FC = () => {
               </Tabs>
             ) : (
               <div className="flex flex-col space-y-1">
-                <button 
-                  className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-accent"
-                  onClick={() => {}}
-                >
+                <button className="flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-accent" onClick={() => {}}>
                   <span className="text-sm">Getting Started</span>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </button>
@@ -241,7 +208,6 @@ const SettingsDocumentation: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             {activeSection === "settings" ? (

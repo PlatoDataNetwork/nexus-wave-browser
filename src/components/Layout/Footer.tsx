@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Column 1: About */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Nexus Wave Browser</h3>
+            <h3 className="text-lg font-semibold mb-4">TMRW W3AI Browser</h3>
             <p className="text-sm text-gray-300 mb-4">
               The next generation Web3 browser built for privacy, security and decentralized applications.
             </p>
@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
               Contact Support
             </Button>
             <p className="text-sm text-gray-300">
-              © {new Date().getFullYear()} Nexus Wave Browser.
+              © {new Date().getFullYear()} TMRW W3AI Browser.
               <br />All rights reserved.
             </p>
           </div>
@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
             <Link to="/cookie-policy" className="hover:text-white">Cookie Policy</Link>
           </div>
           <div>
-            <span>Nexus Wave Browser V2.1 - Building a decentralized future</span>
+            <span>TMRW W3AI Browser V2.1 - Building a decentralized future</span>
           </div>
         </div>
       </div>

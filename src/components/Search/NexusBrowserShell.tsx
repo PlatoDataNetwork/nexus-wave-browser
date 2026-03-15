@@ -22,7 +22,7 @@ const NexusBrowserShell: React.FC<NexusBrowserShellProps> = ({ children }) => {
     refreshPage,
     canGoBack,
     canGoForward,
-  } = useTabs("https://platodata.io/nexus");
+  } = useTabs("https://tmrw.io/nexus");
 
   return (
     <div className="flex flex-col h-full bg-background">

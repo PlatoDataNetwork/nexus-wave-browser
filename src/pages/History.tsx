@@ -27,15 +27,15 @@ import PageLayout from "@/components/Layout/PageLayout";
 const mockHistoryData = [
   {
     id: "hist-1",
-    title: "Platodata.io - Web3 Analytics Platform",
-    url: "https://platodata.io/analytics",
+    title: "tmrw.io - Web3 Analytics Platform",
+    url: "https://tmrw.io/analytics",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 5, // 5 minutes ago
     type: "webpage"
   },
   {
     id: "hist-2",
-    title: "Nexus Wave Browser Documentation",
+    title: "TMRW W3AI Browser Documentation",
     url: "/documentation",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 30, // 30 minutes ago
@@ -43,7 +43,7 @@ const mockHistoryData = [
   },
   {
     id: "hist-3",
-    title: "Nexus Wave Extension Store",
+    title: "TMRW W3AI Extension Store",
     url: "/extension-store",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60, // 1 hour ago
@@ -51,8 +51,8 @@ const mockHistoryData = [
   },
   {
     id: "hist-4",
-    title: "DeFi Protocol Analytics - Platodata",
-    url: "https://platodata.io/defi-protocols",
+    title: "DeFi Protocol Analytics - TMRW",
+    url: "https://tmrw.io/defi-protocols",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 3, // 3 hours ago
     type: "webpage"
@@ -68,7 +68,7 @@ const mockHistoryData = [
   {
     id: "hist-6",
     title: "NFT Marketplace Trends - Web3 Analysis",
-    url: "https://platodata.io/nft-trends",
+    url: "https://tmrw.io/nft-trends",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 60 * 48, // 2 days ago
     type: "webpage"

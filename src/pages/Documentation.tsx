@@ -142,7 +142,7 @@ const Documentation: React.FC = () => {
             <Tabs value={activeTab} className="w-full">
               <TabsContent value="overview" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Plato W3 AI Browser</h2>
+                  <h2 className="text-xl font-medium mb-2">TMRW W3AI Browser</h2>
                   <p className="text-sm text-muted-foreground mb-4">
                     A next-generation Web3-enabled browser with enhanced privacy features
                   </p>
@@ -151,15 +151,15 @@ const Documentation: React.FC = () => {
                 <div className="space-y-6">
                   <Card className="border-nexus-blue/20">
                     <CardContent className="p-6">
-                      <h3 className="text-md font-medium mb-3">About Plato W3 AI Browser</h3>
+                      <h3 className="text-md font-medium mb-3">About TMRW W3AI Browser</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Plato W3 AI Browser is a revolutionary browser built from the ground up with Web3 integration, 
+                        TMRW W3AI Browser is a revolutionary browser built from the ground up with Web3 integration, 
                         privacy protection, and an intuitive user interface. It combines the speed and security of 
                         modern browsing with powerful blockchain features that make interacting with decentralized 
                         applications seamless and secure.
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Version 2.1 introduces the Plato Bridge for improved wallet connectivity, enhanced 
+                        Version 2.1 introduces the TMRW Bridge for improved wallet connectivity, enhanced 
                         privacy shields, and a streamlined user interface designed for both crypto enthusiasts 
                         and everyday users.
                       </p>
@@ -171,7 +171,7 @@ const Documentation: React.FC = () => {
                       <CardContent className="p-6">
                         <h3 className="text-md font-medium mb-3">Key Features</h3>
                         <ul className="text-sm text-muted-foreground space-y-2">
-                          <li>• Web3 wallet integration via Plato Bridge</li>
+                          <li>• Web3 wallet integration via TMRW Bridge</li>
                           <li>• Enhanced privacy shields</li>
                           <li>• Decentralized application support</li>
                           <li>• Advanced bookmarking system</li>
@@ -200,9 +200,9 @@ const Documentation: React.FC = () => {
 
               <TabsContent value="getting-started" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Getting Started with Plato W3 AI Browser</h2>
+                  <h2 className="text-xl font-medium mb-2">Getting Started with TMRW W3AI Browser</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn how to set up and start using Plato W3 AI Browser effectively
+                    Learn how to set up and start using TMRW W3AI Browser effectively
                   </p>
                 </div>
 
@@ -210,7 +210,7 @@ const Documentation: React.FC = () => {
                   <AccordionItem value="installation">
                     <AccordionTrigger className="text-md font-medium">Installation</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>To install Plato W3 AI Browser:</p>
+                      <p>To install TMRW W3AI Browser:</p>
                       <ol className="space-y-2 list-decimal pl-5">
                         <li>Download the installer from the official website</li>
                         <li>Run the installer and follow the on-screen instructions</li>
@@ -218,14 +218,14 @@ const Documentation: React.FC = () => {
                         <li>Select additional components (optional)</li>
                         <li>Complete the installation</li>
                       </ol>
-                      <p className="mt-2">Plato W3 AI Browser is available for Windows, macOS, and Linux systems.</p>
+                      <p className="mt-2">TMRW W3AI Browser is available for Windows, macOS, and Linux systems.</p>
                     </AccordionContent>
                   </AccordionItem>
 
                   <AccordionItem value="initial-setup">
                     <AccordionTrigger className="text-md font-medium">Initial Setup</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>When you first launch Plato W3 AI Browser, you'll be guided through these setup steps:</p>
+                      <p>When you first launch TMRW W3AI Browser, you'll be guided through these setup steps:</p>
                       <ol className="space-y-2 list-decimal pl-5">
                         <li>Choose your default theme (Dark or Light)</li>
                         <li>Select your default search engine</li>
@@ -240,13 +240,13 @@ const Documentation: React.FC = () => {
                   <AccordionItem value="interface">
                     <AccordionTrigger className="text-md font-medium">Understanding the Interface</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>The Plato W3 AI Browser interface includes:</p>
+                      <p>The TMRW W3AI Browser interface includes:</p>
                       <ul className="space-y-2 list-disc pl-5">
                         <li><strong>Address Bar:</strong> For URL entry and search</li>
                         <li><strong>Tab Bar:</strong> Displays and manages open tabs</li>
                         <li><strong>Bookmarks Bar:</strong> Quick access to saved sites</li>
                         <li><strong>Extensions Area:</strong> Access browser extensions</li>
-                        <li><strong>Plato Bridge Button:</strong> Connect to Web3 wallets</li>
+                        <li><strong>TMRW Bridge Button:</strong> Connect to Web3 wallets</li>
                         <li><strong>Settings Button:</strong> Configure browser options</li>
                         <li><strong>Protocol Ticker:</strong> Shows current crypto prices</li>
                       </ul>
@@ -275,7 +275,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Features & Functionality</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Explore the powerful features that make Plato W3 AI Browser unique
+                    Explore the powerful features that make TMRW W3AI Browser unique
                   </p>
                 </div>
 
@@ -284,7 +284,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Tab Management</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser provides advanced tab management features to keep your browsing organized:
+                        TMRW W3AI Browser provides advanced tab management features to keep your browsing organized:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Drag and drop to reorder tabs</li>
@@ -301,7 +301,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Bookmarks System</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        The bookmark system in Plato W3 AI Browser offers flexible organization options:
+                        The bookmark system in TMRW W3AI Browser offers flexible organization options:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Hierarchical folder structure</li>
@@ -318,7 +318,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Extensions Support</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser supports a wide range of extensions to enhance your browsing experience:
+                        TMRW W3AI Browser supports a wide range of extensions to enhance your browsing experience:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Compatible with Chrome Web Store extensions</li>
@@ -335,7 +335,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">History Management</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser's history features help you track and revisit your browsing activity:
+                        TMRW W3AI Browser's history features help you track and revisit your browsing activity:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Chronological and categorical views</li>
@@ -353,7 +353,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Performance Optimization</h3>
                     <p className="text-sm text-muted-foreground mb-3">
-                      Plato W3 AI Browser is designed for speed and efficiency with features like:
+                      TMRW W3AI Browser is designed for speed and efficiency with features like:
                     </p>
                     <ul className="text-sm text-muted-foreground grid grid-cols-1 md:grid-cols-2 gap-2 list-disc pl-5">
                       <li>Hardware acceleration</li>
@@ -371,7 +371,7 @@ const Documentation: React.FC = () => {
 
               <TabsContent value="installation" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Plato W3 AI Browser Installation</h2>
+                  <h2 className="text-xl font-medium mb-2">TMRW W3AI Browser Installation</h2>
                   <p className="text-sm text-muted-foreground mb-4">
                     Detailed installation guidelines for different operating systems and platforms
                   </p>
@@ -379,9 +379,9 @@ const Documentation: React.FC = () => {
 
                 <Card className="border-nexus-blue/20 mb-6">
                   <CardContent className="p-6">
-                    <h3 className="text-md font-medium mb-3">Plato W3 AI Browser Versions</h3>
+                    <h3 className="text-md font-medium mb-3">TMRW W3AI Browser Versions</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato W3 AI Browser is available as both a native application for various operating systems 
+                      TMRW W3AI Browser is available as both a native application for various operating systems 
                       and as a web-based version. Choose the option that best suits your needs.
                     </p>
                   </CardContent>
@@ -404,10 +404,10 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: App Store Download</h5>
-                          <p className="mb-2">Download Plato W3 AI Browser directly from the Apple App Store for the simplest installation experience:</p>
+                          <p className="mb-2">Download TMRW W3AI Browser directly from the Apple App Store for the simplest installation experience:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the App Store on your Mac</li>
-                            <li>Search for "Plato W3 AI Browser"</li>
+                            <li>Search for "TMRW W3AI Browser"</li>
                             <li>Click "Get" or the price button</li>
                             <li>Authenticate with your Apple ID if prompted</li>
                             <li>The app will download and install automatically</li>
@@ -422,12 +422,12 @@ const Documentation: React.FC = () => {
                           <h5 className="font-medium">Option 2: Direct Download</h5>
                           <p className="mb-2">Download the installer package directly from our official website:</p>
                           <ol className="list-decimal pl-5 space-y-1">
-                            <li>Visit the official Plato W3 AI Browser website</li>
+                            <li>Visit the official TMRW W3AI Browser website</li>
                             <li>Go to the Downloads section</li>
                             <li>Select the macOS version</li>
                             <li>Download the .dmg file</li>
                             <li>Open the downloaded file</li>
-                            <li>Drag the Plato W3 AI Browser icon to your Applications folder</li>
+                            <li>Drag the TMRW W3AI Browser icon to your Applications folder</li>
                             <li>Right-click the app and select "Open" the first time to bypass Gatekeeper</li>
                           </ol>
                           <Button className="mt-3 bg-[#1A1F2C] hover:bg-[#1A1F2C]/80 text-white">
@@ -455,10 +455,10 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: Microsoft Store</h5>
-                          <p className="mb-2">Download Plato W3 AI Browser from the Microsoft Store for automatic updates:</p>
+                          <p className="mb-2">Download TMRW W3AI Browser from the Microsoft Store for automatic updates:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the Microsoft Store on your PC</li>
-                            <li>Search for "Plato W3 AI Browser"</li>
+                            <li>Search for "TMRW W3AI Browser"</li>
                             <li>Click "Get" or "Install"</li>
                             <li>The app will download and install automatically</li>
                             <li>Launch from your Start menu</li>
@@ -472,7 +472,7 @@ const Documentation: React.FC = () => {
                           <h5 className="font-medium">Option 2: Direct Installer</h5>
                           <p className="mb-2">Download the installer package directly from our official website:</p>
                           <ol className="list-decimal pl-5 space-y-1">
-                            <li>Visit the official Plato W3 AI Browser website</li>
+                            <li>Visit the official TMRW W3AI Browser website</li>
                             <li>Go to the Downloads section</li>
                             <li>Select the Windows version</li>
                             <li>Download the .exe installer</li>
@@ -508,12 +508,12 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: Snap/Flatpak</h5>
-                          <p className="mb-2">Install Plato W3 AI Browser using Snap (recommended) or Flatpak:</p>
+                          <p className="mb-2">Install TMRW W3AI Browser using Snap (recommended) or Flatpak:</p>
                           <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
                             <p># Using Snap</p>
-                            <p>sudo snap install plato-browser</p>
+                            <p>sudo snap install tmrw-browser</p>
                             <p className="mt-2"># Using Flatpak</p>
-                            <p>flatpak install flathub dev.plato.browser</p>
+                            <p>flatpak install flathub dev.tmrw.browser</p>
                           </div>
                         </div>
                         
@@ -521,10 +521,10 @@ const Documentation: React.FC = () => {
                           <h5 className="font-medium">Option 2: APT Repository (Debian/Ubuntu)</h5>
                           <p className="mb-2">Add our repository and install via APT:</p>
                           <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
-                            <p>curl -s https://repo.platodata.io/gpg | sudo apt-key add -</p>
-                            <p>echo "deb [arch=amd64] https://repo.platodata.io/apt stable main" | sudo tee /etc/apt/sources.list.d/plato.list</p>
+                            <p>curl -s https://repo.tmrw.io/gpg | sudo apt-key add -</p>
+                            <p>echo "deb [arch=amd64] https://repo.tmrw.io/apt stable main" | sudo tee /etc/apt/sources.list.d/tmrw.list</p>
                             <p>sudo apt update</p>
-                            <p>sudo apt install plato-browser</p>
+                            <p>sudo apt install tmrw-browser</p>
                           </div>
                         </div>
                         
@@ -556,14 +556,14 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Web-Based Version</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Access Plato W3 AI Browser directly from your web browser with no installation required.
+                      Access TMRW W3AI Browser directly from your web browser with no installation required.
                       The web-based version offers most of the same functionality as the desktop app,
                       with some limitations for certain Web3 integrations that require deeper system access.
                     </p>
                     
                     <h4 className="font-medium text-sm mt-3">Accessing the Web Version:</h4>
                     <ol className="list-decimal pl-5 space-y-1 text-sm text-muted-foreground mb-4">
-                      <li>Visit app.platodata.io in any modern browser</li>
+                      <li>Visit app.tmrw.io in any modern browser</li>
                       <li>Create an account or sign in with your existing credentials</li>
                       <li>Your browsing data will sync across devices when signed in</li>
                       <li>Bookmark the page for quick access</li>
@@ -588,7 +588,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Mobile Applications</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Take Plato W3 AI Browser with you on your mobile devices. Our mobile apps offer a
+                      Take TMRW W3AI Browser with you on your mobile devices. Our mobile apps offer a
                       tailored experience for smaller screens while maintaining the core functionality
                       of the desktop version.
                     </p>
@@ -635,7 +635,7 @@ const Documentation: React.FC = () => {
                       Google Play and the Google Play logo are trademarks of Google LLC.
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Plato W3 AI Browser is not affiliated with, endorsed by, or sponsored by Apple Inc. or Google LLC. All respective trademarks, logos, and brand names are the property of their respective owners.
+                      TMRW W3AI Browser is not affiliated with, endorsed by, or sponsored by Apple Inc. or Google LLC. All respective trademarks, logos, and brand names are the property of their respective owners.
                     </p>
                   </CardContent>
                 </Card>
@@ -645,15 +645,15 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Web3 Integration</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn about Plato W3 AI Browser's powerful blockchain and Web3 features
+                    Learn about TMRW W3AI Browser's powerful blockchain and Web3 features
                   </p>
                 </div>
 
                 <Card className="border-nexus-blue/20">
                   <CardContent className="p-6">
-                    <h3 className="text-md font-medium mb-3">Plato Bridge</h3>
+                    <h3 className="text-md font-medium mb-3">TMRW Bridge</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato Bridge is a proprietary technology that connects your browser directly to blockchain networks, providing:
+                      TMRW Bridge is a proprietary technology that connects your browser directly to blockchain networks, providing:
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
                       <li>Seamless wallet integration without extensions</li>
@@ -688,7 +688,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Supported Networks</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser works with major blockchain networks:
+                        TMRW W3AI Browser works with major blockchain networks:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Ethereum</li>
@@ -709,7 +709,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Privacy & Security</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn about Plato W3 AI Browser's robust privacy and security features
+                    Learn about TMRW W3AI Browser's robust privacy and security features
                   </p>
                 </div>
 
@@ -717,7 +717,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Privacy Features</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato W3 AI Browser was built with privacy at its core, offering features like:
+                      TMRW W3AI Browser was built with privacy at its core, offering features like:
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
                       <li>Automatic tracker blocking</li>
@@ -734,7 +734,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Settings Guide</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn how to configure Plato W3 AI Browser for optimal performance
+                    Learn how to configure TMRW W3AI Browser for optimal performance
                   </p>
                 </div>
               </TabsContent>
@@ -743,7 +743,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Keyboard Shortcuts</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Master Plato W3 AI Browser with these time-saving keyboard shortcuts
+                    Master TMRW W3AI Browser with these time-saving keyboard shortcuts
                   </p>
                 </div>
               </TabsContent>

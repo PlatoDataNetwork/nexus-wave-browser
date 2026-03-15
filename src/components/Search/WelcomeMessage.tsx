@@ -13,7 +13,7 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ setCurrentMessage }) =>
       <div className="w-16 h-16 rounded-full bg-nexus-purple/10 flex items-center justify-center mx-auto mb-4">
         <MessageCircle className="h-8 w-8 text-nexus-purple" />
       </div>
-      <h2 className="text-xl font-medium mb-2">Welcome to Nexus AI</h2>
+      <h2 className="text-xl font-medium mb-2">Welcome to TMRW AI</h2>
       <p className="text-muted-foreground max-w-md mx-auto mb-6">
         Ask me anything and I'll provide helpful information and answers to your questions.
       </p>

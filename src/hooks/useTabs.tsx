@@ -7,7 +7,7 @@ interface TabHistory {
   [tabId: string]: string[];
 }
 
-export function useTabs(defaultUrl: string = "https://platodata.io") {
+export function useTabs(defaultUrl: string = "https://tmrw.io") {
   const [tabs, setTabs] = useState<Tab[]>(() => {
     // Update initialTabs with the provided defaultUrl for the active tab
     return initialTabs.map(tab => {
@@ -23,7 +23,7 @@ export function useTabs(defaultUrl: string = "https://platodata.io") {
   });
   
   const [currentUrl, setCurrentUrl] = useState<string>(
-    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://platodata.io")
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw.io")
   );
   
   // History management for each tab
@@ -53,8 +53,8 @@ export function useTabs(defaultUrl: string = "https://platodata.io") {
     const newTabId = `tab-${Date.now()}`;
     const newTab: Tab = {
       id: newTabId,
-      title: "platodata.io",
-      url: "https://platodata.io",
+      title: "tmrw.io",
+      url: "https://tmrw.io",
       isActive: false,
       icon: undefined
     };
@@ -70,7 +70,7 @@ export function useTabs(defaultUrl: string = "https://platodata.io") {
     // Initialize history for the new tab
     setTabHistory(prev => ({
       ...prev,
-      [newTabId]: ["https://platodata.io"]
+      [newTabId]: ["https://tmrw.io"]
     }));
     
     setHistoryPosition(prev => ({
@@ -78,7 +78,7 @@ export function useTabs(defaultUrl: string = "https://platodata.io") {
       [newTabId]: 0
     }));
     
-    setCurrentUrl("https://platodata.io");
+    setCurrentUrl("https://tmrw.io");
     toast.success("New tab opened");
   }, []);
 

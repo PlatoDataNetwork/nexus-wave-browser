@@ -152,7 +152,7 @@ const AIFeatures: React.FC = () => {
                 </div>
                 <div className="bg-nexus-blue/10 p-4 rounded-lg border border-nexus-blue/20">
                   <p className="text-sm text-nexus-light-blue mb-2">W3 AI</p>
-                  <p className="text-white">For the safest ETH to USDC swap, I recommend using Uniswap or 1inch through Plato's integrated DEX aggregator. Current gas fees are moderate (35 gwei). Would you like me to find the best rate across all supported DEXs?</p>
+                  <p className="text-white">For the safest ETH to USDC swap, I recommend using Uniswap or 1inch through TMRW's integrated DEX aggregator. Current gas fees are moderate (35 gwei). Would you like me to find the best rate across all supported DEXs?</p>
                 </div>
               </div>
             </motion.div>

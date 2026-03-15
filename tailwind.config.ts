@@ -77,7 +77,7 @@ export default {
 					'card-dark': '#101019',
 					'card-navy': '#0d0d1a',
 					'header-blue': '#0F0F17', /* Used for headers in both themes */
-					// Plato brand blue colors from icon
+					// TMRW brand blue colors from icon
 					'blue': '#2563EB',
 					'light-blue': '#3B82F6',
 					'deep-blue': '#1D4ED8',

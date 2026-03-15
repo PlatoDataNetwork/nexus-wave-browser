@@ -82,20 +82,20 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "ark",
       title: "ARK",
-      url: "https://ark.platodata.xyz",
+      url: "https://ark.tmrw.io",
       color: getColorFromName("ARK")
     },
     {
-      id: "plato-defix",
-      title: "Plato DefIX",
+      id: "tmrw-defix",
+      title: "TMRW DefIX",
       url: "https://web3-vercel-nexus.vercel.app/",
-      color: getColorFromName("Plato DefIX")
+      color: getColorFromName("TMRW DefIX")
     },
     {
-      id: "plato-data-network",
-      title: "Plato Data Network",
-      url: "https://platodata.ai",
-      color: getColorFromName("Plato Data Network")
+      id: "tmrw-data-network",
+      title: "TMRW Data Network",
+      url: "https://tmrw.ai",
+      color: getColorFromName("TMRW Data Network")
     },
     {
       id: "circle-nexus",
@@ -104,15 +104,15 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       color: getColorFromName("Circle Nexus")
     },
     {
-      id: "platoai-code-nexus",
-      title: "PlatoAI Code Nexus",
-      url: "https://platoai-code-forge.vercel.app/",
-      color: getColorFromName("PlatoAI Code Nexus")
+      id: "tmrw-code-nexus",
+      title: "TMRW AI Code Nexus",
+      url: "https://tmrw-code-forge.vercel.app/",
+      color: getColorFromName("TMRW AI Code Nexus")
     },
     {
       id: "cut",
       title: "CUT",
-      url: "https://cut.platodata.xyz",
+      url: "https://cut.tmrw.io",
       color: getColorFromName("CUT")
     },
     // Include top protocols, excluding the specified ones

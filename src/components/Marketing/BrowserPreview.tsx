@@ -18,7 +18,7 @@ const BrowserPreview: React.FC = () => {
           <div className="flex-1 flex items-center ml-4 space-x-1">
             <div className="browser-tab active flex items-center px-3 py-1 text-xs">
               <div className="w-2 h-2 rounded-full bg-nexus-blue mr-2" />
-              <span className="truncate">Plato W3 AI Browser</span>
+              <span className="truncate">TMRW W3AI Browser</span>
             </div>
             <div className="browser-tab flex items-center px-3 py-1 text-xs opacity-70">
               <div className="w-2 h-2 rounded-full bg-gray-500 mr-2" />

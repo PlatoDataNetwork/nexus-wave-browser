@@ -215,7 +215,7 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium">User</p>
-            <p className="text-xs text-muted-foreground">zephyr@platodata.io</p>
+            <p className="text-xs text-muted-foreground">zephyr@tmrw.io</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
