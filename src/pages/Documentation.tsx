@@ -717,7 +717,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Privacy Features</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato W3 AI Browser was built with privacy at its core, offering features like:
+                      TMRW W3AI Browser was built with privacy at its core, offering features like:
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
                       <li>Automatic tracker blocking</li>
