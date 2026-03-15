@@ -379,7 +379,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Your Web3 AI Assistant</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato W3 AI Browser comes with a built-in AI assistant that provides context, explanations, and insights
+                  TMRW W3AI Browser comes with a built-in AI assistant that provides context, explanations, and insights
                   to help you navigate Web3 with confidence.
                 </p>
                 
