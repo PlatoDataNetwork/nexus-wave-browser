@@ -651,9 +651,9 @@ const Documentation: React.FC = () => {
 
                 <Card className="border-nexus-blue/20">
                   <CardContent className="p-6">
-                    <h3 className="text-md font-medium mb-3">Plato Bridge</h3>
+                    <h3 className="text-md font-medium mb-3">TMRW Bridge</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Plato Bridge is a proprietary technology that connects your browser directly to blockchain networks, providing:
+                      TMRW Bridge is a proprietary technology that connects your browser directly to blockchain networks, providing:
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
                       <li>Seamless wallet integration without extensions</li>
