@@ -35,7 +35,7 @@ const mockHistoryData = [
   },
   {
     id: "hist-2",
-    title: "Nexus Wave Browser Documentation",
+    title: "TMRW W3AI Browser Documentation",
     url: "/documentation",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 30, // 30 minutes ago
