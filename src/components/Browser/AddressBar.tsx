@@ -152,7 +152,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
         </TooltipProvider>
       </div>
       
-      <div className="flex-1 mx-2">
+      <div className="flex-1 mx-1.5">
         <form onSubmit={handleSubmit} className="w-full">
           <div className="address-bar">
             <Lock className="h-4 w-4 mr-2 text-nexus-purple" />
