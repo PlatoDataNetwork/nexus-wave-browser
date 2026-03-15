@@ -532,7 +532,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Built by Developers, for Developers</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato W3 AI Browser provides an exceptional development experience with specialized tools for Web3 developers,
+                  TMRW W3AI Browser provides an exceptional development experience with specialized tools for Web3 developers,
                   making it easier than ever to build, test, and deploy decentralized applications.
                 </p>
                 

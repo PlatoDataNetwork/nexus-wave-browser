@@ -35,7 +35,6 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
           if (prev === 1) {
             clearInterval(timer);
             
-            // Trigger confetti explosion
             setTimeout(() => {
               console.log('Triggering confetti');
               confetti({
@@ -45,7 +44,6 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
                 colors: ['#9b87f5', '#7E69AB', '#6E59A5', '#8B5CF6', '#D946EF']
               });
               
-              // Show signup form after confetti starts
               setTimeout(() => {
                 setShowCountdown(false);
                 setShowSignupForm(true);
@@ -66,12 +64,10 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
     e.preventDefault();
     setIsSigningUp(true);
     
-    // Simulate signup process
     setTimeout(() => {
       setIsSigningUp(false);
       setSignupComplete(true);
       
-      // Additional confetti for successful signup
       confetti({
         particleCount: 100,
         spread: 120,
@@ -79,7 +75,6 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
         colors: ['#00D395', '#33C3F0', '#9b87f5']
       });
       
-      // Close modal after showing success
       setTimeout(() => {
         onClose();
       }, 3000);
@@ -95,7 +90,7 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
       <DialogContent className="sm:max-w-md bg-gradient-to-br from-nexus-header-blue to-nexus-space-black border border-nexus-purple/30 shadow-2xl backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center text-white mb-4">
-            {signupComplete ? "Welcome to Nexus Wave!" : "Coming Soon"}
+            {signupComplete ? "Welcome to TMRW W3AI!" : "Coming Soon"}
           </DialogTitle>
         </DialogHeader>
         
@@ -104,7 +99,7 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
             <>
               <div className="text-center">
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  Nexus Wave for {platform}
+                  TMRW W3AI for {platform}
                 </h3>
                 <p className="text-gray-300 max-w-sm">
                   We're putting the finishing touches on the {platform} version. 
@@ -136,7 +131,7 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
                   Be the First to Know!
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Sign up to get notified when Nexus Wave for {platform} is ready
+                  Sign up to get notified when TMRW W3AI for {platform} is ready
                 </p>
               </div>
 
@@ -198,7 +193,7 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen, onClose, plat
                 You're all set, {formData.name}!
               </h3>
               <p className="text-gray-300 max-w-sm">
-                We'll send you an email at <span className="text-nexus-purple">{formData.email}</span> as soon as Nexus Wave for {platform} is ready.
+                We'll send you an email at <span className="text-nexus-purple">{formData.email}</span> as soon as TMRW W3AI for {platform} is ready.
               </p>
               <div className="text-sm text-gray-400 mt-4">
                 Closing in a moment...
