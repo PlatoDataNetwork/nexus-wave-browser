@@ -172,13 +172,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
                   key={protocol.id}
                   name={protocol.name}
                   url={protocol.url}
-                  indent={1}
-                  icon={
-                    <span
-                      className="inline-block h-2.5 w-2.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: protocol.color }}
-                    />
-                  }
+                  indent={2}
                 />
               ))}
             </div>
