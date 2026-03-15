@@ -6,6 +6,10 @@ import WalletConnect from "@/components/Browser/WalletConnect";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SidebarMenu from "@/components/Browser/SidebarMenu";
 import ProtocolsMenu from "@/components/Browser/ProtocolsMenu";
+import { useNavigate } from "react-router-dom";
+import { Search, BarChart3, Compass, Globe, Newspaper, Link2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface IndexProps {
   defaultUrl?: string;
