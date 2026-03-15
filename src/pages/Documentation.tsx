@@ -688,7 +688,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Supported Networks</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser works with major blockchain networks:
+                        TMRW W3AI Browser works with major blockchain networks:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Ethereum</li>
