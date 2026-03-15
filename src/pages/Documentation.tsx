@@ -275,7 +275,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Features & Functionality</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Explore the powerful features that make Plato W3 AI Browser unique
+                    Explore the powerful features that make TMRW W3AI Browser unique
                   </p>
                 </div>
 
