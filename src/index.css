@@ -434,3 +434,19 @@
     padding-left: env(safe-area-inset-left);
   }
 }
+
+/* Neon gradient icon glow animation */
+@keyframes neon-gradient-cycle {
+  0%   { filter: drop-shadow(0 0 6px #ff1a4a) brightness(1.2); }
+  14%  { filter: drop-shadow(0 0 6px #1a8aff) brightness(1.2); }
+  28%  { filter: drop-shadow(0 0 6px #ff6a1a) brightness(1.2); }
+  42%  { filter: drop-shadow(0 0 6px #ff1a9a) brightness(1.2); }
+  57%  { filter: drop-shadow(0 0 6px #1aff6a) brightness(1.2); }
+  71%  { filter: drop-shadow(0 0 6px #ff1a4a) brightness(1.2); }
+  85%  { filter: drop-shadow(0 0 6px #a01aff) brightness(1.2); }
+  100% { filter: drop-shadow(0 0 6px #ff1a4a) brightness(1.2); }
+}
+
+.neon-icon-glow {
+  animation: neon-gradient-cycle 2.5s ease-in-out infinite;
+}
