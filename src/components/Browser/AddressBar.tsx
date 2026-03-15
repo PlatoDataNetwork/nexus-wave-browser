@@ -142,7 +142,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 disabled={isLoading}
                 type="button"
               >
-                <RefreshCw className={`h-4 w-4 text-white ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-3.5 w-3.5 text-white ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
