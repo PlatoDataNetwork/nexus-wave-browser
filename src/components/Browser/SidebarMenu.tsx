@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft } from "lucide-react";
+import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { topProtocols } from "@/lib/protocolData";
 import { useNavigate } from "react-router-dom";
