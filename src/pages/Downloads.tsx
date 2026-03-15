@@ -21,7 +21,7 @@ const Downloads: React.FC = () => {
       <div className="flex-1 container max-w-screen-xl mx-auto py-10 px-4 md:px-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-3">
-            Download Nexus Wave Browser
+            Download TMRW W3AI Browser
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Experience the future of web browsing with our secure, privacy-focused browser built for Web3.

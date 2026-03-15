@@ -15,10 +15,10 @@ const Token: React.FC = () => {
             Coming Soon
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Plato Token
+            TMRW Token
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            The native utility token powering the Plato W3 AI Browser ecosystem. Stake, earn, and participate in governance.
+            The native utility token powering the TMRW W3AI Browser ecosystem. Stake, earn, and participate in governance.
           </p>
         </div>
 
@@ -32,7 +32,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Use Plato tokens for premium features, gas optimization, and exclusive access to Web3 tools.
+                Use TMRW tokens for premium features, gas optimization, and exclusive access to Web3 tools.
               </CardDescription>
             </CardContent>
           </Card>
@@ -46,7 +46,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Participate in protocol governance and help shape the future of the Plato ecosystem.
+                Participate in protocol governance and help shape the future of the TMRW ecosystem.
               </CardDescription>
             </CardContent>
           </Card>
@@ -60,7 +60,7 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Earn Plato tokens through browsing, staking, and contributing to the Web3 community.
+                Earn TMRW tokens through browsing, staking, and contributing to the Web3 community.
               </CardDescription>
             </CardContent>
           </Card>
@@ -74,12 +74,12 @@ const Token: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400 mb-6">
-                The Plato token is currently in development. Join our community to be the first to know about the token launch and early access opportunities.
+                The TMRW token is currently in development. Join our community to be the first to know about the token launch and early access opportunities.
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/app">
                   <Button className="bg-nexus-blue hover:bg-nexus-deep-blue text-white">
-                    Try Plato W3 AI Browser
+                    Try TMRW W3AI Browser
                   </Button>
                 </Link>
                 <Button variant="outline" className="border-nexus-blue text-nexus-light-blue hover:bg-nexus-blue/10">

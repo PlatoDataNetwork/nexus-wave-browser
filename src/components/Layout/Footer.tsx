@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
             <Link to="/cookie-policy" className="hover:text-white">Cookie Policy</Link>
           </div>
           <div>
-            <span>Nexus Wave Browser V2.1 - Building a decentralized future</span>
+            <span>TMRW W3AI Browser V2.1 - Building a decentralized future</span>
           </div>
         </div>
       </div>

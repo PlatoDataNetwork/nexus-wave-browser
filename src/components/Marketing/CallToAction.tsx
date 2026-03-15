@@ -19,7 +19,7 @@ const CallToAction: React.FC = () => {
           <span className="block">The Way Web3 was Meant to Be.</span>
         </h2>
         <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Step into the future with Plato W3 AI Browser, a truly immersive Web3 browser built
+          Step into the future with TMRW W3AI Browser, a truly immersive Web3 browser built
           for both MacOS & PC with seamless integration across the decentralized web.
         </p>
         

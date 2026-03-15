@@ -15,8 +15,8 @@ export interface Tab {
 export const initialTabs: Tab[] = [
   {
     id: "tab-1",
-    title: "Platodata.io",
-    url: "https://Platodata.io",
+    title: "tmrw.io",
+    url: "https://tmrw.io",
     isActive: true,
     icon: undefined
   },
@@ -41,25 +41,25 @@ export const shortcuts = [
     name: "Home",
     description: "Go to the home page",
     icon: Home,
-    url: "https://platodata.io",
+    url: "https://tmrw.io",
   },
   {
     name: "Learn",
     description: "Learn about web3",
     icon: Book,
-    url: "https://platodata.io/learn",
+    url: "https://tmrw.io/learn",
   },
   {
     name: "Academy",
     description: "Take web3 courses",
     icon: GraduationCap,
-    url: "https://platodata.io/academy",
+    url: "https://tmrw.io/academy",
   },
   {
     name: "Launchpad",
     description: "Discover new web3 projects",
     icon: Rocket,
-    url: "https://platodata.io/launchpad",
+    url: "https://tmrw.io/launchpad",
   },
 ];
 
@@ -73,8 +73,8 @@ export const bookmarks = [
   },
   {
     id: "bookmark-2",
-    title: "Nexus Browser",
-    url: "https://nexusbrowser.io",
+    title: "TMRW Browser",
+    url: "https://tmrw.io",
     color: "#9b87f5"
   },
   {
@@ -97,19 +97,19 @@ export const bookmarks = [
   },
   {
     id: "bookmark-6",
-    title: "PlatoAI Creator",
-    url: "https://dashboard.platodata.io",
+    title: "TMRW AI Creator",
+    url: "https://dashboard.tmrw.io",
     color: "#8B5CF6"
   },
   {
     id: "bookmark-7",
-    title: "PlatoAI Analyst",
-    url: "https://analyst.platodata.io",
+    title: "TMRW AI Analyst",
+    url: "https://analyst.tmrw.io",
     color: "#06B6D4"
   }
 ];
 
-// Add the missing popularDApps export - REMOVED ALL GTRADE AND LUMIA REFERENCES
+// Add the missing popularDApps export
 export const popularDApps = [
   {
     id: 1,

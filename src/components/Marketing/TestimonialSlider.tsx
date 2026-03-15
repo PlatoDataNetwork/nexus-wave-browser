@@ -10,7 +10,7 @@ const testimonials = [
     name: "Sarah Johnson",
     role: "Crypto Investor",
     avatar: "SJ",
-    quote: "Plato W3 AI Browser has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
+    quote: "TMRW W3AI Browser has completely transformed my Web3 experience. The built-in wallet connections and dApp integration make managing my assets so much easier.",
     rating: 5
   },
   {

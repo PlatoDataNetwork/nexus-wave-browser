@@ -15,10 +15,10 @@ const Staking: React.FC = () => {
             Coming Soon
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Plato Staking
+            TMRW Staking
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Stake your Plato tokens to earn rewards, secure the network, and unlock premium features.
+            Stake your TMRW tokens to earn rewards, secure the network, and unlock premium features.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ const Staking: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400">
-                Help secure the Plato network and earn rewards for your contribution.
+                Help secure the TMRW network and earn rewards for your contribution.
               </CardDescription>
             </CardContent>
           </Card>
@@ -93,21 +93,21 @@ const Staking: React.FC = () => {
                 <div className="flex justify-between items-center p-3 bg-nexus-blue/10 rounded-lg">
                   <div>
                     <p className="font-medium">Bronze Tier</p>
-                    <p className="text-sm text-gray-400">1,000+ Plato</p>
+                    <p className="text-sm text-gray-400">1,000+ TMRW</p>
                   </div>
                   <Badge variant="outline" className="border-yellow-500 text-yellow-500">5% APY</Badge>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-nexus-blue/10 rounded-lg">
                   <div>
                     <p className="font-medium">Silver Tier</p>
-                    <p className="text-sm text-gray-400">10,000+ Plato</p>
+                    <p className="text-sm text-gray-400">10,000+ TMRW</p>
                   </div>
                   <Badge variant="outline" className="border-gray-400 text-gray-400">8% APY</Badge>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-nexus-blue/10 rounded-lg">
                   <div>
                     <p className="font-medium">Gold Tier</p>
-                    <p className="text-sm text-gray-400">50,000+ Plato</p>
+                    <p className="text-sm text-gray-400">50,000+ TMRW</p>
                   </div>
                   <Badge variant="outline" className="border-yellow-600 text-yellow-600">12% APY</Badge>
                 </div>
@@ -119,7 +119,7 @@ const Staking: React.FC = () => {
             <CardHeader>
               <CardTitle>Staking Benefits</CardTitle>
               <CardDescription className="text-gray-400">
-                Unlock these exclusive benefits by staking your Plato tokens.
+                Unlock these exclusive benefits by staking your TMRW tokens.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -157,12 +157,12 @@ const Staking: React.FC = () => {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-400 mb-6">
-                The Plato staking platform is currently in development. Get ready to earn rewards and unlock premium features.
+                The TMRW staking platform is currently in development. Get ready to earn rewards and unlock premium features.
               </CardDescription>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/token">
                   <Button className="bg-nexus-blue hover:bg-nexus-deep-blue text-white">
-                    Learn About Plato Token
+                    Learn About TMRW Token
                   </Button>
                 </Link>
                 <Button variant="outline" className="border-nexus-blue text-nexus-light-blue hover:bg-nexus-blue/10">

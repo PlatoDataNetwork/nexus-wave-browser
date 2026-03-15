@@ -78,7 +78,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
       [newTabId]: 0
     }));
     
-    setCurrentUrl("https://platodata.io");
+    setCurrentUrl("https://tmrw.io");
     toast.success("New tab opened");
   }, []);
 

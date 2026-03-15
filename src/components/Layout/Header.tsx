@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         <div className="flex items-center gap-2 flex-shrink-0">
           <img src="/favicon.png" alt="Plato" className="h-8 w-8" />
           <span className="text-white font-bold text-sm sm:text-base md:text-lg whitespace-nowrap">
-            Plato W3 AI Browser
+            TMRW W3AI Browser
           </span>
         </div>
         
