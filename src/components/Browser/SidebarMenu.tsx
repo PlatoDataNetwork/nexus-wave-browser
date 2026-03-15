@@ -66,7 +66,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   }) => (
     <button
       onClick={() => toggleSection(sectionKey)}
-      className="w-full flex items-center justify-between px-3 py-1 text-sm font-medium text-foreground hover:bg-muted/50 rounded-md transition-colors"
+      className="w-full flex items-center justify-between px-3 py-1.5 text-sm font-medium text-white hover:bg-muted/50 rounded-md transition-colors"
       style={{ paddingLeft: `${12 + indent * 16}px` }}
     >
       <span className="flex items-center gap-2">
@@ -74,9 +74,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
         {label}
       </span>
       {openSections[sectionKey] ? (
-        <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
+        <ChevronUp className="h-3.5 w-3.5 text-white/60" />
       ) : (
-        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+        <ChevronDown className="h-3.5 w-3.5 text-white/60" />
       )}
     </button>
   );
