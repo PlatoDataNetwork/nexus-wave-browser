@@ -96,7 +96,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 aria-label="Go back"
                 type="button"
               >
-                <ArrowLeft className={`h-4 w-4 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
+                <ArrowLeft className={`h-3.5 w-3.5 text-white ${!canGoBack ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
