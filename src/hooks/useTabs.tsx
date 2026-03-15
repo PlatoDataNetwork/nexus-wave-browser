@@ -23,7 +23,7 @@ export function useTabs(defaultUrl: string = "https://tmrw-digital.com") {
   });
   
   const [currentUrl, setCurrentUrl] = useState<string>(
-    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw.io")
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw-digital.com")
   );
   
   // History management for each tab
