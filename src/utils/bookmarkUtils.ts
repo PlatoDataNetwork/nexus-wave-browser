@@ -112,7 +112,7 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
     {
       id: "cut",
       title: "CUT",
-      url: "https://cut.tmrw.io",
+      url: "https://cut.tmrw-digital.com",
       color: getColorFromName("CUT")
     },
     // Include top protocols, excluding the specified ones

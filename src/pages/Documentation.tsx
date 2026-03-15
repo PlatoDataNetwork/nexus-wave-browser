@@ -563,7 +563,7 @@ const Documentation: React.FC = () => {
                     
                     <h4 className="font-medium text-sm mt-3">Accessing the Web Version:</h4>
                     <ol className="list-decimal pl-5 space-y-1 text-sm text-muted-foreground mb-4">
-                      <li>Visit app.tmrw.io in any modern browser</li>
+                      <li>Visit app.tmrw-digital.com in any modern browser</li>
                       <li>Create an account or sign in with your existing credentials</li>
                       <li>Your browsing data will sync across devices when signed in</li>
                       <li>Bookmark the page for quick access</li>

@@ -104,7 +104,7 @@ export const bookmarks = [
   {
     id: "bookmark-7",
     title: "TMRW AI Analyst",
-    url: "https://analyst.tmrw.io",
+    url: "https://analyst.tmrw-digital.com",
     color: "#06B6D4"
   }
 ];
