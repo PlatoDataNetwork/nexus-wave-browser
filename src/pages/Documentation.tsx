@@ -218,7 +218,7 @@ const Documentation: React.FC = () => {
                         <li>Select additional components (optional)</li>
                         <li>Complete the installation</li>
                       </ol>
-                      <p className="mt-2">Plato W3 AI Browser is available for Windows, macOS, and Linux systems.</p>
+                      <p className="mt-2">TMRW W3AI Browser is available for Windows, macOS, and Linux systems.</p>
                     </AccordionContent>
                   </AccordionItem>
 
