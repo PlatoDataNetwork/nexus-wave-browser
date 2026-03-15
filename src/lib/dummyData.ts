@@ -15,8 +15,8 @@ export interface Tab {
 export const initialTabs: Tab[] = [
   {
     id: "tab-1",
-    title: "tmrw.io",
-    url: "https://tmrw.io",
+    title: "tmrw-digital.com",
+    url: "https://tmrw-digital.com",
     isActive: true,
     icon: undefined
   },
@@ -41,7 +41,7 @@ export const shortcuts = [
     name: "Home",
     description: "Go to the home page",
     icon: Home,
-    url: "https://tmrw.io",
+    url: "https://tmrw-digital.com",
   },
   {
     name: "Learn",
@@ -74,7 +74,7 @@ export const bookmarks = [
   {
     id: "bookmark-2",
     title: "TMRW Browser",
-    url: "https://tmrw.io",
+    url: "https://tmrw-digital.com",
     color: "#9b87f5"
   },
   {

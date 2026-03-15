@@ -7,7 +7,7 @@ interface TabHistory {
   [tabId: string]: string[];
 }
 
-export function useTabs(defaultUrl: string = "https://tmrw.io") {
+export function useTabs(defaultUrl: string = "https://tmrw-digital.com") {
   const [tabs, setTabs] = useState<Tab[]>(() => {
     // Update initialTabs with the provided defaultUrl for the active tab
     return initialTabs.map(tab => {
@@ -23,7 +23,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
   });
   
   const [currentUrl, setCurrentUrl] = useState<string>(
-    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw.io")
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw-digital.com")
   );
   
   // History management for each tab
@@ -53,8 +53,8 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
     const newTabId = `tab-${Date.now()}`;
     const newTab: Tab = {
       id: newTabId,
-      title: "tmrw.io",
-      url: "https://tmrw.io",
+      title: "tmrw-digital.com",
+      url: "https://tmrw-digital.com",
       isActive: false,
       icon: undefined
     };
@@ -70,7 +70,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
     // Initialize history for the new tab
     setTabHistory(prev => ({
       ...prev,
-      [newTabId]: ["https://tmrw.io"]
+      [newTabId]: ["https://tmrw-digital.com"]
     }));
     
     setHistoryPosition(prev => ({
@@ -78,7 +78,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
       [newTabId]: 0
     }));
     
-    setCurrentUrl("https://tmrw.io");
+    setCurrentUrl("https://tmrw-digital.com");
     toast.success("New tab opened");
   }, []);
 
