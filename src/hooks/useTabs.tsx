@@ -7,7 +7,7 @@ interface TabHistory {
   [tabId: string]: string[];
 }
 
-export function useTabs(defaultUrl: string = "https://platodata.io") {
+export function useTabs(defaultUrl: string = "https://tmrw.io") {
   const [tabs, setTabs] = useState<Tab[]>(() => {
     // Update initialTabs with the provided defaultUrl for the active tab
     return initialTabs.map(tab => {
