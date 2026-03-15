@@ -353,7 +353,7 @@ const Documentation: React.FC = () => {
                   <CardContent className="p-6">
                     <h3 className="text-md font-medium mb-3">Performance Optimization</h3>
                     <p className="text-sm text-muted-foreground mb-3">
-                      Plato W3 AI Browser is designed for speed and efficiency with features like:
+                      TMRW W3AI Browser is designed for speed and efficiency with features like:
                     </p>
                     <ul className="text-sm text-muted-foreground grid grid-cols-1 md:grid-cols-2 gap-2 list-disc pl-5">
                       <li>Hardware acceleration</li>
