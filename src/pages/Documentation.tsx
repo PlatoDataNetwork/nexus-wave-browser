@@ -455,7 +455,7 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: Microsoft Store</h5>
-                          <p className="mb-2">Download Plato W3 AI Browser from the Microsoft Store for automatic updates:</p>
+                          <p className="mb-2">Download TMRW W3AI Browser from the Microsoft Store for automatic updates:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the Microsoft Store on your PC</li>
                             <li>Search for "Plato W3 AI Browser"</li>
