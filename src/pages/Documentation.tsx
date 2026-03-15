@@ -458,7 +458,7 @@ const Documentation: React.FC = () => {
                           <p className="mb-2">Download TMRW W3AI Browser from the Microsoft Store for automatic updates:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the Microsoft Store on your PC</li>
-                            <li>Search for "Plato W3 AI Browser"</li>
+                            <li>Search for "TMRW W3AI Browser"</li>
                             <li>Click "Get" or "Install"</li>
                             <li>The app will download and install automatically</li>
                             <li>Launch from your Start menu</li>
