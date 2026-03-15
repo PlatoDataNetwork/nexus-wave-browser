@@ -142,7 +142,7 @@ const Documentation: React.FC = () => {
             <Tabs value={activeTab} className="w-full">
               <TabsContent value="overview" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Plato W3 AI Browser</h2>
+                  <h2 className="text-xl font-medium mb-2">TMRW W3AI Browser</h2>
                   <p className="text-sm text-muted-foreground mb-4">
                     A next-generation Web3-enabled browser with enhanced privacy features
                   </p>
