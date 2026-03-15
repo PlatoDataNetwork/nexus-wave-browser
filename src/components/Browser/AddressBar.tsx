@@ -135,8 +135,8 @@ const AddressBar: React.FC<AddressBarProps> = ({
             <TooltipTrigger asChild>
               <Button 
                 variant="ghost" 
-                size="icon" 
-                className="h-8 w-8" 
+                size="sm" 
+                className="h-6 w-6" 
                 onClick={handleRefresh}
                 aria-label="Refresh page"
                 disabled={isLoading}
