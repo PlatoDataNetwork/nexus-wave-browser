@@ -41,7 +41,7 @@ export const shortcuts = [
     name: "Home",
     description: "Go to the home page",
     icon: Home,
-    url: "https://tmrw.io",
+    url: "https://tmrw-digital.com",
   },
   {
     name: "Learn",
