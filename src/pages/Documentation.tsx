@@ -159,7 +159,7 @@ const Documentation: React.FC = () => {
                         applications seamless and secure.
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Version 2.1 introduces the Plato Bridge for improved wallet connectivity, enhanced 
+                        Version 2.1 introduces the TMRW Bridge for improved wallet connectivity, enhanced 
                         privacy shields, and a streamlined user interface designed for both crypto enthusiasts 
                         and everyday users.
                       </p>
