@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         {/* Left: Brand */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <img src="/favicon.png" alt="TMRW" className="h-8 w-8" />
-          <span className="font-bold text-lg sm:text-xl md:text-2xl whitespace-nowrap text-nexus-blue">
+          <span className="font-bold text-lg sm:text-xl md:text-2xl whitespace-nowrap text-nexus-light-blue">
             TMRW W3AI
           </span>
         </div>
