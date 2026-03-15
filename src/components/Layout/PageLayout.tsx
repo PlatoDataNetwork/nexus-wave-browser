@@ -4,6 +4,7 @@ import BrowserFooter from "../Browser/BrowserFooter";
 import Header from "./Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -69,11 +70,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       {/* Show footer button with mobile optimization */}
       {includeFooter && !isFooterVisible && (
         <Button 
-          size={isMobile ? "sm" : "sm"}
-          className="fixed bottom-4 right-4 bg-[#7B63DD] hover:bg-[#6E59A5] text-white font-medium px-3 py-1 rounded-md shadow-lg z-50 text-xs sm:text-sm"
+          variant="ghost"
+          size="icon"
+          className="fixed bottom-4 right-4 rounded-full h-9 w-9 bg-muted/80 hover:bg-muted text-foreground shadow-lg z-50"
           onClick={toggleFooter}
         >
-          {isMobile ? "Footer" : "Show Footer"}
+          <Eye className="h-4 w-4" />
         </Button>
       )}
     </div>
