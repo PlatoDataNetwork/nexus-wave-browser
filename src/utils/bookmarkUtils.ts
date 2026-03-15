@@ -104,10 +104,10 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       color: getColorFromName("Circle Nexus")
     },
     {
-      id: "platoai-code-nexus",
-      title: "PlatoAI Code Nexus",
-      url: "https://platoai-code-forge.vercel.app/",
-      color: getColorFromName("PlatoAI Code Nexus")
+      id: "tmrw-code-nexus",
+      title: "TMRW AI Code Nexus",
+      url: "https://tmrw-code-forge.vercel.app/",
+      color: getColorFromName("TMRW AI Code Nexus")
     },
     {
       id: "cut",
