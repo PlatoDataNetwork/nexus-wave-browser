@@ -200,9 +200,9 @@ const Documentation: React.FC = () => {
 
               <TabsContent value="getting-started" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Getting Started with Plato W3 AI Browser</h2>
+                  <h2 className="text-xl font-medium mb-2">Getting Started with TMRW W3AI Browser</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn how to set up and start using Plato W3 AI Browser effectively
+                    Learn how to set up and start using TMRW W3AI Browser effectively
                   </p>
                 </div>
 
