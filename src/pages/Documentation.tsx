@@ -404,7 +404,7 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: App Store Download</h5>
-                          <p className="mb-2">Download Plato W3 AI Browser directly from the Apple App Store for the simplest installation experience:</p>
+                          <p className="mb-2">Download TMRW W3AI Browser directly from the Apple App Store for the simplest installation experience:</p>
                           <ol className="list-decimal pl-5 space-y-1">
                             <li>Open the App Store on your Mac</li>
                             <li>Search for "Plato W3 AI Browser"</li>
