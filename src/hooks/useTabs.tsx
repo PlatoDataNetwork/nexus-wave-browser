@@ -53,8 +53,8 @@ export function useTabs(defaultUrl: string = "https://tmrw-digital.com") {
     const newTabId = `tab-${Date.now()}`;
     const newTab: Tab = {
       id: newTabId,
-      title: "tmrw.io",
-      url: "https://tmrw.io",
+      title: "tmrw-digital.com",
+      url: "https://tmrw-digital.com",
       isActive: false,
       icon: undefined
     };
