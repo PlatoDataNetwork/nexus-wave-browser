@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass, Newspaper } from "lucide-react";
+import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass, Newspaper, Bot, Code } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { topProtocols } from "@/lib/protocolData";
 import { useNavigate } from "react-router-dom";
@@ -181,6 +181,30 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
                   }
                 />
               ))}
+            </div>
+          )}
+
+          {/* AI Applications */}
+          <SectionHeader sectionKey="ai-apps" icon={<Bot className="h-4 w-4" />} label="AI Applications" />
+          {openSections["ai-apps"] && (
+            <div className="space-y-0.5">
+              <NavItem name="ChatGPT" url="https://chat.openai.com" indent={1} />
+              <NavItem name="Claude" url="https://claude.ai" indent={1} />
+              <NavItem name="Perplexity" url="https://perplexity.ai" indent={1} />
+              <NavItem name="Midjourney" url="https://midjourney.com" indent={1} />
+              <NavItem name="Hugging Face" url="https://huggingface.co" indent={1} />
+            </div>
+          )}
+
+          {/* Developers */}
+          <SectionHeader sectionKey="developers" icon={<Code className="h-4 w-4" />} label="Developers" />
+          {openSections["developers"] && (
+            <div className="space-y-0.5">
+              <NavItem name="GitHub" url="https://github.com" indent={1} />
+              <NavItem name="Documentation" url="/documentation" indent={1} />
+              <NavItem name="Alchemy" url="https://alchemy.com" indent={1} />
+              <NavItem name="Infura" url="https://infura.io" indent={1} />
+              <NavItem name="Etherscan" url="https://etherscan.io" indent={1} />
             </div>
           )}
 
