@@ -709,7 +709,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Privacy & Security</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn about Plato W3 AI Browser's robust privacy and security features
+                    Learn about TMRW W3AI Browser's robust privacy and security features
                   </p>
                 </div>
 
