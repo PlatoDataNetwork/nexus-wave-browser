@@ -734,7 +734,7 @@ const Documentation: React.FC = () => {
                 <div>
                   <h2 className="text-xl font-medium mb-2">Settings Guide</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Learn how to configure Plato W3 AI Browser for optimal performance
+                    Learn how to configure TMRW W3AI Browser for optimal performance
                   </p>
                 </div>
               </TabsContent>
