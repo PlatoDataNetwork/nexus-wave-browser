@@ -66,7 +66,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   }) => (
     <button
       onClick={() => toggleSection(sectionKey)}
-      className="w-full flex items-center justify-between px-3 py-1 text-sm font-medium text-foreground hover:bg-muted/50 rounded-md transition-colors"
+      className="w-full flex items-center justify-between px-3 py-1.5 text-sm font-medium text-white hover:bg-muted/50 rounded-md transition-colors"
       style={{ paddingLeft: `${12 + indent * 16}px` }}
     >
       <span className="flex items-center gap-2">
@@ -74,9 +74,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
         {label}
       </span>
       {openSections[sectionKey] ? (
-        <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
+        <ChevronUp className="h-3.5 w-3.5 text-white/60" />
       ) : (
-        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+        <ChevronDown className="h-3.5 w-3.5 text-white/60" />
       )}
     </button>
   );
@@ -94,10 +94,10 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   }) => (
     <button
       onClick={() => handleClick(url)}
-      className="w-full flex items-center gap-2 px-3 py-0.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors truncate"
+      className="w-full flex items-center gap-2 px-3 py-0.5 text-sm text-white/80 hover:text-white hover:bg-muted/50 rounded-md transition-colors truncate"
       style={{ paddingLeft: `${12 + indent * 16}px` }}
     >
-      {icon || <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-primary/70" />}
+      {icon || <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-white/60" />}
       <span className="truncate">{name}</span>
     </button>
   );
@@ -106,7 +106,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
     <div className="flex flex-col h-full bg-background border-r border-border">
       <div className="p-3 pb-1 flex items-center gap-2">
         <img src="/favicon.png" alt="TMRW" className="h-7 w-7" />
-        <h2 className="text-base font-bold tracking-wide text-foreground">TMRW W3AI</h2>
+        <h2 className="text-base font-bold tracking-wide text-white">TMRW W3AI</h2>
       </div>
 
       <ScrollArea className="flex-1">
@@ -224,7 +224,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
               onClick={() => handleClick("https://app.uniswap.org")}
               className="w-full flex items-center justify-between text-sm"
             >
-              <span className="text-foreground font-medium">Uniswap v3</span>
+              <span className="text-white font-medium">Uniswap v3</span>
               <span className="text-green-400 text-xs font-medium">+5.2% ↗</span>
             </button>
           </div>
