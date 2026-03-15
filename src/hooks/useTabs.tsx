@@ -23,7 +23,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
   });
   
   const [currentUrl, setCurrentUrl] = useState<string>(
-    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://platodata.io")
+    defaultUrl || (initialTabs.find(tab => tab.isActive)?.url || "https://tmrw.io")
   );
   
   // History management for each tab
