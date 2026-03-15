@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft } from "lucide-react";
+import { Search, BarChart3, Globe, ChevronDown, ChevronUp, Link2, ArrowRightLeft, Compass } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { topProtocols } from "@/lib/protocolData";
 import { useNavigate } from "react-router-dom";
@@ -130,7 +130,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
           )}
 
           {/* Web3 Browser */}
-          <SectionHeader sectionKey="web3-browser" icon={<Globe className="h-4 w-4" />} label="Web3 Browser" />
+          <SectionHeader sectionKey="web3-browser" icon={<Compass className="h-4 w-4" />} label="Web3 Browser" />
           {openSections["web3-browser"] && (
             <div className="space-y-0.5">
               <NavItem name="Browser" url="/app" indent={1} />
