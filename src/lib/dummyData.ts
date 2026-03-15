@@ -59,7 +59,7 @@ export const shortcuts = [
     name: "Launchpad",
     description: "Discover new web3 projects",
     icon: Rocket,
-    url: "https://tmrw.io/launchpad",
+    url: "https://tmrw-digital.com/launchpad",
   },
 ];
 
