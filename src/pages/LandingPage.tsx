@@ -220,7 +220,7 @@ const LandingPage: React.FC = () => {
                 </Badge>
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Native Integration That Feels Like Magic</h2>
                 <p className="text-lg text-gray-300 mb-8">
-                  Plato W3 AI Browser isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
+                  TMRW W3AI Browser isn't just a browser that runs on Mac—it's built from the ground up to leverage everything 
                   MacOS has to offer, from Apple Silicon performance to system-level integration that makes your 
                   Web3 experience truly seamless.
                 </p>
