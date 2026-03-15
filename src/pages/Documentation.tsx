@@ -371,7 +371,7 @@ const Documentation: React.FC = () => {
 
               <TabsContent value="installation" className="p-6 space-y-6 mt-0">
                 <div>
-                  <h2 className="text-xl font-medium mb-2">Plato W3 AI Browser Installation</h2>
+                  <h2 className="text-xl font-medium mb-2">TMRW W3AI Browser Installation</h2>
                   <p className="text-sm text-muted-foreground mb-4">
                     Detailed installation guidelines for different operating systems and platforms
                   </p>
