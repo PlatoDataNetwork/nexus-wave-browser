@@ -110,7 +110,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
       </div>
 
       <ScrollArea className="flex-1">
-        <nav className="px-1.5 pb-4 space-y-0.5">
+        <nav className="px-1.5 pb-4 space-y-0.5 mt-3">
           {/* Discovery */}
           <SectionHeader sectionKey="discovery" icon={<Search className="h-4 w-4" />} label="Discovery" />
           {openSections["discovery"] && (
