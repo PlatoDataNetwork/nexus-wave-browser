@@ -94,10 +94,10 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   }) => (
     <button
       onClick={() => handleClick(url)}
-      className="w-full flex items-center gap-2 px-3 py-0.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors truncate"
+      className="w-full flex items-center gap-2 px-3 py-0.5 text-sm text-white/80 hover:text-white hover:bg-muted/50 rounded-md transition-colors truncate"
       style={{ paddingLeft: `${12 + indent * 16}px` }}
     >
-      {icon || <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-primary/70" />}
+      {icon || <Link2 className="h-3.5 w-3.5 flex-shrink-0 text-white/60" />}
       <span className="truncate">{name}</span>
     </button>
   );
