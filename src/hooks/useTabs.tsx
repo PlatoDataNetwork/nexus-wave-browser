@@ -70,7 +70,7 @@ export function useTabs(defaultUrl: string = "https://tmrw-digital.com") {
     // Initialize history for the new tab
     setTabHistory(prev => ({
       ...prev,
-      [newTabId]: ["https://tmrw.io"]
+      [newTabId]: ["https://tmrw-digital.com"]
     }));
     
     setHistoryPosition(prev => ({
