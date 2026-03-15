@@ -92,10 +92,10 @@ export const getAlphabetizedBookmarks = (): EnhancedBookmark[] => {
       color: getColorFromName("TMRW DefIX")
     },
     {
-      id: "plato-data-network",
-      title: "Plato Data Network",
-      url: "https://platodata.ai",
-      color: getColorFromName("Plato Data Network")
+      id: "tmrw-data-network",
+      title: "TMRW Data Network",
+      url: "https://tmrw.ai",
+      color: getColorFromName("TMRW Data Network")
     },
     {
       id: "circle-nexus",
