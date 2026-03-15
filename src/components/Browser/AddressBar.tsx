@@ -121,7 +121,7 @@ const AddressBar: React.FC<AddressBarProps> = ({
                 aria-label="Go forward"
                 type="button"
               >
-                <ArrowRight className={`h-4 w-4 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
+                <ArrowRight className={`h-3.5 w-3.5 text-white ${!canGoForward ? 'opacity-50' : ''}`} />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
