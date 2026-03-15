@@ -270,7 +270,7 @@ const LandingPage: React.FC = () => {
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold mb-6">Everything You Need, All In One Place</h2>
               <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Whether you're trading, creating, or building, Plato W3 AI Browser empowers you with next-gen UI/UX,
+                Whether you're trading, creating, or building, TMRW W3AI Browser empowers you with next-gen UI/UX,
                 blazing-fast performance, and seamless integration across the decentralized web.
               </p>
             </div>
