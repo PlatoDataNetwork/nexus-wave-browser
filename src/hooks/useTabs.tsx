@@ -70,7 +70,7 @@ export function useTabs(defaultUrl: string = "https://tmrw.io") {
     // Initialize history for the new tab
     setTabHistory(prev => ({
       ...prev,
-      [newTabId]: ["https://platodata.io"]
+      [newTabId]: ["https://tmrw.io"]
     }));
     
     setHistoryPosition(prev => ({
