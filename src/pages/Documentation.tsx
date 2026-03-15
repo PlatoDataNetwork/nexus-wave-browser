@@ -225,7 +225,7 @@ const Documentation: React.FC = () => {
                   <AccordionItem value="initial-setup">
                     <AccordionTrigger className="text-md font-medium">Initial Setup</AccordionTrigger>
                     <AccordionContent className="text-sm text-muted-foreground space-y-3 p-2">
-                      <p>When you first launch Plato W3 AI Browser, you'll be guided through these setup steps:</p>
+                      <p>When you first launch TMRW W3AI Browser, you'll be guided through these setup steps:</p>
                       <ol className="space-y-2 list-decimal pl-5">
                         <li>Choose your default theme (Dark or Light)</li>
                         <li>Select your default search engine</li>
