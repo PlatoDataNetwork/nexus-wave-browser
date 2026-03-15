@@ -301,7 +301,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Bookmarks System</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        The bookmark system in Plato W3 AI Browser offers flexible organization options:
+                        The bookmark system in TMRW W3AI Browser offers flexible organization options:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Hierarchical folder structure</li>
