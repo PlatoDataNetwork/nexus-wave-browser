@@ -130,7 +130,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
           )}
 
           {/* Web3 Browser */}
-          <SectionHeader sectionKey="web3-browser" icon={<Globe className="h-4 w-4" />} label="Web3 Browser" />
+          <SectionHeader sectionKey="web3-browser" icon={<Compass className="h-4 w-4" />} label="Web3 Browser" />
           {openSections["web3-browser"] && (
             <div className="space-y-0.5">
               <NavItem name="Browser" url="/app" indent={1} />
