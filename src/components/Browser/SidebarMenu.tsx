@@ -66,7 +66,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   }) => (
     <button
       onClick={() => toggleSection(sectionKey)}
-      className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-foreground hover:bg-muted/50 rounded-md transition-colors"
+      className="w-full flex items-center justify-between px-3 py-1 text-sm font-medium text-foreground hover:bg-muted/50 rounded-md transition-colors"
       style={{ paddingLeft: `${12 + indent * 16}px` }}
     >
       <span className="flex items-center gap-2">
