@@ -27,8 +27,8 @@ import PageLayout from "@/components/Layout/PageLayout";
 const mockHistoryData = [
   {
     id: "hist-1",
-    title: "tmrw.io - Web3 Analytics Platform",
-    url: "https://tmrw.io/analytics",
+    title: "tmrw-digital.com - Web3 Analytics Platform",
+    url: "https://tmrw-digital.com/analytics",
     favicon: "/favicon.ico",
     timestamp: new Date().getTime() - 1000 * 60 * 5, // 5 minutes ago
     type: "webpage"
