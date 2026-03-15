@@ -318,7 +318,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">Extensions Support</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser supports a wide range of extensions to enhance your browsing experience:
+                        TMRW W3AI Browser supports a wide range of extensions to enhance your browsing experience:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Compatible with Chrome Web Store extensions</li>
