@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
               Contact Support
             </Button>
             <p className="text-sm text-gray-300">
-              © {new Date().getFullYear()} Nexus Wave Browser.
+              © {new Date().getFullYear()} TMRW W3AI Browser.
               <br />All rights reserved.
             </p>
           </div>
