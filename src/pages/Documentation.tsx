@@ -635,7 +635,7 @@ const Documentation: React.FC = () => {
                       Google Play and the Google Play logo are trademarks of Google LLC.
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Plato W3 AI Browser is not affiliated with, endorsed by, or sponsored by Apple Inc. or Google LLC. All respective trademarks, logos, and brand names are the property of their respective owners.
+                      TMRW W3AI Browser is not affiliated with, endorsed by, or sponsored by Apple Inc. or Google LLC. All respective trademarks, logos, and brand names are the property of their respective owners.
                     </p>
                   </CardContent>
                 </Card>
