@@ -184,6 +184,15 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
             </div>
           )}
 
+          {/* Intelligence */}
+          <SectionHeader sectionKey="intelligence" icon={<Newspaper className="h-4 w-4" />} label="Intelligence" />
+          {openSections["intelligence"] && (
+            <div className="space-y-0.5">
+              <NavItem name="Plato" url="https://platodata.io" indent={1} />
+              <NavItem name="CoinTelegraph" url="https://cointelegraph.com" indent={1} />
+            </div>
+          )}
+
           {/* Trending DEX */}
           <div className="mt-3 mx-1.5 p-2.5 rounded-lg bg-muted/30 border border-border">
             <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">Trending DEX</p>
