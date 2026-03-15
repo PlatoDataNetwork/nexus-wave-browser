@@ -171,7 +171,7 @@ const Documentation: React.FC = () => {
                       <CardContent className="p-6">
                         <h3 className="text-md font-medium mb-3">Key Features</h3>
                         <ul className="text-sm text-muted-foreground space-y-2">
-                          <li>• Web3 wallet integration via Plato Bridge</li>
+                          <li>• Web3 wallet integration via TMRW Bridge</li>
                           <li>• Enhanced privacy shields</li>
                           <li>• Decentralized application support</li>
                           <li>• Advanced bookmarking system</li>
