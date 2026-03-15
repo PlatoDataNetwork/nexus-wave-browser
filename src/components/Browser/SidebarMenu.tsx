@@ -105,7 +105,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ onNavigate }) => {
   return (
     <div className="flex flex-col h-full bg-background border-r border-border">
       <div className="p-3 pb-1 flex items-center gap-2">
-        <img src="/favicon.png" alt="TMRW" className="h-7 w-7" />
+        <img src="/favicon.png" alt="TMRW" className="h-7 w-7 neon-icon-glow" />
         <h2 className="text-base font-bold tracking-wide text-foreground">TMRW W3AI</h2>
       </div>
 
