@@ -508,7 +508,7 @@ const Documentation: React.FC = () => {
                       <div className="space-y-3 mt-2">
                         <div>
                           <h5 className="font-medium">Option 1: Snap/Flatpak</h5>
-                          <p className="mb-2">Install Plato W3 AI Browser using Snap (recommended) or Flatpak:</p>
+                          <p className="mb-2">Install TMRW W3AI Browser using Snap (recommended) or Flatpak:</p>
                           <div className="bg-black/90 text-white p-3 rounded-md font-mono text-xs my-3">
                             <p># Using Snap</p>
                             <p>sudo snap install plato-browser</p>
