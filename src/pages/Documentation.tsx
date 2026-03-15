@@ -335,7 +335,7 @@ const Documentation: React.FC = () => {
                     <CardContent className="p-6">
                       <h3 className="text-md font-medium mb-3">History Management</h3>
                       <p className="text-sm text-muted-foreground mb-3">
-                        Plato W3 AI Browser's history features help you track and revisit your browsing activity:
+                        TMRW W3AI Browser's history features help you track and revisit your browsing activity:
                       </p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                         <li>Chronological and categorical views</li>
