@@ -1,0 +1,21 @@
+# TMRW W3AI Browser
+
+> A Web3 AI browser and gateway by TMRW AI, featuring AI-powered search, decentralized browsing, DeFi tools, and protocol discovery.
+
+TMRW W3AI Browser is a next-generation Web3 browser that combines AI-powered search with native access to decentralized applications, DeFi protocols, and blockchain ecosystems. It offers an extension store, staking, token utilities, and built-in AI features designed for crypto-native users.
+
+## Pages
+
+- [Home](/): Overview of the TMRW W3AI Browser and its Web3 + AI capabilities.
+- [Launch App](/app): Entry point to the in-browser Web3 experience with discovery, DeFi, and protocols.
+- [AI Features](/ai-features): Built-in AI assistants, AI-powered search, and intelligent browsing tools.
+- [Search](/search): AI-augmented Web3-aware search across dApps, tokens, and protocols.
+- [Extension Store](/extension-store): Browse and install browser extensions tailored for Web3 workflows.
+- [Downloads](/downloads): Download the TMRW W3AI Browser for supported platforms.
+- [Token](/token): Information about the TMRW token, utility, and tokenomics.
+- [Staking](/staking): Stake TMRW tokens and learn about rewards.
+- [Documentation](/documentation): Product documentation and guides for using the browser.
+
+## Optional
+
+- [Settings Documentation](/settings-docs): Reference for browser settings and configuration.
